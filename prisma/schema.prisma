@@ -1,0 +1,218 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client"  // ← Changé !
+  output   = "./generated/client"  // ← Nouveau !
+}
+
+datasource db {
+  provider = "postgresql"
+  // url supprimé - maintenant dans prisma.config.ts
+}
+
+// --------------------------------------
+// ENUMS
+// --------------------------------------
+enum UserRole {
+  USER
+  RECRUITER
+  ORGANIZATION
+  ADMIN
+}
+
+enum JobPlatform {
+  LINKEDIN
+  FIVERR
+  UPWORK
+  INDEED
+  OTHER
+}
+
+enum ApplicationStatus {
+  PENDING
+  SENT
+  VIEWED
+  REPLIED
+  REJECTED
+  ACCEPTED
+}
+
+// --------------------------------------
+// USER MODEL (Authentication + Core Identity)
+// --------------------------------------
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+
+  // Relations
+  profile       Profile?
+  jobs          Job[]              // Jobs created (for recruiters)
+  applications  JobApplication[]   // Jobs applied (for users)
+  letters       Letter[]           // Letters created by AI
+  resumes       UserResume[]       // User's uploaded resumes
+  notifications Notification[]     // User notifications
+
+  @@index([role])
+  @@index([createdAt])
+  @@index([email])
+}
+
+// --------------------------------------
+// PROFILE MODEL (Extend User without bloating user table)
+// --------------------------------------
+model Profile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  firstName     String?
+  lastName      String?
+  phone         String?
+  location      String?
+  resumeUrl     String?
+  avatarUrl     String?
+  bio           String?
+  website       String?
+  linkedinUrl   String?
+  githubUrl     String?
+  twitterUrl    String?
+
+  // Skillset in JSON format for scalability
+  skills        Json?
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([location])
+}
+
+// --------------------------------------
+// JOB MODEL (Jobs fetched or manually added)
+// --------------------------------------
+model Job {
+  id              String       @id @default(cuid())
+  title           String
+  company         String
+  platform        JobPlatform  @default(OTHER)
+  platformJobId   String?      // To sync with external platforms
+  url             String?
+  description     String?      @db.Text
+  location        String?
+  postedAt        DateTime?
+  salaryMin       Int?
+  salaryMax       Int?
+  salaryCurrency  String?      @default("XOF")
+  isRemote        Boolean      @default(false)
+  experienceLevel String?
+  createdBy       String?      // Recruiter who manually added the job
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  deletedAt       DateTime?    @map("deleted_at")
+
+  // Relationships
+  recruiter       User?        @relation(fields: [createdBy], references: [id])
+  applications    JobApplication[]
+  tags            JobTag[]     @relation("JobTags")
+
+  @@index([platform])
+  @@index([company])
+  @@index([title])
+  @@index([createdAt])
+  @@index([isRemote])
+  @@index([experienceLevel])
+  @@map("jobs")
+}
+
+// --------------------------------------
+// JOB TAG MODEL
+// --------------------------------------
+model JobTag {
+  id    String @id @default(cuid())
+  name  String @unique
+  jobs  Job[]  @relation("JobTags")
+}
+
+// --------------------------------------
+// JOB APPLICATION MODEL
+// --------------------------------------
+model JobApplication {
+  id            String             @id @default(cuid())
+  userId        String
+  jobId         String
+  status        ApplicationStatus  @default(PENDING)
+  appliedAt     DateTime           @default(now())
+  isAutoSent    Boolean            @default(false) // For automations
+  trackingUrl   String?            // To check status
+  notes         String?            @db.Text
+  followUpDate  DateTime?          // For setting reminders
+  salaryOffer   Int?               // If shared by employer
+  interviewDate DateTime?          // For scheduling
+
+  // Relationships
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job           Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  letter        Letter?            // Optional motivation letter
+
+  @@index([userId])
+  @@index([jobId])
+  @@index([status])
+  @@index([appliedAt])
+  @@index([status, appliedAt])
+  @@unique([userId, jobId]) // Prevent duplicate applications
+  @@map("job_applications")
+}
+
+// --------------------------------------
+// MOTIVATION LETTER MODEL (AI-generated texts)
+// --------------------------------------
+model Letter {
+  id             String           @id @default(cuid())
+  userId         String
+  applicationId  String?          @unique // 1 letter per application (optional)
+  content        String           @db.Text
+  generatedAt    DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  // Relations
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  application    JobApplication?  @relation(fields: [applicationId], references: [id])
+  
+  @@index([userId])
+  @@index([applicationId])
+  @@index([generatedAt])
+}
+
+// --------------------------------------
+// USER RESUME MODEL
+// --------------------------------------
+model UserResume {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  fileUrl     String
+  isDefault   Boolean  @default(false)
+  uploadedAt  DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isDefault])
+}
+
+// --------------------------------------
+// NOTIFICATION MODEL
+// --------------------------------------
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // "application_update", "reminder", etc.
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([type, isRead])
+}

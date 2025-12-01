@@ -1,7 +1,7 @@
 # JobPilot Technical Roadmap
 
 ## Phase 1: Project Setup & Foundation (Week 1)
-- [ ] **Project Setup**
+- [X] **Project Setup**
   - Initialize Next.js 14 project with TypeScript
   - Set up ESLint, Prettier, and Husky
   - Configure Git repository and branching strategy
