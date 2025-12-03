@@ -10,7 +10,7 @@
 - [ ] **Database & Authentication**
   - Set up Supabase project
   - Implement database schema (users, profiles, jobs, letters)
-  - Configure NextAuth.js with email/password and Google OAuth
+  - Configure Supabase auth with email/password and Google OAuth
   - Create basic user registration and login pages
 
 ## Phase 2: Core Features (Weeks 2-3)

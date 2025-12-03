@@ -1,7 +1,46 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/auth";
+import { getCurrentSession } from "@/lib/auth/session";
+
 export default function Home() {
+  const [session, setSession] = useState<any>(null)
+  const router = useRouter();
+
+  // Session check
+  const fetchSession = async () => {
+    const currentSession = await getCurrentSession();
+    console.log(currentSession);
+    
+    setSession(currentSession.session);
+  }
+
+  useEffect(() => {
+    fetchSession();
+
+    const {data: authListener} = supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event, session);
+      
+      setSession(session);
+    });
+
+    return () => {
+      authListener?.subscription.unsubscribe();
+    }
+  }, []);
+
+  // logout
+  const signOut = async () => {
+    await logout();
+    setSession(null);
+    router.push("/login");
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
       {/* Navigation */}
@@ -9,14 +48,25 @@ export default function Home() {
         <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
           JobPilot
         </div>
-        <div className="flex gap-4">
+        {session ? (
+          <div>
+            <Button variant="ghost" asChild>
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+            <Button onClick={() => signOut()}>Logout</Button>
+          </div>
+        ) : null}
+        {!session ? (
+          <div className="flex gap-4">
           <Button variant="ghost" asChild>
             <Link href="/login">Log in</Link>
           </Button>
           <Button asChild>
-            <Link href="/register">Get Started</Link>
+            <Link href="/signup">Get Started</Link>
           </Button>
         </div>
+        ): null}
+        
       </nav>
 
       {/* Hero Section */}
@@ -36,7 +86,7 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="text-lg px-8 py-6" asChild>
-              <Link href="/register">
+              <Link href="/signup">
                 Start for Free
               </Link>
             </Button>

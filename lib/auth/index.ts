@@ -1,0 +1,25 @@
+"use server"
+
+import { supabase } from "../supabase/client";
+
+export const signUp = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({ email, password });
+    return error;
+}
+
+export const login = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    return error;
+}
+
+export const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    return error;
+}
+
+// get authenticated user
+export const getAuthUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user == null) return;
+    return user;
+}
