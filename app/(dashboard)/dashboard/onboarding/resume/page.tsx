@@ -1,4 +1,3 @@
-// app/(dashboard)/dashboard/onboarding/cv/page.tsx
 "use client"
 
 import { useState, useCallback, useEffect } from "react"
@@ -20,9 +19,17 @@ export default function CVUploadPage() {
   const [file, setFile] = useState<File | null>(null)
   const [isUploaded, setIsUploaded] = useState(false)
 
+  // 🔥 Processing steps tracker
+  const [processStep, setProcessStep] = useState(0)
+  /*
+      0 = Not started
+      1 = Resume Uploaded
+      2 = Resume Parsed
+      3 = Profile Created / Updated
+  */
+
   const is_user_connected = async () => {
-    // Verify if there is an authenticated user
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       toast({
         title: "Not authenticated",
@@ -31,20 +38,11 @@ export default function CVUploadPage() {
       })
       return
     }
-    toast({
-        title: "User Authenticated",
-        description: "Good !",
-        variant: "default",
-      })
-      console.log(user);
-      
   }
 
   useEffect(() => {
     is_user_connected()
   }, [router])
-  
-  
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -76,7 +74,6 @@ export default function CVUploadPage() {
   }
 
   const handleFile = (selectedFile: File) => {
-    // Check file type
     const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     if (!validTypes.includes(selectedFile.type)) {
       toast({
@@ -87,7 +84,6 @@ export default function CVUploadPage() {
       return
     }
 
-    // Check file size (5MB max)
     if (selectedFile.size > 5 * 1024 * 1024) {
       toast({
         title: "File too large",
@@ -101,104 +97,86 @@ export default function CVUploadPage() {
   }
 
   const uploadFile = async () => {
-        if (!file) return;
+    if (!file) return
 
-    setIsUploading(true);
-    setUploadProgress(0);
+    setIsUploading(true)
+    setUploadProgress(10)
 
     try {
-      // 1. Upload file to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `user-${(await supabase.auth.getUser()).data.user?.id}/${fileName}`;
+      const fileExt = file.name.split('.').pop()
+      const userId = (await supabase.auth.getUser()).data.user?.id
+      const fileName = `${crypto.randomUUID()}.${fileExt}`
+      const filePath = `user-${userId}/${fileName}`
 
-      // Upload with progress tracking
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('resumes-files')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+        .upload(filePath, file)
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw new Error(uploadError.message || 'Failed to upload file');
-      }
+      if (uploadError) throw new Error(uploadError.message)
 
-      // 2. Get public URL of the uploaded file
+      setUploadProgress(50)
+
       const { data: { publicUrl } } = await supabase.storage
         .from('resumes-files')
-        .getPublicUrl(filePath);
+        .getPublicUrl(filePath)
 
-      // 3. Create resume record in database
       const { data: resumeData, error: dbError } = await supabase
         .from('resumes')
         .insert([{
-          userId: (await supabase.auth.getUser()).data.user?.id,
+          userId,
           fileUrl: publicUrl,
           fileName: file.name,
           fileType: file.type,
           fileSize: file.size,
-          isActive: true,
+          isActive: true
         }])
         .select()
-        .single();
+        .single()
 
-      if (dbError) {
-        // Log TOUT l'objet d'erreur
-        console.error('Database error FULL:', JSON.stringify(dbError, null, 2));
-        console.error('Error code:', dbError.code);
-        console.error('Error message:', dbError.message);
-        console.error('Error details:', dbError.details);
-        console.error('Error hint:', dbError.hint);
-        throw new Error(dbError.message || 'Failed to save resume record');
-      }
+      if (dbError) throw dbError
 
-      // Trigger parsing
-      const response = await fetch('/api/parse-resume', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      // 🔥 Step 1 — Uploaded
+      setProcessStep(1)
+      setUploadProgress(70)
+      setIsUploaded(true)
+
+      // 🔥 Begin parsing
+      setProcessStep(1)
+
+      const response = await fetch("/api/parse-resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeId: resumeData.id })
-      });
+      })
 
-      const result = await response.json().catch(() => ({}));
+      const result = await response.json()
 
-      if (!response.ok || result.success === false) {
-        console.error(
-          'Parse error:',
-          result.step ? `[${result.step}]` : '',
-          result.error || 'Unknown error'
-        );
-        // Optionally: show toast or notification to the user
-      } else {
-        console.log('Resume parsed successfully:', result.data);
-        // Update UI or state with parsed data
+      // 🔥 Step 2 — Parsed
+      if (result) {
+        setProcessStep(2)
+        setUploadProgress(85)
+        
+        // Wait for 5 seconds before proceeding to step 3
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        
+        setProcessStep(3)
+        setUploadProgress(100)
       }
-
-      // Update UI
-      setIsUploaded(true);
-      toast({
-        title: "Resume uploaded successfully!",
-        description: "We're processing your resume...",
-      });
 
     } catch (error: any) {
-      console.error('Upload failed:', error);
       toast({
         title: "Upload failed",
-        description: error.message || "An error occurred while uploading your resume",
+        description: error.message,
         variant: "destructive",
-      });
+      })
     } finally {
-      setIsUploading(false);
+      setTimeout(() => setIsUploading(false), 500)
     }
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (file) {
-      uploadFile()
-    }
+    if (file) uploadFile()
   }
 
   const handleContinue = () => {
@@ -208,6 +186,7 @@ export default function CVUploadPage() {
   return (
     <div className="container mx-auto max-w-3xl py-8">
       <div className="space-y-6">
+
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight">Upload Your Resume</h1>
           <p className="mt-2 text-muted-foreground">
@@ -223,6 +202,53 @@ export default function CVUploadPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+
+            {/* 🚀 PROCESS TRACKER */}
+            <div className="mb-8 p-4 border rounded-lg bg-muted/30">
+              <h3 className="text-sm font-semibold mb-3 text-muted-foreground">Processing Steps</h3>
+
+              <div className="space-y-3">
+
+                {/* Step 1 */}
+                <div className="flex items-center gap-3">
+                  {processStep >= 1 ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : isUploading ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                  ) : (
+                    <div className="w-5 h-5 border rounded-full"></div>
+                  )}
+                  <span className="text-sm">Resume Uploaded</span>
+                </div>
+
+                {/* Step 2 */}
+                <div className="flex items-center gap-3">
+                  {processStep >= 2 ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : processStep === 1 ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                  ) : (
+                    <div className="w-5 h-5 border rounded-full"></div>
+                  )}
+                  <span className="text-sm">Resume Parsed</span>
+                </div>
+
+                {/* Step 3 */}
+                <div className="flex items-center gap-3">
+                  {processStep >= 3 ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : processStep === 2 ? (
+                    <Loader2 className="w-5 h-5 animate-spin text-blue-500" />
+                  ) : (
+                    <div className="w-5 h-5 border rounded-full"></div>
+                  )}
+                  <span className="text-sm">Profile Created & Updated</span>
+                </div>
+
+              </div>
+            </div>
+
+            {/* --- ORIGINAL UPLOAD UI BELOW --- */}
             <form onSubmit={handleSubmit}>
               <div
                 className={cn(
@@ -239,14 +265,12 @@ export default function CVUploadPage() {
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
                       <Upload className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        <span className="font-medium text-blue-600 dark:text-blue-400">Click to upload</span> or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        PDF or Word document (max 5MB)
-                      </p>
-                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      <span className="font-medium text-blue-600 dark:text-blue-400">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      PDF or Word document (max 5MB)
+                    </p>
                     <input
                       type="file"
                       id="cv-resume"
@@ -267,51 +291,35 @@ export default function CVUploadPage() {
                     <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
                       <FileText className="h-8 w-8 text-green-600 dark:text-green-400" />
                     </div>
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        {file.name}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                      {isUploading && (
-                        <div className="space-y-2">
-                          <Progress value={uploadProgress} className="h-2" />
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            Uploading... {uploadProgress}%
-                          </p>
-                        </div>
-                      )}
-                      {isUploaded && (
-                        <div className="flex items-center justify-center space-x-1 text-green-600 dark:text-green-400">
-                          <CheckCircle className="h-4 w-4" />
-                          <span className="text-sm">Upload successful!</span>
-                        </div>
-                      )}
-                    </div>
-                    {!isUploading && !isUploaded && (
-                      <Button type="submit">Upload Resume</Button>
+                    <p className="text-sm font-medium">{file.name}</p>
+                    {isUploading && <Progress value={uploadProgress} className="h-2" />}
+                    {!isUploading && !isUploaded && <Button type="submit">Upload Resume</Button>}
+                    {isUploaded && (
+                      <div className="flex items-center gap-2 text-green-500">
+                        <CheckCircle className="w-4 h-4" /> Upload successful!
+                      </div>
                     )}
                   </div>
                 )}
               </div>
             </form>
+
           </CardContent>
+
           <CardFooter className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={() => router.back()}
-            >
+            <Button variant="outline" onClick={() => router.back()}>
               Back
             </Button>
+
             <Button
               onClick={handleContinue}
-              disabled={!isUploaded}
+              disabled={processStep < 3}
             >
               Continue
             </Button>
           </CardFooter>
         </Card>
+
       </div>
     </div>
   )

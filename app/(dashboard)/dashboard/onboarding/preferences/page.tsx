@@ -1,211 +1,412 @@
 // app/(dashboard)/dashboard/onboarding/preferences/page.tsx
-"use client"
+'use client'
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Briefcase, MapPin, DollarSign, Star, Check } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { Briefcase, MapPin, DollarSign, Clock, Monitor, Target, Plus, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast'
+import { supabase } from '@/lib/supabase/client'
+import { upsertJobPreference } from '@/lib/actions/job-preferences.action'
 
-const jobTitles = [
-  "Frontend Developer",
-  "Backend Developer",
-  "Full Stack Developer",
-  "UI/UX Designer",
-  "Product Manager",
-  "DevOps Engineer",
-  "Data Scientist",
-  "Mobile Developer"
-]
-
-const locations = [
-  "Remote",
-  "On-site",
-  "Hybrid",
-  "Abidjan, CI",
-  "Lagos, NG",
-  "Nairobi, KE",
-  "Cape Town, ZA"
-]
-
-export default function PreferencesPage() {
+export default function JobPreferencesPage() {
   const router = useRouter()
-  const [selectedTitles, setSelectedTitles] = useState<string[]>([])
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([])
-  const [salaryRange, setSalaryRange] = useState<[number, number]>([300000, 1500000])
-  const [experienceLevel, setExperienceLevel] = useState<number>(2)
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
 
-  const toggleTitle = (title: string) => {
-    setSelectedTitles(prev =>
-      prev.includes(title)
-        ? prev.filter(t => t !== title)
-        : [...prev, title]
-    )
+  // Form state
+  const [jobTitles, setJobTitles] = useState<string[]>([])
+  const [locations, setLocations] = useState<string[]>([])
+  const [minSalary, setMinSalary] = useState(500000)
+  const [maxSalary, setMaxSalary] = useState(1000000)
+  const [experienceLevel, setExperienceLevel] = useState('Mid-Level')
+  const [workTypes, setWorkTypes] = useState<string[]>([])
+  const [remoteOptions, setRemoteOptions] = useState<string[]>([])
+  const [skills, setSkills] = useState<string[]>([])
+
+  // Input state
+  const [newJobTitle, setNewJobTitle] = useState('')
+  const [newLocation, setNewLocation] = useState('')
+  const [newSkill, setNewSkill] = useState('')
+
+  useEffect(() => {
+    loadUserAndPreferences()
+  }, [])
+
+  const loadUserAndPreferences = async () => {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      toast({
+        title: 'Not authenticated',
+        description: 'Please sign in',
+        variant: 'destructive',
+      })
+      router.push('/login')
+      return
+    }
+
+    setUserId(user.id)
+
+    // Load existing preferences if any
+    const { data: preferences } = await supabase
+      .from('job_preferences')
+      .select('*')
+      .eq('userid', user.id)
+      .single()
+
+    if (preferences) {
+      setJobTitles(preferences.jobtitles || [])
+      setLocations(preferences.locations || [])
+      setMinSalary(preferences.minsalary || 500000)
+      setMaxSalary(preferences.maxsalary || 1000000)
+      setExperienceLevel(preferences.experiencelevel || 'Mid-Level')
+      setWorkTypes(preferences.worktypes || [])
+      setRemoteOptions(preferences.remoteoptions || [])
+      setSkills(preferences.skills || [])
+    }
   }
 
-  const toggleLocation = (location: string) => {
-    setSelectedLocations(prev =>
-      prev.includes(location)
-        ? prev.filter(l => l !== location)
-        : [...prev, location]
-    )
+  // Add/Remove functions
+  const addJobTitle = () => {
+    if (newJobTitle.trim() && !jobTitles.includes(newJobTitle.trim())) {
+      setJobTitles([...jobTitles, newJobTitle.trim()])
+      setNewJobTitle('')
+    }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically save the preferences to your database
-    console.log({
-      jobTitles: selectedTitles,
-      locations: selectedLocations,
-      salaryRange,
-      experienceLevel
-    })
-    router.push("/dashboard")
+  const removeJobTitle = (title: string) => {
+    setJobTitles(jobTitles.filter(t => t !== title))
   }
 
-  const experienceLevels = [
-    { level: 1, label: "Entry Level" },
-    { level: 2, label: "Mid Level" },
-    { level: 3, label: "Senior" },
-    { level: 4, label: "Lead" },
-    { level: 5, label: "Executive" }
-  ]
+  const addLocation = () => {
+    if (newLocation.trim() && !locations.includes(newLocation.trim())) {
+      setLocations([...locations, newLocation.trim()])
+      setNewLocation('')
+    }
+  }
+
+  const removeLocation = (location: string) => {
+    setLocations(locations.filter(l => l !== location))
+  }
+
+  const addSkill = () => {
+    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+      setSkills([...skills, newSkill.trim()])
+      setNewSkill('')
+    }
+  }
+
+  const removeSkill = (skill: string) => {
+    setSkills(skills.filter(s => s !== skill))
+  }
+
+  const toggleWorkType = (type: string) => {
+    if (workTypes.includes(type)) {
+      setWorkTypes(workTypes.filter(t => t !== type))
+    } else {
+      setWorkTypes([...workTypes, type])
+    }
+  }
+
+  const toggleRemoteOption = (option: string) => {
+    if (remoteOptions.includes(option)) {
+      setRemoteOptions(remoteOptions.filter(o => o !== option))
+    } else {
+      setRemoteOptions([...remoteOptions, option])
+    }
+  }
+
+  const handleSave = async () => {
+    if (!userId) return
+
+    // Validation
+    if (jobTitles.length === 0) {
+      toast({
+        title: 'Missing information',
+        description: 'Please add at least one job title',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      const { success } = await upsertJobPreference({
+        userId: userId,
+        jobTitles: jobTitles,
+        locations: locations,
+        minSalary: minSalary,
+        maxSalary: maxSalary,
+        experienceLevel: experienceLevel,
+        workTypes: workTypes,
+        remoteOptions: remoteOptions,
+        skills: skills,
+      });
+
+      if (!success) throw Error("Failed to save job preferences")
+
+      toast({
+        title: 'Preferences saved!',
+        description: 'Your job preferences have been updated',
+      })
+
+      // Redirect to dashboard
+      setTimeout(() => {
+        router.push(`/dashboard?onboarding_complete=${true}`)
+      }, 1500)
+
+    } catch (error: any) {
+      console.error('Save error:', error)
+      toast({
+        title: 'Save failed',
+        description: error.message || 'Please try again',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSkip = () => {
+    router.push('/dashboard?onboarding_complete=true')
+  }
 
   return (
     <div className="container mx-auto max-w-4xl py-8">
-      <div className="space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight">Job Preferences</h1>
-          <p className="mt-2 text-muted-foreground">
-            Let's customize your job search experience
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Job Preferences</CardTitle>
-              <CardDescription>
-                Tell us what kind of jobs you're looking for
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8">
-              {/* Job Titles */}
-              <div>
-                <div className="flex items-center mb-4">
-                  <Briefcase className="h-5 w-5 mr-2 text-blue-600" />
-                  <Label className="text-base">Job Titles</Label>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {jobTitles.map((title) => (
-                    <Button
-                      key={title}
-                      type="button"
-                      variant={selectedTitles.includes(title) ? "default" : "outline"}
-                      className="rounded-full"
-                      onClick={() => toggleTitle(title)}
-                    >
-                      {title}
-                      {selectedTitles.includes(title) && (
-                        <Check className="ml-2 h-4 w-4" />
-                      )}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Locations */}
-              <div>
-                <div className="flex items-center mb-4">
-                  <MapPin className="h-5 w-5 mr-2 text-green-600" />
-                  <Label className="text-base">Preferred Locations</Label>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {locations.map((location) => (
-                    <Button
-                      key={location}
-                      type="button"
-                      variant={selectedLocations.includes(location) ? "default" : "outline"}
-                      className="rounded-full"
-                      onClick={() => toggleLocation(location)}
-                    >
-                      {location}
-                      {selectedLocations.includes(location) && (
-                        <Check className="ml-2 h-4 w-4" />
-                      )}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Salary Range */}
-              <div>
-                <div className="flex items-center mb-4">
-                  <DollarSign className="h-5 w-5 mr-2 text-yellow-600" />
-                  <Label className="text-base">Expected Salary (XOF/month)</Label>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>{salaryRange[0].toLocaleString()} XOF</span>
-                    <span>{salaryRange[1].toLocaleString()}+ XOF</span>
-                  </div>
-                  <Slider
-                    value={salaryRange}
-                    onValueChange={(value) => setSalaryRange(value as [number, number])}
-                    min={100000}
-                    max={3000000}
-                    step={50000}
-                    minStepsBetweenThumbs={1}
-                  />
-                </div>
-              </div>
-
-              {/* Experience Level */}
-              <div>
-                <div className="flex items-center mb-4">
-                  <Star className="h-5 w-5 mr-2 text-purple-600" />
-                  <Label className="text-base">Experience Level</Label>
-                </div>
-                <div className="grid grid-cols-5 gap-2">
-                  {experienceLevels.map(({ level, label }) => (
-                    <Button
-                      key={level}
-                      type="button"
-                      variant={experienceLevel === level ? "default" : "outline"}
-                      className={cn(
-                        "flex-col h-auto py-3",
-                        experienceLevel === level && "bg-purple-600 hover:bg-purple-700"
-                      )}
-                      onClick={() => setExperienceLevel(level)}
-                    >
-                      <div className="flex space-x-1 mb-1">
-                        {[...Array(level)].map((_, i) => (
-                          <Star key={i} className="h-4 w-4 fill-current" />
-                        ))}
-                      </div>
-                      <span className="text-xs">{label}</span>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.back()}
-              >
-                Back
-              </Button>
-              <Button type="submit">Complete Setup</Button>
-            </CardFooter>
-          </Card>
-        </form>
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          Set Your Job Preferences
+        </h1>
+        <p className="text-gray-600">
+          Tell us what you're looking for and we'll match you with the best opportunities
+        </p>
       </div>
+
+      <Card>
+        <CardContent className="pt-6 space-y-8">
+          
+          {/* Job Titles */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <Briefcase className="w-5 h-5 text-blue-600" />
+              Target Job Titles *
+            </label>
+            <p className="text-sm text-gray-600 mb-3">
+              What positions are you interested in?
+            </p>
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                value={newJobTitle}
+                onChange={(e) => setNewJobTitle(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addJobTitle()}
+                placeholder="e.g., Frontend Developer"
+                className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <Button onClick={addJobTitle} size="icon">
+                <Plus className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {jobTitles.map((title) => (
+                <span
+                  key={title}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
+                >
+                  {title}
+                  <button
+                    onClick={() => removeJobTitle(title)}
+                    className="hover:bg-blue-200 rounded-full p-0.5"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Locations */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <MapPin className="w-5 h-5 text-green-600" />
+              Preferred Locations
+            </label>
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                value={newLocation}
+                onChange={(e) => setNewLocation(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addLocation()}
+                placeholder="e.g., Remote, Abidjan, Paris"
+                className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none"
+              />
+              <Button onClick={addLocation} size="icon" className="bg-green-600 hover:bg-green-700">
+                <Plus className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {locations.map((location) => (
+                <span
+                  key={location}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-100 text-green-800 rounded-full text-sm"
+                >
+                  {location}
+                  <button onClick={() => removeLocation(location)}>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Salary Range */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <DollarSign className="w-5 h-5 text-yellow-600" />
+              Salary Range (XOF/month)
+            </label>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm mb-2">Minimum</label>
+                <input
+                  type="number"
+                  value={minSalary}
+                  onChange={(e) => setMinSalary(Number(e.target.value))}
+                  className="w-full px-4 py-2 border rounded-lg"
+                />
+              </div>
+              <div>
+                <label className="block text-sm mb-2">Maximum</label>
+                <input
+                  type="number"
+                  value={maxSalary}
+                  onChange={(e) => setMaxSalary(Number(e.target.value))}
+                  className="w-full px-4 py-2 border rounded-lg"
+                />
+              </div>
+            </div>
+            <p className="mt-2 text-sm text-gray-600">
+              {minSalary.toLocaleString()} - {maxSalary.toLocaleString()} XOF
+            </p>
+          </div>
+
+          {/* Experience Level */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <Target className="w-5 h-5 text-purple-600" />
+              Experience Level
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {['Entry Level', 'Mid-Level', 'Senior', 'Lead', 'Executive'].map((level) => (
+                <Button
+                  key={level}
+                  onClick={() => setExperienceLevel(level)}
+                  variant={experienceLevel === level ? 'default' : 'outline'}
+                  className={experienceLevel === level ? 'bg-purple-600' : ''}
+                >
+                  {level}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Work Types */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <Clock className="w-5 h-5 text-orange-600" />
+              Work Types
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship'].map((type) => (
+                <Button
+                  key={type}
+                  onClick={() => toggleWorkType(type)}
+                  variant={workTypes.includes(type) ? 'default' : 'outline'}
+                  className={workTypes.includes(type) ? 'bg-orange-600' : ''}
+                >
+                  {type}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Remote Options */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <Monitor className="w-5 h-5 text-indigo-600" />
+              Remote Work Preferences
+            </label>
+            <div className="flex flex-wrap gap-3">
+              {['Fully Remote', 'Hybrid', 'On-site'].map((option) => (
+                <Button
+                  key={option}
+                  onClick={() => toggleRemoteOption(option)}
+                  variant={remoteOptions.includes(option) ? 'default' : 'outline'}
+                  className={remoteOptions.includes(option) ? 'bg-indigo-600' : ''}
+                >
+                  {option}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Skills */}
+          <div>
+            <label className="flex items-center gap-2 text-lg font-semibold mb-3">
+              <Target className="w-5 h-5 text-pink-600" />
+              Required Skills
+            </label>
+            <div className="flex gap-2 mb-3">
+              <input
+                type="text"
+                value={newSkill}
+                onChange={(e) => setNewSkill(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addSkill()}
+                placeholder="e.g., React, Python"
+                className="flex-1 px-4 py-2 border rounded-lg"
+              />
+              <Button onClick={addSkill} size="icon" className="bg-pink-600 hover:bg-pink-700">
+                <Plus className="w-5 h-5" />
+              </Button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-pink-100 text-pink-800 rounded-full text-sm"
+                >
+                  {skill}
+                  <button onClick={() => removeSkill(skill)}>
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+        </CardContent>
+
+        <CardFooter className="flex gap-4">
+          <Button
+            onClick={handleSave}
+            disabled={isLoading || jobTitles.length === 0}
+            className="flex-1"
+          >
+            {isLoading ? 'Saving...' : 'Save Preferences'}
+          </Button>
+          <Button
+            onClick={handleSkip}
+            variant="outline"
+            disabled={isLoading}
+          >
+            Skip for Now
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
