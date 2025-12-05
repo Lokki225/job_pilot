@@ -7,6 +7,9 @@ import Link from "next/link"
 import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { logout } from "@/lib/auth"
+import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase/client"
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
@@ -23,10 +26,19 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
+  const router = useRouter();
+  const [session, setSession] = useState<any>()
+
+  const fetchSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    setSession(session)
+  }
 
   // Close mobile sidebar when route changes
   useEffect(() => {
     setSidebarOpen(false)
+    fetchSession()
+
   }, [pathname])
 
   return (
@@ -158,7 +170,15 @@ export default function DashboardLayout({
                   "Dashboard"
                 }
               </h1>
+
+
             </div>
+            {session ? (<Button onClick={() => {
+              logout();
+              router.push("/login");
+            }}>
+              Logout
+            </Button>): null}
           </div>
         </header>
 

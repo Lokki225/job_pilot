@@ -3,14 +3,16 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useToast } from "@/components/ui/use-toast"
 import { CheckCircle, Rocket, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function WelcomePage() {
   const router = useRouter()
+  const { toast } = useToast()
 
   const handleContinue = () => {
-    router.push("/dashboard/onboarding/cv")
+    router.push("/dashboard/onboarding/resume")
   }
 
   return (

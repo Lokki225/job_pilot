@@ -1,7 +1,7 @@
 // app/(dashboard)/dashboard/onboarding/cv/page.tsx
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Upload, FileText, CheckCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast"
+import { supabase } from "@/lib/supabase/client"
 
 export default function CVUploadPage() {
   const router = useRouter()
@@ -18,6 +19,32 @@ export default function CVUploadPage() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [file, setFile] = useState<File | null>(null)
   const [isUploaded, setIsUploaded] = useState(false)
+
+  const is_user_connected = async () => {
+    // Verify if there is an authenticated user
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast({
+        title: "Not authenticated",
+        description: "Please sign in to upload your resume",
+        variant: "destructive",
+      })
+      return
+    }
+    toast({
+        title: "User Authenticated",
+        description: "Good !",
+        variant: "default",
+      })
+      console.log(user);
+      
+  }
+
+  useEffect(() => {
+    is_user_connected()
+  }, [router])
+  
+  
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -73,27 +100,96 @@ export default function CVUploadPage() {
     setFile(selectedFile)
   }
 
-  const simulateUpload = () => {
-    setIsUploading(true)
-    setUploadProgress(0)
-    
-    const interval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval)
-          setIsUploading(false)
-          setIsUploaded(true)
-          return 100
-        }
-        return prev + 10
-      })
-    }, 200)
-  }
+  const uploadFile = async () => {
+        if (!file) return;
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // 1. Upload file to Supabase Storage
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `user-${(await supabase.auth.getUser()).data.user?.id}/${fileName}`;
+
+      // Upload with progress tracking
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('resumes-files')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(uploadError.message || 'Failed to upload file');
+      }
+
+      // 2. Get public URL of the uploaded file
+      const { data: { publicUrl } } = await supabase.storage
+        .from('resumes-files')
+        .getPublicUrl(filePath);
+
+      // 3. Create resume record in database
+      const { data: resumeData, error: dbError } = await supabase
+        .from('resumes')
+        .insert([{
+          userId: (await supabase.auth.getUser()).data.user?.id,
+          fileUrl: publicUrl,
+          fileName: file.name,
+          fileType: file.type,
+          fileSize: file.size,
+          isActive: true,
+        }])
+        .select()
+        .single();
+
+      if (dbError) {
+        // Log TOUT l'objet d'erreur
+        console.error('Database error FULL:', JSON.stringify(dbError, null, 2));
+        console.error('Error code:', dbError.code);
+        console.error('Error message:', dbError.message);
+        console.error('Error details:', dbError.details);
+        console.error('Error hint:', dbError.hint);
+        throw new Error(dbError.message || 'Failed to save resume record');
+      }
+
+      // Trigger parsing
+      const response = await fetch('/api/parse-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeId: resumeData.id })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Parse error:', errorData.error || 'Failed to parse resume');
+        // Handle error (maybe show a toast)
+      }
+
+      // Update UI
+      setIsUploaded(true);
+      toast({
+        title: "Resume uploaded successfully!",
+        description: "We're processing your resume...",
+      });
+
+    } catch (error: any) {
+      console.error('Upload failed:', error);
+      toast({
+        title: "Upload failed",
+        description: error.message || "An error occurred while uploading your resume",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (file) {
-      simulateUpload()
+      uploadFile()
     }
   }
 
@@ -105,17 +201,17 @@ export default function CVUploadPage() {
     <div className="container mx-auto max-w-3xl py-8">
       <div className="space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight">Upload Your CV</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Upload Your Resume</h1>
           <p className="mt-2 text-muted-foreground">
-            Let's help you get started by uploading your CV
+            Let's help you get started by uploading your Resume
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>CV Upload</CardTitle>
+            <CardTitle>Resume Upload</CardTitle>
             <CardDescription>
-              Upload your CV to help us match you with relevant job opportunities
+              Upload your Resume to help us match you with relevant job opportunities
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -145,7 +241,7 @@ export default function CVUploadPage() {
                     </div>
                     <input
                       type="file"
-                      id="cv-upload"
+                      id="cv-resume"
                       className="hidden"
                       accept=".pdf,.doc,.docx"
                       onChange={handleFileChange}
@@ -153,7 +249,7 @@ export default function CVUploadPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => document.getElementById('cv-upload')?.click()}
+                      onClick={() => document.getElementById('cv-resume')?.click()}
                     >
                       Select File
                     </Button>
@@ -186,7 +282,7 @@ export default function CVUploadPage() {
                       )}
                     </div>
                     {!isUploading && !isUploaded && (
-                      <Button type="submit">Upload CV</Button>
+                      <Button type="submit">Upload Resume</Button>
                     )}
                   </div>
                 )}

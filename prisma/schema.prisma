@@ -1,17 +1,19 @@
-// This is your Prisma schema file
+// ===========================================================
+// GENERATOR & DATASOURCE
+// ===========================================================
 generator client {
-  provider = "prisma-client"  // ← Changé !
-  output   = "./generated/client"  // ← Nouveau !
+  provider = "prisma-client"
+  output   = "./generated/client"
 }
 
 datasource db {
   provider = "postgresql"
-  // url supprimé - maintenant dans prisma.config.ts
+  // URL handled in prisma.config.ts (Supabase)
 }
 
-// --------------------------------------
+// ===========================================================
 // ENUMS
-// --------------------------------------
+// ===========================================================
 enum UserRole {
   USER
   RECRUITER
@@ -36,183 +38,282 @@ enum ApplicationStatus {
   ACCEPTED
 }
 
-// --------------------------------------
-// USER MODEL (Authentication + Core Identity)
-// --------------------------------------
+// ===========================================================
+// USER (Auth + Global Relations)
+// ===========================================================
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  passwordHash  String
-  role          UserRole  @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  lastLoginAt   DateTime?
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email           String    @unique
+  role            UserRole  @default(USER)
 
   // Relations
-  profile       Profile?
-  jobs          Job[]              // Jobs created (for recruiters)
-  applications  JobApplication[]   // Jobs applied (for users)
-  letters       Letter[]           // Letters created by AI
-  resumes       UserResume[]       // User's uploaded resumes
-  notifications Notification[]     // User notifications
+  profile         Profile?
+  resumes         Resume[]
+  jobApplications JobApplication[]
+  preferences     JobSearchPreference?
+  notifications   Notification[]
+  aiContents      AIGeneratedContent[]
 
-  @@index([role])
-  @@index([createdAt])
-  @@index([email])
+  // Onboarding state
+  onboardingStep  Int       @default(0)   // 0 = fresh user, 1-5 steps...
+  isOnboarded     Boolean   @default(false)
+
+  createdAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime  @updatedAt @db.Timestamptz(6)
+
+  @@map("users")
 }
 
-// --------------------------------------
-// PROFILE MODEL (Extend User without bloating user table)
-// --------------------------------------
+// ===========================================================
+// PROFILE (Extended User Data + Resume-derived fields)
+// ===========================================================
 model Profile {
-  id            String   @id @default(cuid())
-  userId        String   @unique
-  firstName     String?
-  lastName      String?
-  phone         String?
-  location      String?
-  resumeUrl     String?
-  avatarUrl     String?
-  bio           String?
-  website       String?
-  linkedinUrl   String?
-  githubUrl     String?
-  twitterUrl    String?
+  id              String   @id @default(cuid())
+  userId          String   @unique @db.Uuid
 
-  // Skillset in JSON format for scalability
-  skills        Json?
-
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([location])
-}
-
-// --------------------------------------
-// JOB MODEL (Jobs fetched or manually added)
-// --------------------------------------
-model Job {
-  id              String       @id @default(cuid())
-  title           String
-  company         String
-  platform        JobPlatform  @default(OTHER)
-  platformJobId   String?      // To sync with external platforms
-  url             String?
-  description     String?      @db.Text
+  // Core personal info
+  firstName       String?
+  lastName        String?
+  phone           String?
   location        String?
-  postedAt        DateTime?
-  salaryMin       Int?
-  salaryMax       Int?
-  salaryCurrency  String?      @default("XOF")
-  isRemote        Boolean      @default(false)
-  experienceLevel String?
-  createdBy       String?      // Recruiter who manually added the job
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  deletedAt       DateTime?    @map("deleted_at")
+  bio             String?
+  headline        String?
 
-  // Relationships
-  recruiter       User?        @relation(fields: [createdBy], references: [id])
-  applications    JobApplication[]
-  tags            JobTag[]     @relation("JobTags")
+  // Socials
+  website         String?
+  linkedinUrl     String?
+  githubUrl       String?
+  twitterUrl      String?
 
-  @@index([platform])
-  @@index([company])
-  @@index([title])
-  @@index([createdAt])
-  @@index([isRemote])
-  @@index([experienceLevel])
-  @@map("jobs")
+  avatarUrl       String?
+  resumeUrl       String?     // Last uploaded resume
+
+  // Profile completeness
+  completionScore Int       @default(0)
+  isComplete      Boolean   @default(false)
+
+  // Language list
+  languages       String[]    // JSON array of languages like ["English", "French"]
+
+  // Relations
+  skills          Skill[]
+  experiences     Experience[]
+  educations      Education[]
+  certifications  Certification[]
+  projects        Project[]
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime    @updatedAt @db.Timestamptz(6)
+
+  @@map("profiles")
 }
 
-// --------------------------------------
-// JOB TAG MODEL
-// --------------------------------------
-model JobTag {
-  id    String @id @default(cuid())
-  name  String @unique
-  jobs  Job[]  @relation("JobTags")
+// ===========================================================
+// RESUME STORAGE (multiple resumes for users)
+// ===========================================================
+model Resume {
+  id          String   @id @default(cuid())
+  userId      String   @db.Uuid
+
+  fileUrl     String
+  fileName    String
+  fileType    String
+  fileSize    Int
+
+  isActive    Boolean  @default(true)
+
+  parsedData  Json?    // Resume parser data storage
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("resumes")
 }
 
-// --------------------------------------
-// JOB APPLICATION MODEL
-// --------------------------------------
+// ===========================================================
+// PROFILE SUB-SECTIONS (Highly scalable, normalized)
+// ===========================================================
+model Skill {
+  id          String   @id @default(cuid())
+  profileId   String
+  name        String
+  level       Int?       // 1–5 skill rating
+  category    String?    // e.g., “Backend”, “Cloud”, etc.
+
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("skills")
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  profileId   String
+
+  title       String
+  company     String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  isCurrent   Boolean  @default(false)
+  description String?
+
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("experiences")
+}
+
+model Education {
+  id          String   @id @default(cuid())
+  profileId   String
+
+  institution String
+  degree      String
+  field       String
+  startDate   DateTime
+  endDate     DateTime?
+  isCurrent   Boolean  @default(false)
+  description String?
+
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("educations")
+}
+
+model Certification {
+  id            String   @id @default(cuid())
+  profileId     String
+
+  name          String
+  issuer        String
+  issueDate     DateTime
+  expiryDate    DateTime?
+  credentialUrl String?
+
+  profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("certifications")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  profileId   String
+
+  name        String
+  description String
+  url         String?
+  startDate   DateTime
+  endDate     DateTime?
+  isCurrent   Boolean  @default(false)
+
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("projects")
+}
+
+// ===========================================================
+// JOB APPLYING MODULE
+// ===========================================================
 model JobApplication {
-  id            String             @id @default(cuid())
-  userId        String
-  jobId         String
-  status        ApplicationStatus  @default(PENDING)
-  appliedAt     DateTime           @default(now())
-  isAutoSent    Boolean            @default(false) // For automations
-  trackingUrl   String?            // To check status
-  notes         String?            @db.Text
-  followUpDate  DateTime?          // For setting reminders
-  salaryOffer   Int?               // If shared by employer
-  interviewDate DateTime?          // For scheduling
+  id          String           @id @default(cuid())
+  userId      String           @db.Uuid
 
-  // Relationships
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  job           Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  letter        Letter?            // Optional motivation letter
+  jobTitle    String
+  company     String
+  status      ApplicationStatus @default(PENDING)
 
-  @@index([userId])
-  @@index([jobId])
-  @@index([status])
-  @@index([appliedAt])
-  @@index([status, appliedAt])
-  @@unique([userId, jobId]) // Prevent duplicate applications
+  appliedAt   DateTime @default(now()) @db.Timestamptz(6)
+  source      JobPlatform?
+  jobPostUrl  String?
+  notes       String?
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
   @@map("job_applications")
 }
 
-// --------------------------------------
-// MOTIVATION LETTER MODEL (AI-generated texts)
-// --------------------------------------
-model Letter {
-  id             String           @id @default(cuid())
-  userId         String
-  applicationId  String?          @unique // 1 letter per application (optional)
-  content        String           @db.Text
-  generatedAt    DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+// ===========================================================
+// JOB SEARCH PREFERENCES
+// ===========================================================
+model JobSearchPreference {
+  id              String   @id @default(cuid())
+  userId          String   @unique @db.Uuid
 
-  // Relations
-  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  application    JobApplication?  @relation(fields: [applicationId], references: [id])
-  
-  @@index([userId])
-  @@index([applicationId])
-  @@index([generatedAt])
+  jobTitles       String[] // preferred titles
+  locations       String[] // preferred locations
+  minSalary       Int?
+  maxSalary       Int?
+  experienceLevel String?
+  workTypes       String[] // ["full-time", "contract"]
+  remoteOptions   String[] // ["remote", "on-site"]
+  skills          String[]
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("job_search_preferences")
 }
 
-// --------------------------------------
-// USER RESUME MODEL
-// --------------------------------------
-model UserResume {
+// ===========================================================
+// AI GENERATED CONTENT (Cover letters, resumes, summaries, etc.)
+// ===========================================================
+model AIGeneratedContent {
   id          String   @id @default(cuid())
-  userId      String
-  title       String
-  fileUrl     String
-  isDefault   Boolean  @default(false)
-  uploadedAt  DateTime @default(now())
+  userId      String   @db.Uuid
+
+  type        String   // “cover_letter”, “summary”, etc.
+  prompt      String
+  content     String   @db.Text
+  model       String   // “gpt-4.1”, “deepseek-r1”, etc.
+  metadata    Json?
+
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-  @@index([isDefault])
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("ai_generated_content")
 }
 
-// --------------------------------------
-// NOTIFICATION MODEL
-// --------------------------------------
+// ===========================================================
+// NOTIFICATIONS SYSTEM
+// ===========================================================
 model Notification {
-  id        String   @id @default(cuid())
-  userId    String
-  type      String   // "application_update", "reminder", etc.
-  message   String   @db.Text
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String   @db.Uuid
 
-  @@index([userId])
-  @@index([isRead])
-  @@index([createdAt])
-  @@index([type, isRead])
+  type        String   // “job_match”, “reminder”
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  link        String?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+
+  @@map("notifications")
 }

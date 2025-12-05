@@ -20,8 +20,18 @@ export type ProfileModel = runtime.Types.Result.DefaultSelection<Prisma.$Profile
 
 export type AggregateProfile = {
   _count: ProfileCountAggregateOutputType | null
+  _avg: ProfileAvgAggregateOutputType | null
+  _sum: ProfileSumAggregateOutputType | null
   _min: ProfileMinAggregateOutputType | null
   _max: ProfileMaxAggregateOutputType | null
+}
+
+export type ProfileAvgAggregateOutputType = {
+  completionScore: number | null
+}
+
+export type ProfileSumAggregateOutputType = {
+  completionScore: number | null
 }
 
 export type ProfileMinAggregateOutputType = {
@@ -31,13 +41,18 @@ export type ProfileMinAggregateOutputType = {
   lastName: string | null
   phone: string | null
   location: string | null
-  resumeUrl: string | null
-  avatarUrl: string | null
   bio: string | null
+  headline: string | null
   website: string | null
   linkedinUrl: string | null
   githubUrl: string | null
   twitterUrl: string | null
+  avatarUrl: string | null
+  resumeUrl: string | null
+  completionScore: number | null
+  isComplete: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ProfileMaxAggregateOutputType = {
@@ -47,13 +62,18 @@ export type ProfileMaxAggregateOutputType = {
   lastName: string | null
   phone: string | null
   location: string | null
-  resumeUrl: string | null
-  avatarUrl: string | null
   bio: string | null
+  headline: string | null
   website: string | null
   linkedinUrl: string | null
   githubUrl: string | null
   twitterUrl: string | null
+  avatarUrl: string | null
+  resumeUrl: string | null
+  completionScore: number | null
+  isComplete: boolean | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type ProfileCountAggregateOutputType = {
@@ -63,17 +83,30 @@ export type ProfileCountAggregateOutputType = {
   lastName: number
   phone: number
   location: number
-  resumeUrl: number
-  avatarUrl: number
   bio: number
+  headline: number
   website: number
   linkedinUrl: number
   githubUrl: number
   twitterUrl: number
-  skills: number
+  avatarUrl: number
+  resumeUrl: number
+  completionScore: number
+  isComplete: number
+  languages: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
+
+export type ProfileAvgAggregateInputType = {
+  completionScore?: true
+}
+
+export type ProfileSumAggregateInputType = {
+  completionScore?: true
+}
 
 export type ProfileMinAggregateInputType = {
   id?: true
@@ -82,13 +115,18 @@ export type ProfileMinAggregateInputType = {
   lastName?: true
   phone?: true
   location?: true
-  resumeUrl?: true
-  avatarUrl?: true
   bio?: true
+  headline?: true
   website?: true
   linkedinUrl?: true
   githubUrl?: true
   twitterUrl?: true
+  avatarUrl?: true
+  resumeUrl?: true
+  completionScore?: true
+  isComplete?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ProfileMaxAggregateInputType = {
@@ -98,13 +136,18 @@ export type ProfileMaxAggregateInputType = {
   lastName?: true
   phone?: true
   location?: true
-  resumeUrl?: true
-  avatarUrl?: true
   bio?: true
+  headline?: true
   website?: true
   linkedinUrl?: true
   githubUrl?: true
   twitterUrl?: true
+  avatarUrl?: true
+  resumeUrl?: true
+  completionScore?: true
+  isComplete?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type ProfileCountAggregateInputType = {
@@ -114,14 +157,19 @@ export type ProfileCountAggregateInputType = {
   lastName?: true
   phone?: true
   location?: true
-  resumeUrl?: true
-  avatarUrl?: true
   bio?: true
+  headline?: true
   website?: true
   linkedinUrl?: true
   githubUrl?: true
   twitterUrl?: true
-  skills?: true
+  avatarUrl?: true
+  resumeUrl?: true
+  completionScore?: true
+  isComplete?: true
+  languages?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -163,6 +211,18 @@ export type ProfileAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: ProfileAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: ProfileSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: ProfileMinAggregateInputType
@@ -193,6 +253,8 @@ export type ProfileGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: ProfileCountAggregateInputType | true
+  _avg?: ProfileAvgAggregateInputType
+  _sum?: ProfileSumAggregateInputType
   _min?: ProfileMinAggregateInputType
   _max?: ProfileMaxAggregateInputType
 }
@@ -204,15 +266,22 @@ export type ProfileGroupByOutputType = {
   lastName: string | null
   phone: string | null
   location: string | null
-  resumeUrl: string | null
-  avatarUrl: string | null
   bio: string | null
+  headline: string | null
   website: string | null
   linkedinUrl: string | null
   githubUrl: string | null
   twitterUrl: string | null
-  skills: runtime.JsonValue | null
+  avatarUrl: string | null
+  resumeUrl: string | null
+  completionScore: number
+  isComplete: boolean
+  languages: string[]
+  createdAt: Date
+  updatedAt: Date
   _count: ProfileCountAggregateOutputType | null
+  _avg: ProfileAvgAggregateOutputType | null
+  _sum: ProfileSumAggregateOutputType | null
   _min: ProfileMinAggregateOutputType | null
   _max: ProfileMaxAggregateOutputType | null
 }
@@ -237,19 +306,29 @@ export type ProfileWhereInput = {
   OR?: Prisma.ProfileWhereInput[]
   NOT?: Prisma.ProfileWhereInput | Prisma.ProfileWhereInput[]
   id?: Prisma.StringFilter<"Profile"> | string
-  userId?: Prisma.StringFilter<"Profile"> | string
+  userId?: Prisma.UuidFilter<"Profile"> | string
   firstName?: Prisma.StringNullableFilter<"Profile"> | string | null
   lastName?: Prisma.StringNullableFilter<"Profile"> | string | null
   phone?: Prisma.StringNullableFilter<"Profile"> | string | null
   location?: Prisma.StringNullableFilter<"Profile"> | string | null
-  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
-  avatarUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
+  headline?: Prisma.StringNullableFilter<"Profile"> | string | null
   website?: Prisma.StringNullableFilter<"Profile"> | string | null
   linkedinUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   githubUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   twitterUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
-  skills?: Prisma.JsonNullableFilter<"Profile">
+  avatarUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
+  completionScore?: Prisma.IntFilter<"Profile"> | number
+  isComplete?: Prisma.BoolFilter<"Profile"> | boolean
+  languages?: Prisma.StringNullableListFilter<"Profile">
+  createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+  skills?: Prisma.SkillListRelationFilter
+  experiences?: Prisma.ExperienceListRelationFilter
+  educations?: Prisma.EducationListRelationFilter
+  certifications?: Prisma.CertificationListRelationFilter
+  projects?: Prisma.ProjectListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -260,14 +339,24 @@ export type ProfileOrderByWithRelationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
-  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  headline?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedinUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   twitterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  skills?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  completionScore?: Prisma.SortOrder
+  isComplete?: Prisma.SortOrder
+  languages?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  skills?: Prisma.SkillOrderByRelationAggregateInput
+  experiences?: Prisma.ExperienceOrderByRelationAggregateInput
+  educations?: Prisma.EducationOrderByRelationAggregateInput
+  certifications?: Prisma.CertificationOrderByRelationAggregateInput
+  projects?: Prisma.ProjectOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -281,14 +370,24 @@ export type ProfileWhereUniqueInput = Prisma.AtLeast<{
   lastName?: Prisma.StringNullableFilter<"Profile"> | string | null
   phone?: Prisma.StringNullableFilter<"Profile"> | string | null
   location?: Prisma.StringNullableFilter<"Profile"> | string | null
-  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
-  avatarUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableFilter<"Profile"> | string | null
+  headline?: Prisma.StringNullableFilter<"Profile"> | string | null
   website?: Prisma.StringNullableFilter<"Profile"> | string | null
   linkedinUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   githubUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
   twitterUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
-  skills?: Prisma.JsonNullableFilter<"Profile">
+  avatarUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableFilter<"Profile"> | string | null
+  completionScore?: Prisma.IntFilter<"Profile"> | number
+  isComplete?: Prisma.BoolFilter<"Profile"> | boolean
+  languages?: Prisma.StringNullableListFilter<"Profile">
+  createdAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Profile"> | Date | string
+  skills?: Prisma.SkillListRelationFilter
+  experiences?: Prisma.ExperienceListRelationFilter
+  educations?: Prisma.EducationListRelationFilter
+  certifications?: Prisma.CertificationListRelationFilter
+  projects?: Prisma.ProjectListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
@@ -299,17 +398,24 @@ export type ProfileOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
-  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  headline?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   linkedinUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   githubUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   twitterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  skills?: Prisma.SortOrderInput | Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  completionScore?: Prisma.SortOrder
+  isComplete?: Prisma.SortOrder
+  languages?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProfileCountOrderByAggregateInput
+  _avg?: Prisma.ProfileAvgOrderByAggregateInput
   _max?: Prisma.ProfileMaxOrderByAggregateInput
   _min?: Prisma.ProfileMinOrderByAggregateInput
+  _sum?: Prisma.ProfileSumOrderByAggregateInput
 }
 
 export type ProfileScalarWhereWithAggregatesInput = {
@@ -317,19 +423,24 @@ export type ProfileScalarWhereWithAggregatesInput = {
   OR?: Prisma.ProfileScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProfileScalarWhereWithAggregatesInput | Prisma.ProfileScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Profile"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Profile"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"Profile"> | string
   firstName?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   lastName?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
-  resumeUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
-  avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  headline?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   linkedinUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   githubUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
   twitterUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
-  skills?: Prisma.JsonNullableWithAggregatesFilter<"Profile">
+  avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  resumeUrl?: Prisma.StringNullableWithAggregatesFilter<"Profile"> | string | null
+  completionScore?: Prisma.IntWithAggregatesFilter<"Profile"> | number
+  isComplete?: Prisma.BoolWithAggregatesFilter<"Profile"> | boolean
+  languages?: Prisma.StringNullableListFilter<"Profile">
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Profile"> | Date | string
 }
 
 export type ProfileCreateInput = {
@@ -338,14 +449,24 @@ export type ProfileCreateInput = {
   lastName?: string | null
   phone?: string | null
   location?: string | null
-  resumeUrl?: string | null
-  avatarUrl?: string | null
   bio?: string | null
+  headline?: string | null
   website?: string | null
   linkedinUrl?: string | null
   githubUrl?: string | null
   twitterUrl?: string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
   user: Prisma.UserCreateNestedOneWithoutProfileInput
 }
 
@@ -356,14 +477,24 @@ export type ProfileUncheckedCreateInput = {
   lastName?: string | null
   phone?: string | null
   location?: string | null
-  resumeUrl?: string | null
-  avatarUrl?: string | null
   bio?: string | null
+  headline?: string | null
   website?: string | null
   linkedinUrl?: string | null
   githubUrl?: string | null
   twitterUrl?: string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type ProfileUpdateInput = {
@@ -372,14 +503,24 @@ export type ProfileUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
 }
 
@@ -390,14 +531,24 @@ export type ProfileUncheckedUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
 }
 
 export type ProfileCreateManyInput = {
@@ -407,14 +558,19 @@ export type ProfileCreateManyInput = {
   lastName?: string | null
   phone?: string | null
   location?: string | null
-  resumeUrl?: string | null
-  avatarUrl?: string | null
   bio?: string | null
+  headline?: string | null
   website?: string | null
   linkedinUrl?: string | null
   githubUrl?: string | null
   twitterUrl?: string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type ProfileUpdateManyMutationInput = {
@@ -423,14 +579,19 @@ export type ProfileUpdateManyMutationInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProfileUncheckedUpdateManyInput = {
@@ -440,19 +601,32 @@ export type ProfileUncheckedUpdateManyInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProfileNullableScalarRelationFilter = {
   is?: Prisma.ProfileWhereInput | null
   isNot?: Prisma.ProfileWhereInput | null
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type ProfileCountOrderByAggregateInput = {
@@ -462,14 +636,23 @@ export type ProfileCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  resumeUrl?: Prisma.SortOrder
-  avatarUrl?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  headline?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedinUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   twitterUrl?: Prisma.SortOrder
-  skills?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
+  completionScore?: Prisma.SortOrder
+  isComplete?: Prisma.SortOrder
+  languages?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type ProfileAvgOrderByAggregateInput = {
+  completionScore?: Prisma.SortOrder
 }
 
 export type ProfileMaxOrderByAggregateInput = {
@@ -479,13 +662,18 @@ export type ProfileMaxOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  resumeUrl?: Prisma.SortOrder
-  avatarUrl?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  headline?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedinUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   twitterUrl?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
+  completionScore?: Prisma.SortOrder
+  isComplete?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type ProfileMinOrderByAggregateInput = {
@@ -495,13 +683,27 @@ export type ProfileMinOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   location?: Prisma.SortOrder
-  resumeUrl?: Prisma.SortOrder
-  avatarUrl?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  headline?: Prisma.SortOrder
   website?: Prisma.SortOrder
   linkedinUrl?: Prisma.SortOrder
   githubUrl?: Prisma.SortOrder
   twitterUrl?: Prisma.SortOrder
+  avatarUrl?: Prisma.SortOrder
+  resumeUrl?: Prisma.SortOrder
+  completionScore?: Prisma.SortOrder
+  isComplete?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type ProfileSumOrderByAggregateInput = {
+  completionScore?: Prisma.SortOrder
+}
+
+export type ProfileScalarRelationFilter = {
+  is?: Prisma.ProfileWhereInput
+  isNot?: Prisma.ProfileWhereInput
 }
 
 export type ProfileCreateNestedOneWithoutUserInput = {
@@ -536,8 +738,87 @@ export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutUserInput, Prisma.ProfileUpdateWithoutUserInput>, Prisma.ProfileUncheckedUpdateWithoutUserInput>
 }
 
+export type ProfileCreatelanguagesInput = {
+  set: string[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type ProfileUpdatelanguagesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type ProfileCreateNestedOneWithoutSkillsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutSkillsInput, Prisma.ProfileUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutSkillsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutSkillsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutSkillsInput, Prisma.ProfileUncheckedCreateWithoutSkillsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutSkillsInput
+  upsert?: Prisma.ProfileUpsertWithoutSkillsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutSkillsInput, Prisma.ProfileUpdateWithoutSkillsInput>, Prisma.ProfileUncheckedUpdateWithoutSkillsInput>
+}
+
+export type ProfileCreateNestedOneWithoutExperiencesInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutExperiencesInput, Prisma.ProfileUncheckedCreateWithoutExperiencesInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutExperiencesInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutExperiencesNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutExperiencesInput, Prisma.ProfileUncheckedCreateWithoutExperiencesInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutExperiencesInput
+  upsert?: Prisma.ProfileUpsertWithoutExperiencesInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutExperiencesInput, Prisma.ProfileUpdateWithoutExperiencesInput>, Prisma.ProfileUncheckedUpdateWithoutExperiencesInput>
+}
+
+export type ProfileCreateNestedOneWithoutEducationsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutEducationsInput, Prisma.ProfileUncheckedCreateWithoutEducationsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutEducationsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutEducationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutEducationsInput, Prisma.ProfileUncheckedCreateWithoutEducationsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutEducationsInput
+  upsert?: Prisma.ProfileUpsertWithoutEducationsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutEducationsInput, Prisma.ProfileUpdateWithoutEducationsInput>, Prisma.ProfileUncheckedUpdateWithoutEducationsInput>
+}
+
+export type ProfileCreateNestedOneWithoutCertificationsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutCertificationsInput, Prisma.ProfileUncheckedCreateWithoutCertificationsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutCertificationsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutCertificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutCertificationsInput, Prisma.ProfileUncheckedCreateWithoutCertificationsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutCertificationsInput
+  upsert?: Prisma.ProfileUpsertWithoutCertificationsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutCertificationsInput, Prisma.ProfileUpdateWithoutCertificationsInput>, Prisma.ProfileUncheckedUpdateWithoutCertificationsInput>
+}
+
+export type ProfileCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutProjectsInput, Prisma.ProfileUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+}
+
+export type ProfileUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfileCreateWithoutProjectsInput, Prisma.ProfileUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.ProfileCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.ProfileUpsertWithoutProjectsInput
+  connect?: Prisma.ProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProfileUpdateToOneWithWhereWithoutProjectsInput, Prisma.ProfileUpdateWithoutProjectsInput>, Prisma.ProfileUncheckedUpdateWithoutProjectsInput>
 }
 
 export type ProfileCreateWithoutUserInput = {
@@ -546,14 +827,24 @@ export type ProfileCreateWithoutUserInput = {
   lastName?: string | null
   phone?: string | null
   location?: string | null
-  resumeUrl?: string | null
-  avatarUrl?: string | null
   bio?: string | null
+  headline?: string | null
   website?: string | null
   linkedinUrl?: string | null
   githubUrl?: string | null
   twitterUrl?: string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
 }
 
 export type ProfileUncheckedCreateWithoutUserInput = {
@@ -562,14 +853,24 @@ export type ProfileUncheckedCreateWithoutUserInput = {
   lastName?: string | null
   phone?: string | null
   location?: string | null
-  resumeUrl?: string | null
-  avatarUrl?: string | null
   bio?: string | null
+  headline?: string | null
   website?: string | null
   linkedinUrl?: string | null
   githubUrl?: string | null
   twitterUrl?: string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
 }
 
 export type ProfileCreateOrConnectWithoutUserInput = {
@@ -594,14 +895,24 @@ export type ProfileUpdateWithoutUserInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
 }
 
 export type ProfileUncheckedUpdateWithoutUserInput = {
@@ -610,16 +921,691 @@ export type ProfileUncheckedUpdateWithoutUserInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  skills?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
 }
 
+export type ProfileCreateWithoutSkillsInput = {
+  id?: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutSkillsInput = {
+  id?: string
+  userId: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutSkillsInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutSkillsInput, Prisma.ProfileUncheckedCreateWithoutSkillsInput>
+}
+
+export type ProfileUpsertWithoutSkillsInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutSkillsInput, Prisma.ProfileUncheckedUpdateWithoutSkillsInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutSkillsInput, Prisma.ProfileUncheckedCreateWithoutSkillsInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutSkillsInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutSkillsInput, Prisma.ProfileUncheckedUpdateWithoutSkillsInput>
+}
+
+export type ProfileUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutSkillsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type ProfileCreateWithoutExperiencesInput = {
+  id?: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutExperiencesInput = {
+  id?: string
+  userId: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutExperiencesInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutExperiencesInput, Prisma.ProfileUncheckedCreateWithoutExperiencesInput>
+}
+
+export type ProfileUpsertWithoutExperiencesInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutExperiencesInput, Prisma.ProfileUncheckedUpdateWithoutExperiencesInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutExperiencesInput, Prisma.ProfileUncheckedCreateWithoutExperiencesInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutExperiencesInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutExperiencesInput, Prisma.ProfileUncheckedUpdateWithoutExperiencesInput>
+}
+
+export type ProfileUpdateWithoutExperiencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutExperiencesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type ProfileCreateWithoutEducationsInput = {
+  id?: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutEducationsInput = {
+  id?: string
+  userId: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutEducationsInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutEducationsInput, Prisma.ProfileUncheckedCreateWithoutEducationsInput>
+}
+
+export type ProfileUpsertWithoutEducationsInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutEducationsInput, Prisma.ProfileUncheckedUpdateWithoutEducationsInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutEducationsInput, Prisma.ProfileUncheckedCreateWithoutEducationsInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutEducationsInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutEducationsInput, Prisma.ProfileUncheckedUpdateWithoutEducationsInput>
+}
+
+export type ProfileUpdateWithoutEducationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutEducationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type ProfileCreateWithoutCertificationsInput = {
+  id?: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutProfileInput
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutCertificationsInput = {
+  id?: string
+  userId: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutCertificationsInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutCertificationsInput, Prisma.ProfileUncheckedCreateWithoutCertificationsInput>
+}
+
+export type ProfileUpsertWithoutCertificationsInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutCertificationsInput, Prisma.ProfileUncheckedUpdateWithoutCertificationsInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutCertificationsInput, Prisma.ProfileUncheckedCreateWithoutCertificationsInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutCertificationsInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutCertificationsInput, Prisma.ProfileUncheckedUpdateWithoutCertificationsInput>
+}
+
+export type ProfileUpdateWithoutCertificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutCertificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+export type ProfileCreateWithoutProjectsInput = {
+  id?: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationCreateNestedManyWithoutProfileInput
+  user: Prisma.UserCreateNestedOneWithoutProfileInput
+}
+
+export type ProfileUncheckedCreateWithoutProjectsInput = {
+  id?: string
+  userId: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  location?: string | null
+  bio?: string | null
+  headline?: string | null
+  website?: string | null
+  linkedinUrl?: string | null
+  githubUrl?: string | null
+  twitterUrl?: string | null
+  avatarUrl?: string | null
+  resumeUrl?: string | null
+  completionScore?: number
+  isComplete?: boolean
+  languages?: Prisma.ProfileCreatelanguagesInput | string[]
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.SkillUncheckedCreateNestedManyWithoutProfileInput
+  experiences?: Prisma.ExperienceUncheckedCreateNestedManyWithoutProfileInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutProfileInput
+  certifications?: Prisma.CertificationUncheckedCreateNestedManyWithoutProfileInput
+}
+
+export type ProfileCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.ProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutProjectsInput, Prisma.ProfileUncheckedCreateWithoutProjectsInput>
+}
+
+export type ProfileUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.ProfileUpdateWithoutProjectsInput, Prisma.ProfileUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.ProfileCreateWithoutProjectsInput, Prisma.ProfileUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.ProfileWhereInput
+}
+
+export type ProfileUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.ProfileWhereInput
+  data: Prisma.XOR<Prisma.ProfileUpdateWithoutProjectsInput, Prisma.ProfileUncheckedUpdateWithoutProjectsInput>
+}
+
+export type ProfileUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUpdateManyWithoutProfileNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProfileNestedInput
+}
+
+export type ProfileUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  headline?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  linkedinUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  githubUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  twitterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  completionScore?: Prisma.IntFieldUpdateOperationsInput | number
+  isComplete?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  languages?: Prisma.ProfileUpdatelanguagesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.SkillUncheckedUpdateManyWithoutProfileNestedInput
+  experiences?: Prisma.ExperienceUncheckedUpdateManyWithoutProfileNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutProfileNestedInput
+  certifications?: Prisma.CertificationUncheckedUpdateManyWithoutProfileNestedInput
+}
+
+
+/**
+ * Count Type ProfileCountOutputType
+ */
+
+export type ProfileCountOutputType = {
+  skills: number
+  experiences: number
+  educations: number
+  certifications: number
+  projects: number
+}
+
+export type ProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  skills?: boolean | ProfileCountOutputTypeCountSkillsArgs
+  experiences?: boolean | ProfileCountOutputTypeCountExperiencesArgs
+  educations?: boolean | ProfileCountOutputTypeCountEducationsArgs
+  certifications?: boolean | ProfileCountOutputTypeCountCertificationsArgs
+  projects?: boolean | ProfileCountOutputTypeCountProjectsArgs
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProfileCountOutputType
+   */
+  select?: Prisma.ProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountSkillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SkillWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountExperiencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExperienceWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountEducationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EducationWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountCertificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CertificationWhereInput
+}
+
+/**
+ * ProfileCountOutputType without action
+ */
+export type ProfileCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
 
 
 export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -629,15 +1615,26 @@ export type ProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   lastName?: boolean
   phone?: boolean
   location?: boolean
-  resumeUrl?: boolean
-  avatarUrl?: boolean
   bio?: boolean
+  headline?: boolean
   website?: boolean
   linkedinUrl?: boolean
   githubUrl?: boolean
   twitterUrl?: boolean
-  skills?: boolean
+  avatarUrl?: boolean
+  resumeUrl?: boolean
+  completionScore?: boolean
+  isComplete?: boolean
+  languages?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  skills?: boolean | Prisma.Profile$skillsArgs<ExtArgs>
+  experiences?: boolean | Prisma.Profile$experiencesArgs<ExtArgs>
+  educations?: boolean | Prisma.Profile$educationsArgs<ExtArgs>
+  certifications?: boolean | Prisma.Profile$certificationsArgs<ExtArgs>
+  projects?: boolean | Prisma.Profile$projectsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
 export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -647,14 +1644,19 @@ export type ProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastName?: boolean
   phone?: boolean
   location?: boolean
-  resumeUrl?: boolean
-  avatarUrl?: boolean
   bio?: boolean
+  headline?: boolean
   website?: boolean
   linkedinUrl?: boolean
   githubUrl?: boolean
   twitterUrl?: boolean
-  skills?: boolean
+  avatarUrl?: boolean
+  resumeUrl?: boolean
+  completionScore?: boolean
+  isComplete?: boolean
+  languages?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
@@ -665,14 +1667,19 @@ export type ProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastName?: boolean
   phone?: boolean
   location?: boolean
-  resumeUrl?: boolean
-  avatarUrl?: boolean
   bio?: boolean
+  headline?: boolean
   website?: boolean
   linkedinUrl?: boolean
   githubUrl?: boolean
   twitterUrl?: boolean
-  skills?: boolean
+  avatarUrl?: boolean
+  resumeUrl?: boolean
+  completionScore?: boolean
+  isComplete?: boolean
+  languages?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["profile"]>
 
@@ -683,19 +1690,30 @@ export type ProfileSelectScalar = {
   lastName?: boolean
   phone?: boolean
   location?: boolean
-  resumeUrl?: boolean
-  avatarUrl?: boolean
   bio?: boolean
+  headline?: boolean
   website?: boolean
   linkedinUrl?: boolean
   githubUrl?: boolean
   twitterUrl?: boolean
-  skills?: boolean
+  avatarUrl?: boolean
+  resumeUrl?: boolean
+  completionScore?: boolean
+  isComplete?: boolean
+  languages?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "phone" | "location" | "resumeUrl" | "avatarUrl" | "bio" | "website" | "linkedinUrl" | "githubUrl" | "twitterUrl" | "skills", ExtArgs["result"]["profile"]>
+export type ProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "phone" | "location" | "bio" | "headline" | "website" | "linkedinUrl" | "githubUrl" | "twitterUrl" | "avatarUrl" | "resumeUrl" | "completionScore" | "isComplete" | "languages" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
 export type ProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  skills?: boolean | Prisma.Profile$skillsArgs<ExtArgs>
+  experiences?: boolean | Prisma.Profile$experiencesArgs<ExtArgs>
+  educations?: boolean | Prisma.Profile$educationsArgs<ExtArgs>
+  certifications?: boolean | Prisma.Profile$certificationsArgs<ExtArgs>
+  projects?: boolean | Prisma.Profile$projectsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.ProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -707,6 +1725,11 @@ export type ProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Profile"
   objects: {
+    skills: Prisma.$SkillPayload<ExtArgs>[]
+    experiences: Prisma.$ExperiencePayload<ExtArgs>[]
+    educations: Prisma.$EducationPayload<ExtArgs>[]
+    certifications: Prisma.$CertificationPayload<ExtArgs>[]
+    projects: Prisma.$ProjectPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -716,14 +1739,19 @@ export type $ProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     lastName: string | null
     phone: string | null
     location: string | null
-    resumeUrl: string | null
-    avatarUrl: string | null
     bio: string | null
+    headline: string | null
     website: string | null
     linkedinUrl: string | null
     githubUrl: string | null
     twitterUrl: string | null
-    skills: runtime.JsonValue | null
+    avatarUrl: string | null
+    resumeUrl: string | null
+    completionScore: number
+    isComplete: boolean
+    languages: string[]
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["profile"]>
   composites: {}
 }
@@ -1118,6 +2146,11 @@ readonly fields: ProfileFieldRefs;
  */
 export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  skills<T extends Prisma.Profile$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  experiences<T extends Prisma.Profile$experiencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$experiencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExperiencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  educations<T extends Prisma.Profile$educationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$educationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EducationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  certifications<T extends Prisma.Profile$certificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$certificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CertificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projects<T extends Prisma.Profile$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Profile$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1154,14 +2187,19 @@ export interface ProfileFieldRefs {
   readonly lastName: Prisma.FieldRef<"Profile", 'String'>
   readonly phone: Prisma.FieldRef<"Profile", 'String'>
   readonly location: Prisma.FieldRef<"Profile", 'String'>
-  readonly resumeUrl: Prisma.FieldRef<"Profile", 'String'>
-  readonly avatarUrl: Prisma.FieldRef<"Profile", 'String'>
   readonly bio: Prisma.FieldRef<"Profile", 'String'>
+  readonly headline: Prisma.FieldRef<"Profile", 'String'>
   readonly website: Prisma.FieldRef<"Profile", 'String'>
   readonly linkedinUrl: Prisma.FieldRef<"Profile", 'String'>
   readonly githubUrl: Prisma.FieldRef<"Profile", 'String'>
   readonly twitterUrl: Prisma.FieldRef<"Profile", 'String'>
-  readonly skills: Prisma.FieldRef<"Profile", 'Json'>
+  readonly avatarUrl: Prisma.FieldRef<"Profile", 'String'>
+  readonly resumeUrl: Prisma.FieldRef<"Profile", 'String'>
+  readonly completionScore: Prisma.FieldRef<"Profile", 'Int'>
+  readonly isComplete: Prisma.FieldRef<"Profile", 'Boolean'>
+  readonly languages: Prisma.FieldRef<"Profile", 'String[]'>
+  readonly createdAt: Prisma.FieldRef<"Profile", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Profile", 'DateTime'>
 }
     
 
@@ -1555,6 +2593,126 @@ export type ProfileDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Profiles to delete.
    */
   limit?: number
+}
+
+/**
+ * Profile.skills
+ */
+export type Profile$skillsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Skill
+   */
+  select?: Prisma.SkillSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Skill
+   */
+  omit?: Prisma.SkillOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SkillInclude<ExtArgs> | null
+  where?: Prisma.SkillWhereInput
+  orderBy?: Prisma.SkillOrderByWithRelationInput | Prisma.SkillOrderByWithRelationInput[]
+  cursor?: Prisma.SkillWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SkillScalarFieldEnum | Prisma.SkillScalarFieldEnum[]
+}
+
+/**
+ * Profile.experiences
+ */
+export type Profile$experiencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Experience
+   */
+  select?: Prisma.ExperienceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Experience
+   */
+  omit?: Prisma.ExperienceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExperienceInclude<ExtArgs> | null
+  where?: Prisma.ExperienceWhereInput
+  orderBy?: Prisma.ExperienceOrderByWithRelationInput | Prisma.ExperienceOrderByWithRelationInput[]
+  cursor?: Prisma.ExperienceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExperienceScalarFieldEnum | Prisma.ExperienceScalarFieldEnum[]
+}
+
+/**
+ * Profile.educations
+ */
+export type Profile$educationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Education
+   */
+  select?: Prisma.EducationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Education
+   */
+  omit?: Prisma.EducationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EducationInclude<ExtArgs> | null
+  where?: Prisma.EducationWhereInput
+  orderBy?: Prisma.EducationOrderByWithRelationInput | Prisma.EducationOrderByWithRelationInput[]
+  cursor?: Prisma.EducationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EducationScalarFieldEnum | Prisma.EducationScalarFieldEnum[]
+}
+
+/**
+ * Profile.certifications
+ */
+export type Profile$certificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Certification
+   */
+  select?: Prisma.CertificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Certification
+   */
+  omit?: Prisma.CertificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CertificationInclude<ExtArgs> | null
+  where?: Prisma.CertificationWhereInput
+  orderBy?: Prisma.CertificationOrderByWithRelationInput | Prisma.CertificationOrderByWithRelationInput[]
+  cursor?: Prisma.CertificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CertificationScalarFieldEnum | Prisma.CertificationScalarFieldEnum[]
+}
+
+/**
+ * Profile.projects
+ */
+export type Profile$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
 }
 
 /**

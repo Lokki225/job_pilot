@@ -7,7 +7,7 @@
   - Configure Git repository and branching strategy
   - Set up CI/CD pipeline (Vercel recommended)
   
-- [ ] **Database & Authentication**
+- [X] **Database & Authentication**
   - Set up Supabase project
   - Implement database schema (users, profiles, jobs, letters)
   - Configure Supabase auth with email/password and Google OAuth

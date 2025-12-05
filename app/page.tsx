@@ -14,25 +14,27 @@ export default function Home() {
 
   // Session check
   const fetchSession = async () => {
-    const currentSession = await getCurrentSession();
-    console.log(currentSession);
-    
-    setSession(currentSession.session);
+    const { data: { session } } = await supabase.auth.getSession()
+    setSession(session)
   }
 
   useEffect(() => {
-    fetchSession();
+    // Initial session fetch
+    fetchSession()
 
-    const {data: authListener} = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
-      
-      setSession(session);
-    });
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event)
+        setSession(session)
+      }
+    )
 
+    // Cleanup function
     return () => {
-      authListener?.subscription.unsubscribe();
+      subscription?.unsubscribe()
     }
-  }, []);
+  }, [])
 
   // logout
   const signOut = async () => {

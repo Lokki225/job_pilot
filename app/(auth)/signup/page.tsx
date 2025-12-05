@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { signUp } from "@/lib/auth"
+import { toast } from "@/components/ui/use-toast"
 
 export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -18,29 +18,75 @@ export default function SignupPage() {
   const [passwordConf, setPasswordConf] = useState("")
   const router = useRouter();
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
 
-    console.log("Handle Submit...");
+    // Validation : mots de passe identiques
+    if (password !== passwordConf) {
+      toast({
+        title: "Passwords don't match",
+        description: "Please make sure both passwords are identical",
+        variant: "destructive",
+      })
+      return
+    }
 
-    // Look if passwords match
-    if(password !== passwordConf) {
-        console.log("Passwords different");
-        return;
+    // Validation : longueur mot de passe
+    if (password.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters",
+        variant: "destructive",
+      })
+      return
     }
 
     setIsLoading(true)
 
-    // SignUp flow
     try {
-        const error = await signUp(email, password);
-        if(error) throw error;
-        router.push("/dashboard/onboarding/welcome")
-    } catch (error) {
-        console.error("An error occured: ", error);
-        return;
+      console.log('Starting signup for:', email)
+      
+      const { user, error } = await signUp(email, password)
+
+      if (error) {
+        console.error('Signup failed:', error)
+        toast({
+          title: "Signup failed",
+          description: error,
+          variant: "destructive",
+        })
+        return
+      }
+
+      if (!user) {
+        toast({
+          title: "Signup failed",
+          description: "No user returned",
+          variant: "destructive",
+        })
+        return
+      }
+
+      console.log('Signup successful:', user.id)
+
+      // Succès : rediriger vers onboarding
+      toast({
+        title: "Account created!",
+        description: "Welcome to JobPilot AI",
+      })
+
+      router.push('/dashboard/onboarding/welcome')
+      router.refresh() // Important pour rafraîchir la session
+
+    } catch (error: any) {
+      console.error('Unexpected error:', error)
+      toast({
+        title: "An error occurred",
+        description: error.message || "Please try again",
+        variant: "destructive",
+      })
     } finally {
-        setIsLoading(false)
+      setIsLoading(false)
     }
   }
 

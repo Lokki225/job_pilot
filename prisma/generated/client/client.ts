@@ -50,30 +50,50 @@ export type User = Prisma.UserModel
  */
 export type Profile = Prisma.ProfileModel
 /**
- * Model Job
+ * Model Resume
  * 
  */
-export type Job = Prisma.JobModel
+export type Resume = Prisma.ResumeModel
 /**
- * Model JobTag
+ * Model Skill
  * 
  */
-export type JobTag = Prisma.JobTagModel
+export type Skill = Prisma.SkillModel
+/**
+ * Model Experience
+ * 
+ */
+export type Experience = Prisma.ExperienceModel
+/**
+ * Model Education
+ * 
+ */
+export type Education = Prisma.EducationModel
+/**
+ * Model Certification
+ * 
+ */
+export type Certification = Prisma.CertificationModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
 /**
  * Model JobApplication
  * 
  */
 export type JobApplication = Prisma.JobApplicationModel
 /**
- * Model Letter
+ * Model JobSearchPreference
  * 
  */
-export type Letter = Prisma.LetterModel
+export type JobSearchPreference = Prisma.JobSearchPreferenceModel
 /**
- * Model UserResume
+ * Model AIGeneratedContent
  * 
  */
-export type UserResume = Prisma.UserResumeModel
+export type AIGeneratedContent = Prisma.AIGeneratedContentModel
 /**
  * Model Notification
  * 

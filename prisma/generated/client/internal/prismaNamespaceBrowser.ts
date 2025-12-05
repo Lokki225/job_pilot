@@ -53,11 +53,15 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Profile: 'Profile',
-  Job: 'Job',
-  JobTag: 'JobTag',
+  Resume: 'Resume',
+  Skill: 'Skill',
+  Experience: 'Experience',
+  Education: 'Education',
+  Certification: 'Certification',
+  Project: 'Project',
   JobApplication: 'JobApplication',
-  Letter: 'Letter',
-  UserResume: 'UserResume',
+  JobSearchPreference: 'JobSearchPreference',
+  AIGeneratedContent: 'AIGeneratedContent',
   Notification: 'Notification'
 } as const
 
@@ -80,11 +84,11 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  passwordHash: 'passwordHash',
   role: 'role',
+  onboardingStep: 'onboardingStep',
+  isOnboarded: 'isOnboarded',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  lastLoginAt: 'lastLoginAt'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -97,99 +101,178 @@ export const ProfileScalarFieldEnum = {
   lastName: 'lastName',
   phone: 'phone',
   location: 'location',
-  resumeUrl: 'resumeUrl',
-  avatarUrl: 'avatarUrl',
   bio: 'bio',
+  headline: 'headline',
   website: 'website',
   linkedinUrl: 'linkedinUrl',
   githubUrl: 'githubUrl',
   twitterUrl: 'twitterUrl',
-  skills: 'skills'
+  avatarUrl: 'avatarUrl',
+  resumeUrl: 'resumeUrl',
+  completionScore: 'completionScore',
+  isComplete: 'isComplete',
+  languages: 'languages',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeof ProfileScalarFieldEnum]
 
 
-export const JobScalarFieldEnum = {
+export const ResumeScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
+  fileUrl: 'fileUrl',
+  fileName: 'fileName',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  isActive: 'isActive',
+  parsedData: 'parsedData',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ResumeScalarFieldEnum = (typeof ResumeScalarFieldEnum)[keyof typeof ResumeScalarFieldEnum]
+
+
+export const SkillScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  name: 'name',
+  level: 'level',
+  category: 'category',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SkillScalarFieldEnum = (typeof SkillScalarFieldEnum)[keyof typeof SkillScalarFieldEnum]
+
+
+export const ExperienceScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
   title: 'title',
   company: 'company',
-  platform: 'platform',
-  platformJobId: 'platformJobId',
-  url: 'url',
-  description: 'description',
   location: 'location',
-  postedAt: 'postedAt',
-  salaryMin: 'salaryMin',
-  salaryMax: 'salaryMax',
-  salaryCurrency: 'salaryCurrency',
-  isRemote: 'isRemote',
-  experienceLevel: 'experienceLevel',
-  createdBy: 'createdBy',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isCurrent: 'isCurrent',
+  description: 'description',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  deletedAt: 'deletedAt'
+  updatedAt: 'updatedAt'
 } as const
 
-export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+export type ExperienceScalarFieldEnum = (typeof ExperienceScalarFieldEnum)[keyof typeof ExperienceScalarFieldEnum]
 
 
-export const JobTagScalarFieldEnum = {
+export const EducationScalarFieldEnum = {
   id: 'id',
-  name: 'name'
+  profileId: 'profileId',
+  institution: 'institution',
+  degree: 'degree',
+  field: 'field',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isCurrent: 'isCurrent',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type JobTagScalarFieldEnum = (typeof JobTagScalarFieldEnum)[keyof typeof JobTagScalarFieldEnum]
+export type EducationScalarFieldEnum = (typeof EducationScalarFieldEnum)[keyof typeof EducationScalarFieldEnum]
+
+
+export const CertificationScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  name: 'name',
+  issuer: 'issuer',
+  issueDate: 'issueDate',
+  expiryDate: 'expiryDate',
+  credentialUrl: 'credentialUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CertificationScalarFieldEnum = (typeof CertificationScalarFieldEnum)[keyof typeof CertificationScalarFieldEnum]
+
+
+export const ProjectScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  name: 'name',
+  description: 'description',
+  url: 'url',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  isCurrent: 'isCurrent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
 export const JobApplicationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  jobId: 'jobId',
+  jobTitle: 'jobTitle',
+  company: 'company',
   status: 'status',
   appliedAt: 'appliedAt',
-  isAutoSent: 'isAutoSent',
-  trackingUrl: 'trackingUrl',
+  source: 'source',
+  jobPostUrl: 'jobPostUrl',
   notes: 'notes',
-  followUpDate: 'followUpDate',
-  salaryOffer: 'salaryOffer',
-  interviewDate: 'interviewDate'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type JobApplicationScalarFieldEnum = (typeof JobApplicationScalarFieldEnum)[keyof typeof JobApplicationScalarFieldEnum]
 
 
-export const LetterScalarFieldEnum = {
+export const JobSearchPreferenceScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  applicationId: 'applicationId',
-  content: 'content',
-  generatedAt: 'generatedAt',
+  jobTitles: 'jobTitles',
+  locations: 'locations',
+  minSalary: 'minSalary',
+  maxSalary: 'maxSalary',
+  experienceLevel: 'experienceLevel',
+  workTypes: 'workTypes',
+  remoteOptions: 'remoteOptions',
+  skills: 'skills',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type LetterScalarFieldEnum = (typeof LetterScalarFieldEnum)[keyof typeof LetterScalarFieldEnum]
+export type JobSearchPreferenceScalarFieldEnum = (typeof JobSearchPreferenceScalarFieldEnum)[keyof typeof JobSearchPreferenceScalarFieldEnum]
 
 
-export const UserResumeScalarFieldEnum = {
+export const AIGeneratedContentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  title: 'title',
-  fileUrl: 'fileUrl',
-  isDefault: 'isDefault',
-  uploadedAt: 'uploadedAt'
+  type: 'type',
+  prompt: 'prompt',
+  content: 'content',
+  model: 'model',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type UserResumeScalarFieldEnum = (typeof UserResumeScalarFieldEnum)[keyof typeof UserResumeScalarFieldEnum]
+export type AIGeneratedContentScalarFieldEnum = (typeof AIGeneratedContentScalarFieldEnum)[keyof typeof AIGeneratedContentScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   type: 'type',
+  title: 'title',
   message: 'message',
   isRead: 'isRead',
-  createdAt: 'createdAt'
+  link: 'link',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
