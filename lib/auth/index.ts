@@ -1,11 +1,10 @@
 // lib/actions/auth.ts
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { supabase } from "../supabase/client"
 
 export const signUp = async (email: string, password: string) => {
   try {
-    const supabase = await createClient() // ← IMPORTANT : créer le client ici
 
     // 1. Créer l'utilisateur dans Supabase Auth
     const { data, error: signUpError } = await supabase.auth.signUp({
@@ -59,20 +58,17 @@ export const signUp = async (email: string, password: string) => {
 }
 
 export const login = async (email: string, password: string) => {
-    const supabase = await createClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return error;
 }
 
 export const logout = async () => {
-    const supabase = await createClient()
     const { error } = await supabase.auth.signOut();
     return error;
 }
 
 // get authenticated user
 export const getAuthUser = async () => {
-    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser();
     if (user == null) return;
     return user;

@@ -161,10 +161,18 @@ export default function CVUploadPage() {
         body: JSON.stringify({ resumeId: resumeData.id })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Parse error:', errorData.error || 'Failed to parse resume');
-        // Handle error (maybe show a toast)
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || result.success === false) {
+        console.error(
+          'Parse error:',
+          result.step ? `[${result.step}]` : '',
+          result.error || 'Unknown error'
+        );
+        // Optionally: show toast or notification to the user
+      } else {
+        console.log('Resume parsed successfully:', result.data);
+        // Update UI or state with parsed data
       }
 
       // Update UI
