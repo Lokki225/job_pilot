@@ -4,12 +4,29 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/components/ui/use-toast"
+import { getCurrentSession } from "@/lib/auth/session"
+import { supabase } from "@/lib/supabase/client"
 import { CheckCircle, Rocket, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function WelcomePage() {
   const router = useRouter()
   const { toast } = useToast()
+  const [session, setSession] = useState<any>()
+  
+  const fetchSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    setSession(session)
+    console.log(session);
+  }
+
+  useEffect(() => {
+    fetchSession()
+
+  }, [router])
+
+  
 
   const handleContinue = () => {
     router.push("/dashboard/onboarding/resume")

@@ -1,6 +1,6 @@
 "use server"
 
-import { supabase } from '@/lib/supabase/client'
+import { adminSupabase } from '../supabase/server'
 
 type JobPreference = {
   id?: string
@@ -19,30 +19,25 @@ type JobPreference = {
 
 export async function createJobPreference(preference: Omit<JobPreference, 'id' | 'createdAt' | 'updatedAt'>) {
   
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    throw new Error('User not authenticated')
-  }
-
-  const { data, error } = await supabase
+  const { data, error } = await adminSupabase
     .from('job_search_preferences')
     .insert([{
-      user_id: user.id,
-      job_titles: preference.jobTitles,
+      userId: preference.userId,
+      jobTitles: preference.jobTitles,
       locations: preference.locations,
-      min_salary: preference.minSalary,
-      max_salary: preference.maxSalary,
-      experience_level: preference.experienceLevel,
-      work_types: preference.workTypes,
-      remote_options: preference.remoteOptions,
+      minSalary: preference.minSalary,
+      maxSalary: preference.maxSalary,
+      experienceLevel: preference.experienceLevel,
+      workTypes: preference.workTypes,
+      remoteOptions: preference.remoteOptions,
       skills: preference.skills
     }])
     .select()
     .single()
 
   if (error) {
-    console.error('Error creating job preference:', error)
-    throw new Error('Failed to create job preference')
+    console.error('Error creating job preference:', error.message)
+    throw new Error(`Failed to create job preference: ${error.message}`)
   }
 
   return data
@@ -51,10 +46,10 @@ export async function createJobPreference(preference: Omit<JobPreference, 'id' |
 export async function getJobPreference(userId: string) {
   
   
-  const { data, error } = await supabase
+  const { data, error } = await adminSupabase
     .from('job_search_preferences')
     .select('*')
-    .eq('user_id', userId)
+    .eq('userId', userId)
     .single()
 
   if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
@@ -84,18 +79,18 @@ export async function updateJobPreference(
 ) {
   
   
-  const { error } = await supabase
+  const { error } = await adminSupabase
     .from('job_search_preferences')
     .update({
-      job_titles: updates.jobTitles,
+      jobTitles: updates.jobTitles,
       locations: updates.locations,
-      min_salary: updates.minSalary,
-      max_salary: updates.maxSalary,
-      experience_level: updates.experienceLevel,
-      work_types: updates.workTypes,
-      remote_options: updates.remoteOptions,
+      minSalary: updates.minSalary,
+      maxSalary: updates.maxSalary,
+      experienceLevel: updates.experienceLevel,
+      workTypes: updates.workTypes,
+      remoteOptions: updates.remoteOptions,
       skills: updates.skills,
-      updated_at: new Date().toISOString()
+      updatedAt: new Date().toISOString()
     })
     .eq('id', id)
 
@@ -110,7 +105,7 @@ export async function updateJobPreference(
 export async function deleteJobPreference(id: string) {
   
   
-  const { error } = await supabase
+  const { error } = await adminSupabase
     .from('job_search_preferences')
     .delete()
     .eq('id', id)
@@ -126,10 +121,10 @@ export async function deleteJobPreference(id: string) {
 export async function upsertJobPreference(preference: Omit<JobPreference, 'id' | 'createdAt' | 'updatedAt'>) {
   
   
-  const { data: existing } = await supabase
+  const { data: existing } = await adminSupabase
     .from('job_search_preferences')
     .select('id')
-    .eq('user_id', preference.userId)
+    .eq('userId', preference.userId)
     .single()
 
   if (existing) {

@@ -30,6 +30,7 @@ export default function CVUploadPage() {
 
   const is_user_connected = async () => {
     const { data: { user } } = await supabase.auth.getUser()
+    
     if (!user) {
       toast({
         title: "Not authenticated",

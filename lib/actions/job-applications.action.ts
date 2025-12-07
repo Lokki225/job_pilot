@@ -2,7 +2,8 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { adminSupabase } from "../supabase/server"
+import { getCurrentUser } from "../auth"
 
 const JobApplicationSchema = z.object({
   jobTitle: z.string().min(1),
@@ -19,10 +20,10 @@ export async function createJobApplication(values: z.infer<typeof JobApplication
     const parsed = JobApplicationSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from("job_applications")
       .insert({
         userId: user.id,
@@ -42,10 +43,10 @@ export async function createJobApplication(values: z.infer<typeof JobApplication
 export async function listJobApplications(status?: string) {
   try {
     
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
 
-    let query = supabase
+    let query = adminSupabase
       .from("job_applications")
       .select("*")
       .eq("userId", user.id)
@@ -68,10 +69,10 @@ export async function listJobApplications(status?: string) {
 export async function updateJobApplication(id: string, values: Partial<z.infer<typeof JobApplicationSchema>>) {
   try {
     
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from("job_applications")
       .update(values)
       .eq("id", id)
@@ -90,10 +91,10 @@ export async function updateJobApplication(id: string, values: Partial<z.infer<t
 export async function deleteJobApplication(id: string) {
   try {
     
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
 
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from("job_applications")
       .delete()
       .eq("id", id)
@@ -110,10 +111,10 @@ export async function deleteJobApplication(id: string) {
 export async function getJobApplicationStats() {
   try {
     
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from("job_applications")
       .select("status")
       .eq("userId", user.id)

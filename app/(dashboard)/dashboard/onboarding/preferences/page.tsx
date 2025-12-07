@@ -52,7 +52,7 @@ export default function JobPreferencesPage() {
 
     // Load existing preferences if any
     const { data: preferences } = await supabase
-      .from('job_preferences')
+      .from('job_search_preferences')
       .select('*')
       .eq('userid', user.id)
       .single()
@@ -147,7 +147,7 @@ export default function JobPreferencesPage() {
         skills: skills,
       });
 
-      if (!success) throw Error("Failed to save job preferences")
+      // if (!success) throw Error("Failed to save job preferences")
 
       toast({
         title: 'Preferences saved!',
@@ -172,7 +172,7 @@ export default function JobPreferencesPage() {
   }
 
   const handleSkip = () => {
-    router.push('/dashboard?onboarding_complete=true')
+    router.push(`/dashboard?onboarding_complete=${true}`)
   }
 
   return (

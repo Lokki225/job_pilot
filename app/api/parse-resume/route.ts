@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     // ----------------------------
     try {
       const parsedResume = transformResumeData(parsedData);
-      await updateUserProfile(resume.userId, parsedResume)
+      await updateUserProfile(resume.userId, parsedResume, finalUrl)
     } catch (profileError: any) {
       console.error('Error updating user profile:', profileError)
       throw new Error('Failed to update user profile: ' + profileError.message)
@@ -154,7 +154,7 @@ async function parseResume(fileUrl: string, fileName: string) {
 // Helper: Update user profile and skills
 // ----------------------------
 // Update user profile and related data
-async function updateUserProfile(userId: string, parsedData: any) {
+async function updateUserProfile(userId: string, parsedData: any, resumeUrl: string) {
   try {
     // 1. Try to get the existing profile or create a new one if it doesn't exist
     let profileId: string;
@@ -180,6 +180,7 @@ async function updateUserProfile(userId: string, parsedData: any) {
           bio: parsedData.summary || null,
           completionScore: 0,
           isComplete: false,
+          resumeUrl: resumeUrl,
           languages: parsedData.languages || [],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()

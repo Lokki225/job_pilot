@@ -1,12 +1,12 @@
 "use client"
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ChevronDown } from "lucide-react"
 import Link from "next/link";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { logout } from "@/lib/auth";
-import { getCurrentSession } from "@/lib/auth/session";
+import { supabase } from "@/lib/supabase/client";
 
 export default function Home() {
   const [session, setSession] = useState<any>(null)
@@ -42,33 +42,84 @@ export default function Home() {
     setSession(null);
     router.push("/login");
   }
-
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
       {/* Navigation */}
       <nav className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
           JobPilot
-        </div>
-        {session ? (
-          <div>
-            <Button variant="ghost" asChild>
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
-            <Button onClick={() => signOut()}>Logout</Button>
-          </div>
-        ) : null}
-        {!session ? (
-          <div className="flex gap-4">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Log in</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/signup">Get Started</Link>
-          </Button>
-        </div>
-        ): null}
+        </Link>
         
+        <div className="flex gap-6 items-center">
+          <Link
+            href="/about"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          >
+            About
+          </Link>
+
+          <Link
+            href="/pricing"
+            className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          >
+            Pricing
+          </Link>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Resources <ChevronDown className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/contact">Contact</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/help">Help / FAQ</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Legal <ChevronDown className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/terms">Terms & Conditions</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/privacy">Privacy Policy</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {session ? (
+            // Show dashboard and logout when authenticated
+            <div className="flex items-center gap-4">
+              <Button variant="outline" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+              <Button 
+                variant="ghost" 
+                onClick={signOut}
+                className="text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20"
+              >
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            // Show login/signup when not authenticated
+            <div className="flex gap-4">
+              <Button variant="ghost" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Get Started</Link>
+              </Button>
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Hero Section */}
@@ -142,7 +193,9 @@ export default function Home() {
             Join thousands of job seekers who found their dream job with JobPilot.
           </p>
           <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-6">
-            Get Started - It's Free
+            <Link href="/signup">
+              Get Started - It's Free
+            </Link>
           </Button>
         </div>
       </section>
