@@ -15,6 +15,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
   { name: "Cover Letters", href: "/dashboard/letters", icon: FileText },
+  { name: "Profile", href: "/dashboard/profile", icon: FileText },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
 
@@ -40,6 +41,24 @@ export default function DashboardLayout({
     fetchSession()
 
   }, [pathname])
+
+  const getPageTitle = (path: string): string => {
+    // First try to find a matching navigation item
+    const navItem = navigation.find(item => path.startsWith(item.href));
+    if (navItem) return navItem.name;
+
+    // If no match, try to derive from URL
+    const lastSegment = path.split('/').pop() || '';
+    if (lastSegment) {
+      return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+    }
+
+    console.log(lastSegment);
+    
+
+    // Fallback
+    return "Dashboard";
+  };
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
@@ -95,7 +114,7 @@ export default function DashboardLayout({
           {/* Navigation */}
           <nav className="flex-1 space-y-1 overflow-y-auto p-2">
             {navigation.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = pathname.startsWith(item.href)
               return (
                 <Link
                   key={item.name}
@@ -165,13 +184,8 @@ export default function DashboardLayout({
           <div className="flex flex-1 justify-between">
             <div className="flex items-center">
               <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {
-                  navigation.find((item) => item.href === pathname)?.name ||
-                  "Dashboard"
-                }
+                {getPageTitle(pathname)}
               </h1>
-
-
             </div>
             {session ? (<Button onClick={() => {
               logout();
