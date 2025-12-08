@@ -1,93 +1,180 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Briefcase, GraduationCap, Award, MapPin, Mail, Phone, Globe, Linkedin, Github, Edit2, Save, X, Plus, Trash2, Calendar, Building, FileText, Download, Eye } from 'lucide-react';
+import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
+import { getProfileDetails, upsertProfile, updateCompletionScore } from "@/lib/actions/profile.action";
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment } from 'react'
+import { ResumePreviewModal } from '@/components/shared/ResumePreviewModal';
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [profileCompletion, setProfileCompletion] = useState(0);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
 
   // Profile data
   const [profile, setProfile] = useState({
-    firstName: 'Oriane',
-    lastName: 'Martinez',
-    headline: 'Senior Financial Analyst',
-    email: 'oriane.martinez@email.com',
-    phone: '+33 6 12 34 56 78',
-    location: 'Paris, France',
-    bio: 'Results-driven finance professional with 7+ years of experience in financial analysis, corporate finance, and strategic planning. Passionate about data-driven decision making and financial optimization.',
-    website: 'orianemartinez.com',
-    linkedin: 'linkedin.com/in/oriane-m',
-    github: 'github.com/orianem',
-    avatarUrl: null,
+    firstName: '',
+    lastName: '',
+    headline: '',
+    email: '',
+    phone: '',
+    location: '',
+    bio: '',
+    website: '',
+    linkedin: '',
+    github: '',
+    avatarUrl: null as string | null,
+    resumeUrl: null as string | null,
   });
 
-  const [experiences, setExperiences] = useState([
-    {
-      id: 1,
-      title: 'Senior Financial Analyst',
-      company: 'BNP Paribas',
-      location: 'Paris, France',
-      startDate: '2020-01',
-      endDate: null,
-      current: true,
-      description: 'Lead financial analysis and strategic planning initiatives for the Corporate Finance division, managing a portfolio of €500M+ in assets.',
-    },
-    {
-      id: 2,
-      title: 'Financial Analyst',
-      company: 'Société Générale',
-      location: 'Paris, France',
-      startDate: '2017-06',
-      endDate: '2020-01',
-      current: false,
-      description: 'Conducted financial analysis and reporting for the Investment Banking division.',
-    },
-  ]);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [education, setEducation] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [certifications, setCertifications] = useState<any[]>([]);
+  const [languages, setLanguages] = useState<any[]>([]);
 
-  const [education, setEducation] = useState([
-    {
-      id: 1,
-      degree: "Master's in Finance",
-      school: 'HEC Paris',
-      field: 'Corporate Finance',
-      startDate: '2013-09',
-      endDate: '2015-06',
-      current: false,
-    },
-    {
-      id: 2,
-      degree: "Bachelor's in Economics",
-      school: 'Sciences Po Paris',
-      field: 'Economics and Finance',
-      startDate: '2010-09',
-      endDate: '2013-06',
-      current: false,
-    },
-  ]);
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const [skills, setSkills] = useState([
-    { id: 1, name: 'Financial Analysis', level: 95 },
-    { id: 2, name: 'Excel & Modeling', level: 90 },
-    { id: 3, name: 'Risk Management', level: 85 },
-    { id: 4, name: 'Bloomberg Terminal', level: 80 },
-    { id: 5, name: 'Python & SQL', level: 75 },
-  ]);
+        const { user, error: userError } = await getCurrentUser();
+        if (!user || userError) {
+          router.push('/login');
+          return;
+        }
 
-  const [certifications, setCertifications] = useState([
-    { id: 1, name: 'CFA Level III', issuer: 'CFA Institute', date: '2022-06' },
-    { id: 2, name: 'Financial Risk Manager', issuer: 'GARP', date: '2020-11' },
-  ]);
+        const { data, error } = await getProfileDetails(user.id);
+        if (!data || error) {
+          setError(error || 'Profile not found');
+          return;
+        }
 
-  const [languages, setLanguages] = useState([
-    { id: 1, name: 'French', level: 'Native' },
-    { id: 2, name: 'English', level: 'Fluent' },
-    { id: 3, name: 'Spanish', level: 'Professional' },
-  ]);
+        const { profile: p, skills, experiences, educations, certifications } = data as any;
 
-  const handleSaveProfile = () => {
-    setIsEditing(false);
-    console.log('Profile saved:', profile);
-    alert('Profile updated successfully!');
+        setProfile({
+          firstName: p.firstName || '',
+          lastName: p.lastName || '',
+          headline: p.headline || '',
+          email: user.email || '',
+          phone: p.phone || '',
+          location: p.location || '',
+          bio: p.bio || '',
+          website: p.website || '',
+          linkedin: p.linkedinUrl || '',
+          github: p.githubUrl || '',
+          avatarUrl: p.avatarUrl || null,
+          resumeUrl: p.resumeUrl || null,
+        });
+
+        setExperiences(
+          (experiences || []).map((exp: any) => ({
+            id: exp.id,
+            title: exp.title,
+            company: exp.company,
+            location: exp.location,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
+            current: exp.isCurrent,
+            description: exp.description,
+          }))
+        );
+
+        setEducation(
+          (educations || []).map((edu: any) => ({
+            id: edu.id,
+            degree: edu.degree,
+            school: edu.institution,
+            field: edu.field,
+            startDate: edu.startDate,
+            endDate: edu.endDate,
+            current: edu.isCurrent,
+          }))
+        );
+
+        setSkills(
+          (skills || []).map((skill: any) => ({
+            id: skill.id,
+            name: skill.name,
+            level: typeof skill.level === 'number' ? skill.level : 80,
+          }))
+        );
+
+        setCertifications(
+          (certifications || []).map((cert: any) => ({
+            id: cert.id,
+            name: cert.name,
+            issuer: cert.issuer,
+            date: cert.issueDate,
+          }))
+        );
+
+        setLanguages(
+          (p.languages || []).map((lang: string, index: number) => ({
+            id: index + 1,
+            name: lang,
+            level: 'Fluent',
+          }))
+        );
+
+        if (typeof p.completionScore === 'number') {
+          setProfileCompletion(p.completionScore);
+        }
+      } catch (err) {
+        setError('Failed to load profile');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, [router]);
+
+  const handleSaveProfile = async () => {
+    try {
+      setIsSaving(true);
+      setError(null);
+
+      const payload: any = {
+        firstName: profile.firstName || undefined,
+        lastName: profile.lastName || undefined,
+        phone: profile.phone || undefined,
+        location: profile.location || undefined,
+        bio: profile.bio || undefined,
+        headline: profile.headline || undefined,
+        website: profile.website || undefined,
+        linkedinUrl: profile.linkedin || undefined,
+        githubUrl: profile.github || undefined,
+        avatarUrl: profile.avatarUrl || undefined,
+        resumeUrl: profile.resumeUrl || undefined,
+        languages: (languages || []).map((l: any) => l.name),
+      };
+
+      const { data, error } = await upsertProfile(payload);
+      if (error) {
+        setError(error);
+        return;
+      }
+
+      const { data: completionData, error: completionError } = await updateCompletionScore();
+      if (!completionError && completionData?.completionScore !== undefined) {
+        setProfileCompletion(completionData.completionScore);
+      }
+
+      setIsEditing(false);
+    } catch (err) {
+      setError('Failed to save profile');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const formatDate = (dateString: any) => {
@@ -95,6 +182,30 @@ export default function ProfilePage() {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
+
+
+  const handlePreview = () => {
+    setIsPreviewOpen(true)
+  }
+
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="h-8 w-8 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm">
+          {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -134,7 +245,7 @@ export default function ProfilePage() {
 
             {/* Action Buttons */}
             <div className="flex gap-3">
-              <button className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition-colors flex items-center gap-2">
+              <button className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-indigo-50 transition-colors flex items-center gap-2" onClick={handlePreview}>
                 <Eye className="w-4 h-4" />
                 Preview Resume
               </button>
@@ -178,13 +289,14 @@ export default function ProfilePage() {
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold text-gray-800">About</h2>
                     <button
-                      onClick={() => setIsEditing(!isEditing)}
-                      className="text-indigo-600 hover:text-indigo-700 flex items-center gap-2"
+                      onClick={isEditing ? handleSaveProfile : () => setIsEditing(true)}
+                      disabled={isSaving}
+                      className="text-indigo-600 hover:text-indigo-700 flex items-center gap-2 disabled:opacity-60"
                     >
                       {isEditing ? (
                         <>
                           <Save className="w-4 h-4" />
-                          Save
+                          {isSaving ? 'Saving...' : 'Save'}
                         </>
                       ) : (
                         <>
@@ -443,12 +555,16 @@ export default function ProfilePage() {
               <div className="mb-4">
                 <div className="flex justify-between text-sm mb-2">
                   <span>Completion</span>
-                  <span className="font-bold">85%</span>
+                  <span className="font-bold">{profileCompletion}%</span>
                 </div>
                 <div className="h-2 bg-white/30 rounded-full overflow-hidden">
-                  <div className="h-full bg-white rounded-full" style={{ width: '85%' }} />
+                  <div
+                    className="h-full bg-white rounded-full"
+                    style={{ width: `${Math.min(Math.max(profileCompletion, 0), 100)}%` }}
+                  />
                 </div>
               </div>
+
               <p className="text-sm text-indigo-100">
                 Great job! Complete your profile to unlock all features.
               </p>
@@ -456,6 +572,18 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <ResumePreviewModal 
+        isPreviewOpen={isPreviewOpen}
+        setIsPreviewOpen={setIsPreviewOpen}
+        experiences={experiences}
+        education={education}
+        skills={skills}
+        certifications={certifications}
+        languages={languages}
+        profile={profile}
+        formatDate={formatDate}
+      />
     </div>
   );
 }

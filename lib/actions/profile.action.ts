@@ -41,6 +41,46 @@ export async function getProfile(userId: string) {
   }
 }
 
+export async function getProfileDetails(userId: string) {
+  try {
+    const { data: profile, error: profileError } = await adminSupabase
+      .from("profiles")
+      .select("*")
+      .eq("userId", userId)
+      .maybeSingle();
+
+    if (profileError) return { data: null, error: profileError.message };
+    if (!profile) return { data: null, error: "Profile not found" };
+
+    const profileId = profile.id;
+
+    const [skillsRes, experiencesRes, educationsRes, certificationsRes] = await Promise.all([
+      adminSupabase.from("skills").select("*").eq("profileId", profileId),
+      adminSupabase.from("experiences").select("*").eq("profileId", profileId),
+      adminSupabase.from("educations").select("*").eq("profileId", profileId),
+      adminSupabase.from("certifications").select("*").eq("profileId", profileId),
+    ]);
+
+    const firstError =
+      skillsRes.error || experiencesRes.error || educationsRes.error || certificationsRes.error;
+
+    if (firstError) return { data: null, error: firstError.message };
+
+    return {
+      data: {
+        profile,
+        skills: skillsRes.data || [],
+        experiences: experiencesRes.data || [],
+        educations: educationsRes.data || [],
+        certifications: certificationsRes.data || [],
+      },
+      error: null,
+    };
+  } catch (err) {
+    return { data: null, error: "Unexpected error fetching profile details" };
+  }
+}
+
 export async function createProfile(values: z.infer<typeof ProfileSchema>) {
   try {
     
