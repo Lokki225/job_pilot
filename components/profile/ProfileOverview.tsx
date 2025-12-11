@@ -20,6 +20,10 @@ interface ProfileOverviewProps {
   onAddItem: (type: string) => void;
   onEditItem: (type: string, id: string) => void;
   onDeleteItem: (type: string, id: string) => void;
+  onSaveSkill?: (skill: any) => void;
+  onSaveExperience?: (experience: any) => void;
+  onSaveEducation?: (education: any) => void;
+  onSaveCertification?: (certification: any) => void;
 }
 
 export const ProfileOverview = ({
@@ -35,7 +39,11 @@ export const ProfileOverview = ({
   onCancel,
   onAddItem,
   onEditItem,
-  onDeleteItem
+  onDeleteItem,
+  onSaveSkill,
+  onSaveExperience,
+  onSaveEducation,
+  onSaveCertification
 }: ProfileOverviewProps) => {
   const renderContent = () => {
     switch (activeTab) {
@@ -45,7 +53,7 @@ export const ProfileOverview = ({
             <AboutSection
               profile={profile}
               isEditing={isEditing}
-              onInputChange={onInputChange}
+              onInputChange={(e) => onInputChange(e)}
             />
             <ExperienceSection
               experiences={experiences}
@@ -53,6 +61,7 @@ export const ProfileOverview = ({
               onAdd={() => onAddItem('experience')}
               onEdit={(id) => onEditItem('experience', id)}
               onDelete={(id) => onDeleteItem('experience', id)}
+              onSave={onSaveExperience}
             />
             <EducationSection
               education={education}
@@ -60,18 +69,21 @@ export const ProfileOverview = ({
               onAdd={() => onAddItem('education')}
               onEdit={(id) => onEditItem('education', id)}
               onDelete={(id) => onDeleteItem('education', id)}
+              onSave={onSaveEducation}
             />
             <SkillsSection
               skills={skills}
               isEditing={isEditing}
               onAdd={() => onAddItem('skill')}
               onDelete={(id) => onDeleteItem('skill', id)}
+              onSave={onSaveSkill}
             />
             <CertificationsSection
               certifications={certifications}
               isEditing={isEditing}
               onAdd={() => onAddItem('certification')}
               onDelete={(id) => onDeleteItem('certification', id)}
+              onSave={onSaveCertification}
             />
           </div>
         );
@@ -83,6 +95,7 @@ export const ProfileOverview = ({
             onAdd={() => onAddItem('experience')}
             onEdit={(id) => onEditItem('experience', id)}
             onDelete={(id) => onDeleteItem('experience', id)}
+            onSave={onSaveExperience}
             expanded
           />
         );
@@ -94,6 +107,7 @@ export const ProfileOverview = ({
             onAdd={() => onAddItem('education')}
             onEdit={(id) => onEditItem('education', id)}
             onDelete={(id) => onDeleteItem('education', id)}
+            onSave={onSaveEducation}
             expanded
           />
         );
@@ -104,6 +118,7 @@ export const ProfileOverview = ({
             isEditing={isEditing}
             onAdd={() => onAddItem('skill')}
             onDelete={(id) => onDeleteItem('skill', id)}
+            onSave={onSaveSkill}
             expanded
           />
         );

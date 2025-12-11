@@ -1,10 +1,12 @@
 "use client"
+import { GoogleSignInButton } from "@/components/auth/social-buttons";
 // ---------- app/(auth)/login/page.tsx ----------
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
+import { login } from "@/lib/auth";
 import { supabase } from "@/lib/supabase/client";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,16 +24,32 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } = await login(email, password);
 
-      if (error) throw error;
+      if (error) {
+        throw new Error(error);
+      }
 
-      // On success, go to dashboard; Proxy will protect routes based on auth
-      router.push("/dashboard");
-      
+      // If we have a session, set it in the browser
+      if (data?.session) {
+        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token!,
+        });
+
+        if (sessionError) throw sessionError;
+
+        toast({
+          title: "Login successful!",
+          description: "Welcome back to JobPilot",
+        });
+
+        // Force a refresh to update the auth state
+        router.refresh();
+        router.push('/dashboard');
+        return;
+      }
+
     } catch (error: any) {
       console.error('Login error:', error);
       toast({
@@ -40,7 +58,6 @@ export default function LoginPage() {
         variant: "destructive",
       });
     } finally {
-      // Always stop loading, even if navigation fails
       setIsLoading(false);
     }
   };
@@ -117,21 +134,8 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Google login */}
-            <Button type="button" variant="outline" className="w-full">
-              <svg
-                className="mr-2 h-4 w-4"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 488 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M488 261.8C488 403.3 391.1 504 248 504..."
-                />
-              </svg>
-              Sign in with Google
-            </Button>
+            {/* Google Sign In Button */}
+            <GoogleSignInButton type="signin" />
 
             {/* Login button */}
             <Button type="submit" className="w-full" disabled={isLoading}>

@@ -2,7 +2,7 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server"
 
 const ExperienceSchema = z.object({
   title: z.string().min(1),
@@ -16,10 +16,10 @@ const ExperienceSchema = z.object({
 
 export async function createExperience(profileId: string, values: z.infer<typeof ExperienceSchema>) {
   try {
-    
     const parsed = ExperienceSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -42,7 +42,7 @@ export async function createExperience(profileId: string, values: z.infer<typeof
 
 export async function listExperiences(profileId: string) {
   try {
-    
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -62,7 +62,7 @@ export async function listExperiences(profileId: string) {
 
 export async function updateExperience(id: string, values: z.infer<typeof ExperienceSchema>) {
   try {
-    
+    const supabase = await createClient();
     const parsed = ExperienceSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
@@ -86,7 +86,7 @@ export async function updateExperience(id: string, values: z.infer<typeof Experi
 
 export async function deleteExperience(id: string) {
   try {
-    
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 

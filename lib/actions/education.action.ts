@@ -2,23 +2,26 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server";
 
 const EducationSchema = z.object({
-  institution: z.string().min(1),
-  degree: z.string().min(1),
-  field: z.string().min(1),
-  startDate: z.string(),
-  endDate: z.string().optional(),
+  institution: z.string().min(1, "Institution is required"),
+  degree: z.string().min(1, "Degree is required"),
+  field: z.string().min(1, "Field of study is required"),
+  startDate: z.string().min(1, "Start date is required"),
+  endDate: z.string().optional().nullable(),
   isCurrent: z.boolean().default(false),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
 })
 
 export async function createEducation(profileId: string, values: z.infer<typeof EducationSchema>) {
   try {
-    
+    const supabase = await createClient();
     const parsed = EducationSchema.safeParse(values)
-    if (!parsed.success) return { data: null, error: "Invalid input format" }
+    if (!parsed.success) {
+      console.error("Education validation errors:", parsed.error.issues);
+      return { data: null, error: `Invalid input format: ${parsed.error.issues.map((e: any) => e.message).join(', ')}` };
+    }
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
@@ -42,7 +45,8 @@ export async function createEducation(profileId: string, values: z.infer<typeof 
 
 export async function listEducations(profileId: string) {
   try {
-    
+    const supabase = await createClient();
+  
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -62,6 +66,7 @@ export async function listEducations(profileId: string) {
 
 export async function updateEducation(id: string, values: z.infer<typeof EducationSchema>) {
   try {
+    const supabase = await createClient();
     
     const parsed = EducationSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
@@ -86,6 +91,7 @@ export async function updateEducation(id: string, values: z.infer<typeof Educati
 
 export async function deleteEducation(id: string) {
   try {
+    const supabase = await createClient();
     
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }

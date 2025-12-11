@@ -2,7 +2,7 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server"
 
 const SkillSchema = z.object({
   name: z.string().min(1),
@@ -16,8 +16,12 @@ export async function createSkill(profileId: string, values: z.infer<typeof Skil
     const parsed = SkillSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+    const supabase = await createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+    
+        if (!user) return { data: null, error: "Unauthorized" };
 
     const { data, error } = await supabase
       .from("skills")
@@ -38,7 +42,7 @@ export async function createSkill(profileId: string, values: z.infer<typeof Skil
 
 export async function listSkills(profileId: string) {
   try {
-    
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -58,7 +62,7 @@ export async function listSkills(profileId: string) {
 
 export async function updateSkill(id: string, values: z.infer<typeof SkillSchema>) {
   try {
-    
+    const supabase = await createClient();
     const parsed = SkillSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
@@ -82,7 +86,7 @@ export async function updateSkill(id: string, values: z.infer<typeof SkillSchema
 
 export async function deleteSkill(id: string) {
   try {
-    
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 

@@ -1,5 +1,4 @@
-import { User, MapPin, Mail, Phone, Globe, Linkedin, Github, Edit2, Save, X, Eye } from 'lucide-react';
-import { Profile } from '@/lib/constants';
+import { User, MapPin, Mail, Phone, Globe, Linkedin, Github, Edit2, Save, X, Eye, Camera } from 'lucide-react';
 
 interface ProfileHeaderProps {
   profile: any;
@@ -9,6 +8,7 @@ interface ProfileHeaderProps {
   onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onPreview: () => void;
   isSaving: boolean;
+  onAvatarUpload?: (file: File) => void;
 }
 
 export const ProfileHeader = ({
@@ -18,14 +18,21 @@ export const ProfileHeader = ({
   onSave,
   onInputChange,
   onPreview,
-  isSaving
+  isSaving,
+  onAvatarUpload
 }: ProfileHeaderProps) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onAvatarUpload) {
+      onAvatarUpload(file);
+    }
+  };
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
       <div className="flex flex-col md:flex-row md:items-center gap-6">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+          <div className="relative w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden group">
             {profile.avatarUrl ? (
               <img
                 src={profile.avatarUrl}
@@ -34,6 +41,23 @@ export const ProfileHeader = ({
               />
             ) : (
               <User className="w-12 h-12 text-gray-400" />
+            )}
+            {isEditing && (
+              <>
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="avatar-upload"
+                  className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                >
+                  <Camera className="w-6 h-6 text-white" />
+                </label>
+              </>
             )}
           </div>
         </div>
@@ -52,7 +76,7 @@ export const ProfileHeader = ({
                     id="firstName"
                     name="firstName"
                     value={profile.firstName}
-                    onChange={onInputChange}
+                    onChange={(e) => onInputChange(e)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
@@ -65,7 +89,7 @@ export const ProfileHeader = ({
                     id="lastName"
                     name="lastName"
                     value={profile.lastName}
-                    onChange={onInputChange}
+                    onChange={(e) => onInputChange(e)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
@@ -79,10 +103,40 @@ export const ProfileHeader = ({
                   id="headline"
                   name="headline"
                   value={profile.headline}
-                  onChange={onInputChange}
+                  onChange={(e) => onInputChange(e)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="E.g., Senior Software Engineer"
                 />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={profile.location}
+                    onChange={(e) => onInputChange(e)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="E.g., San Francisco, CA"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={profile.phone}
+                    onChange={(e) => onInputChange(e)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="E.g., +1 (555) 123-4567"
+                  />
+                </div>
               </div>
             </div>
           ) : (

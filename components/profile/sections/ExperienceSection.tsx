@@ -170,10 +170,7 @@ export const ExperienceSection = ({
           </div>
           <div className="flex justify-end space-x-2">
             <button
-              onClick={() => {
-                setEditingId(null);
-                onCancel?.();
-              }}
+              onClick={() => setEditingId(null)}
               className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
             >
               Cancel

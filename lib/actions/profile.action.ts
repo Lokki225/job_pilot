@@ -1,27 +1,27 @@
 "use server"
 import { z } from "zod";
-import { adminSupabase } from "../supabase/server";
+import { adminSupabase, createClient } from "../supabase/server";
 
 const ProfileSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  phone: z.string().optional(),
-  location: z.string().optional(),
-  bio: z.string().optional(),
-  headline: z.string().optional(),
+  firstName: z.string().optional().nullable(),
+  lastName: z.string().optional().nullable(),
+  phone: z.string().optional().nullable(),
+  location: z.string().optional().nullable(),
+  bio: z.string().optional().nullable(),
+  headline: z.string().optional().nullable(),
 
-  website: z.string().optional(),
-  linkedinUrl: z.string().optional(),
-  githubUrl: z.string().optional(),
-  twitterUrl: z.string().optional(),
+  website: z.string().optional().nullable(),
+  linkedinUrl: z.string().optional().nullable(),
+  githubUrl: z.string().optional().nullable(),
+  twitterUrl: z.string().optional().nullable(),
 
-  avatarUrl: z.string().optional(),
-  resumeUrl: z.string().optional(),
+  avatarUrl: z.string().optional().nullable(),
+  resumeUrl: z.string().optional().nullable(),
 
-  languages: z.array(z.string()).optional(),
+  languages: z.array(z.string()).optional().nullable(),
 
-  completionScore: z.number().optional(),
-  isComplete: z.boolean().optional(),
+  completionScore: z.number().optional().nullable(),
+  isComplete: z.boolean().optional().nullable(),
 });
 
 export async function getProfile(userId: string) {
@@ -87,9 +87,10 @@ export async function createProfile(values: z.infer<typeof ProfileSchema>) {
     const parsed = ProfileSchema.safeParse(values);
     if (!parsed.success) return { data: null, error: "Invalid input format" };
 
+    const supabase = await createClient();
     const {
       data: { user },
-    } = await adminSupabase.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
 
@@ -110,15 +111,16 @@ export async function updateProfile(values: z.infer<typeof ProfileSchema>) {
     const parsed = ProfileSchema.safeParse(values);
     if (!parsed.success) return { data: null, error: "Invalid input format" };
 
+    const supabase = await createClient();
     const {
       data: { user },
-    } = await adminSupabase.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
 
     const { data, error } = await adminSupabase
       .from("profiles")
-      .update({ ...parsed.data })
+      .update({ ...parsed.data, updatedAt: new Date().toISOString() })
       .eq("userId", user.id)
       .select("*")
       .single();
@@ -133,11 +135,10 @@ export async function updateProfile(values: z.infer<typeof ProfileSchema>) {
 
 export async function deleteProfile() {
   try {
-    
-
+    const supabase = await createClient();
     const {
       data: { user },
-    } = await adminSupabase.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
 
@@ -155,29 +156,50 @@ export async function upsertProfile(values: z.infer<typeof ProfileSchema>) {
   try {
     
     const parsed = ProfileSchema.safeParse(values);
-    if (!parsed.success) return { data: null, error: "Invalid input format" };
+    if (!parsed.success) {
+      console.error("Validation errors:", parsed.error.issues);
+      return { data: null, error: `Invalid input format: ${parsed.error.issues.map((e: any) => e.message).join(', ')}` };
+    }
 
+    // Use authenticated client to get user from session
+    const supabase = await createClient();
     const {
       data: { user },
-    } = await adminSupabase.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
 
-    const existing = await adminSupabase
+    // Check if profile exists
+    const { data: existing } = await adminSupabase
       .from("profiles")
       .select("id")
       .eq("userId", user.id)
-      .single();
+      .maybeSingle();
 
-    if (existing.error && existing.error.code !== "PGRST116") {
-      return { data: null, error: existing.error.message };
+    let data, error;
+
+    if (existing) {
+      // Update existing profile
+      const result = await adminSupabase
+        .from("profiles")
+        .update({ ...parsed.data, updatedAt: new Date().toISOString() })
+        .eq("userId", user.id)
+        .select("*")
+        .single();
+      
+      data = result.data;
+      error = result.error;
+    } else {
+      // Insert new profile
+      const result = await adminSupabase
+        .from("profiles")
+        .insert({ userId: user.id, ...parsed.data, updatedAt: new Date().toISOString() })
+        .select("*")
+        .single();
+      
+      data = result.data;
+      error = result.error;
     }
-
-    const { data, error } = await adminSupabase
-      .from("profiles")
-      .upsert({ userId: user.id, ...parsed.data })
-      .select("*")
-      .single();
 
     if (error) return { data: null, error: error.message };
 
@@ -190,9 +212,10 @@ export async function upsertProfile(values: z.infer<typeof ProfileSchema>) {
 export async function updateCompletionScore() {
   try {
     // Get the current user
+    const supabase = await createClient();
     const {
       data: { user },
-    } = await adminSupabase.auth.getUser();
+    } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
 

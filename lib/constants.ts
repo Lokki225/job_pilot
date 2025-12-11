@@ -29,3 +29,40 @@ export interface ResumePreviewModalProps {
   profile: any;
   formatDate: (dateString: string) => string;
 }
+
+export interface FormData {
+  // Profile
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  location: string;
+  title: string;
+  bio: string;
+  
+  // Job Preferences
+  jobTypes: string[];
+  experienceLevel: string;
+  salaryMin: string;
+  salaryMax: string;
+  preferredLocations: string[];
+  skills: string[];
+  
+  // Notifications
+  emailNotifications: boolean;
+  jobAlerts: boolean;
+  weeklyDigest: boolean;
+  applicationUpdates: boolean;
+  similarJobs: boolean;
+  
+  // Privacy
+  profileVisibility: string;
+  showSalary: boolean;
+  showContact: boolean;
+}
+
+export type NotificationItem = {
+  key: keyof FormData;
+  label: string;
+  description: string;
+};

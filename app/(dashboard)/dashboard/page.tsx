@@ -31,6 +31,7 @@ export default function DashboardPage() {
   })
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [profileError, setProfileError] = useState<string | null>(null)
 
   useEffect(() => {
     loadDashboardData()
@@ -39,34 +40,42 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     try {
       setIsLoading(true)
+      setProfileError(null)
 
       // Get authenticated user from server action
       const { user, error: userError } = await getCurrentUser()
+
+      console.log(user);
+      
       
       if (!user || userError) {
+        console.error('No authenticated user:', userError)
         router.push('/login')
         return
       }
 
-      console.log('User:', user.id);
-
       // Check if should show onboarding hero
-      const dismissed = localStorage.getItem('onboarding_hero_dismissed')
+      const dismissed = typeof window !== 'undefined' ? localStorage.getItem('onboarding_hero_dismissed') : null
       if (onboardingComplete && !dismissed) {
         setShowOnboardingHero(true)
       }
 
       // Load profile completeness with user ID
-      const { data: profile, error: profileError } = await getProfile(user.id)
-      
-      if (profile) {
-        const completeness = calculateCompleteness(profile)
-        setProfileCompleteness(completeness.percentage)
-        setCompletionItems(completeness.items)
-      } else {
-        console.warn('Profile not found:', profileError)
-        // Set default empty state
-        setProfileCompleteness(0)
+      try {
+        const { data: profile, error: profileError } = await getProfile(user.id)
+        
+        if (profile) {
+          const completeness = calculateCompleteness(profile)
+          setProfileCompleteness(completeness.percentage)
+          setCompletionItems(completeness.items)
+        } else {
+          console.warn('Profile not found for user:', user.id)
+          setProfileError('Please complete your profile to get started')
+          setProfileCompleteness(0)
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error)
+        setProfileError('Failed to load profile. Please try refreshing the page.')
       }
 
       // Load application stats
@@ -88,19 +97,19 @@ export default function DashboardPage() {
     const items = [
       { 
         label: 'Basic Info', 
-        completed: !!(profile.firstName && profile.lastName && profile.location), // ✅ Vérifiez les vrais noms de colonnes
+        completed: !!(profile.firstName && profile.lastName && profile.location), // Vérifiez les vrais noms de colonnes
         icon: User,
         link: '/dashboard/profile'
       },
       { 
         label: 'Resume Uploaded', 
-        completed: !!profile.resumeUrl, // ✅ lowercase
+        completed: !!profile.resumeUrl, // lowercase
         icon: Briefcase,
         link: '/dashboard/profile'
       },
       { 
         label: 'Job Preferences', 
-        completed: profile.completionScore >= 50, // ✅ Utilisez le score de complétion
+        completed: profile.completionScore >= 50, // Utilisez le score de complétion
         icon: Target,
         link: '/dashboard/onboarding/preferences'
       },
@@ -123,7 +132,7 @@ export default function DashboardPage() {
     setTimeout(() => {
       setShowOnboardingHero(false)
       localStorage.setItem('onboarding_hero_dismissed', 'true')
-      router.replace('/dashboard', { scroll: false }) // ✅ Évite le scroll en haut
+      router.replace('/dashboard', { scroll: false }) // Évite le scroll en haut
     }, 300)
   }
 
@@ -131,17 +140,28 @@ export default function DashboardPage() {
     router.push('/dashboard/profile')
   }
 
-  // ✅ Skeleton loader pendant le chargement
+  // Skeleton loader pendant le chargement
   if (isLoading) {
     return (
-      <div className="container mx-auto py-8 px-4">
-        <div className="space-y-6">
-          <div className="h-8 w-64 bg-gray-200 rounded animate-pulse" />
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="h-32 bg-gray-200 rounded animate-pulse" />
-            ))}
-          </div>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <p className="text-muted-foreground">Loading your dashboard...</p>
+      </div>
+    )
+  }
+
+  if (profileError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-4">
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg max-w-md w-full">
+          <h2 className="text-xl font-semibold mb-2">Profile Incomplete</h2>
+          <p className="text-muted-foreground mb-4">{profileError}</p>
+          <Button 
+            onClick={() => router.push('/dashboard/profile')}
+            className="w-full"
+          >
+            Complete Your Profile
+          </Button>
         </div>
       </div>
     )

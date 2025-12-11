@@ -2,6 +2,7 @@
 // ---------- app/(auth)/signup/page.tsx ----------
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoogleSignInButton } from "@/components/auth/social-buttons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
@@ -63,15 +64,15 @@ export default function SignupPage() {
       if (session) {
           // Set the session in the browser
           const { data: { session: currentSession }, error } = await supabase.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token!,
+            access_token: session.access_token,
+            refresh_token: session.refresh_token!,
           });
 
           if (error) throw error;
 
           toast({
-          title: "Account created!",
-          description: "Welcome to JobPilot AI",
+            title: "Account created!",
+            description: "Welcome to JobPilot AI",
           });
 
           // Force a refresh to update the auth state
@@ -193,21 +194,8 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* Google Button */}
-            <Button type="button" variant="outline" className="w-full">
-              <svg
-                className="mr-2 h-4 w-4"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 488 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M488 261.8C488 403.3 391.1 504 248 504..."
-                />
-              </svg>
-              Sign up with Google
-            </Button>
+            {/* Google Sign In Button */}
+            <GoogleSignInButton type="signup" />
 
             {/* Submit Button */}
             <Button type="submit" className="w-full" disabled={isLoading}>
