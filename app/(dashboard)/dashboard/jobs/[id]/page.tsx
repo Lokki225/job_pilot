@@ -657,17 +657,17 @@ export default function JobDetailsPage() {
               ) : existingCoverLetters.length > 0 ? (
                 <>
                   {/* Show existing cover letter info */}
-                  <div className="bg-white rounded-lg p-3 border border-purple-200">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-purple-200 dark:border-purple-700">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-slate-700 flex items-center gap-1">
+                      <span className="text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-1">
                         <CheckCircle className="w-4 h-4 text-green-500" />
                         Cover Letter Ready
                       </span>
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
                         {existingCoverLetters.length} version{existingCoverLetters.length > 1 ? 's' : ''}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 line-clamp-2 mb-2">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mb-2">
                       {existingCoverLetters[0].content.substring(0, 100)}...
                     </p>
                     <div className="flex gap-2">

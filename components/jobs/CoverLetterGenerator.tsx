@@ -360,13 +360,14 @@ export function CoverLetterGenerator({
 
               {/* AI Improve Section */}
               {showImproveInput ? (
-                <div className="bg-purple-50 rounded-lg p-4 space-y-3">
-                  <Label>How should I improve it?</Label>
+                <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 space-y-3 border border-purple-100 dark:border-purple-800">
+                  <Label className="text-slate-900 dark:text-white">How should I improve it?</Label>
                   <Textarea
                     value={improveFeedback}
                     onChange={(e) => setImproveFeedback(e.target.value)}
                     placeholder="E.g., Make it more concise, add more technical details, sound more confident..."
                     rows={2}
+                    className="bg-white dark:bg-gray-800 border-purple-200 dark:border-purple-700"
                   />
                   <div className="flex gap-2">
                     <Button

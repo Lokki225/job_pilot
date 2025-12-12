@@ -8,6 +8,7 @@ import { OpenAIProvider } from './providers/openai'
 import { GroqProvider } from './providers/groq'
 import { TogetherProvider } from './providers/together'
 import { GoogleProvider } from './providers/google'
+import { OpenRouterProvider } from './providers/openrouter'
 
 // ===========================================================
 // MULTI-PROVIDER AI SERVICE
@@ -65,6 +66,7 @@ class AIService {
     const groqKey = process.env.GROQ_API_KEY
     const togetherKey = process.env.TOGETHER_API_KEY
     const googleKey = process.env.GOOGLE_AI_API_KEY
+    const openrouterKey = process.env.OPENROUTER_API_KEY
 
     if (openaiKey && openaiKey !== 'your_openai_key') {
       this.providers.set('openai', new OpenAIProvider({ apiKey: openaiKey }))
@@ -82,8 +84,14 @@ class AIService {
       this.providers.set('google', new GoogleProvider({ apiKey: googleKey }))
     }
 
-    // Set default provider (prefer free options first)
-    if (this.providers.has('groq')) {
+    if (openrouterKey) {
+      this.providers.set('openrouter', new OpenRouterProvider({ apiKey: openrouterKey }))
+    }
+
+    // Set default provider (prefer OpenRouter for best free tier)
+    if (this.providers.has('openrouter')) {
+      this.currentProvider = 'openrouter'
+    } else if (this.providers.has('groq')) {
       this.currentProvider = 'groq'
     } else if (this.providers.has('together')) {
       this.currentProvider = 'together'

@@ -60,4 +60,4 @@ export abstract class BaseAIProvider {
   }
 }
 
-export type AIProviderType = 'openai' | 'groq' | 'together' | 'google'
+export type AIProviderType = 'openai' | 'groq' | 'together' | 'google' | 'openrouter'

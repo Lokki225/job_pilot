@@ -46,6 +46,87 @@ enum ApplicationStatus {
   WITHDRAWN     // User withdrew application
 }
 
+// Training & Study Room Enums
+enum SessionType {
+  QUICK         // 15 min, 5 questions
+  FULL_MOCK     // 45-60 min, 15-20 questions
+  TARGETED      // 20-30 min, focus on weaknesses
+  COMPANY_PREP  // 30-45 min, company-specific
+}
+
+enum SessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+enum QuestionType {
+  BEHAVIORAL
+  TECHNICAL
+  SITUATIONAL
+  GENERAL
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum StudyStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ContentType {
+  TEXT
+  VIDEO
+  INTERACTIVE
+  QUIZ
+  PRACTICE
+}
+
+enum ResearchType {
+  AI_GENERATED
+  USER_PROVIDED
+}
+
+enum ExperienceLevel {
+  ENTRY
+  MID
+  SENIOR
+  EXECUTIVE
+}
+
+enum PeerSessionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+  CANCELLED
+}
+
+enum CalendarProvider {
+  GOOGLE
+  OUTLOOK
+  APPLE
+}
+
+enum InterviewOutcome {
+  PENDING
+  PASSED
+  REJECTED
+  UNKNOWN
+}
+
+enum AchievementCategory {
+  STUDY
+  TRAINING
+  COMMUNITY
+  MILESTONE
+}
+
 // ===========================================================
 // USER (Auth + Global Relations)
 // ===========================================================
@@ -63,6 +144,22 @@ model User {
   aiContents        AIGeneratedContent[]
   coverLetters      CoverLetter[]
   emailApplications EmailApplication[]
+
+  // Training & Study Room Relations
+  studyProgress         UserStudyProgress[]
+  trainingSessions      TrainingSession[]
+  interviewStats        UserInterviewStats?
+  companyResearch       CompanyResearch[]
+  peerPracticeProfile   PeerPracticeProfile?
+  peerSessionsRequested PeerPracticeSession[] @relation("requester")
+  peerSessionsPartner   PeerPracticeSession[] @relation("partner")
+  calendarConnections   UserCalendarConnection[]
+  detectedInterviews    DetectedInterview[]
+  successStories        SuccessStory[]
+  storyLikes            SuccessStoryLike[]
+  achievements          UserAchievement[]
+  xp                    UserXP?
+  xpTransactions        XPTransaction[]
 
   // Onboarding state
   onboardingStep  Int       @default(0)   // 0 = fresh user, 1-5 steps...
@@ -489,4 +586,544 @@ model Notification {
   updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("notifications")
+}
+
+// ===========================================================
+// STUDY ROOM - CHAPTERS
+// ===========================================================
+model StudyChapter {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  orderIndex      Int
+  title           String   @db.VarChar(255)
+  description     String?  @db.Text
+  estimatedMinutes Int     @default(60)
+  icon            String?  @db.VarChar(50)
+  isPremium       Boolean  @default(false)
+
+  // Relations
+  lessons         StudyLesson[]
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("study_chapters")
+}
+
+// ===========================================================
+// STUDY ROOM - LESSONS
+// ===========================================================
+model StudyLesson {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapterId       String      @db.Uuid
+  orderIndex      Int
+  title           String      @db.VarChar(255)
+  description     String?     @db.Text
+  estimatedMinutes Int        @default(15)
+  contentType     ContentType @default(TEXT)
+  content         Json?       // Flexible content storage
+  isPremium       Boolean     @default(false)
+
+  // Relations
+  chapter         StudyChapter       @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  quiz            StudyQuiz?
+  resources       StudyResource[]
+  userProgress    UserStudyProgress[]
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([chapterId])
+  @@map("study_lessons")
+}
+
+ // ===========================================================
+ // STUDY ROOM - QUIZZES (Text-based MVP)
+ // ===========================================================
+ model StudyQuiz {
+   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+   lessonId     String   @unique @db.Uuid
+   title        String?  @db.VarChar(255)
+   passingScore Int      @default(70)
+   questions    Json     // Array of quiz questions
+
+   // Relations
+   lesson       StudyLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+   createdAt    DateTime @default(now()) @db.Timestamptz(6)
+   updatedAt    DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+   @@map("study_quizzes")
+ }
+
+// ===========================================================
+// STUDY ROOM - RESOURCES (Downloadable files)
+// ===========================================================
+model StudyResource {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId      String   @db.Uuid
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  fileUrl       String   @db.Text
+  fileType      String?  @db.VarChar(50)
+  isPremium     Boolean  @default(false)
+  downloadCount Int      @default(0)
+
+  // Relations
+  lesson        StudyLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([lessonId])
+  @@map("study_resources")
+}
+
+// ===========================================================
+// STUDY ROOM - USER PROGRESS
+// ===========================================================
+model UserStudyProgress {
+  id                String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String      @db.Uuid
+  lessonId          String      @db.Uuid
+  status            StudyStatus @default(NOT_STARTED)
+  progressPercentage Int        @default(0)
+  quizScore         Int?
+  quizAttempts      Int         @default(0)
+  timeSpentSeconds  Int         @default(0)
+  completedAt       DateTime?   @db.Timestamptz(6)
+
+  // Relations
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson            StudyLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("user_study_progress")
+}
+
+// ===========================================================
+// TRAINING ROOM - SESSIONS
+// ===========================================================
+model TrainingSession {
+  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String        @db.Uuid
+  sessionType       SessionType
+  companyId         String?       @db.Uuid
+  companyName       String?       @db.VarChar(255)
+  jobTitle          String?       @db.VarChar(255)
+  jobApplicationId  String?       @db.Uuid
+  focusAreas        Json?         // Array of focus areas
+  difficulty        Difficulty    @default(MEDIUM)
+  totalQuestions    Int           @default(0)
+  completedQuestions Int          @default(0)
+  durationSeconds   Int           @default(0)
+  overallScore      Int?
+  status            SessionStatus @default(IN_PROGRESS)
+  feedbackSummary   Json?
+  startedAt         DateTime      @default(now()) @db.Timestamptz(6)
+  completedAt       DateTime?     @db.Timestamptz(6)
+
+  // Relations
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company           CompanyResearch?  @relation(fields: [companyId], references: [id])
+  questions         TrainingQuestion[]
+
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([status])
+  @@index([userId, status])
+  @@map("training_sessions")
+}
+
+// ===========================================================
+// TRAINING ROOM - QUESTIONS
+// ===========================================================
+model TrainingQuestion {
+  id                  String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId           String       @db.Uuid
+  orderIndex          Int
+  questionType        QuestionType
+  questionText        String       @db.Text
+  questionContext     String?      @db.Text
+  userAnswer          String?      @db.Text
+  answerAudioUrl      String?      @db.Text
+  answerDurationSeconds Int?
+  aiFeedback          Json?        // Structured feedback
+  score               Int?
+  improvementTips     Json?
+  keywordsUsed        Json?
+  keywordsMissing     Json?
+  revisedAnswer       String?      @db.Text
+  answeredAt          DateTime?    @db.Timestamptz(6)
+
+  // Relations
+  session             TrainingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  createdAt           DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([sessionId])
+  @@map("training_questions")
+}
+
+// ===========================================================
+// TRAINING ROOM - USER INTERVIEW STATS
+// ===========================================================
+model UserInterviewStats {
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                  String   @unique @db.Uuid
+  totalSessions           Int      @default(0)
+  totalQuestionsAnswered  Int      @default(0)
+  totalPracticeTimeSeconds Int     @default(0)
+  avgSessionScore         Decimal? @db.Decimal(5, 2)
+  highestScore            Int      @default(0)
+  currentStreakDays       Int      @default(0)
+  longestStreakDays       Int      @default(0)
+  lastPracticeDate        DateTime? @db.Date
+  weakAreas               Json?    // Array of weak skill areas
+  strongAreas             Json?    // Array of strong skill areas
+  scoreHistory            Json?    // Array of {date, score}
+  skillScores             Json?    // {behavioral: 85, technical: 70, ...}
+
+  // Relations
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt               DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("user_interview_stats")
+}
+
+// ===========================================================
+// COMPANY RESEARCH
+// ===========================================================
+model CompanyResearch {
+  id                      String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                  String       @db.Uuid
+  companyName             String       @db.VarChar(255)
+  companyWebsite          String?      @db.Text
+  researchType            ResearchType
+
+  // Company data
+  missionStatement        String?      @db.Text
+  coreValues              Json?        // Array of values
+  companyCulture          String?      @db.Text
+  industry                String?      @db.VarChar(100)
+  companySize             String?      @db.VarChar(50)
+  foundedYear             Int?
+  headquarters            String?      @db.VarChar(255)
+  mainProducts            Json?        // Array of products/services
+  keyAchievements         Json?        // Array of achievements
+  recentNews              Json?        // Array of news items
+  leadershipTeam          Json?        // Array of {name, title}
+
+  // Interview intel
+  commonInterviewQuestions Json?       // Array of questions
+  interviewProcess        String?      @db.Text
+  glassdoorRating         Decimal?     @db.Decimal(2, 1)
+  glassdoorSummary        String?      @db.Text
+  companyChallenges       Json?        // Array of challenges
+  growthOpportunities     Json?        // Array of opportunities
+
+  // User notes
+  userNotes               String?      @db.Text
+  lastAiRefresh           DateTime?    @db.Timestamptz(6)
+  isVerified              Boolean      @default(false)
+
+  // Relations
+  user                    User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingSessions        TrainingSession[]
+  detectedInterviews      DetectedInterview[]
+
+  createdAt               DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt               DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([userId, companyName])
+  @@index([userId])
+  @@index([companyName])
+  @@map("company_research")
+}
+
+// ===========================================================
+// PEER PRACTICE - PROFILE
+// ===========================================================
+model PeerPracticeProfile {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String          @unique @db.Uuid
+  isAvailable     Boolean         @default(true)
+  preferredTimes  Json?           // Array of {day, startTime, endTime}
+  timezone        String?         @db.VarChar(100)
+  targetRoles     Json?           // Array of job titles
+  industries      Json?           // Array of industries
+  experienceLevel ExperienceLevel?
+  languages       Json?           // Array of languages
+  bio             String?         @db.Text
+  totalSessions   Int             @default(0)
+  avgRating       Decimal?        @db.Decimal(2, 1)
+
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("peer_practice_profiles")
+}
+
+// ===========================================================
+// PEER PRACTICE - SESSIONS
+// ===========================================================
+model PeerPracticeSession {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  requesterId       String            @db.Uuid
+  partnerId         String            @db.Uuid
+  scheduledAt       DateTime          @db.Timestamptz(6)
+  durationMinutes   Int               @default(30)
+  meetingUrl        String?           @db.Text
+  status            PeerSessionStatus @default(PENDING)
+  focusArea         String?           @db.VarChar(100)
+  notes             String?           @db.Text
+
+  // Ratings and feedback
+  requesterRating   Int?
+  requesterFeedback String?           @db.Text
+  partnerRating     Int?
+  partnerFeedback   String?           @db.Text
+
+  // Relations
+  requester         User              @relation("requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  partner           User              @relation("partner", fields: [partnerId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([requesterId])
+  @@index([partnerId])
+  @@index([scheduledAt])
+  @@map("peer_practice_sessions")
+}
+
+// ===========================================================
+// CALENDAR - CONNECTIONS
+// ===========================================================
+model UserCalendarConnection {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String           @db.Uuid
+  provider        CalendarProvider
+  accessToken     String           @db.Text
+  refreshToken    String?          @db.Text
+  tokenExpiresAt  DateTime?        @db.Timestamptz(6)
+  calendarId      String?          @db.VarChar(255)
+  isActive        Boolean          @default(true)
+  lastSyncAt      DateTime?        @db.Timestamptz(6)
+
+  // Relations
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  detectedInterviews DetectedInterview[]
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@map("user_calendar_connections")
+}
+
+// ===========================================================
+// CALENDAR - DETECTED INTERVIEWS
+// ===========================================================
+model DetectedInterview {
+  id                    String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String            @db.Uuid
+  calendarConnectionId  String?           @db.Uuid
+  calendarEventId       String?           @db.VarChar(255)
+  companyName           String?           @db.VarChar(255)
+  jobTitle              String?           @db.VarChar(255)
+  interviewType         String?           @db.VarChar(100)
+  scheduledAt           DateTime          @db.Timestamptz(6)
+  durationMinutes       Int?
+  location              String?           @db.Text
+  description           String?           @db.Text
+  jobApplicationId      String?           @db.Uuid
+  companyResearchId     String?           @db.Uuid
+
+  // Reminder tracking
+  reminder5DaysSent     Boolean           @default(false)
+  reminder2DaysSent     Boolean           @default(false)
+  reminder1DaySent      Boolean           @default(false)
+  reminder2HoursSent    Boolean           @default(false)
+
+  // Outcome
+  outcome               InterviewOutcome  @default(PENDING)
+  userNotes             String?           @db.Text
+
+  // Relations
+  user                  User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  calendarConnection    UserCalendarConnection? @relation(fields: [calendarConnectionId], references: [id])
+  companyResearch       CompanyResearch?  @relation(fields: [companyResearchId], references: [id])
+
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([scheduledAt])
+  @@map("detected_interviews")
+}
+
+// ===========================================================
+// SUCCESS STORIES
+// ===========================================================
+model SuccessStory {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String   @db.Uuid
+
+  // Job details
+  jobTitle              String   @db.VarChar(255)
+  companyName           String   @db.VarChar(255)
+  industry              String?  @db.VarChar(100)
+  salaryRange           String?  @db.VarChar(100)
+  location              String?  @db.VarChar(255)
+
+  // The story
+  title                 String?  @db.VarChar(255)
+  story                 String   @db.Text
+  keyLearnings          Json?    // Array of key takeaways
+  adviceForOthers       String?  @db.Text
+
+  // Auto-populated stats
+  totalApplications     Int?
+  totalTrainingSessions Int?
+  totalStudyTimeMinutes Int?
+  totalQuestionsPracticed Int?
+  avgTrainingScore      Int?
+  daysToOffer           Int?
+
+  // Display settings
+  isAnonymous           Boolean  @default(false)
+  displayName           String?  @db.VarChar(255)
+  isFeatured            Boolean  @default(false)
+  isPublished           Boolean  @default(false)
+
+  // Engagement
+  viewCount             Int      @default(0)
+  likeCount             Int      @default(0)
+
+  // Relations
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes                 SuccessStoryLike[]
+
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([isPublished])
+  @@index([userId])
+  @@map("success_stories")
+}
+
+// ===========================================================
+// SUCCESS STORY LIKES
+// ===========================================================
+model SuccessStoryLike {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storyId   String   @db.Uuid
+  userId    String   @db.Uuid
+
+  // Relations
+  story     SuccessStory @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([storyId, userId])
+  @@map("success_story_likes")
+}
+
+// ===========================================================
+// GAMIFICATION - ACHIEVEMENTS
+// ===========================================================
+model Achievement {
+  id               String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug             String              @unique @db.VarChar(100)
+  title            String              @db.VarChar(255)
+  description      String              @db.Text
+  icon             String?             @db.VarChar(50)
+  category         AchievementCategory
+  points           Int                 @default(10)
+  requirementType  String?             @db.VarChar(50)
+  requirementValue Int?
+  requirementField String?             @db.VarChar(100)
+  isSecret         Boolean             @default(false)
+
+  // Relations
+  userAchievements UserAchievement[]
+
+  createdAt        DateTime @default(now()) @db.Timestamptz(6)
+
+  @@map("achievements")
+}
+
+// ===========================================================
+// GAMIFICATION - USER ACHIEVEMENTS
+// ===========================================================
+model UserAchievement {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String    @db.Uuid
+  achievementId String    @db.Uuid
+  progress      Int       @default(0)
+  unlockedAt    DateTime? @db.Timestamptz(6)
+  isNotified    Boolean   @default(false)
+
+  // Relations
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("user_achievements")
+}
+
+// ===========================================================
+// GAMIFICATION - USER XP
+// ===========================================================
+model UserXP {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @unique @db.Uuid
+  totalXp         Int      @default(0)
+  currentLevel    Int      @default(1)
+  xpToNextLevel   Int      @default(100)
+  weeklyXp        Int      @default(0)
+  monthlyXp       Int      @default(0)
+  lastXpReset     DateTime? @db.Date
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("user_xp")
+}
+
+// ===========================================================
+// GAMIFICATION - XP TRANSACTIONS
+// ===========================================================
+model XPTransaction {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @db.Uuid
+  amount      Int
+  source      String   @db.VarChar(100) // 'lesson_complete', 'quiz_pass', etc.
+  sourceId    String?  @db.Uuid
+  description String?  @db.Text
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([userId])
+  @@map("xp_transactions")
 }

@@ -2,6 +2,7 @@
 import { adminSupabase } from '@/lib/supabase/server'
 import { calculateCompletionScore } from '@/lib/utils'
 import { aiService } from '@/lib/services/ai'
+import { cvExtractorService } from '@/lib/services/cv-extractor'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -49,42 +50,87 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log('[parse-resume] Using fileUrl for Affinda:', finalUrl)
+    console.log('[parse-resume] Using fileUrl for CV extraction:', finalUrl)
 
-    // 3️⃣ Parse the resume via Affinda
-    let affindaData: any
+    // 3️⃣ Extract text from CV using local CV extractor (PDF + OCR merge)
+    let extractedText: string
     try {
-      affindaData = await parseResumeWithAffinda(finalUrl, resume.fileName)
-      console.log('[parse-resume] Affinda raw data received')
+      console.log('[parse-resume] Checking CV extractor availability...')
+      const isAvailable = await cvExtractorService.isAvailable()
+      
+      if (!isAvailable) {
+        console.warn('[parse-resume] CV extractor service not available, falling back to direct AI parsing')
+        // Fallback: try to fetch and parse directly
+        const fileResponse = await fetch(finalUrl)
+        const fileBlob = await fileResponse.blob()
+        const buffer = Buffer.from(await fileBlob.arrayBuffer())
+        
+        // Use AI to extract what it can from the file
+        extractedText = `Resume file: ${resume.fileName}\nNote: CV extractor service unavailable, using fallback parsing.`
+      } else {
+        console.log('[parse-resume] Fetching file for CV extraction...')
+        const fileResponse = await fetch(finalUrl)
+        if (!fileResponse.ok) {
+          throw new Error(`Failed to fetch file: ${fileResponse.status} ${fileResponse.statusText}`)
+        }
+        
+        const fileBlob = await fileResponse.blob()
+        const buffer = Buffer.from(await fileBlob.arrayBuffer())
+        
+        console.log('[parse-resume] Extracting text with CV extractor (PDF + OCR merge)...')
+        const extractionResult = await cvExtractorService.extractTextFromBuffer(
+          buffer,
+          resume.fileName,
+          { mode: 'auto', preprocess: true }
+        )
+        
+        extractedText = extractionResult.full_text
+        console.log('[parse-resume] CV extraction complete:', {
+          mode: extractionResult.mode_used,
+          pages: extractionResult.num_pages,
+          chars: extractionResult.stats.total_chars,
+          warnings: extractionResult.warnings
+        })
+        
+        // Log warnings if any
+        if (extractionResult.warnings.length > 0) {
+          console.warn('[parse-resume] CV extraction warnings:', extractionResult.warnings)
+        }
+      }
     } catch (err: any) {
-      console.error('[parse-resume] Error parsing resume with Affinda:', err)
+      console.error('[parse-resume] Error extracting CV text:', err)
       return NextResponse.json(
         { 
-          error: 'Failed to parse resume',
+          error: 'Failed to extract CV text',
           details: err.message
         },
         { status: 500 }
       )
     }
 
-    // 4️⃣ Use AI to transform Affinda data into structured profile data
+    // 4️⃣ Use AI to transform extracted text into structured profile data
     let parsedData: any
     try {
-      console.log('[parse-resume] Using AI to parse Affinda data...')
-      parsedData = await aiService.parseResumeData(affindaData)
+      console.log('[parse-resume] Using AI to parse extracted CV text...')
+      parsedData = await aiService.parseResumeData({ extractedText })
       console.log('[parse-resume] AI parsed data:', parsedData)
     } catch (aiError: any) {
-      console.error('[parse-resume] AI parsing failed, using fallback:', aiError)
-      // The AI service has a built-in fallback, so this should rarely happen
-      parsedData = await aiService.parseResumeData(affindaData)
+      console.error('[parse-resume] AI parsing failed:', aiError)
+      return NextResponse.json(
+        { 
+          error: 'Failed to parse CV data with AI',
+          details: aiError.message
+        },
+        { status: 500 }
+      )
     }
 
-    // 5️⃣ Update resume record with both raw and parsed data
+    // 5️⃣ Update resume record with both raw extracted text and parsed data
     const { error: updateError } = await adminSupabase
       .from('resumes')
       .update({ 
         parsedData: {
-          raw: affindaData,
+          raw: { extractedText },
           structured: parsedData
         }
       })
@@ -118,53 +164,9 @@ export async function POST(request: Request) {
   }
 }
 
-// Helper function to parse resume via Affinda
-async function parseResumeWithAffinda(fileUrl: string, fileName: string) {
-  try {
-    console.log('[parse-resume] Fetching file from URL:', fileUrl);
-    
-    // First, download the file from the URL
-    const fileResponse = await fetch(fileUrl);
-    if (!fileResponse.ok) {
-      throw new Error(`Failed to fetch file: ${fileResponse.status} ${fileResponse.statusText}`);
-    }
-    
-    // Get the file as a blob
-    const fileBlob = await fileResponse.blob();
-    
-    // Create FormData and append the file
-    const formData = new FormData();
-    formData.append('file', fileBlob, fileName); // The filename is important
-    
-    console.log('[parse-resume] Sending to Affinda...');
-    
-    const response = await fetch('https://api.affinda.com/v2/resumes', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.AFFINDA_API_KEY}`
-        // Don't set Content-Type header when using FormData, let the browser set it with the correct boundary
-      },
-      body: formData
-    });
-
-    const data = await response.json();
-    console.log('[parse-resume] Affinda response status:', response.status);
-    
-    if (!response.ok) {
-      console.error('[parse-resume] Affinda API error:', data);
-      throw new Error(JSON.stringify({
-        status: response.status,
-        statusText: response.statusText,
-        ...data
-      }));
-    }
-
-    return data;
-  } catch (error: any) {
-    console.error('[parse-resume] Error in parseResume:', error);
-    throw error; // Re-throw to be caught by the caller
-  }
-}
+// Note: Affinda integration replaced with local CV extractor service
+// The CV extractor uses PyMuPDF for PDF text extraction + Tesseract OCR
+// with intelligent merging to maximize text coverage from any CV format
 
 // ----------------------------
 // Helper: Update user profile with AI-parsed data

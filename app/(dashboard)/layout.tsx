@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils"
@@ -16,6 +16,8 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
   { name: "Cover Letters", href: "/dashboard/letters", icon: FileText },
+  { name: "Study Room", href: "/dashboard/study", icon: BookOpen },
+  { name: "Content Gen", href: "/dashboard/admin/study-content", icon: Sparkles },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
 

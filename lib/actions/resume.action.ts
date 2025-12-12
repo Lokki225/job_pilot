@@ -24,31 +24,41 @@ export async function createResume(values: z.infer<typeof ResumeSchema>) {
     if (!user) return { data: null, error: "Unauthorized" };
 
     // Ensure user exists in users table (handles case where OAuth callback didn't create it)
-    const { data: existingUser } = await adminSupabase
+    const { data: existingUser, error: userCheckError } = await adminSupabase
       .from("users")
       .select("id")
       .eq("id", user.id)
       .single();
 
-    if (!existingUser) {
-      // Create user record
-      await adminSupabase.from("users").upsert({
+    if (userCheckError || !existingUser) {
+      // Create user record first - this MUST succeed before inserting resume
+      const { error: userInsertError } = await adminSupabase.from("users").upsert({
         id: user.id,
         email: user.email!,
         role: "USER",
       }, { onConflict: "id" });
+
+      if (userInsertError) {
+        console.error("Failed to create user record:", userInsertError);
+        return { data: null, error: "Failed to create user record: " + userInsertError.message };
+      }
 
       // Create profile record
       const userMetadata = user.user_metadata || {};
       const fullName = userMetadata.full_name || userMetadata.name || user.email?.split("@")[0] || "User";
       const nameParts = fullName.trim().split(/\s+/);
       
-      await adminSupabase.from("profiles").upsert({
+      const { error: profileInsertError } = await adminSupabase.from("profiles").upsert({
         userId: user.id,
         firstName: nameParts[0] || "",
         lastName: nameParts.slice(1).join(" ") || "",
         avatarUrl: userMetadata.avatar_url || userMetadata.picture || "",
       }, { onConflict: "userId" });
+
+      if (profileInsertError) {
+        console.error("Failed to create profile record:", profileInsertError);
+        // Don't fail here - profile is not required for resume upload
+      }
     }
 
     // Use admin client for database operations (bypasses RLS)
