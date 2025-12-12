@@ -145,6 +145,64 @@ export async function generateCoverLetter(values: z.infer<typeof GenerateCoverLe
 }
 
 // ===========================================================
+// GET ALL COVER LETTERS
+// ===========================================================
+
+export async function getAllCoverLetters() {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: 'Unauthorized' }
+    }
+
+    // Get cover letters
+    const { data: coverLetters, error } = await adminSupabase
+      .from('cover_letters')
+      .select('*')
+      .eq('userId', user.id)
+      .order('createdAt', { ascending: false })
+
+    if (error) {
+      return { data: null, error: error.message }
+    }
+
+    // Get job applications for the cover letters that have jobApplicationId
+    const jobAppIds = coverLetters
+      ?.filter(cl => cl.jobApplicationId)
+      .map(cl => cl.jobApplicationId) || []
+
+    let jobAppsMap: Record<string, any> = {}
+    
+    if (jobAppIds.length > 0) {
+      const { data: jobApps } = await adminSupabase
+        .from('job_applications')
+        .select('id, jobTitle, company, status')
+        .in('id', jobAppIds)
+
+      if (jobApps) {
+        jobAppsMap = jobApps.reduce((acc, app) => {
+          acc[app.id] = app
+          return acc
+        }, {} as Record<string, any>)
+      }
+    }
+
+    // Combine the data
+    const enrichedLetters = coverLetters?.map(letter => ({
+      ...letter,
+      job_applications: letter.jobApplicationId ? jobAppsMap[letter.jobApplicationId] || null : null
+    })) || []
+
+    return { data: enrichedLetters, error: null }
+  } catch (err) {
+    console.error('Get all cover letters error:', err)
+    return { data: null, error: 'Failed to get cover letters' }
+  }
+}
+
+// ===========================================================
 // GET COVER LETTERS FOR JOB APPLICATION
 // ===========================================================
 

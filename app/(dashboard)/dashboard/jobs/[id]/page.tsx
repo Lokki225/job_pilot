@@ -292,7 +292,7 @@ export default function JobDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
-        <p className="text-slate-600">Loading job details...</p>
+        <p className="text-slate-600 dark:text-slate-400">Loading job details...</p>
       </div>
     )
   }
@@ -301,8 +301,8 @@ export default function JobDetailsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <AlertCircle className="w-12 h-12 text-red-400 mb-4" />
-        <h2 className="text-xl font-semibold text-slate-900 mb-2">Job Not Found</h2>
-        <p className="text-slate-600 mb-4">{error || 'This job application does not exist'}</p>
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Job Not Found</h2>
+        <p className="text-slate-600 dark:text-slate-400 mb-4">{error || 'This job application does not exist'}</p>
         <Button onClick={() => router.push('/dashboard/jobs/applications')}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Applications
@@ -332,8 +332,8 @@ export default function JobDetailsPage() {
                 <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
               )}
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">{job.jobTitle}</h1>
-            <div className="flex items-center gap-4 mt-2 text-slate-600">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{job.jobTitle}</h1>
+            <div className="flex items-center gap-4 mt-2 text-slate-600 dark:text-slate-400">
               <span className="flex items-center gap-1">
                 <Building2 className="w-4 h-4" />
                 {job.company}
@@ -404,8 +404,8 @@ export default function JobDetailsPage() {
         {/* Left Column - Details */}
         <div className="lg:col-span-2 space-y-6">
           {/* Quick Info */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Job Details</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Job Details</h2>
             
             {isEditing ? (
               <div className="space-y-4">
@@ -462,13 +462,13 @@ export default function JobDetailsPage() {
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 {job.jobType && (
-                  <div className="flex items-center gap-2 text-slate-600">
+                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
                     <Briefcase className="w-4 h-4" />
                     <span>{job.jobType}</span>
                   </div>
                 )}
                 {job.salary && (
-                  <div className="flex items-center gap-2 text-green-600">
+                  <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                     <DollarSign className="w-4 h-4" />
                     <span>{job.salary}</span>
                   </div>
@@ -492,8 +492,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* Description */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Description</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Description</h2>
             {isEditing ? (
               <Textarea
                 value={editForm.description}
@@ -502,9 +502,9 @@ export default function JobDetailsPage() {
                 placeholder="Job description..."
               />
             ) : (
-              <div className="prose prose-slate max-w-none">
+              <div className="prose prose-slate max-w-none text-slate-600 dark:text-slate-400">
                 {job.description ? (
-                  <p className="whitespace-pre-wrap text-slate-600">{job.description}</p>
+                  <p className="whitespace-pre-wrap">{job.description}</p>
                 ) : (
                   <p className="text-slate-400 italic">No description available</p>
                 )}
@@ -513,8 +513,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* Requirements */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Requirements</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Requirements</h2>
             {isEditing ? (
               <Textarea
                 value={editForm.requirements}
@@ -525,7 +525,7 @@ export default function JobDetailsPage() {
             ) : (
               <div className="prose prose-slate max-w-none">
                 {job.requirements ? (
-                  <p className="whitespace-pre-wrap text-slate-600">{job.requirements}</p>
+                  <p className="whitespace-pre-wrap text-slate-600 dark:text-slate-400">{job.requirements}</p>
                 ) : (
                   <p className="text-slate-400 italic">No requirements listed</p>
                 )}
@@ -534,8 +534,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* Notes */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <FileText className="w-4 h-4" />
               My Notes
             </h2>
@@ -549,7 +549,7 @@ export default function JobDetailsPage() {
             ) : (
               <div>
                 {job.notes ? (
-                  <p className="whitespace-pre-wrap text-slate-600">{job.notes}</p>
+                  <p className="whitespace-pre-wrap text-slate-600 dark:text-slate-400">{job.notes}</p>
                 ) : (
                   <p className="text-slate-400 italic">No notes yet. Click Edit to add notes.</p>
                 )}
@@ -561,8 +561,8 @@ export default function JobDetailsPage() {
         {/* Right Column - Status & Timeline */}
         <div className="space-y-6">
           {/* Status Card */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Application Status</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Application Status</h2>
             
             {isEditing ? (
               <Select
@@ -588,8 +588,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* Dates */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Important Dates</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Important Dates</h2>
             
             {isEditing ? (
               <div className="space-y-4">
@@ -613,19 +613,19 @@ export default function JobDetailsPage() {
             ) : (
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Added</span>
-                  <span className="text-slate-900">{formatDate(job.createdAt)}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Added</span>
+                  <span className="text-slate-900 dark:text-white">{formatDate(job.createdAt)}</span>
                 </div>
                 {job.appliedDate && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">Applied</span>
-                    <span className="text-slate-900">{formatDate(job.appliedDate)}</span>
+                    <span className="text-slate-500 dark:text-slate-400">Applied</span>
+                    <span className="text-slate-900 dark:text-white">{formatDate(job.appliedDate)}</span>
                   </div>
                 )}
                 {job.interviewDate && (
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-500">Interview</span>
-                    <span className="text-purple-600 font-medium">{formatDate(job.interviewDate)}</span>
+                    <span className="text-slate-500 dark:text-slate-400">Interview</span>
+                    <span className="text-purple-600 dark:text-purple-400 font-medium">{formatDate(job.interviewDate)}</span>
                   </div>
                 )}
               </div>
@@ -633,8 +633,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* Source */}
-          <div className="bg-white rounded-xl border p-6">
-            <h2 className="font-semibold text-slate-900 mb-4">Source</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Source</h2>
             <div className="flex items-center gap-2">
               <Badge variant="outline">{job.source}</Badge>
               {job.isPasted && (
@@ -644,8 +644,8 @@ export default function JobDetailsPage() {
           </div>
 
           {/* AI Actions */}
-          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-100 p-6">
-            <h2 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border border-purple-100 dark:border-purple-800 p-6">
+            <h2 className="font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-purple-600" />
               AI Assistant
             </h2>

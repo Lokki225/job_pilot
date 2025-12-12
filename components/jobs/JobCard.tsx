@@ -63,24 +63,24 @@ export function JobCard({
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
       case 'ADZUNA':
-        return 'bg-orange-100 text-orange-700 border-orange-200'
+        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-800'
       case 'JSEARCH':
-        return 'bg-blue-100 text-blue-700 border-blue-200'
+        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800'
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
     }
   }
 
   if (variant === 'compact') {
     return (
-      <div className="bg-white rounded-lg border border-slate-200 p-4 hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group">
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+            <h3 className="font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
               {job.title}
             </h3>
-            <p className="text-sm text-slate-600 truncate">{job.company}</p>
-            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
+            <p className="text-sm text-slate-600 dark:text-slate-400 truncate">{job.company}</p>
+            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 {job.location}
@@ -94,7 +94,7 @@ export function JobCard({
             </div>
           </div>
           {matchScore && (
-            <Badge variant="secondary" className="bg-green-100 text-green-700 shrink-0">
+            <Badge variant="secondary" className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 shrink-0">
               {matchScore}%
             </Badge>
           )}
@@ -104,15 +104,15 @@ export function JobCard({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all cursor-pointer group">
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2 flex-wrap">
-            <h3 className="text-xl font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {job.title}
             </h3>
             {matchScore && (
-              <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
+              <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-medium rounded-full flex items-center gap-1">
                 <Star className="w-3 h-3" />
                 {matchScore}% Match
               </span>
@@ -135,15 +135,15 @@ export function JobCard({
             ) : (
               <Building2 className="w-5 h-5 text-slate-400" />
             )}
-            <p className="text-slate-600 font-medium">{job.company}</p>
+            <p className="text-slate-600 dark:text-slate-300 font-medium">{job.company}</p>
           </div>
           
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
             <span className="flex items-center gap-1">
               <MapPin className="w-4 h-4" />
               {job.location}
               {job.remote && (
-                <Badge variant="secondary" className="ml-1 text-xs bg-purple-100 text-purple-700">
+                <Badge variant="secondary" className="ml-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">
                   Remote
                 </Badge>
               )}
@@ -175,15 +175,15 @@ export function JobCard({
           className={cn(
             "p-2 rounded-lg transition-all",
             saved
-              ? 'bg-blue-100 text-blue-600'
-              : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+              ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
+              : 'bg-slate-100 dark:bg-slate-700 text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600'
           )}
         >
           <BookmarkPlus className="w-5 h-5" />
         </button>
       </div>
 
-      <p className="text-slate-600 text-sm mb-3 line-clamp-2">
+      <p className="text-slate-600 dark:text-slate-400 text-sm mb-3 line-clamp-2">
         {job.description}
       </p>
 
@@ -192,13 +192,13 @@ export function JobCard({
           {job.tags.slice(0, 5).map((tag, index) => (
             <span
               key={index}
-              className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-medium"
+              className="px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-full text-xs font-medium"
             >
               {tag}
             </span>
           ))}
           {job.tags.length > 5 && (
-            <span className="px-3 py-1 bg-slate-50 text-slate-500 rounded-full text-xs">
+            <span className="px-3 py-1 bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-400 rounded-full text-xs">
               +{job.tags.length - 5} more
             </span>
           )}

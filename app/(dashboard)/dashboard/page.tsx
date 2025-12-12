@@ -58,14 +58,14 @@ const getRelativeTime = (date: string) => {
 // Status badge helper
 const getStatusBadge = (status: string) => {
   const statusConfig: Record<string, { label: string; className: string }> = {
-    WISHLIST: { label: 'Wishlist', className: 'bg-slate-100 text-slate-700' },
-    APPLIED: { label: 'Applied', className: 'bg-blue-100 text-blue-700' },
-    INTERVIEWING: { label: 'Interview', className: 'bg-purple-100 text-purple-700' },
-    OFFER: { label: 'Offer', className: 'bg-green-100 text-green-700' },
-    REJECTED: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
-    ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-700' },
+    WISHLIST: { label: 'Wishlist', className: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
+    APPLIED: { label: 'Applied', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
+    INTERVIEWING: { label: 'Interview', className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
+    OFFER: { label: 'Offer', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
+    REJECTED: { label: 'Rejected', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
+    ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' },
   }
-  const config = statusConfig[status] || { label: status, className: 'bg-gray-100 text-gray-700' }
+  const config = statusConfig[status] || { label: status, className: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' }
   return <Badge className={config.className}>{config.label}</Badge>
 }
 
@@ -239,8 +239,8 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
-        <p className="text-slate-500">Loading your dashboard...</p>
+        <Loader2 className="h-12 w-12 animate-spin text-indigo-600 dark:text-indigo-400" />
+        <p className="text-slate-500 dark:text-slate-400">Loading your dashboard...</p>
       </div>
     )
   }
@@ -248,10 +248,10 @@ export default function DashboardPage() {
   if (profileError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-4">
-        <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl max-w-md w-full">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-6 rounded-2xl max-w-md w-full">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2 text-slate-900">Profile Incomplete</h2>
-          <p className="text-slate-600 mb-4">{profileError}</p>
+          <h2 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Profile Incomplete</h2>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">{profileError}</p>
           <Button 
             onClick={() => router.push('/dashboard/profile')}
             className="w-full bg-indigo-600 hover:bg-indigo-700"
@@ -303,7 +303,7 @@ export default function DashboardPage() {
             <Button 
               onClick={() => router.push('/dashboard/jobs/applications')}
               variant="outline"
-              className="border-white/30 text-white hover:bg-white/10"
+              className="border-white/30 text-black hover:bg-white/10"
             >
               <Briefcase className="w-4 h-4 mr-2" />
               My Applications
@@ -347,52 +347,52 @@ export default function DashboardPage() {
         <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications')}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Briefcase className="w-6 h-6 text-indigo-600" />
+              <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Briefcase className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
             </div>
-            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.total}</div>
-            <p className="text-slate-500 text-sm">Total Applications</p>
+            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.total}</div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Total Applications</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=APPLIED')}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Send className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Send className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
             </div>
-            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.sent}</div>
-            <p className="text-slate-500 text-sm">Applications Sent</p>
+            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.sent}</div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Applications Sent</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=INTERVIEWING')}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Calendar className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
             </div>
-            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.replied}</div>
-            <p className="text-slate-500 text-sm">Interviews</p>
+            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.replied}</div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Interviews</p>
           </CardContent>
         </Card>
 
         <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=OFFER')}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <ThumbsUp className="w-6 h-6 text-green-600" />
+              <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ThumbsUp className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-green-600 transition-colors" />
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors" />
             </div>
-            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.accepted}</div>
-            <p className="text-slate-500 text-sm">Offers Received</p>
+            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.accepted}</div>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Offers Received</p>
           </CardContent>
         </Card>
       </div>
@@ -423,11 +423,11 @@ export default function DashboardPage() {
             <CardContent>
               {recentApplications.length === 0 ? (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Briefcase className="w-8 h-8 text-slate-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-900 mb-2">No applications yet</h3>
-                  <p className="text-slate-500 mb-4">Start your job search and track your applications here</p>
+                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">No applications yet</h3>
+                  <p className="text-slate-500 dark:text-slate-400 mb-4">Start your job search and track your applications here</p>
                   <Button onClick={() => router.push('/dashboard/jobs')}>
                     <Search className="w-4 h-4 mr-2" />
                     Browse Jobs
@@ -438,15 +438,15 @@ export default function DashboardPage() {
                   {recentApplications.map((app) => (
                     <div 
                       key={app.id}
-                      className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all cursor-pointer"
+                      className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-all cursor-pointer"
                       onClick={() => router.push(`/dashboard/jobs/${app.id}`)}
                     >
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
                         {app.company?.charAt(0) || 'J'}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-slate-900 truncate">{app.jobTitle}</h4>
-                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <h4 className="font-semibold text-slate-900 dark:text-white truncate">{app.jobTitle}</h4>
+                        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                           <Building2 className="w-3 h-3" />
                           <span className="truncate">{app.company}</span>
                           {app.location && (
@@ -460,7 +460,7 @@ export default function DashboardPage() {
                       </div>
                       <div className="flex flex-col items-end gap-2">
                         {getStatusBadge(app.status)}
-                        <span className="text-xs text-slate-400">{getRelativeTime(app.createdAt)}</span>
+                        <span className="text-xs text-slate-400 dark:text-slate-500">{getRelativeTime(app.createdAt)}</span>
                       </div>
                     </div>
                   ))}
@@ -486,8 +486,8 @@ export default function DashboardPage() {
                 className="w-full justify-start gap-3 h-12"
                 onClick={() => router.push('/dashboard/jobs')}
               >
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-                  <Search className="w-4 h-4 text-indigo-600" />
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                  <Search className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <span>Search Jobs</span>
               </Button>
@@ -496,8 +496,8 @@ export default function DashboardPage() {
                 className="w-full justify-start gap-3 h-12"
                 onClick={() => router.push('/dashboard/jobs/applications')}
               >
-                <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-purple-600" />
+                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                 </div>
                 <span>View Applications</span>
               </Button>
@@ -506,8 +506,8 @@ export default function DashboardPage() {
                 className="w-full justify-start gap-3 h-12"
                 onClick={() => router.push('/dashboard/profile')}
               >
-                <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                  <User className="w-4 h-4 text-green-600" />
+                <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                  <User className="w-4 h-4 text-green-600 dark:text-green-400" />
                 </div>
                 <span>Edit Profile</span>
               </Button>
@@ -525,19 +525,19 @@ export default function DashboardPage() {
             <CardContent>
               {upcomingInterviews.length === 0 ? (
                 <div className="text-center py-6">
-                  <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-                  <p className="text-slate-500 text-sm">No upcoming interviews</p>
+                  <Calendar className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
+                  <p className="text-slate-500 dark:text-slate-400 text-sm">No upcoming interviews</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {upcomingInterviews.map((interview) => (
                     <div 
                       key={interview.id}
-                      className="p-3 rounded-lg bg-purple-50 border border-purple-100"
+                      className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800"
                     >
-                      <h4 className="font-medium text-slate-900 text-sm">{interview.jobTitle}</h4>
-                      <p className="text-xs text-slate-500">{interview.company}</p>
-                      <div className="flex items-center gap-1 mt-2 text-xs text-purple-600">
+                      <h4 className="font-medium text-slate-900 dark:text-white text-sm">{interview.jobTitle}</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{interview.company}</p>
+                      <div className="flex items-center gap-1 mt-2 text-xs text-purple-600 dark:text-purple-400">
                         <Clock className="w-3 h-3" />
                         {new Date(interview.interviewDate).toLocaleDateString('en-US', {
                           weekday: 'short',
@@ -570,13 +570,13 @@ export default function DashboardPage() {
                       key={index}
                       className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
                         item.completed 
-                          ? 'bg-green-50 border border-green-100' 
-                          : 'bg-slate-50 border border-slate-100 hover:border-indigo-200 cursor-pointer'
+                          ? 'bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800' 
+                          : 'bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 cursor-pointer'
                       }`}
                       onClick={() => !item.completed && router.push(item.link)}
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        item.completed ? 'bg-green-500 text-white' : 'bg-slate-200 text-slate-500'
+                        item.completed ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
                       }`}>
                         {item.completed ? (
                           <CheckCircle className="w-4 h-4" />
@@ -584,7 +584,7 @@ export default function DashboardPage() {
                           <item.icon className="w-4 h-4" />
                         )}
                       </div>
-                      <span className={`text-sm ${item.completed ? 'text-green-700' : 'text-slate-700'}`}>
+                      <span className={`text-sm ${item.completed ? 'text-green-700 dark:text-green-400' : 'text-slate-700 dark:text-slate-300'}`}>
                         {item.label}
                       </span>
                       {!item.completed && (
@@ -598,15 +598,15 @@ export default function DashboardPage() {
           )}
 
           {/* Tips Card */}
-          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
+          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-indigo-100 dark:border-indigo-800">
             <CardContent className="p-6">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
-                  <Rocket className="w-5 h-5 text-indigo-600" />
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
+                  <Rocket className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 mb-1">Pro Tip</h4>
-                  <p className="text-sm text-slate-600">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Pro Tip</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     {stats.total === 0 
                       ? "Start by browsing our job recommendations tailored to your profile!"
                       : stats.replied === 0 

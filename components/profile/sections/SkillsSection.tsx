@@ -88,7 +88,7 @@ export const SkillsSection = ({
           <div
             key={i}
             className={`h-2 w-2 rounded-full mx-0.5 ${
-              i <= level ? 'bg-indigo-600' : 'bg-gray-200'
+              i <= level ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-slate-600'
             }`}
           />
         ))}
@@ -97,9 +97,9 @@ export const SkillsSection = ({
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Skills</h2>
         {isEditing && !editingId && !isAdding && (
           <button
             onClick={() => {
@@ -205,7 +205,7 @@ export const SkillsSection = ({
 
               return (
                 <div key={category} className="space-y-3">
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     {category}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -291,11 +291,11 @@ export const SkillsSection = ({
                       ) : (
                         <div
                           key={skill.id}
-                          className="group relative p-4 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="group relative p-4 border border-gray-100 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                         >
                           <div className="flex justify-between items-start">
                             <div>
-                              <h3 className="font-medium text-gray-900">{skill.name}</h3>
+                              <h3 className="font-medium text-gray-900 dark:text-gray-100">{skill.name}</h3>
                               <div className="mt-2">
                                 {renderSkillLevel(skill.level)}
                               </div>

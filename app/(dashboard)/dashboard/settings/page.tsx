@@ -323,19 +323,19 @@ export default function JobSettingsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-slate-600">Loading your settings...</p>
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+          <p className="text-slate-600 dark:text-slate-400">Loading your settings...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 shadow-sm">
+      <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -343,13 +343,13 @@ export default function JobSettingsPage() {
                 <User className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
-                <p className="text-sm text-slate-500">Manage your account and preferences</p>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Manage your account and preferences</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               {saved && (
-                <span className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm font-medium flex items-center gap-1 animate-fade-in">
+                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-medium flex items-center gap-1 animate-fade-in">
                   <Check className="w-4 h-4" />
                   Saved!
                 </span>
@@ -380,7 +380,7 @@ export default function JobSettingsPage() {
         <div className="flex gap-6">
           {/* Sidebar Navigation */}
           <div className="w-64 flex-shrink-0">
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-2 sticky top-6">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-2 sticky top-6">
               {tabs.map(tab => {
                 const Icon = tab.icon;
                 return (
@@ -389,8 +389,8 @@ export default function JobSettingsPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
                       activeTab === tab.id
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-slate-600 hover:bg-slate-50'
+                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -403,17 +403,17 @@ export default function JobSettingsPage() {
 
           {/* Main Content */}
           <div className="flex-1">
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
               {/* Profile Tab */}
               {activeTab === 'profile' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Profile Information</h2>
-                    <p className="text-slate-600">Update your personal details and professional information</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Profile Information</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Update your personal details and professional information</p>
                   </div>
 
                   {/* Profile Photo */}
-                  <div className="flex items-center gap-6 pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-6 pb-6 border-b border-slate-200 dark:border-slate-700">
                     {avatarUrl ? (
                       <img src={avatarUrl} alt="Profile" className="w-24 h-24 rounded-full object-cover" />
                     ) : (
@@ -433,21 +433,21 @@ export default function JobSettingsPage() {
                   {/* Name Fields */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">First Name</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">First Name</label>
                       <input
                         type="text"
                         value={formData.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Last Name</label>
                       <input
                         type="text"
                         value={formData.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -455,21 +455,21 @@ export default function JobSettingsPage() {
                   {/* Contact Info */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email</label>
                       <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => handleInputChange('email', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Phone</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Phone</label>
                       <input
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -477,22 +477,22 @@ export default function JobSettingsPage() {
                   {/* Location & Title */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Location</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Location</label>
                       <input
                         type="text"
                         value={formData.location}
                         onChange={(e) => handleInputChange('location', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                         placeholder="City, Country"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-2">Professional Title</label>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Professional Title</label>
                       <input
                         type="text"
                         value={formData.title}
                         onChange={(e) => handleInputChange('title', e.target.value)}
-                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                         placeholder="e.g., Senior Developer"
                       />
                     </div>
@@ -500,31 +500,31 @@ export default function JobSettingsPage() {
 
                   {/* Bio */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Bio</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Bio</label>
                     <textarea
                       value={formData.bio}
                       onChange={(e) => handleInputChange('bio', e.target.value)}
                       rows={4}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       placeholder="Tell us about yourself..."
                     />
                   </div>
 
                   {/* Resume */}
-                  <div className="pt-6 border-t border-slate-200">
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Resume/CV</label>
+                  <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Resume/CV</label>
                     
                     {/* Current Resume Display */}
                     {currentResume && !resumeFile && (
-                      <div className="mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                      <div className="mb-4 p-4 bg-slate-50 dark:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-600">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <FileText className="w-5 h-5 text-blue-600" />
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-slate-900">{currentResume.fileName}</p>
-                              <p className="text-xs text-slate-500">Current resume</p>
+                              <p className="text-sm font-medium text-slate-900 dark:text-white">{currentResume.fileName}</p>
+                              <p className="text-xs text-slate-500 dark:text-slate-400">Current resume</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
@@ -551,15 +551,15 @@ export default function JobSettingsPage() {
 
                     {/* Selected File Preview */}
                     {resumeFile && (
-                      <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <FileText className="w-5 h-5 text-blue-600" />
+                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
-                              <p className="text-sm font-medium text-slate-900">{resumeFile.name}</p>
-                              <p className="text-xs text-slate-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                              <p className="text-sm font-medium text-slate-900 dark:text-white">{resumeFile.name}</p>
+                              <p className="text-xs text-slate-500 dark:text-slate-400">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
                             </div>
                           </div>
                           <button
@@ -576,10 +576,10 @@ export default function JobSettingsPage() {
                     {isUploadingResume && (
                       <div className="mb-4">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm text-slate-600">Uploading and parsing resume...</span>
+                          <span className="text-sm text-slate-600 dark:text-slate-400">Uploading and parsing resume...</span>
                           <span className="text-sm font-medium text-blue-600">{resumeUploadProgress}%</span>
                         </div>
-                        <div className="w-full bg-slate-200 rounded-full h-2">
+                        <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                           <div
                             className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${resumeUploadProgress}%` }}
@@ -591,7 +591,7 @@ export default function JobSettingsPage() {
                     {/* Upload Area */}
                     {!isUploadingResume && (
                       <>
-                        <label className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer block">
+                        <label className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg p-6 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors cursor-pointer block">
                           <input
                             type="file"
                             accept=".pdf,.doc,.docx"
@@ -599,10 +599,10 @@ export default function JobSettingsPage() {
                             className="hidden"
                           />
                           <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                          <p className="text-sm font-medium text-slate-700 mb-1">
+                          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                             {currentResume ? 'Click to upload a new resume' : 'Click to upload or drag and drop'}
                           </p>
-                          <p className="text-xs text-slate-500">PDF, DOC, DOCX (max 10MB)</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">PDF, DOC, DOCX (max 10MB)</p>
                         </label>
 
                         {/* Upload Button */}
@@ -631,13 +631,13 @@ export default function JobSettingsPage() {
               {activeTab === 'preferences' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Job Preferences</h2>
-                    <p className="text-slate-600">Set your job search criteria to get better matches</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Job Preferences</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Set your job search criteria to get better matches</p>
                   </div>
 
                   {/* Job Types */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Job Types</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Job Types</label>
                     <div className="flex flex-wrap gap-2">
                       {jobTypeOptions.map(type => (
                         <button
@@ -646,7 +646,7 @@ export default function JobSettingsPage() {
                           className={`px-4 py-2 rounded-lg font-medium transition-all ${
                             formData.jobTypes.includes(type)
                               ? 'bg-blue-600 text-white'
-                              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                           }`}
                         >
                           {type}
@@ -657,7 +657,7 @@ export default function JobSettingsPage() {
 
                   {/* Experience Level */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Experience Level</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Experience Level</label>
                     <div className="flex flex-wrap gap-2">
                       {experienceLevels.map(level => (
                         <button
@@ -666,7 +666,7 @@ export default function JobSettingsPage() {
                           className={`px-4 py-2 rounded-lg font-medium transition-all ${
                             formData.experienceLevel === level
                               ? 'bg-blue-600 text-white'
-                              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
                           }`}
                         >
                           {level}
@@ -677,30 +677,30 @@ export default function JobSettingsPage() {
 
                   {/* Salary Range */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Expected Salary (USD/year)</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Expected Salary (USD/year)</label>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-slate-500 mb-2">Minimum</label>
+                        <label className="block text-xs text-slate-500 dark:text-slate-400 mb-2">Minimum</label>
                         <div className="relative">
                           <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                           <input
                             type="number"
                             value={formData.salaryMin}
                             onChange={(e) => handleInputChange('salaryMin', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                             placeholder="80,000"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs text-slate-500 mb-2">Maximum</label>
+                        <label className="block text-xs text-slate-400 mb-2">Maximum</label>
                         <div className="relative">
                           <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                           <input
                             type="number"
                             value={formData.salaryMax}
                             onChange={(e) => handleInputChange('salaryMax', e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                             placeholder="120,000"
                           />
                         </div>
@@ -710,12 +710,12 @@ export default function JobSettingsPage() {
 
                   {/* Preferred Locations */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Preferred Locations</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Preferred Locations</label>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {formData.preferredLocations.map(loc => (
                         <span
                           key={loc}
-                          className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium flex items-center gap-2"
+                          className="px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-medium flex items-center gap-2"
                         >
                           <MapPin className="w-4 h-4" />
                           {loc}
@@ -731,18 +731,18 @@ export default function JobSettingsPage() {
                     <input
                       type="text"
                       placeholder="Add a location..."
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                     />
                   </div>
 
                   {/* Skills */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Skills</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Skills</label>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {formData.skills.map(skill => (
                         <span
                           key={skill}
-                          className="px-3 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium flex items-center gap-2"
+                          className="px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-medium flex items-center gap-2"
                         >
                           {skill}
                           <button
@@ -761,7 +761,7 @@ export default function JobSettingsPage() {
                           <button
                             key={skill}
                             onClick={() => handleArrayToggle('skills', skill)}
-                            className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors"
+                            className="px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                           >
                             + {skill}
                           </button>
@@ -775,27 +775,27 @@ export default function JobSettingsPage() {
               {activeTab === 'notifications' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Notification Settings</h2>
-                    <p className="text-slate-600">Choose what updates you want to receive</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Notification Settings</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Choose what updates you want to receive</p>
                   </div>
 
                   <div className="space-y-4">
                     {notificationsData.map(item => (
-                      <div key={item.key} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                      <div key={item.key} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
                         <div>
-                          <h3 className="font-medium text-slate-900">{item.label}</h3>
-                          <p className="text-sm text-slate-600">{item.description}</p>
+                          <h3 className="font-medium text-slate-900 dark:text-white">{item.label}</h3>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{item.description}</p>
                         </div>
                         <button
                             onClick={() => handleInputChange(item.key as keyof FormData, !formData[item.key as keyof FormData])}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                formData[item.key as keyof FormData] ? 'bg-blue-600' : 'bg-slate-300'
+                                formData[item.key as keyof FormData] ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
                             }`}
                             >
                             <span
                                 className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                                 formData[item.key as keyof FormData] ? 'translate-x-6' : 'translate-x-1'
-                                }`}
+                            }`}
                             />
                         </button>
                       </div>
@@ -808,13 +808,13 @@ export default function JobSettingsPage() {
               {activeTab === 'privacy' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Privacy & Security</h2>
-                    <p className="text-slate-600">Manage your privacy settings and account security</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Privacy & Security</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Manage your privacy settings and account security</p>
                   </div>
 
                   {/* Change Password */}
-                  <div className="pb-6 border-b border-slate-200">
-                    <h3 className="font-semibold text-slate-900 mb-4">Change Password</h3>
+                  <div className="pb-6 border-b border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Change Password</h3>
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-slate-700 mb-2">Current Password</label>
@@ -822,7 +822,8 @@ export default function JobSettingsPage() {
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                           <input
                             type={showPassword ? 'text' : 'password'}
-                            className="w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-12 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                            placeholder="Enter your current password"
                           />
                           <button
                             onClick={() => setShowPassword(!showPassword)}
@@ -837,14 +838,16 @@ export default function JobSettingsPage() {
                           <label className="block text-sm font-medium text-slate-700 mb-2">New Password</label>
                           <input
                             type="password"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                            placeholder="Enter your new password"
                           />
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
                           <input
                             type="password"
-                            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                            placeholder="Confirm your new password"
                           />
                         </div>
                       </div>
@@ -856,32 +859,32 @@ export default function JobSettingsPage() {
 
                   {/* Privacy Settings */}
                   <div>
-                    <h3 className="font-semibold text-slate-900 mb-4">Privacy Settings</h3>
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Privacy Settings</h3>
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
                         <div>
-                          <h4 className="font-medium text-slate-900">Profile Visibility</h4>
-                          <p className="text-sm text-slate-600">Who can see your profile</p>
+                          <h4 className="font-medium text-slate-900 dark:text-white">Profile Visibility</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">Who can see your profile</p>
                         </div>
                         <select
                           value={formData.profileVisibility}
                           onChange={(e) => handleInputChange('profileVisibility', e.target.value)}
-                          className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                         >
                           <option value="public">Public</option>
                           <option value="recruiters">Recruiters Only</option>
                           <option value="private">Private</option>
                         </select>
                       </div>
-                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
                         <div>
-                          <h4 className="font-medium text-slate-900">Show Salary Expectations</h4>
-                          <p className="text-sm text-slate-600">Display your salary range to recruiters</p>
+                          <h4 className="font-medium text-slate-900 dark:text-white">Show Salary Expectations</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">Display your salary range to recruiters</p>
                         </div>
                         <button
                           onClick={() => handleInputChange('showSalary', !formData.showSalary)}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            formData.showSalary ? 'bg-blue-600' : 'bg-slate-300'
+                            formData.showSalary ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
                           }`}
                         >
                           <span

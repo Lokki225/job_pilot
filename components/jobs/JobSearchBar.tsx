@@ -130,7 +130,7 @@ export function JobSearchBar({
           <PopoverContent className="w-80" align="end">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <h4 className="font-semibold">Filters</h4>
+                <h4 className="font-semibold text-slate-900 dark:text-white">Filters</h4>
                 {activeFilterCount > 0 && (
                   <Button 
                     variant="ghost" 
@@ -145,7 +145,7 @@ export function JobSearchBar({
 
               {/* Job Type */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Job Type
                 </label>
                 <Select
@@ -167,7 +167,7 @@ export function JobSearchBar({
 
               {/* Date Posted */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Date Posted
                 </label>
                 <Select
@@ -188,14 +188,14 @@ export function JobSearchBar({
 
               {/* Remote Toggle */}
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-slate-700">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Remote only
                 </label>
                 <button
                   onClick={() => updateFilter('remote', !filters.remote)}
                   className={cn(
                     "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    filters.remote ? "bg-blue-600" : "bg-slate-200"
+                    filters.remote ? "bg-blue-600" : "bg-slate-200 dark:bg-slate-600"
                   )}
                 >
                   <span
@@ -241,7 +241,7 @@ export function JobSearchBar({
       {/* Active Filters Display */}
       {activeFilterCount > 0 && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-slate-500">Active filters:</span>
+          <span className="text-sm text-slate-500 dark:text-slate-400">Active filters:</span>
           
           {filters.jobType && filters.jobType !== 'all' && (
             <Badge variant="secondary" className="gap-1">
@@ -280,7 +280,7 @@ export function JobSearchBar({
       {/* Sort Options */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-600">Sort by:</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400">Sort by:</span>
           <Select
             value={filters.sortBy}
             onValueChange={(value) => {

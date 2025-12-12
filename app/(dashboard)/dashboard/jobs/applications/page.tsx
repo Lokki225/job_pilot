@@ -180,8 +180,8 @@ export default function ApplicationsPage() {
             Back
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">My Applications</h1>
-            <p className="text-sm text-slate-500">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Applications</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {stats.total} applications tracked
             </p>
           </div>
@@ -201,25 +201,25 @@ export default function ApplicationsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white rounded-lg border p-4">
-          <p className="text-sm text-slate-500">Total</p>
-          <p className="text-2xl font-bold">{stats.total}</p>
+        <div className="bg-white dark:bg-slate-800 rounded-lg border dark:border-slate-700 p-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400">Total</p>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.total}</p>
         </div>
-        <div className="bg-slate-50 rounded-lg border p-4">
-          <p className="text-sm text-slate-500">Wishlist</p>
-          <p className="text-2xl font-bold">{stats.wishlist}</p>
+        <div className="bg-slate-50 dark:bg-slate-800 rounded-lg border dark:border-slate-700 p-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400">Wishlist</p>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white">{stats.wishlist}</p>
         </div>
-        <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-          <p className="text-sm text-blue-600">Applied</p>
-          <p className="text-2xl font-bold text-blue-700">{stats.applied}</p>
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800 p-4">
+          <p className="text-sm text-blue-600 dark:text-blue-400">Applied</p>
+          <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{stats.applied}</p>
         </div>
-        <div className="bg-purple-50 rounded-lg border border-purple-200 p-4">
-          <p className="text-sm text-purple-600">Interviewing</p>
-          <p className="text-2xl font-bold text-purple-700">{stats.interviewing}</p>
+        <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-200 dark:border-purple-800 p-4">
+          <p className="text-sm text-purple-600 dark:text-purple-400">Interviewing</p>
+          <p className="text-2xl font-bold text-purple-700 dark:text-purple-300">{stats.interviewing}</p>
         </div>
-        <div className="bg-green-50 rounded-lg border border-green-200 p-4">
-          <p className="text-sm text-green-600">Offered</p>
-          <p className="text-2xl font-bold text-green-700">{stats.offered}</p>
+        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800 p-4">
+          <p className="text-sm text-green-600 dark:text-green-400">Offered</p>
+          <p className="text-2xl font-bold text-green-700 dark:text-green-300">{stats.offered}</p>
         </div>
       </div>
 
@@ -235,7 +235,7 @@ export default function ApplicationsPage() {
           />
         </div>
         
-        <div className="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
           <Button
             variant={viewMode === 'kanban' ? 'default' : 'ghost'}
             size="sm"
@@ -261,16 +261,16 @@ export default function ApplicationsPage() {
       {isLoading && (
         <div className="flex flex-col items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
-          <p className="text-slate-600">Loading applications...</p>
+          <p className="text-slate-600 dark:text-slate-400">Loading applications...</p>
         </div>
       )}
 
       {/* Empty State */}
       {!isLoading && applications.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-xl border">
+        <div className="text-center py-12 bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700">
           <Briefcase className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-slate-900 mb-2">No applications yet</h3>
-          <p className="text-slate-600 mb-4">Start tracking your job applications</p>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No applications yet</h3>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">Start tracking your job applications</p>
           <Button onClick={() => router.push('/dashboard/jobs')}>
             <Plus className="w-4 h-4 mr-2" />
             Find Jobs
@@ -291,39 +291,39 @@ export default function ApplicationsPage() {
 
       {/* List View */}
       {!isLoading && applications.length > 0 && viewMode === 'list' && (
-        <div className="bg-white rounded-xl border overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-slate-50 border-b">
+            <thead className="bg-slate-50 dark:bg-slate-900 border-b dark:border-slate-700">
               <tr>
-                <th className="text-left p-4 text-sm font-medium text-slate-600">Job</th>
-                <th className="text-left p-4 text-sm font-medium text-slate-600">Company</th>
-                <th className="text-left p-4 text-sm font-medium text-slate-600">Status</th>
-                <th className="text-left p-4 text-sm font-medium text-slate-600">Applied</th>
-                <th className="text-left p-4 text-sm font-medium text-slate-600">Actions</th>
+                <th className="text-left p-4 text-sm font-medium text-slate-600 dark:text-slate-400">Job</th>
+                <th className="text-left p-4 text-sm font-medium text-slate-600 dark:text-slate-400">Company</th>
+                <th className="text-left p-4 text-sm font-medium text-slate-600 dark:text-slate-400">Status</th>
+                <th className="text-left p-4 text-sm font-medium text-slate-600 dark:text-slate-400">Applied</th>
+                <th className="text-left p-4 text-sm font-medium text-slate-600 dark:text-slate-400">Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredApplications.map(app => (
-                <tr key={app.id} className="border-b hover:bg-slate-50">
+                <tr key={app.id} className="border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700">
                   <td className="p-4">
-                    <p className="font-medium text-slate-900">{app.jobTitle}</p>
+                    <p className="font-medium text-slate-900 dark:text-white">{app.jobTitle}</p>
                     {app.location && (
-                      <p className="text-sm text-slate-500">{app.location}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">{app.location}</p>
                     )}
                   </td>
-                  <td className="p-4 text-slate-600">{app.company}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{app.company}</td>
                   <td className="p-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      app.status === 'WISHLIST' ? 'bg-slate-100 text-slate-700' :
-                      app.status === 'APPLIED' ? 'bg-blue-100 text-blue-700' :
-                      app.status === 'INTERVIEWING' ? 'bg-purple-100 text-purple-700' :
-                      app.status === 'OFFERED' ? 'bg-green-100 text-green-700' :
-                      'bg-red-100 text-red-700'
+                      app.status === 'WISHLIST' ? 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300' :
+                      app.status === 'APPLIED' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' :
+                      app.status === 'INTERVIEWING' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' :
+                      app.status === 'OFFERED' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' :
+                      'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
                     }`}>
                       {app.status}
                     </span>
                   </td>
-                  <td className="p-4 text-sm text-slate-500">
+                  <td className="p-4 text-sm text-slate-500 dark:text-slate-400">
                     {app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : '-'}
                   </td>
                   <td className="p-4">

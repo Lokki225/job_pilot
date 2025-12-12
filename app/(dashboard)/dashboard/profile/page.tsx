@@ -595,7 +595,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <div className="h-8 w-8 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
       </div>
     );
@@ -603,8 +603,8 @@ export default function ProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="px-4 py-3 rounded-lg bg-red-50 text-red-700 border border-red-200 text-sm">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
+        <div className="px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 text-sm">
           {error}
         </div>
       </div>
@@ -612,10 +612,10 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">
       {/* Success Message Toast */}
       {successMessage && (
-        <div className="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg bg-green-50 text-green-700 border border-green-200 shadow-lg flex items-center gap-2 animate-in slide-in-from-top">
+        <div className="fixed top-4 right-4 z-50 px-6 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800 shadow-lg flex items-center gap-2 animate-in slide-in-from-top">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -675,37 +675,37 @@ export default function ProfilePage() {
           {/* Right Column - Sidebar */}
           <div className="space-y-6">
             {/* Contact Info */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-4">Contact Information</h3>
+            <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Contact Information</h3>
               <div className="space-y-3 text-sm">
                 {profile.email && (
                   <div className="flex items-center gap-3">
                     <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{profile.email}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{profile.email}</span>
                   </div>
                 )}
                 {profile.phone && (
                   <div className="flex items-center gap-3">
                     <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{profile.phone}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{profile.phone}</span>
                   </div>
                 )}
                 {profile.location && (
                   <div className="flex items-center gap-3">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{profile.location}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{profile.location}</span>
                   </div>
                 )}
                 {profile.website && (
                   <div className="flex items-center gap-3">
                     <Globe className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{profile.website}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{profile.website}</span>
                   </div>
                 )}
                 {profile.linkedin && (
                   <div className="flex items-center gap-3">
                     <Linkedin className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700">{profile.linkedin}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{profile.linkedin}</span>
                   </div>
                 )}
               </div>
@@ -713,13 +713,13 @@ export default function ProfilePage() {
 
             {/* Languages */}
             {languages.length > 0 && (
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Languages</h3>
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Languages</h3>
                 <div className="space-y-3 text-sm">
                   {languages.map((lang: any) => (
                     <div key={lang.id} className="flex justify-between items-center">
-                      <span className="text-gray-700 font-medium">{lang.name}</span>
-                      <span className="text-gray-500">{lang.level}</span>
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">{lang.name}</span>
+                      <span className="text-gray-500 dark:text-gray-400">{lang.level}</span>
                     </div>
                   ))}
                 </div>
@@ -728,13 +728,13 @@ export default function ProfilePage() {
 
             {/* Certifications */}
             {certifications.length > 0 && (
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Certifications</h3>
+              <div className="bg-white dark:bg-slate-800 rounded-xl shadow-md p-6">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Certifications</h3>
                 <div className="space-y-4">
                   {certifications.map((cert: any) => (
-                    <div key={cert.id} className="border-l-2 border-indigo-600 pl-3">
-                      <p className="font-semibold text-gray-800 text-sm">{cert.name}</p>
-                      <p className="text-xs text-gray-600">{cert.issuer}</p>
+                    <div key={cert.id} className="border-l-2 border-indigo-600 dark:border-indigo-400 pl-3">
+                      <p className="font-semibold text-gray-800 dark:text-white text-sm">{cert.name}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{cert.issuer}</p>
                       {cert.issueDate && (
                         <p className="text-xs text-gray-500 mt-1">{formatDate(cert.issueDate)}</p>
                       )}

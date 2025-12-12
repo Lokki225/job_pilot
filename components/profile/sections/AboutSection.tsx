@@ -27,9 +27,9 @@ export const AboutSection = ({
   const displayBio = showReadMore ? `${profile.bio?.substring(0, 200)}...` : profile.bio;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">About</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">About</h2>
         {isEditing && (
           <div className="flex gap-2">
             <button
@@ -53,7 +53,7 @@ export const AboutSection = ({
       {isEditing ? (
         <div className="space-y-4">
           <div>
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Bio
             </label>
             <textarea
@@ -62,13 +62,13 @@ export const AboutSection = ({
               value={profile.bio || ''}
               onChange={onInputChange}
               rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Tell us about yourself..."
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="website" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Website
               </label>
               <input
@@ -77,12 +77,12 @@ export const AboutSection = ({
                 name="website"
                 value={profile.website || ''}
                 onChange={onInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="https://example.com"
               />
             </div>
             <div>
-              <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="linkedin" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 LinkedIn
               </label>
               <input
@@ -91,12 +91,12 @@ export const AboutSection = ({
                 name="linkedin"
                 value={profile.linkedin || ''}
                 onChange={onInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="https://linkedin.com/in/username"
               />
             </div>
             <div>
-              <label htmlFor="github" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="github" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 GitHub
               </label>
               <input
@@ -105,7 +105,7 @@ export const AboutSection = ({
                 name="github"
                 value={profile.github || ''}
                 onChange={onInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="https://github.com/username"
               />
             </div>
@@ -115,7 +115,7 @@ export const AboutSection = ({
         <div className="space-y-4">
           {profile.bio ? (
             <div>
-              <p className="text-gray-700 whitespace-pre-line">
+              <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
                 {displayBio}
                 {showReadMore && (
                   <button
@@ -128,7 +128,7 @@ export const AboutSection = ({
               </p>
             </div>
           ) : (
-            <p className="text-gray-500 italic">No bio added yet.</p>
+            <p className="text-gray-500 dark:text-gray-400 italic">No bio added yet.</p>
           )}
           
           {(profile.website || profile.linkedin || profile.github) && (

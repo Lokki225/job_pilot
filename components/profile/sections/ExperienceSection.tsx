@@ -187,12 +187,12 @@ export const ExperienceSection = ({
     }
 
     return (
-      <div key={exp.id} className="border-l-2 border-gray-200 pl-4 py-4 group">
+      <div key={exp.id} className="border-l-2 border-gray-200 dark:border-slate-600 pl-4 py-4 group">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{exp.title}</h3>
-            <p className="text-indigo-600">{exp.company}</p>
-            <div className="flex items-center text-sm text-gray-500 mt-1">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{exp.title}</h3>
+            <p className="text-indigo-600 dark:text-indigo-400">{exp.company}</p>
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
               <Calendar className="w-4 h-4 mr-1" />
               <span>
                 {new Date(exp.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} -{' '}
@@ -207,7 +207,7 @@ export const ExperienceSection = ({
               )}
             </div>
             {exp.description && (
-              <p className="mt-2 text-gray-700 whitespace-pre-line">{exp.description}</p>
+              <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-line">{exp.description}</p>
             )}
           </div>
           {isEditing && (
@@ -234,9 +234,9 @@ export const ExperienceSection = ({
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Experience</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Experience</h2>
         {isEditing && !editingId && (
           <button
             onClick={handleAddNew}
@@ -358,7 +358,7 @@ export const ExperienceSection = ({
         {experiences.length > 0 ? (
           experiences.map(renderExperienceItem)
         ) : !isEditing ? (
-          <p className="text-gray-500 italic">No experience added yet.</p>
+          <p className="text-gray-500 dark:text-gray-400 italic">No experience added yet.</p>
         ) : null}
       </div>
     </div>

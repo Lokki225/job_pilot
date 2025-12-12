@@ -28,11 +28,11 @@ export const ProfileHeader = ({
     }
   };
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 mb-6">
       <div className="flex flex-col md:flex-row md:items-center gap-6">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className="relative w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden group">
+          <div className="relative w-24 h-24 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden group">
             {profile.avatarUrl ? (
               <img
                 src={profile.avatarUrl}
@@ -68,7 +68,7 @@ export const ProfileHeader = ({
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     First Name
                   </label>
                   <input
@@ -77,11 +77,11 @@ export const ProfileHeader = ({
                     name="firstName"
                     value={profile.firstName}
                     onChange={(e) => onInputChange(e)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Last Name
                   </label>
                   <input
@@ -90,12 +90,12 @@ export const ProfileHeader = ({
                     name="lastName"
                     value={profile.lastName}
                     onChange={(e) => onInputChange(e)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="headline" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="headline" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Headline
                 </label>
                 <input
@@ -110,7 +110,7 @@ export const ProfileHeader = ({
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Location
                   </label>
                   <input
@@ -124,7 +124,7 @@ export const ProfileHeader = ({
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Phone
                   </label>
                   <input
@@ -141,11 +141,11 @@ export const ProfileHeader = ({
             </div>
           ) : (
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                 {profile.firstName} {profile.lastName}
               </h1>
-              <p className="text-lg text-indigo-600 mt-1">{profile.headline}</p>
-              <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-600">
+              <p className="text-lg text-indigo-600 dark:text-indigo-400 mt-1">{profile.headline}</p>
+              <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-600 dark:text-gray-400">
                 {profile.location && (
                   <span className="flex items-center gap-1">
                     <MapPin className="w-4 h-4" />
@@ -215,7 +215,7 @@ export const ProfileHeader = ({
               </button>
               <button
                 onClick={onEditToggle}
-                className="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded-md hover:bg-gray-50 flex items-center gap-2"
+                className="px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 <X className="w-4 h-4" />
                 Cancel
@@ -225,7 +225,7 @@ export const ProfileHeader = ({
             <>
               <button
                 onClick={onEditToggle}
-                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 flex items-center gap-2"
+                className="px-4 py-2 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 flex items-center gap-2"
               >
                 <Edit2 className="w-4 h-4" />
                 Edit Profile

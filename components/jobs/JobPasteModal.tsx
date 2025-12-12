@@ -150,9 +150,9 @@ export function JobPasteModal({
           {!parsedJob ? (
             <>
               {/* Instructions */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-                <h3 className="font-semibold text-blue-900 mb-2">How it works:</h3>
-                <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4 mb-4">
+                <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">How it works:</h3>
+                <ol className="text-sm text-blue-700 dark:text-blue-400 space-y-1 list-decimal list-inside">
                   <li>Copy the entire job posting from LinkedIn, Indeed, or any website</li>
                   <li>Paste it in the text area below</li>
                   <li>Click "Extract Job Details" to analyze it</li>
@@ -163,23 +163,23 @@ export function JobPasteModal({
 
               {/* Text Area */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Paste Job Posting
                 </label>
                 <textarea
                   value={pastedText}
                   onChange={(e) => setPastedText(e.target.value)}
                   placeholder="Paste the complete job posting here... Include title, company, description, requirements, etc."
-                  className="w-full h-64 px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"
+                  className="w-full h-64 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 />
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
                   {pastedText.length} characters • The more details you provide, the better the extraction
                 </p>
               </div>
 
               {/* Error Message */}
               {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400 text-sm">
                   {error}
                 </div>
               )}
@@ -206,19 +206,19 @@ export function JobPasteModal({
           ) : (
             <>
               {/* Success Message */}
-              <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4 flex items-start gap-3">
+              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 mb-4 flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-green-900 mb-1 flex items-center gap-2">
+                  <h3 className="font-semibold text-green-900 dark:text-green-300 mb-1 flex items-center gap-2">
                     Job Details Extracted Successfully!
                     {aiParsedJob && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 rounded-full text-xs font-medium">
                         <Brain className="w-3 h-3" />
                         AI Powered
                       </span>
                     )}
                   </h3>
-                  <p className="text-sm text-green-700">
+                  <p className="text-sm text-green-700 dark:text-green-400">
                     Review the information below and save or find similar jobs
                     {aiParsedJob && (
                       <span className="ml-2 text-green-600">
@@ -230,16 +230,16 @@ export function JobPasteModal({
               </div>
 
               {/* Extracted Job Preview */}
-              <div className="bg-white border border-slate-200 rounded-xl p-6 mb-4">
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-4">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                       {parsedJob.jobTitle}
                     </h3>
-                    <p className="text-lg text-slate-700 font-medium mb-2">
+                    <p className="text-lg text-slate-700 dark:text-slate-300 font-medium mb-2">
                       {parsedJob.company}
                     </p>
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
+                    <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600 dark:text-slate-400">
                       {parsedJob.location && (
                         <span className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
@@ -278,7 +278,7 @@ export function JobPasteModal({
                 {/* Skills - AI Enhanced */}
                 {aiParsedJob?.skills && aiParsedJob.skills.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-1">
                       <Tag className="w-4 h-4" />
                       Skills
                     </h4>
@@ -286,13 +286,13 @@ export function JobPasteModal({
                       {aiParsedJob.skills.slice(0, 12).map((skill, idx) => (
                         <span
                           key={idx}
-                          className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium"
+                          className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md text-xs font-medium"
                         >
                           {skill}
                         </span>
                       ))}
                       {aiParsedJob.skills.length > 12 && (
-                        <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xs">
+                        <span className="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 rounded-md text-xs">
                           +{aiParsedJob.skills.length - 12} more
                         </span>
                       )}
@@ -303,11 +303,11 @@ export function JobPasteModal({
                 {/* Requirements - AI Enhanced */}
                 {(aiParsedJob?.requirements || parsedJob.requirements) && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-slate-700 mb-2">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       Requirements
                     </h4>
                     {aiParsedJob?.requirements ? (
-                      <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                      <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1 list-disc list-inside">
                         {aiParsedJob.requirements.slice(0, 5).map((req, idx) => (
                           <li key={idx}>{req}</li>
                         ))}
@@ -316,7 +316,7 @@ export function JobPasteModal({
                         )}
                       </ul>
                     ) : (
-                      <p className="text-sm text-slate-600 line-clamp-3">
+                      <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
                         {parsedJob.requirements}
                       </p>
                     )}
@@ -326,10 +326,10 @@ export function JobPasteModal({
                 {/* Benefits - AI Enhanced */}
                 {aiParsedJob?.benefits && aiParsedJob.benefits.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-slate-700 mb-2">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       Benefits
                     </h4>
-                    <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                    <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1 list-disc list-inside">
                       {aiParsedJob.benefits.slice(0, 5).map((benefit, idx) => (
                         <li key={idx}>{benefit}</li>
                       ))}
@@ -339,10 +339,10 @@ export function JobPasteModal({
 
                 {parsedJob.description && (
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-700 mb-2">
+                    <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                       Description
                     </h4>
-                    <p className="text-sm text-slate-600 line-clamp-4">
+                    <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-4">
                       {parsedJob.description}
                     </p>
                   </div>

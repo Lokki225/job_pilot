@@ -58,11 +58,11 @@ export function JobDetailsModal({
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
       case 'ADZUNA':
-        return 'bg-orange-100 text-orange-700 border-orange-200'
+        return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 border-orange-200 dark:border-orange-800'
       case 'JSEARCH':
-        return 'bg-blue-100 text-blue-700 border-blue-200'
+        return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800'
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
     }
   }
 
@@ -85,7 +85,7 @@ export function JobDetailsModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-3xl max-h-[90vh] p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b bg-gradient-to-r from-slate-50 to-blue-50">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-slate-50 to-blue-50 dark:from-slate-800 dark:to-slate-800">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -95,12 +95,12 @@ export function JobDetailsModal({
                 >
                   {job.source}
                 </Badge>
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-slate-500 dark:text-slate-400">
                   {formatPostedDate(job.postedDate)}
                 </span>
               </div>
               
-              <DialogTitle className="text-2xl font-bold text-slate-900 mb-2">
+              <DialogTitle className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                 {job.title}
               </DialogTitle>
               
@@ -112,12 +112,12 @@ export function JobDetailsModal({
                     className="w-8 h-8 rounded object-contain bg-white border"
                   />
                 ) : (
-                  <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
                     <Building2 className="w-5 h-5 text-slate-400" />
                   </div>
                 )}
                 <div>
-                  <p className="font-semibold text-slate-700">{job.company}</p>
+                  <p className="font-semibold text-slate-700 dark:text-slate-200">{job.company}</p>
                   {job.companyUrl && (
                     <a 
                       href={job.companyUrl} 
@@ -132,12 +132,12 @@ export function JobDetailsModal({
                 </div>
               </div>
               
-              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
                 <span className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
                   {job.location}
                   {job.remote && (
-                    <Badge variant="secondary" className="ml-1 text-xs bg-purple-100 text-purple-700">
+                    <Badge variant="secondary" className="ml-1 text-xs bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">
                       Remote
                     </Badge>
                   )}
@@ -164,7 +164,7 @@ export function JobDetailsModal({
             {/* Skills/Tags */}
             {job.tags && job.tags.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-slate-700 mb-2">
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Skills & Technologies
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -172,7 +172,7 @@ export function JobDetailsModal({
                     <Badge 
                       key={index} 
                       variant="secondary"
-                      className="bg-blue-50 text-blue-700 border-blue-200"
+                      className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-800"
                     >
                       {tag}
                     </Badge>
@@ -183,10 +183,10 @@ export function JobDetailsModal({
 
             {/* Description */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-700 mb-2">
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                 Job Description
               </h3>
-              <div className="prose prose-sm max-w-none text-slate-600">
+              <div className="prose prose-sm max-w-none text-slate-600 dark:text-slate-400">
                 <p className="whitespace-pre-wrap">{job.description}</p>
               </div>
             </div>
@@ -194,10 +194,10 @@ export function JobDetailsModal({
             {/* Requirements */}
             {job.requirements && (
               <div>
-                <h3 className="text-sm font-semibold text-slate-700 mb-2">
+                <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
                   Requirements
                 </h3>
-                <div className="prose prose-sm max-w-none text-slate-600">
+                <div className="prose prose-sm max-w-none text-slate-600 dark:text-slate-400">
                   <p className="whitespace-pre-wrap">{job.requirements}</p>
                 </div>
               </div>
@@ -206,7 +206,7 @@ export function JobDetailsModal({
         </ScrollArea>
 
         {/* Footer Actions */}
-        <div className="px-6 py-4 border-t bg-slate-50 flex items-center justify-between gap-4">
+        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Button
               variant="outline"

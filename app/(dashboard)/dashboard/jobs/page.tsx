@@ -11,7 +11,8 @@ import {
   Search,
   Sparkles,
   Clock,
-  Zap
+  Zap,
+  ChevronDown
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -54,6 +55,7 @@ export default function JobsPage() {
   // Search state
   const [lastSearch, setLastSearch] = useState<JobSearchFilters | null>(null)
   const [hasSearched, setHasSearched] = useState(false)
+  const [isTopPicksCollapsed, setIsTopPicksCollapsed] = useState(false)
 
   // Load cached recommendations on mount
   useEffect(() => {
@@ -289,8 +291,8 @@ export default function JobsPage() {
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Job Search</h1>
-            <p className="text-sm text-slate-500">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Job Search</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {totalJobs > 0 ? `${totalJobs} jobs found` : 'Search for your next opportunity'}
             </p>
           </div>
@@ -317,127 +319,141 @@ export default function JobsPage() {
 
       {/* Top Picks Section - Cached Daily */}
       {!hasSearched && (
-        <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 rounded-xl border border-indigo-100 p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-purple-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 p-6">
+          <div 
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => setIsTopPicksCollapsed(!isTopPicksCollapsed)}
+          >
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
                 <Zap className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">Top Picks for You</h2>
-                <p className="text-xs text-slate-500 flex items-center gap-1">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Top Picks for You</h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                   {isFromCache && <Clock className="w-3 h-3" />}
                   {lastRefreshed 
                     ? `Updated ${new Date(lastRefreshed).toLocaleDateString()}`
                     : 'Personalized based on your profile'
                   }
+                  {topPicks.length > 0 && ` • ${topPicks.length} jobs`}
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefreshRecommendations}
-              disabled={isRefreshing || recommendationsLoading}
-              className="gap-2"
-            >
-              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleRefreshRecommendations()
+                }}
+                disabled={isRefreshing || recommendationsLoading}
+                className="gap-2"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <ChevronDown className={`w-5 h-5 text-slate-500 transition-transform ${isTopPicksCollapsed ? '-rotate-90' : ''}`} />
+            </div>
           </div>
 
-          {recommendationsLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
-              <span className="ml-2 text-slate-600">Loading recommendations...</span>
-            </div>
-          ) : topPicks.length > 0 ? (
-            <div className="grid gap-3">
-              {topPicks.map((job, index) => (
-                <div
-                  key={job.id}
-                  className="bg-white rounded-lg border border-slate-200 p-4 hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer"
-                  onClick={() => handleViewDetails(job)}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="secondary" className="text-xs bg-indigo-100 text-indigo-700">
-                          #{index + 1} Match
-                        </Badge>
-                        {job.remote && (
-                          <Badge variant="outline" className="text-xs">Remote</Badge>
-                        )}
-                      </div>
-                      <h3 className="font-semibold text-slate-900 truncate">{job.title}</h3>
-                      <p className="text-sm text-slate-600">{job.company} • {job.location}</p>
-                      {job.salary && (
-                        <p className="text-sm text-green-600 font-medium mt-1">{job.salary}</p>
-                      )}
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleSaveJob(job, true)
-                      }}
+          {!isTopPicksCollapsed && (
+            <div className="mt-4">
+              {recommendationsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+                  <span className="ml-2 text-slate-600 dark:text-slate-400">Loading recommendations...</span>
+                </div>
+              ) : topPicks.length > 0 ? (
+                <div className="grid gap-3">
+                  {topPicks.map((job, index) => (
+                    <div
+                      key={job.id}
+                      className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 transition-all cursor-pointer"
+                      onClick={() => handleViewDetails(job)}
                     >
-                      Save
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="secondary" className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400">
+                              #{index + 1} Match
+                            </Badge>
+                            {job.remote && (
+                              <Badge variant="outline" className="text-xs">Remote</Badge>
+                            )}
+                          </div>
+                          <h3 className="font-semibold text-slate-900 dark:text-white truncate">{job.title}</h3>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{job.company} • {job.location}</p>
+                          {job.salary && (
+                            <p className="text-sm text-green-600 font-medium mt-1">{job.salary}</p>
+                          )}
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleSaveJob(job, true)
+                          }}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : savedJobIds.size > 0 && originalTopPicksCount > 0 ? (
+                <div className="text-center py-8">
+                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Sparkles className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">All Caught Up! 🎉</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-4">
+                    You've saved all {savedJobIds.size} of today's recommended jobs.
+                    <br />
+                    Come back tomorrow for fresh recommendations!
+                  </p>
+                  <div className="flex items-center justify-center gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={() => router.push('/dashboard/jobs/applications')}
+                      className="gap-2"
+                    >
+                      <Briefcase className="w-4 h-4" />
+                      View Saved Jobs
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleRefreshRecommendations}
+                      disabled={isRefreshing}
+                      className="gap-2"
+                    >
+                      <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                      Get More Now
                     </Button>
                   </div>
                 </div>
-              ))}
-            </div>
-          ) : savedJobIds.size > 0 && originalTopPicksCount > 0 ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">All Caught Up! 🎉</h3>
-              <p className="text-slate-600 mb-4">
-                You've saved all {savedJobIds.size} of today's recommended jobs.
-                <br />
-                Come back tomorrow for fresh recommendations!
-              </p>
-              <div className="flex items-center justify-center gap-3">
-                <Button
-                  variant="outline"
-                  onClick={() => router.push('/dashboard/jobs/applications')}
-                  className="gap-2"
-                >
-                  <Briefcase className="w-4 h-4" />
-                  View Saved Jobs
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleRefreshRecommendations}
-                  disabled={isRefreshing}
-                  className="gap-2"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                  Get More Now
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="text-center py-6 text-slate-500">
-              <Sparkles className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-              <p>Complete your profile to get personalized recommendations</p>
-              <Button
-                variant="link"
-                onClick={() => router.push('/dashboard/profile')}
-                className="mt-2"
-              >
-                Update Profile
-              </Button>
+              ) : (
+                <div className="text-center py-6 text-slate-500">
+                  <Sparkles className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                  <p>Complete your profile to get personalized recommendations</p>
+                  <Button
+                    variant="link"
+                    onClick={() => router.push('/dashboard/profile')}
+                    className="mt-2"
+                  >
+                    Update Profile
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
       )}
 
       {/* Search Bar */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
         <JobSearchBar 
           onSearch={(filters) => {
             setHasSearched(true)
@@ -450,11 +466,11 @@ export default function JobsPage() {
 
       {/* Error State */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-semibold text-red-900">Search Error</h3>
-            <p className="text-sm text-red-700">{error}</p>
+            <h3 className="font-semibold text-red-900 dark:text-red-400">Search Error</h3>
+            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
             <Button
               variant="outline"
               size="sm"
@@ -472,7 +488,7 @@ export default function JobsPage() {
       {isLoading && jobs.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
-          <p className="text-slate-600">Searching jobs...</p>
+          <p className="text-slate-600 dark:text-slate-400">Searching jobs...</p>
         </div>
       )}
 
@@ -480,8 +496,8 @@ export default function JobsPage() {
       {!isLoading && !error && jobs.length === 0 && (
         <div className="text-center py-12">
           <Search className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-slate-900 mb-2">No jobs found</h3>
-          <p className="text-slate-600 mb-4">Try adjusting your search filters</p>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">No jobs found</h3>
+          <p className="text-slate-600 dark:text-slate-400 mb-4">Try adjusting your search filters</p>
         </div>
       )}
 

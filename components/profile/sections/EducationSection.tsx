@@ -204,13 +204,13 @@ export const EducationSection = ({
     }
 
     return (
-      <div key={edu.id} className="border-l-2 border-gray-200 pl-4 py-4 group">
+      <div key={edu.id} className="border-l-2 border-gray-200 dark:border-slate-600 pl-4 py-4 group">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">{edu.degree}</h3>
-            <p className="text-indigo-600">{edu.school}</p>
-            {edu.field && <p className="text-gray-600 text-sm mt-1">{edu.field}</p>}
-            <div className="flex items-center text-sm text-gray-500 mt-1">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{edu.degree}</h3>
+            <p className="text-indigo-600 dark:text-indigo-400">{edu.school}</p>
+            {edu.field && <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{edu.field}</p>}
+            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
               <Calendar className="w-4 h-4 mr-1" />
               <span>
                 {new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} -{' '}
@@ -225,7 +225,7 @@ export const EducationSection = ({
               )}
             </div>
             {edu.description && (
-              <p className="mt-2 text-gray-700 whitespace-pre-line text-sm">{edu.description}</p>
+              <p className="mt-2 text-gray-700 dark:text-gray-300 whitespace-pre-line text-sm">{edu.description}</p>
             )}
           </div>
           {isEditing && (
@@ -252,9 +252,9 @@ export const EducationSection = ({
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Education</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Education</h2>
         {isEditing && !editingId && (
           <button
             onClick={handleAddNew}

@@ -128,9 +128,9 @@ export const CertificationsSection = ({
   };
 
   return (
-    <div className={`bg-white rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 ${!expanded ? 'mb-6' : ''}`}>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-900">Certifications</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Certifications</h2>
         {isEditing && !editingId && !isAdding && (
           <button
             onClick={() => {

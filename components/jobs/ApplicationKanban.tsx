@@ -49,11 +49,11 @@ interface ApplicationKanbanProps {
 }
 
 const COLUMNS: { status: ApplicationStatus; label: string; icon: React.ElementType; color: string }[] = [
-  { status: 'WISHLIST', label: 'Wishlist', icon: Star, color: 'bg-slate-100 border-slate-300' },
-  { status: 'APPLIED', label: 'Applied', icon: Clock, color: 'bg-blue-50 border-blue-300' },
-  { status: 'INTERVIEWING', label: 'Interviewing', icon: Briefcase, color: 'bg-purple-50 border-purple-300' },
-  { status: 'OFFERED', label: 'Offered', icon: CheckCircle, color: 'bg-green-50 border-green-300' },
-  { status: 'REJECTED', label: 'Rejected', icon: XCircle, color: 'bg-red-50 border-red-300' },
+  { status: 'WISHLIST', label: 'Wishlist', icon: Star, color: 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-600' },
+  { status: 'APPLIED', label: 'Applied', icon: Clock, color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-300 dark:border-blue-700' },
+  { status: 'INTERVIEWING', label: 'Interviewing', icon: Briefcase, color: 'bg-purple-50 dark:bg-purple-900/20 border-purple-300 dark:border-purple-700' },
+  { status: 'OFFERED', label: 'Offered', icon: CheckCircle, color: 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700' },
+  { status: 'REJECTED', label: 'Rejected', icon: XCircle, color: 'bg-red-50 dark:bg-red-900/20 border-red-300 dark:border-red-700' },
 ]
 
 export function ApplicationKanban({
@@ -105,7 +105,7 @@ export function ApplicationKanban({
           <div
             key={column.status}
             className={cn(
-              "flex-shrink-0 w-72 rounded-xl border-2 p-3",
+              "shrink-0 w-72 rounded-xl border-2 p-3",
               column.color
             )}
             onDragOver={handleDragOver}
@@ -115,7 +115,7 @@ export function ApplicationKanban({
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Icon className="w-4 h-4" />
-                <h3 className="font-semibold text-sm">{column.label}</h3>
+                <h3 className="font-semibold text-sm text-slate-900 dark:text-white">{column.label}</h3>
                 <Badge variant="secondary" className="text-xs">
                   {columnApps.length}
                 </Badge>
@@ -130,20 +130,20 @@ export function ApplicationKanban({
                   draggable
                   onDragStart={(e) => handleDragStart(e, app.id)}
                   className={cn(
-                    "bg-white rounded-lg border border-slate-200 p-3 cursor-grab active:cursor-grabbing",
-                    "hover:shadow-md hover:border-blue-300 transition-all",
+                    "bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-3 cursor-grab active:cursor-grabbing",
+                    "hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all",
                     draggedItem === app.id && "opacity-50"
                   )}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex-1 min-w-0">
                       <h4 
-                        className="font-medium text-sm text-slate-900 truncate cursor-pointer hover:text-blue-600"
+                        className="font-medium text-sm text-slate-900 dark:text-white truncate cursor-pointer hover:text-blue-600 dark:hover:text-blue-400"
                         onClick={() => onViewDetails(app)}
                       >
                         {app.jobTitle}
                       </h4>
-                      <div className="flex items-center gap-1 text-xs text-slate-500 mt-1">
+                      <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mt-1">
                         <Building2 className="w-3 h-3" />
                         <span className="truncate">{app.company}</span>
                       </div>
@@ -182,7 +182,7 @@ export function ApplicationKanban({
                   </div>
 
                   {app.location && (
-                    <div className="flex items-center gap-1 text-xs text-slate-500 mb-2">
+                    <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 mb-2">
                       <MapPin className="w-3 h-3" />
                       <span className="truncate">{app.location}</span>
                     </div>
@@ -195,7 +195,7 @@ export function ApplicationKanban({
                       </Badge>
                     )}
                     {app.appliedAt && (
-                      <div className="flex items-center gap-1 text-xs text-slate-400">
+                      <div className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
                         <Calendar className="w-3 h-3" />
                         {formatDate(app.appliedAt)}
                       </div>
@@ -209,7 +209,7 @@ export function ApplicationKanban({
               ))}
 
               {columnApps.length === 0 && (
-                <div className="text-center py-8 text-slate-400 text-sm">
+                <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-sm">
                   Drop applications here
                 </div>
               )}

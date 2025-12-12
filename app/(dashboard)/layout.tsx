@@ -4,8 +4,9 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/auth"
 import { useRouter } from "next/navigation"
@@ -15,7 +16,6 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
   { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
   { name: "Cover Letters", href: "/dashboard/letters", icon: FileText },
-  { name: "Profile", href: "/dashboard/profile", icon: FileText },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ]
 
@@ -147,21 +147,33 @@ export default function DashboardLayout({
 
           {/* User Profile */}
           <div className="border-t p-2 dark:border-slate-700">
-            <div className={cn("flex items-center", isCollapsed ? "justify-center" : "px-2")}>
+            <Link 
+              href="/dashboard/profile"
+              className={cn(
+                "flex items-center rounded-md p-2 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors",
+                isCollapsed ? "justify-center" : "px-2"
+              )}
+            >
               <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                <span className="text-sm font-medium">U</span>
+                {session?.user?.user_metadata?.full_name ? (
+                  <span className="text-sm font-medium">
+                    {session.user.user_metadata.full_name.charAt(0).toUpperCase()}
+                  </span>
+                ) : (
+                  <User className="h-4 w-4" />
+                )}
               </div>
               {!isCollapsed && (
                 <div className="ml-3 overflow-hidden">
                   <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">
-                    User Name
+                    {session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || 'User'}
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                     View profile
                   </p>
                 </div>
               )}
-            </div>
+            </Link>
           </div>
         </div>
       </aside>
@@ -188,12 +200,15 @@ export default function DashboardLayout({
                 {getPageTitle(pathname)}
               </h1>
             </div>
-            {session ? (<Button onClick={() => {
-              logout();
-              router.push("/login");
-            }}>
-              Logout
-            </Button>): null}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              {session ? (<Button onClick={() => {
+                logout();
+                router.push("/login");
+              }}>
+                Logout
+              </Button>): null}
+            </div>
           </div>
         </header>
 
