@@ -10,7 +10,11 @@ import {
   ArrowRight,
   MapPin,
   Briefcase,
-  DollarSign
+  DollarSign,
+  Brain,
+  Clock,
+  GraduationCap,
+  Tag
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +24,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { parseJobPosting, type ParsedJob } from '@/lib/utils/job-parser'
+import { parseJobWithAI, type AIParsedjob } from '@/lib/services/ai-job-parser'
 
 interface JobPasteModalProps {
   isOpen: boolean
@@ -37,19 +42,51 @@ export function JobPasteModal({
   const [pastedText, setPastedText] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [parsedJob, setParsedJob] = useState<ParsedJob | null>(null)
+  const [aiParsedJob, setAiParsedJob] = useState<AIParsedjob | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [useAI, setUseAI] = useState(true)
 
-  const handleExtract = () => {
+  const handleExtract = async () => {
     if (!pastedText.trim()) return
     
     setIsProcessing(true)
     setError(null)
     
     try {
+      if (useAI) {
+        // Try AI parsing first
+        const { data: aiResult, error: aiError } = await parseJobWithAI(pastedText)
+        
+        if (aiResult && aiResult.jobTitle && aiResult.company) {
+          setAiParsedJob(aiResult)
+          // Also set parsedJob for compatibility with existing handlers
+          setParsedJob({
+            jobTitle: aiResult.jobTitle,
+            company: aiResult.company,
+            location: aiResult.location,
+            jobType: aiResult.jobType,
+            salary: aiResult.salary,
+            description: aiResult.description,
+            requirements: aiResult.requirements?.join('\n') || null,
+            jobPostUrl: aiResult.jobPostUrl,
+            source: 'PASTED',
+            isPasted: true,
+          })
+          return
+        }
+        
+        // If AI fails, fall back to regex
+        if (aiError) {
+          console.warn('AI parsing failed, falling back to regex:', aiError)
+        }
+      }
+      
+      // Fallback to regex parsing
       const result = parseJobPosting(pastedText)
       
       if (result.jobTitle && result.company) {
         setParsedJob(result)
+        setAiParsedJob(null)
       } else {
         setError('Could not extract job details. Please ensure the text contains a job title and company name.')
       }
@@ -80,6 +117,7 @@ export function JobPasteModal({
   const handleReset = () => {
     setPastedText('')
     setParsedJob(null)
+    setAiParsedJob(null)
     setError(null)
   }
 
@@ -171,11 +209,22 @@ export function JobPasteModal({
               <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4 flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-green-900 mb-1">
+                  <h3 className="font-semibold text-green-900 mb-1 flex items-center gap-2">
                     Job Details Extracted Successfully!
+                    {aiParsedJob && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                        <Brain className="w-3 h-3" />
+                        AI Powered
+                      </span>
+                    )}
                   </h3>
                   <p className="text-sm text-green-700">
                     Review the information below and save or find similar jobs
+                    {aiParsedJob && (
+                      <span className="ml-2 text-green-600">
+                        (Confidence: {Math.round((aiParsedJob.confidence || 0) * 100)}%)
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -183,11 +232,11 @@ export function JobPasteModal({
               {/* Extracted Job Preview */}
               <div className="bg-white border border-slate-200 rounded-xl p-6 mb-4">
                 <div className="flex items-start justify-between mb-4">
-                  <div>
+                  <div className="flex-1">
                     <h3 className="text-2xl font-bold text-slate-900 mb-2">
                       {parsedJob.jobTitle}
                     </h3>
-                    <p className="text-lg text-slate-700 font-medium mb-1">
+                    <p className="text-lg text-slate-700 font-medium mb-2">
                       {parsedJob.company}
                     </p>
                     <div className="flex flex-wrap items-center gap-3 text-sm text-slate-600">
@@ -197,10 +246,10 @@ export function JobPasteModal({
                           {parsedJob.location}
                         </span>
                       )}
-                      {parsedJob.jobType && (
+                      {(parsedJob.jobType || aiParsedJob?.workMode) && (
                         <span className="flex items-center gap-1">
                           <Briefcase className="w-4 h-4" />
-                          {parsedJob.jobType}
+                          {[parsedJob.jobType, aiParsedJob?.workMode].filter(Boolean).join(' • ')}
                         </span>
                       )}
                       {parsedJob.salary && (
@@ -209,18 +258,82 @@ export function JobPasteModal({
                           {parsedJob.salary}
                         </span>
                       )}
+                      {aiParsedJob?.experienceLevel && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+                          {aiParsedJob.experienceLevel} Level
+                          {aiParsedJob.yearsExperience && ` (${aiParsedJob.yearsExperience})`}
+                        </span>
+                      )}
+                      {aiParsedJob?.education && (
+                        <span className="flex items-center gap-1">
+                          <GraduationCap className="w-4 h-4" />
+                          {aiParsedJob.education}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {parsedJob.requirements && (
+                {/* Skills - AI Enhanced */}
+                {aiParsedJob?.skills && aiParsedJob.skills.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1">
+                      <Tag className="w-4 h-4" />
+                      Skills
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {aiParsedJob.skills.slice(0, 12).map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs font-medium"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {aiParsedJob.skills.length > 12 && (
+                        <span className="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-xs">
+                          +{aiParsedJob.skills.length - 12} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Requirements - AI Enhanced */}
+                {(aiParsedJob?.requirements || parsedJob.requirements) && (
                   <div className="mb-4">
                     <h4 className="text-sm font-semibold text-slate-700 mb-2">
                       Requirements
                     </h4>
-                    <p className="text-sm text-slate-600 line-clamp-3">
-                      {parsedJob.requirements}
-                    </p>
+                    {aiParsedJob?.requirements ? (
+                      <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                        {aiParsedJob.requirements.slice(0, 5).map((req, idx) => (
+                          <li key={idx}>{req}</li>
+                        ))}
+                        {aiParsedJob.requirements.length > 5 && (
+                          <li className="text-slate-400">+{aiParsedJob.requirements.length - 5} more...</li>
+                        )}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-slate-600 line-clamp-3">
+                        {parsedJob.requirements}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Benefits - AI Enhanced */}
+                {aiParsedJob?.benefits && aiParsedJob.benefits.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-slate-700 mb-2">
+                      Benefits
+                    </h4>
+                    <ul className="text-sm text-slate-600 space-y-1 list-disc list-inside">
+                      {aiParsedJob.benefits.slice(0, 5).map((benefit, idx) => (
+                        <li key={idx}>{benefit}</li>
+                      ))}
+                    </ul>
                   </div>
                 )}
 

@@ -93,6 +93,8 @@ export async function upsertJobPreferences(values: z.infer<typeof JobPreferenceS
       .upsert({
         userId: user.id,
         ...parsed.data
+      }, {
+        onConflict: 'userId'
       })
       .select()
       .single()

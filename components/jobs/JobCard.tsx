@@ -43,11 +43,14 @@ export function JobCard({
     onSave?.(job.id)
   }
 
-  const formatPostedDate = (date?: Date) => {
+  const formatPostedDate = (date?: Date | string) => {
     if (!date) return 'Recently posted'
     
+    const parsedDate = typeof date === 'string' ? new Date(date) : date
+    if (isNaN(parsedDate.getTime())) return 'Recently posted'
+    
     const now = new Date()
-    const diffMs = now.getTime() - date.getTime()
+    const diffMs = now.getTime() - parsedDate.getTime()
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
     
     if (diffDays === 0) return 'Today'

@@ -20,7 +20,10 @@ import {
   AlertCircle,
   FileText,
   Link as LinkIcon,
-  Save
+  Save,
+  Sparkles,
+  Send,
+  Mail
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -40,7 +43,10 @@ import {
   deleteJobApplication,
   toggleFavorite 
 } from '@/lib/actions/job-application.action'
+import { getCoverLettersForJob } from '@/lib/actions/cover-letter.action'
 import { toast } from '@/components/ui/use-toast'
+import { CoverLetterGenerator } from '@/components/jobs/CoverLetterGenerator'
+import { AutoApplyModal } from '@/components/jobs/AutoApplyModal'
 
 type ApplicationStatus = 'WISHLIST' | 'APPLIED' | 'INTERVIEWING' | 'OFFERED' | 'REJECTED' | 'ACCEPTED' | 'WITHDRAWN'
 
@@ -86,6 +92,22 @@ export default function JobDetailsPage() {
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  // Cover letter & auto-apply modals
+  const [showCoverLetterModal, setShowCoverLetterModal] = useState(false)
+  const [showAutoApplyModal, setShowAutoApplyModal] = useState(false)
+  const [generatedCoverLetter, setGeneratedCoverLetter] = useState<{
+    id: string
+    content: string
+    subject: string
+  } | null>(null)
+  const [existingCoverLetters, setExistingCoverLetters] = useState<{
+    id: string
+    content: string
+    subject: string
+    createdAt: string
+  }[]>([])
+  const [isLoadingCoverLetters, setIsLoadingCoverLetters] = useState(false)
+
   // Edit form state
   const [editForm, setEditForm] = useState({
     jobTitle: '',
@@ -105,6 +127,36 @@ export default function JobDetailsPage() {
   useEffect(() => {
     loadJob()
   }, [jobId])
+
+  useEffect(() => {
+    if (job?.id) {
+      loadCoverLetters()
+    }
+  }, [job?.id])
+
+  const loadCoverLetters = async () => {
+    if (!job?.id) return
+    setIsLoadingCoverLetters(true)
+    try {
+      const result = await getCoverLettersForJob(job.id)
+      if (result.data) {
+        setExistingCoverLetters(result.data as any[])
+        // Set the most recent as the generated one for auto-apply
+        if (result.data.length > 0) {
+          const latest = result.data[0] as any
+          setGeneratedCoverLetter({
+            id: latest.id,
+            content: latest.content,
+            subject: latest.subject || `Application for ${job.jobTitle}`,
+          })
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load cover letters:', err)
+    } finally {
+      setIsLoadingCoverLetters(false)
+    }
+  }
 
   const loadJob = async () => {
     setIsLoading(true)
@@ -591,18 +643,127 @@ export default function JobDetailsPage() {
             </div>
           </div>
 
-          {/* Actions */}
+          {/* AI Actions */}
+          <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl border border-purple-100 p-6">
+            <h2 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-600" />
+              AI Assistant
+            </h2>
+            <div className="space-y-3">
+              {isLoadingCoverLetters ? (
+                <div className="flex items-center justify-center py-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                </div>
+              ) : existingCoverLetters.length > 0 ? (
+                <>
+                  {/* Show existing cover letter info */}
+                  <div className="bg-white rounded-lg p-3 border border-purple-200">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-slate-700 flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        Cover Letter Ready
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        {existingCoverLetters.length} version{existingCoverLetters.length > 1 ? 's' : ''}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 line-clamp-2 mb-2">
+                      {existingCoverLetters[0].content.substring(0, 100)}...
+                    </p>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-xs"
+                        onClick={() => setShowCoverLetterModal(true)}
+                      >
+                        <Edit className="w-3 h-3 mr-1" />
+                        View / Edit
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 text-xs"
+                        onClick={() => setShowCoverLetterModal(true)}
+                      >
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Regenerate
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <Button
+                    className="w-full justify-start gap-2 bg-gradient-to-r from-green-600 to-emerald-600"
+                    onClick={() => setShowAutoApplyModal(true)}
+                  >
+                    <Send className="w-4 h-4" />
+                    Send Application
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                  onClick={() => setShowCoverLetterModal(true)}
+                >
+                  <FileText className="w-4 h-4 text-purple-600" />
+                  Generate Cover Letter
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* External Apply */}
           {job.jobPostUrl && (
             <Button
+              variant="outline"
               className="w-full"
               onClick={() => window.open(job.jobPostUrl!, '_blank')}
             >
               <ExternalLink className="w-4 h-4 mr-2" />
-              Apply Now
+              Apply on Website
             </Button>
           )}
         </div>
       </div>
+
+      {/* Cover Letter Generator Modal */}
+      {job && (
+        <CoverLetterGenerator
+          isOpen={showCoverLetterModal}
+          onClose={() => {
+            setShowCoverLetterModal(false)
+            loadCoverLetters() // Refresh cover letters after closing
+          }}
+          jobApplicationId={job.id}
+          jobTitle={job.jobTitle}
+          company={job.company}
+          onGenerated={(coverLetter) => {
+            setGeneratedCoverLetter(coverLetter)
+            loadCoverLetters() // Refresh cover letters list
+          }}
+          onSendApplication={(coverLetter) => {
+            setGeneratedCoverLetter(coverLetter)
+            setShowCoverLetterModal(false)
+            setShowAutoApplyModal(true)
+          }}
+        />
+      )}
+
+      {/* Auto Apply Modal */}
+      {job && generatedCoverLetter && (
+        <AutoApplyModal
+          isOpen={showAutoApplyModal}
+          onClose={() => setShowAutoApplyModal(false)}
+          jobApplicationId={job.id}
+          jobTitle={job.jobTitle}
+          company={job.company}
+          coverLetter={generatedCoverLetter}
+          onSuccess={() => {
+            loadJob() // Refresh job data after sending
+          }}
+        />
+      )}
     </div>
   )
 }

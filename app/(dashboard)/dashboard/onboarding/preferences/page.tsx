@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
 import { supabase } from '@/lib/supabase/client'
-import { upsertJobPreference } from '@/lib/actions/job-preferences.action'
+import { upsertJobPreferences } from '@/lib/actions/job-preferences.action'
 
 export default function JobPreferencesPage() {
   const router = useRouter()
@@ -135,19 +135,26 @@ export default function JobPreferencesPage() {
     setIsLoading(true)
 
     try {
-      const { success } = await upsertJobPreference({
-        userId: userId,
+      const { data, error } = await upsertJobPreferences({
         jobTitles: jobTitles,
+        keywords: [],
         locations: locations,
         minSalary: minSalary,
         maxSalary: maxSalary,
+        currency: "USD",
         experienceLevel: experienceLevel,
         workTypes: workTypes,
         remoteOptions: remoteOptions,
         skills: skills,
+        industries: [],
+        companySize: [],
+        excludeCompanies: [],
+        autoSearch: false,
+        notifyOnMatch: true,
+        searchFrequency: "daily",
       });
 
-      // if (!success) throw Error("Failed to save job preferences")
+      if (error) throw new Error(error);
 
       toast({
         title: 'Preferences saved!',

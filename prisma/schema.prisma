@@ -55,19 +55,21 @@ model User {
   role            UserRole  @default(USER)
 
   // Relations
-  profile         Profile?
-  resumes         Resume[]
-  jobApplications JobApplication[]
-  preferences     JobSearchPreference?
-  notifications   Notification[]
-  aiContents      AIGeneratedContent[]
+  profile           Profile?
+  resumes           Resume[]
+  jobApplications   JobApplication[]
+  preferences       JobSearchPreference?
+  notifications     Notification[]
+  aiContents        AIGeneratedContent[]
+  coverLetters      CoverLetter[]
+  emailApplications EmailApplication[]
 
   // Onboarding state
   onboardingStep  Int       @default(0)   // 0 = fresh user, 1-5 steps...
   isOnboarded     Boolean   @default(false)
 
   createdAt       DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime  @updatedAt @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("users")
 }
@@ -76,7 +78,7 @@ model User {
 // PROFILE (Extended User Data + Resume-derived fields)
 // ===========================================================
 model Profile {
-  id              String   @id @default(cuid())
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String   @unique @db.Uuid
 
   // Core personal info
@@ -112,7 +114,7 @@ model Profile {
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime    @updatedAt @db.Timestamptz(6)
+  updatedAt       DateTime    @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("profiles")
 }
@@ -121,7 +123,7 @@ model Profile {
 // RESUME STORAGE (multiple resumes for users)
 // ===========================================================
 model Resume {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String   @db.Uuid
 
   fileUrl     String
@@ -136,7 +138,7 @@ model Resume {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("resumes")
 }
@@ -145,8 +147,8 @@ model Resume {
 // PROFILE SUB-SECTIONS (Highly scalable, normalized)
 // ===========================================================
 model Skill {
-  id          String   @id @default(cuid())
-  profileId   String
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId   String   @db.Uuid
   name        String
   level       Int?       // 1–5 skill rating
   category    String?    // e.g., “Backend”, “Cloud”, etc.
@@ -154,14 +156,14 @@ model Skill {
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("skills")
 }
 
 model Experience {
-  id          String   @id @default(cuid())
-  profileId   String
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId   String   @db.Uuid
 
   title       String
   company     String
@@ -174,14 +176,14 @@ model Experience {
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("experiences")
 }
 
 model Education {
-  id          String   @id @default(cuid())
-  profileId   String
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId   String   @db.Uuid
 
   institution String
   degree      String
@@ -194,14 +196,14 @@ model Education {
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("educations")
 }
 
 model Certification {
-  id            String   @id @default(cuid())
-  profileId     String
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId     String   @db.Uuid
 
   name          String
   issuer        String
@@ -212,14 +214,14 @@ model Certification {
   profile       Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("certifications")
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  profileId   String
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId   String   @db.Uuid
 
   name        String
   description String
@@ -231,7 +233,7 @@ model Project {
   profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("projects")
 }
@@ -240,7 +242,7 @@ model Project {
 // JOB APPLYING MODULE
 // ===========================================================
 model JobApplication {
-  id              String            @id @default(cuid())
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String            @db.Uuid
 
   // Core Job Details
@@ -285,7 +287,7 @@ model JobApplication {
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime          @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime          @updatedAt @db.Timestamptz(6)
+  updatedAt       DateTime          @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@index([userId])
   @@index([status])
@@ -297,7 +299,7 @@ model JobApplication {
 // JOB SEARCH PREFERENCES
 // ===========================================================
 model JobSearchPreference {
-  id              String   @id @default(cuid())
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String   @unique @db.Uuid
 
   // Search Keywords
@@ -336,7 +338,7 @@ model JobSearchPreference {
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("job_search_preferences")
 }
@@ -345,7 +347,7 @@ model JobSearchPreference {
 // CACHED JOB RECOMMENDATIONS (Daily refresh, personalized)
 // ===========================================================
 model CachedJobRecommendation {
-  id              String   @id @default(cuid())
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String   @db.Uuid
   
   // Job data (stored as JSON for flexibility)
@@ -361,7 +363,7 @@ model CachedJobRecommendation {
   lastRefreshedAt DateTime @default(now()) @db.Timestamptz(6)
   
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@unique([userId])
   @@index([userId, expiresAt])
@@ -372,7 +374,7 @@ model CachedJobRecommendation {
 // AI GENERATED CONTENT (Cover letters, resumes, summaries, etc.)
 // ===========================================================
 model AIGeneratedContent {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String   @db.Uuid
 
   type        String   // “cover_letter”, “summary”, etc.
@@ -384,16 +386,95 @@ model AIGeneratedContent {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("ai_generated_content")
+}
+
+// ===========================================================
+// COVER LETTERS (AI-generated, linked to job applications)
+// ===========================================================
+model CoverLetter {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @db.Uuid
+  jobApplicationId  String?  // Optional link to job application
+  
+  // Content
+  content           String   @db.Text
+  subject           String?  // Email subject line
+  
+  // Generation metadata
+  aiModel           String?  // "gpt-4", "deepseek", etc.
+  promptUsed        String?  @db.Text
+  tone              String?  // "professional", "friendly", "formal"
+  
+  // Status
+  isDefault         Boolean  @default(false) // User's default template
+  isSent            Boolean  @default(false)
+  
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailApplications EmailApplication[]
+  
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([jobApplicationId])
+  @@map("cover_letters")
+}
+
+// ===========================================================
+// EMAIL APPLICATIONS (Auto-sent job applications)
+// ===========================================================
+model EmailApplication {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @db.Uuid
+  jobApplicationId  String   // Link to job application
+  coverLetterId     String?  @db.Uuid // Link to cover letter used
+  
+  // Recipient info
+  recipientEmail    String
+  recipientName     String?
+  companyName       String
+  
+  // Email content
+  subject           String
+  body              String   @db.Text
+  
+  // Attachments
+  resumeUrl         String?  // URL to attached resume
+  attachments       Json?    // Array of attachment info
+  
+  // Status tracking
+  status            String   @default("draft") // draft, queued, sent, delivered, opened, failed
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  openedAt          DateTime?
+  failureReason     String?
+  
+  // Email service tracking
+  emailServiceId    String?  // ID from email service (Resend, etc.)
+  emailServiceResponse Json?
+  
+  // Relations
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coverLetter       CoverLetter? @relation(fields: [coverLetterId], references: [id])
+  
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([jobApplicationId])
+  @@index([status])
+  @@map("email_applications")
 }
 
 // ===========================================================
 // NOTIFICATIONS SYSTEM
 // ===========================================================
 model Notification {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String   @db.Uuid
 
   type        String   // “job_match”, “reminder”
@@ -405,7 +486,7 @@ model Notification {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
+  updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
   @@map("notifications")
 }

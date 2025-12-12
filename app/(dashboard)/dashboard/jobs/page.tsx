@@ -43,6 +43,8 @@ export default function JobsPage() {
   const [lastRefreshed, setLastRefreshed] = useState<string | null>(null)
   const [isFromCache, setIsFromCache] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [savedJobIds, setSavedJobIds] = useState<Set<string>>(new Set())
+  const [originalTopPicksCount, setOriginalTopPicksCount] = useState(0)
   
   // Modal states
   const [showPasteModal, setShowPasteModal] = useState(false)
@@ -64,10 +66,12 @@ export default function JobsPage() {
       const result = await getJobRecommendations()
       if (result.data) {
         setTopPicks(result.data.topPicks)
+        setOriginalTopPicksCount(result.data.topPicks.length)
         setJobs(result.data.jobs)
         setTotalJobs(result.data.jobs.length)
         setIsFromCache(result.data.fromCache)
         setLastRefreshed(result.data.lastRefreshed)
+        setSavedJobIds(new Set()) // Reset saved jobs on fresh load
       }
     } catch (err) {
       console.error('Failed to load recommendations:', err)
@@ -82,10 +86,12 @@ export default function JobsPage() {
       const result = await refreshJobRecommendations()
       if (result.data) {
         setTopPicks(result.data.topPicks)
+        setOriginalTopPicksCount(result.data.topPicks.length)
         setJobs(result.data.jobs)
         setTotalJobs(result.data.jobs.length)
         setIsFromCache(false)
         setLastRefreshed(result.data.lastRefreshed)
+        setSavedJobIds(new Set()) // Reset saved jobs on refresh
         toast({
           title: 'Recommendations Updated',
           description: 'Found new jobs matching your profile',
@@ -183,7 +189,7 @@ export default function JobsPage() {
     setShowDetailsModal(true)
   }
 
-  const handleSaveJob = async (job: NormalizedJob) => {
+  const handleSaveJob = async (job: NormalizedJob, isFromTopPicks: boolean = false) => {
     try {
       const result = await createJobApplication({
         jobTitle: job.title,
@@ -204,6 +210,12 @@ export default function JobsPage() {
       })
       
       if (result.data) {
+        // Remove from topPicks if it was from recommendations
+        if (isFromTopPicks) {
+          setTopPicks(prev => prev.filter(j => j.id !== job.id))
+          setSavedJobIds(prev => new Set([...prev, job.id]))
+        }
+        
         toast({
           title: 'Job Saved!',
           description: 'Added to your wishlist',
@@ -368,7 +380,7 @@ export default function JobsPage() {
                       variant="outline"
                       onClick={(e) => {
                         e.stopPropagation()
-                        handleSaveJob(job)
+                        handleSaveJob(job, true)
                       }}
                     >
                       Save
@@ -376,6 +388,37 @@ export default function JobsPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          ) : savedJobIds.size > 0 && originalTopPicksCount > 0 ? (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">All Caught Up! 🎉</h3>
+              <p className="text-slate-600 mb-4">
+                You've saved all {savedJobIds.size} of today's recommended jobs.
+                <br />
+                Come back tomorrow for fresh recommendations!
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => router.push('/dashboard/jobs/applications')}
+                  className="gap-2"
+                >
+                  <Briefcase className="w-4 h-4" />
+                  View Saved Jobs
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleRefreshRecommendations}
+                  disabled={isRefreshing}
+                  className="gap-2"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  Get More Now
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="text-center py-6 text-slate-500">

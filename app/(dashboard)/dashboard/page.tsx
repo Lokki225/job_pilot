@@ -1,14 +1,73 @@
-// app/(dashboard)/dashboard/page.tsx
 "use client"
 
-import { ArrowRight, Award, Briefcase, CheckCircle, FileText, Search, Sparkles, Target, TrendingUp, User, X } from "lucide-react"
+import { 
+  ArrowRight, 
+  ArrowUpRight,
+  Award, 
+  Briefcase, 
+  Calendar,
+  CheckCircle, 
+  Clock,
+  FileText, 
+  Heart,
+  Loader2,
+  MapPin,
+  Plus,
+  Search, 
+  Sparkles, 
+  Star,
+  Target, 
+  TrendingUp, 
+  User, 
+  X,
+  Zap,
+  Building2,
+  Send,
+  Eye,
+  ThumbsUp,
+  AlertCircle,
+  ChevronRight,
+  BarChart3,
+  Rocket
+} from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { getProfile } from "@/lib/actions/profile.action"
-import { getJobApplicationStats } from "@/lib/actions/job-applications.action"
+import { getProfile, getProfileDetails } from "@/lib/actions/profile.action"
+import { getJobApplicationStats, getRecentApplications, getUpcomingInterviews } from "@/lib/actions/job-applications.action"
+import { getJobPreferences } from "@/lib/actions/job-preferences.action"
 import { getCurrentUser } from "@/lib/auth"
+
+// Helper function for relative time
+const getRelativeTime = (date: string) => {
+  const now = new Date()
+  const then = new Date(date)
+  const diffMs = now.getTime() - then.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+  return `${Math.floor(diffDays / 30)} months ago`
+}
+
+// Status badge helper
+const getStatusBadge = (status: string) => {
+  const statusConfig: Record<string, { label: string; className: string }> = {
+    WISHLIST: { label: 'Wishlist', className: 'bg-slate-100 text-slate-700' },
+    APPLIED: { label: 'Applied', className: 'bg-blue-100 text-blue-700' },
+    INTERVIEWING: { label: 'Interview', className: 'bg-purple-100 text-purple-700' },
+    OFFER: { label: 'Offer', className: 'bg-green-100 text-green-700' },
+    REJECTED: { label: 'Rejected', className: 'bg-red-100 text-red-700' },
+    ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-700' },
+  }
+  const config = statusConfig[status] || { label: status, className: 'bg-gray-100 text-gray-700' }
+  return <Badge className={config.className}>{config.label}</Badge>
+}
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -19,8 +78,8 @@ export default function DashboardPage() {
   const [profileCompleteness, setProfileCompleteness] = useState(0)
   const [completionItems, setCompletionItems] = useState([
     { label: 'Basic Info', completed: false, icon: User, link: '/dashboard/profile' },
-    { label: 'Resume Uploaded', completed: false, icon: Briefcase, link: '/dashboard/profile' },
-    { label: 'Job Preferences', completed: false, icon: Target, link: '/dashboard/profile' },
+    { label: 'Resume Uploaded', completed: false, icon: FileText, link: '/dashboard/profile' },
+    { label: 'Job Preferences', completed: false, icon: Target, link: '/dashboard/onboarding/preferences' },
     { label: 'Skills & Experience', completed: false, icon: Award, link: '/dashboard/profile' },
   ])
   const [stats, setStats] = useState({
@@ -28,7 +87,12 @@ export default function DashboardPage() {
     pending: 0,
     sent: 0,
     replied: 0,
+    rejected: 0,
+    accepted: 0,
   })
+  const [recentApplications, setRecentApplications] = useState<any[]>([])
+  const [upcomingInterviews, setUpcomingInterviews] = useState<any[]>([])
+  const [userName, setUserName] = useState('')
   const [isAnimating, setIsAnimating] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [profileError, setProfileError] = useState<string | null>(null)
@@ -42,11 +106,7 @@ export default function DashboardPage() {
       setIsLoading(true)
       setProfileError(null)
 
-      // Get authenticated user from server action
       const { user, error: userError } = await getCurrentUser()
-
-      console.log(user);
-      
       
       if (!user || userError) {
         console.error('No authenticated user:', userError)
@@ -60,16 +120,24 @@ export default function DashboardPage() {
         setShowOnboardingHero(true)
       }
 
-      // Load profile completeness with user ID
+      // Load profile and related data
       try {
-        const { data: profile, error: profileError } = await getProfile(user.id)
+        const [profileResult, profileDetailsResult, preferencesResult] = await Promise.all([
+          getProfile(user.id),
+          getProfileDetails(user.id),
+          getJobPreferences()
+        ])
+        
+        const profile = profileResult.data
+        const profileDetails = profileDetailsResult.data
+        const preferences = preferencesResult.data
         
         if (profile) {
-          const completeness = calculateCompleteness(profile)
+          setUserName(profile.firstName || 'there')
+          const completeness = calculateCompleteness(profile, profileDetails, preferences)
           setProfileCompleteness(completeness.percentage)
           setCompletionItems(completeness.items)
         } else {
-          console.warn('Profile not found for user:', user.id)
           setProfileError('Please complete your profile to get started')
           setProfileCompleteness(0)
         }
@@ -78,13 +146,22 @@ export default function DashboardPage() {
         setProfileError('Failed to load profile. Please try refreshing the page.')
       }
 
-      // Load application stats
-      const { data: applicationStats, error: statsError } = await getJobApplicationStats()
-      
+      // Load stats
+      const { data: applicationStats } = await getJobApplicationStats()
       if (applicationStats) {
         setStats(applicationStats)
-      } else {
-        console.warn('Stats error:', statsError)
+      }
+
+      // Load recent applications
+      const { data: recent } = await getRecentApplications(5)
+      if (recent) {
+        setRecentApplications(recent)
+      }
+
+      // Load upcoming interviews
+      const { data: interviews } = await getUpcomingInterviews()
+      if (interviews) {
+        setUpcomingInterviews(interviews)
       }
     } catch (error) {
       console.error('Dashboard loading error:', error)
@@ -93,31 +170,46 @@ export default function DashboardPage() {
     }
   }
 
-  const calculateCompleteness = (profile: any) => {
+  const calculateCompleteness = (profile: any, profileDetails: any, preferences: any) => {
+    // Check if job preferences exist and have at least some data
+    const hasJobPreferences = preferences && (
+      (preferences.jobTitles && preferences.jobTitles.length > 0) ||
+      (preferences.locations && preferences.locations.length > 0) ||
+      (preferences.workTypes && preferences.workTypes.length > 0) ||
+      preferences.experienceLevel
+    )
+    
+    // Check if skills exist (from profileDetails or profile)
+    const hasSkills = (profileDetails?.skills && profileDetails.skills.length > 0) ||
+                      (profile.skills && profile.skills.length > 0)
+    
+    // Check if has experience
+    const hasExperience = profileDetails?.experiences && profileDetails.experiences.length > 0
+
     const items = [
       { 
         label: 'Basic Info', 
-        completed: !!(profile.firstName && profile.lastName && profile.location), // Vérifiez les vrais noms de colonnes
+        completed: !!(profile.firstName && profile.lastName && profile.location),
         icon: User,
         link: '/dashboard/profile'
       },
       { 
         label: 'Resume Uploaded', 
-        completed: !!profile.resumeUrl, // lowercase
-        icon: Briefcase,
+        completed: !!profile.resumeUrl,
+        icon: FileText,
         link: '/dashboard/profile'
       },
       { 
         label: 'Job Preferences', 
-        completed: profile.completionScore >= 50, // Utilisez le score de complétion
+        completed: hasJobPreferences,
         icon: Target,
         link: '/dashboard/onboarding/preferences'
       },
       { 
         label: 'Skills & Experience', 
-        completed: profile.completionScore >= 75,
+        completed: hasSkills || hasExperience,
         icon: Award,
-        link: '/dashboard/profile#skills'
+        link: '/dashboard/profile'
       },
     ]
 
@@ -132,20 +224,23 @@ export default function DashboardPage() {
     setTimeout(() => {
       setShowOnboardingHero(false)
       localStorage.setItem('onboarding_hero_dismissed', 'true')
-      router.replace('/dashboard', { scroll: false }) // Évite le scroll en haut
+      router.replace('/dashboard', { scroll: false })
     }, 300)
   }
 
-  const handleCompleteProfile = () => {
-    router.push('/dashboard/profile')
+  // Get greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Good morning'
+    if (hour < 18) return 'Good afternoon'
+    return 'Good evening'
   }
 
-  // Skeleton loader pendant le chargement
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-        <p className="text-muted-foreground">Loading your dashboard...</p>
+        <Loader2 className="h-12 w-12 animate-spin text-indigo-600" />
+        <p className="text-slate-500">Loading your dashboard...</p>
       </div>
     )
   }
@@ -153,12 +248,13 @@ export default function DashboardPage() {
   if (profileError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-4">
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg max-w-md w-full">
-          <h2 className="text-xl font-semibold mb-2">Profile Incomplete</h2>
-          <p className="text-muted-foreground mb-4">{profileError}</p>
+        <div className="bg-amber-50 border border-amber-200 p-6 rounded-2xl max-w-md w-full">
+          <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2 text-slate-900">Profile Incomplete</h2>
+          <p className="text-slate-600 mb-4">{profileError}</p>
           <Button 
             onClick={() => router.push('/dashboard/profile')}
-            className="w-full"
+            className="w-full bg-indigo-600 hover:bg-indigo-700"
           >
             Complete Your Profile
           </Button>
@@ -168,397 +264,356 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4"> {/* ✅ Ajoutez un container */}
-      {/* Onboarding Hero */}
-      {showOnboardingHero && (
-        <div 
-          className={`mb-8 transition-all duration-300 ${
-            isAnimating ? 'opacity-0 transform scale-95' : 'opacity-100 transform scale-100'
-          }`}
-        >
-          {/* Main Hero Card */}
-          <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 rounded-2xl shadow-2xl">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
-            </div>
-
-            {/* Floating Particles */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute top-10 left-10 w-2 h-2 bg-white rounded-full animate-ping opacity-75"></div>
-              <div className="absolute top-20 right-32 w-3 h-3 bg-yellow-300 rounded-full animate-pulse"></div>
-              <div className="absolute bottom-16 left-1/4 w-2 h-2 bg-pink-300 rounded-full animate-bounce"></div>
-            </div>
-
-            {/* Close Button */}
-            <button
-              onClick={handleDismissHero}
-              className="absolute top-4 right-4 z-10 p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-all"
-              aria-label="Dismiss hero"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="relative px-8 py-10 md:px-12 md:py-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                
-                {/* Left Side - Content */}
-                <div className="space-y-6">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full">
-                    <CheckCircle className="w-5 h-5 text-green-300" />
-                    <span className="text-sm font-semibold text-white">
-                      Onboarding Complete! 🎉
-                    </span>
-                  </div>
-
-                  <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                      You're Almost Ready!
-                    </h1>
-                    <p className="text-lg text-blue-100">
-                      Your profile is <span className="font-bold text-white">{profileCompleteness}% complete</span>.
-                      Complete the remaining steps to unlock all features and get better job matches.
-                    </p>
-                  </div>
-
-                  {/* Progress Bar */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm text-blue-100">
-                      <span>Profile Completion</span>
-                      <span className="font-semibold text-white">{profileCompleteness}%</span>
-                    </div>
-                    <div className="h-3 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
-                      <div 
-                        className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full transition-all duration-1000 ease-out shadow-lg"
-                        style={{ width: `${profileCompleteness}%` }}
-                      >
-                        <div className="h-full w-full bg-gradient-to-r from-white/30 to-transparent animate-pulse"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-4 pt-2">
-                    <Button 
-                      onClick={handleCompleteProfile}
-                      className="group px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-                    >
-                      <span>Complete Your Profile</span>
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                    <Button 
-                      onClick={handleDismissHero}
-                      variant="ghost"
-                      className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl hover:bg-white/20"
-                    >
-                      I'll Check Later
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Right Side - Checklist */}
-                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-                  <div className="flex items-center gap-2 mb-6">
-                    <Sparkles className="w-5 h-5 text-yellow-300" />
-                    <h3 className="text-lg font-semibold text-white">
-                      Profile Checklist
-                    </h3>
-                  </div>
-
-                  <div className="space-y-4">
-                    {completionItems.map((item, index) => (
-                      <div 
-                        key={index}
-                        className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
-                          item.completed 
-                            ? 'bg-green-500/20 border border-green-400/30' 
-                            : 'bg-white/5 border border-white/10 hover:bg-white/10'
-                        }`}
-                      >
-                        <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                          item.completed 
-                            ? 'bg-green-400 text-white' 
-                            : 'bg-white/20 text-white/60'
-                        }`}>
-                          {item.completed ? (
-                            <CheckCircle className="w-5 h-5" />
-                          ) : (
-                            <item.icon className="w-5 h-5" />
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <p className={`font-medium ${
-                            item.completed ? 'text-white' : 'text-blue-100'
-                          }`}>
-                            {item.label}
-                          </p>
-                          <p className="text-xs text-blue-200">
-                            {item.completed ? 'Completed' : 'Pending'}
-                          </p>
-                        </div>
-                        {!item.completed && (
-                          <Button
-                            onClick={() => router.push(item.link)}
-                            size="sm"
-                            className="bg-white/20 hover:bg-white/30 text-white"
-                          >
-                            Add
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-white/20">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-white">
-                        {completionItems.filter(i => i.completed).length}/{completionItems.length}
-                      </div>
-                      <div className="text-xs text-blue-200">Sections Done</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-yellow-300">
-                        {completionItems.filter(i => !i.completed).length}
-                      </div>
-                      <div className="text-xs text-blue-200">Left to Complete</div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Actions Cards Below */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/dashboard/jobs')}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 rounded-lg">
-                    <Briefcase className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <CardTitle className="text-base">Browse Jobs</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Start exploring job opportunities matched to your profile
-                </CardDescription>
-                <Button variant="link" className="p-0 h-auto text-blue-600">
-                  View Jobs <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/dashboard/profile')}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-purple-50 rounded-lg">
-                    <Target className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <CardTitle className="text-base">Complete Profile</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Add more details to get better job recommendations
-                </CardDescription>
-                <Button variant="link" className="p-0 h-auto text-purple-600">
-                  Go to Profile <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/dashboard/letters')}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-50 rounded-lg">
-                    <Award className="w-5 h-5 text-green-600" />
-                  </div>
-                  <CardTitle className="text-base">AI Cover Letter</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-3">
-                  Generate personalized cover letters with AI
-                </CardDescription>
-                <Button variant="link" className="p-0 h-auto text-green-600">
-                  Try AI <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+    <div className="space-y-8">
+      {/* Welcome Header */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl p-8 text-white">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
         </div>
-      )}
-
-      {/* Regular Dashboard Content */}
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col justify-between space-y-2 sm:flex-row sm:items-center">
+        
+        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Welcome back! Here's what's happening with your job search.
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="w-5 h-5 text-yellow-300" />
+              <span className="text-indigo-200 text-sm font-medium">
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              </span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              {getGreeting()}, {userName}! 👋
+            </h1>
+            <p className="text-indigo-100 text-lg">
+              {stats.total === 0 
+                ? "Ready to start your job search journey?"
+                : `You have ${stats.total} application${stats.total !== 1 ? 's' : ''} in progress`
+              }
             </p>
           </div>
-          <div className="flex items-center space-x-2">
-            <Button onClick={() => router.push('/dashboard/jobs')}>
-              <Search className="mr-2 h-4 w-4" />
+          
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              onClick={() => router.push('/dashboard/jobs')}
+              className="bg-white text-indigo-600 hover:bg-indigo-50 shadow-lg"
+            >
+              <Search className="w-4 h-4 mr-2" />
               Find Jobs
+            </Button>
+            <Button 
+              onClick={() => router.push('/dashboard/jobs/applications')}
+              variant="outline"
+              className="border-white/30 text-white hover:bg-white/10"
+            >
+              <Briefcase className="w-4 h-4 mr-2" />
+              My Applications
             </Button>
           </div>
         </div>
+      </div>
 
-        {/* Stats Grid */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Applications</CardTitle>
-              <Briefcase className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <p className="text-xs text-muted-foreground">
-                {stats.total > 0 ? `${stats.pending} pending` : 'No applications yet'}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Cover Letters</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.sent}</div>
-              <p className="text-xs text-muted-foreground">
-                {stats.sent > 0 ? 'Applications sent' : 'Generate your first letter'}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Responses</CardTitle>
-              <User className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.replied}</div>
-              <p className="text-xs text-muted-foreground">
-                {stats.replied > 0 ? 'Companies replied' : 'Waiting for responses'}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {stats.total > 0 ? `${Math.round((stats.replied / stats.total) * 100)}%` : '0%'}
+      {/* Profile Completion Banner (if not complete) */}
+      {profileCompleteness < 100 && !showOnboardingHero && (
+        <Card className="border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="w-5 h-5 text-amber-600" />
+                  <h3 className="font-semibold text-slate-900">Complete Your Profile</h3>
+                </div>
+                <p className="text-slate-600 text-sm mb-3">
+                  A complete profile helps you get better job matches and increases your chances of getting hired.
+                </p>
+                <div className="flex items-center gap-3">
+                  <Progress value={profileCompleteness} className="flex-1 h-2" />
+                  <span className="text-sm font-medium text-amber-700">{profileCompleteness}%</span>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">
-                Reply rate
-              </p>
+              <Button 
+                onClick={() => router.push('/dashboard/profile')}
+                className="bg-amber-600 hover:bg-amber-700"
+              >
+                Complete Now
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications')}>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Briefcase className="w-6 h-6 text-indigo-600" />
+              </div>
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+            </div>
+            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.total}</div>
+            <p className="text-slate-500 text-sm">Total Applications</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=APPLIED')}>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Send className="w-6 h-6 text-blue-600" />
+              </div>
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </div>
+            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.sent}</div>
+            <p className="text-slate-500 text-sm">Applications Sent</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=INTERVIEWING')}>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Calendar className="w-6 h-6 text-purple-600" />
+              </div>
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+            </div>
+            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.replied}</div>
+            <p className="text-slate-500 text-sm">Interviews</p>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=OFFER')}>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ThumbsUp className="w-6 h-6 text-green-600" />
+              </div>
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-green-600 transition-colors" />
+            </div>
+            <div className="text-3xl font-bold text-slate-900 mb-1">{stats.accepted}</div>
+            <p className="text-slate-500 text-sm">Offers Received</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* Recent Applications */}
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-indigo-600" />
+                  Recent Applications
+                </CardTitle>
+                <CardDescription>Your latest job applications</CardDescription>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => router.push('/dashboard/jobs/applications')}
+                className="text-indigo-600"
+              >
+                View All
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {recentApplications.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Briefcase className="w-8 h-8 text-slate-400" />
+                  </div>
+                  <h3 className="font-semibold text-slate-900 mb-2">No applications yet</h3>
+                  <p className="text-slate-500 mb-4">Start your job search and track your applications here</p>
+                  <Button onClick={() => router.push('/dashboard/jobs')}>
+                    <Search className="w-4 h-4 mr-2" />
+                    Browse Jobs
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {recentApplications.map((app) => (
+                    <div 
+                      key={app.id}
+                      className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all cursor-pointer"
+                      onClick={() => router.push(`/dashboard/jobs/${app.id}`)}
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                        {app.company?.charAt(0) || 'J'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-slate-900 truncate">{app.jobTitle}</h4>
+                        <div className="flex items-center gap-2 text-sm text-slate-500">
+                          <Building2 className="w-3 h-3" />
+                          <span className="truncate">{app.company}</span>
+                          {app.location && (
+                            <>
+                              <span>•</span>
+                              <MapPin className="w-3 h-3" />
+                              <span className="truncate">{app.location}</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        {getStatusBadge(app.status)}
+                        <span className="text-xs text-slate-400">{getRelativeTime(app.createdAt)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Recent Applications & Next Steps */}
-        <div className="grid gap-4 md:grid-cols-2">
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle>Recent Applications</CardTitle>
-              <CardDescription>Your most recent job applications</CardDescription>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-amber-500" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button 
+                variant="outline" 
+                className="w-full justify-start gap-3 h-12"
+                onClick={() => router.push('/dashboard/jobs')}
+              >
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                  <Search className="w-4 h-4 text-indigo-600" />
+                </div>
+                <span>Search Jobs</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start gap-3 h-12"
+                onClick={() => router.push('/dashboard/jobs/applications')}
+              >
+                <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-purple-600" />
+                </div>
+                <span>View Applications</span>
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full justify-start gap-3 h-12"
+                onClick={() => router.push('/dashboard/profile')}
+              >
+                <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                  <User className="w-4 h-4 text-green-600" />
+                </div>
+                <span>Edit Profile</span>
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Upcoming Interviews */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-purple-600" />
+                Upcoming Interviews
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              {stats.total === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Briefcase className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>No applications yet</p>
-                  <Button 
-                    variant="link" 
-                    onClick={() => router.push('/dashboard/jobs')}
-                    className="mt-2"
-                  >
-                    Browse jobs to get started
-                  </Button>
+              {upcomingInterviews.length === 0 ? (
+                <div className="text-center py-6">
+                  <Calendar className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+                  <p className="text-slate-500 text-sm">No upcoming interviews</p>
                 </div>
               ) : (
-                <>
-                  <div className="space-y-4">
-                    {/* ✅ TODO: Map real applications data */}
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex items-center justify-between border-b pb-3">
-                        <div>
-                          <p className="font-medium">Frontend Developer</p>
-                          <p className="text-sm text-muted-foreground">Acme Inc. • Remote</p>
-                        </div>
-                        <div className="text-sm text-muted-foreground">2 days ago</div>
+                <div className="space-y-3">
+                  {upcomingInterviews.map((interview) => (
+                    <div 
+                      key={interview.id}
+                      className="p-3 rounded-lg bg-purple-50 border border-purple-100"
+                    >
+                      <h4 className="font-medium text-slate-900 text-sm">{interview.jobTitle}</h4>
+                      <p className="text-xs text-slate-500">{interview.company}</p>
+                      <div className="flex items-center gap-1 mt-2 text-xs text-purple-600">
+                        <Clock className="w-3 h-3" />
+                        {new Date(interview.interviewDate).toLocaleDateString('en-US', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
                       </div>
-                    ))}
-                  </div>
-                  <Button 
-                    variant="ghost" 
-                    className="mt-4 w-full"
-                    onClick={() => router.push('/dashboard/applications')}
-                  >
-                    View all applications
-                  </Button>
-                </>
+                    </div>
+                  ))}
+                </div>
               )}
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Next Steps</CardTitle>
-              <CardDescription>Your action items</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {profileCompleteness < 100 && (
-                  <div className="flex items-start space-x-3">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-yellow-500" />
-                    <div>
-                      <p className="font-medium">Complete your profile</p>
-                      <p className="text-sm text-muted-foreground">
-                        {100 - profileCompleteness}% remaining
-                      </p>
+          {/* Profile Checklist */}
+          {profileCompleteness < 100 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                  Profile Checklist
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {completionItems.map((item, index) => (
+                    <div 
+                      key={index}
+                      className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                        item.completed 
+                          ? 'bg-green-50 border border-green-100' 
+                          : 'bg-slate-50 border border-slate-100 hover:border-indigo-200 cursor-pointer'
+                      }`}
+                      onClick={() => !item.completed && router.push(item.link)}
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        item.completed ? 'bg-green-500 text-white' : 'bg-slate-200 text-slate-500'
+                      }`}>
+                        {item.completed ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : (
+                          <item.icon className="w-4 h-4" />
+                        )}
+                      </div>
+                      <span className={`text-sm ${item.completed ? 'text-green-700' : 'text-slate-700'}`}>
+                        {item.label}
+                      </span>
+                      {!item.completed && (
+                        <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                      )}
                     </div>
-                  </div>
-                )}
-                
-                {stats.pending > 0 && (
-                  <div className="flex items-start space-x-3">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
-                    <div>
-                      <p className="font-medium">Follow up on applications</p>
-                      <p className="text-sm text-muted-foreground">
-                        {stats.pending} pending responses
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
-                <div className="flex items-start space-x-3">
-                  <div className="mt-1 h-2 w-2 rounded-full bg-green-500" />
-                  <div>
-                    <p className="font-medium">Browse new opportunities</p>
-                    <p className="text-sm text-muted-foreground">
-                      Fresh jobs matched to your profile
-                    </p>
-                  </div>
+          {/* Tips Card */}
+          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0">
+                  <Rocket className="w-5 h-5 text-indigo-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-slate-900 mb-1">Pro Tip</h4>
+                  <p className="text-sm text-slate-600">
+                    {stats.total === 0 
+                      ? "Start by browsing our job recommendations tailored to your profile!"
+                      : stats.replied === 0 
+                        ? "Follow up on your applications after a week to show your interest."
+                        : "Keep your profile updated to get better job matches."
+                    }
+                  </p>
                 </div>
               </div>
             </CardContent>

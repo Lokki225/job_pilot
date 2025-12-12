@@ -135,3 +135,47 @@ export async function getJobApplicationStats() {
     return { data: null, error: "Unexpected error calculating stats" }
   }
 }
+
+export async function getRecentApplications(limit: number = 5) {
+  try {
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
+
+    const { data, error } = await adminSupabase
+      .from("job_applications")
+      .select("*")
+      .eq("userId", user.id)
+      .order("createdAt", { ascending: false })
+      .limit(limit)
+
+    if (error) return { data: null, error: error.message }
+
+    return { data, error: null }
+  } catch (err) {
+    return { data: null, error: "Unexpected error fetching recent applications" }
+  }
+}
+
+export async function getUpcomingInterviews() {
+  try {
+    const { user, error: authError } = await getCurrentUser()
+    if (!user || authError) return { data: null, error: authError || "Unauthorized" }
+
+    const today = new Date().toISOString()
+    
+    const { data, error } = await adminSupabase
+      .from("job_applications")
+      .select("*")
+      .eq("userId", user.id)
+      .not("interviewDate", "is", null)
+      .gte("interviewDate", today)
+      .order("interviewDate", { ascending: true })
+      .limit(5)
+
+    if (error) return { data: null, error: error.message }
+
+    return { data, error: null }
+  } catch (err) {
+    return { data: null, error: "Unexpected error fetching interviews" }
+  }
+}

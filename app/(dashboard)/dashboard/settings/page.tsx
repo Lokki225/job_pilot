@@ -1,30 +1,45 @@
 "use client"
 
-import React, { useState } from 'react';
-import { User, Bell, Shield, CreditCard, Briefcase, MapPin, DollarSign, Clock, FileText, Sparkles, Check, Upload, Mail, Lock, Globe, Trash2, Download, Eye, EyeOff, LogOut, ChevronRight, Save } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Bell, Shield, CreditCard, Briefcase, MapPin, DollarSign, Clock, FileText, Sparkles, Check, Upload, Mail, Lock, Globe, Trash2, Download, Eye, EyeOff, LogOut, ChevronRight, Save, Loader2 } from 'lucide-react';
 import { FormData } from '@/lib/constants';
-
+import { getProfile, upsertProfile } from '@/lib/actions/profile.action';
+import { getJobPreferences, upsertJobPreferences } from '@/lib/actions/job-preferences.action';
+import { getCurrentUser } from '@/lib/auth';
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase/client';
+import { createResume, deleteResume, listResumes } from '@/lib/actions/resume.action';
 
 export default function JobSettingsPage() {
+  const router = useRouter();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('profile');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState('');
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [currentResume, setCurrentResume] = useState<{ id: string; fileName: string; fileUrl: string } | null>(null);
+  const [isUploadingResume, setIsUploadingResume] = useState(false);
+  const [resumeUploadProgress, setResumeUploadProgress] = useState(0);
+
   const [formData, setFormData] = useState<FormData>({
     // Profile
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@email.com',
-    phone: '+1 (555) 123-4567',
-    location: 'Abidjan, Côte d\'Ivoire',
-    title: 'Senior Frontend Developer',
-    bio: 'Passionate developer with 5+ years of experience building modern web applications.',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    location: '',
+    title: '',
+    bio: '',
     
     // Job Preferences
-    jobTypes: ['Full-time', 'Remote'],
-    experienceLevel: 'Senior',
-    salaryMin: '100000',
-    salaryMax: '160000',
-    preferredLocations: ['Remote', 'Abidjan', 'San Francisco'],
-    skills: ['React', 'TypeScript', 'Node.js', 'Python', 'AWS'],
+    jobTypes: [],
+    experienceLevel: '',
+    salaryMin: '',
+    salaryMax: '',
+    preferredLocations: [],
+    skills: [],
     
     // Notifications
     emailNotifications: true,
@@ -42,25 +57,238 @@ export default function JobSettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  // Load user data on mount
+  useEffect(() => {
+    loadUserData();
+  }, []);
+
+  const loadUserData = async () => {
+    try {
+      setIsLoading(true);
+      const { user, error: userError } = await getCurrentUser();
+      if (!user || userError) {
+        router.push('/login');
+        return;
+      }
+
+      const { data: profile } = await getProfile(user.id);
+      const { data: preferences } = await getJobPreferences();
+
+      if (profile) {
+        setAvatarUrl(profile.avatarUrl || '');
+        setFormData(prev => ({
+          ...prev,
+          firstName: profile.firstName || '',
+          lastName: profile.lastName || '',
+          email: user.email || '',
+          phone: profile.phone || '',
+          location: profile.location || '',
+          title: profile.headline || '',
+          bio: profile.bio || '',
+        }));
+      }
+
+      if (preferences) {
+        setFormData(prev => ({
+          ...prev,
+          jobTypes: preferences.workTypes || [],
+          experienceLevel: preferences.experienceLevel || '',
+          salaryMin: preferences.minSalary?.toString() || '',
+          salaryMax: preferences.maxSalary?.toString() || '',
+          preferredLocations: preferences.locations || [],
+          skills: preferences.skills || [],
+        }));
+      }
+
+      // Load existing resume
+      const { data: resumes } = await listResumes();
+      if (resumes && resumes.length > 0) {
+        const latestResume = resumes[0];
+        setCurrentResume({
+          id: latestResume.id,
+          fileName: latestResume.fileName,
+          fileUrl: latestResume.fileUrl,
+        });
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      toast({ title: 'Error', description: 'Failed to load settings', variant: 'destructive' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    };
+  };
 
   const handleArrayToggle = (field: 'jobTypes' | 'preferredLocations' | 'skills', value: string) => {
     setFormData(prev => ({
-        ...prev,
-        [field]: prev[field].includes(value)
+      ...prev,
+      [field]: prev[field].includes(value)
         ? (prev[field] as string[]).filter(v => v !== value)
         : [...(prev[field] as string[]), value]
     }));
-    };
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    try {
+      const { error: profileError } = await upsertProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        location: formData.location,
+        headline: formData.title,
+        bio: formData.bio,
+      });
+      if (profileError) throw new Error(profileError);
+
+      const { error: prefsError } = await upsertJobPreferences({
+        workTypes: formData.jobTypes,
+        experienceLevel: formData.experienceLevel || null,
+        minSalary: formData.salaryMin ? parseInt(formData.salaryMin) : null,
+        maxSalary: formData.salaryMax ? parseInt(formData.salaryMax) : null,
+        locations: formData.preferredLocations,
+        skills: formData.skills,
+        jobTitles: [],
+        keywords: [],
+        remoteOptions: [],
+        industries: [],
+        companySize: [],
+        excludeCompanies: [],
+        currency: 'USD',
+        autoSearch: false,
+        notifyOnMatch: true,
+        searchFrequency: 'daily',
+      });
+      if (prefsError) throw new Error(prefsError);
+
+      setSaved(true);
+      toast({ title: 'Settings saved', description: 'Your changes have been saved successfully' });
+      setTimeout(() => setSaved(false), 3000);
+    } catch (error: any) {
+      console.error('Error saving settings:', error);
+      toast({ title: 'Error', description: error.message || 'Failed to save settings', variant: 'destructive' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleResumeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!validTypes.includes(file.type)) {
+        toast({ title: 'Invalid file type', description: 'Please upload a PDF or Word document', variant: 'destructive' });
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        toast({ title: 'File too large', description: 'Please upload a file smaller than 10MB', variant: 'destructive' });
+        return;
+      }
+      setResumeFile(file);
+    }
+  };
+
+  const handleResumeUpload = async () => {
+    if (!resumeFile) return;
+
+    setIsUploadingResume(true);
+    setResumeUploadProgress(10);
+
+    try {
+      const { user } = await getCurrentUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // Delete previous resume if exists
+      if (currentResume) {
+        await deleteResume(currentResume.id);
+        // Delete from storage
+        const oldFilePath = currentResume.fileUrl.split('/').slice(-2).join('/');
+        await supabase.storage.from('resumes-files').remove([oldFilePath]);
+      }
+
+      setResumeUploadProgress(30);
+
+      // Upload new file to storage
+      const fileExt = resumeFile.name.split('.').pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `user-${user.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('resumes-files')
+        .upload(filePath, resumeFile);
+
+      if (uploadError) throw new Error(uploadError.message);
+
+      setResumeUploadProgress(50);
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('resumes-files')
+        .getPublicUrl(filePath);
+
+      // Create resume record
+      const { data: resumeData, error: dbError } = await createResume({
+        fileUrl: publicUrl,
+        fileName: resumeFile.name,
+        fileType: resumeFile.type,
+        fileSize: resumeFile.size,
+      });
+
+      if (dbError) throw new Error(dbError);
+
+      setResumeUploadProgress(70);
+
+      // Parse resume and update profile
+      const response = await fetch('/api/parse-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeId: resumeData?.id })
+      });
+
+      const result = await response.json();
+
+      setResumeUploadProgress(100);
+
+      if (result.success) {
+        setCurrentResume({
+          id: resumeData?.id || '',
+          fileName: resumeFile.name,
+          fileUrl: publicUrl,
+        });
+        setResumeFile(null);
+        
+        // Reload user data to reflect parsed resume data
+        await loadUserData();
+        
+        toast({ title: 'Resume uploaded', description: 'Your resume has been uploaded and your profile has been updated' });
+      } else {
+        toast({ title: 'Resume uploaded', description: 'Resume uploaded but parsing failed. Your profile was not updated.', variant: 'destructive' });
+      }
+    } catch (error: any) {
+      console.error('Error uploading resume:', error);
+      toast({ title: 'Upload failed', description: error.message || 'Failed to upload resume', variant: 'destructive' });
+    } finally {
+      setIsUploadingResume(false);
+      setResumeUploadProgress(0);
+    }
+  };
+
+  const handleRemoveResume = async () => {
+    if (!currentResume) return;
+
+    try {
+      await deleteResume(currentResume.id);
+      const filePath = currentResume.fileUrl.split('/').slice(-2).join('/');
+      await supabase.storage.from('resumes-files').remove([filePath]);
+      setCurrentResume(null);
+      toast({ title: 'Resume removed', description: 'Your resume has been removed' });
+    } catch (error: any) {
+      console.error('Error removing resume:', error);
+      toast({ title: 'Error', description: 'Failed to remove resume', variant: 'destructive' });
+    }
   };
 
   const tabs = [
@@ -92,6 +320,17 @@ export default function JobSettingsPage() {
   const jobTypeOptions = ['Full-time', 'Part-time', 'Contract', 'Freelance', 'Remote'];
   const experienceLevels = ['Entry', 'Mid-level', 'Senior', 'Lead', 'Executive'];
   const availableSkills = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python', 'Java', 'AWS', 'Docker', 'SQL', 'GraphQL', 'Vue.js', 'Angular'];
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto mb-4" />
+          <p className="text-slate-600">Loading your settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -175,9 +414,13 @@ export default function JobSettingsPage() {
 
                   {/* Profile Photo */}
                   <div className="flex items-center gap-6 pb-6 border-b border-slate-200">
-                    <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-3xl text-white font-bold">
-                      JD
-                    </div>
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="Profile" className="w-24 h-24 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-3xl text-white font-bold">
+                        {formData.firstName?.[0]?.toUpperCase() || ''}{formData.lastName?.[0]?.toUpperCase() || ''}
+                      </div>
+                    )}
                     <div>
                       <button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center gap-2 mb-2">
                         <Upload className="w-4 h-4" />
@@ -270,11 +513,116 @@ export default function JobSettingsPage() {
                   {/* Resume */}
                   <div className="pt-6 border-t border-slate-200">
                     <label className="block text-sm font-medium text-slate-700 mb-3">Resume/CV</label>
-                    <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer">
-                      <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                      <p className="text-sm font-medium text-slate-700 mb-1">Click to upload or drag and drop</p>
-                      <p className="text-xs text-slate-500">PDF, DOC, DOCX (max 10MB)</p>
-                    </div>
+                    
+                    {/* Current Resume Display */}
+                    {currentResume && !resumeFile && (
+                      <div className="mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-slate-900">{currentResume.fileName}</p>
+                              <p className="text-xs text-slate-500">Current resume</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={currentResume.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 text-slate-500 hover:text-blue-600 transition-colors"
+                              title="View resume"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </a>
+                            <button
+                              onClick={handleRemoveResume}
+                              className="p-2 text-slate-500 hover:text-red-600 transition-colors"
+                              title="Remove resume"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Selected File Preview */}
+                    {resumeFile && (
+                      <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-slate-900">{resumeFile.name}</p>
+                              <p className="text-xs text-slate-500">{(resumeFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setResumeFile(null)}
+                            className="p-2 text-slate-500 hover:text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Upload Progress */}
+                    {isUploadingResume && (
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-slate-600">Uploading and parsing resume...</span>
+                          <span className="text-sm font-medium text-blue-600">{resumeUploadProgress}%</span>
+                        </div>
+                        <div className="w-full bg-slate-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${resumeUploadProgress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Upload Area */}
+                    {!isUploadingResume && (
+                      <>
+                        <label className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer block">
+                          <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={handleResumeFileChange}
+                            className="hidden"
+                          />
+                          <Upload className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                          <p className="text-sm font-medium text-slate-700 mb-1">
+                            {currentResume ? 'Click to upload a new resume' : 'Click to upload or drag and drop'}
+                          </p>
+                          <p className="text-xs text-slate-500">PDF, DOC, DOCX (max 10MB)</p>
+                        </label>
+
+                        {/* Upload Button */}
+                        {resumeFile && (
+                          <button
+                            onClick={handleResumeUpload}
+                            className="mt-4 w-full px-4 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                          >
+                            <Upload className="w-4 h-4" />
+                            Upload & Update Profile
+                          </button>
+                        )}
+                      </>
+                    )}
+
+                    {currentResume && (
+                      <p className="mt-3 text-xs text-slate-500">
+                        Uploading a new resume will replace your current one and update your profile with the new information.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}

@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/lib/supabase/client"
+import { createResume } from "@/lib/actions/resume.action"
 
 export default function CVUploadPage() {
   const router = useRouter()
@@ -104,12 +105,15 @@ export default function CVUploadPage() {
     setUploadProgress(10)
 
     try {
-      const fileExt = file.name.split('.').pop()
-      const userId = (await supabase.auth.getUser()).data.user?.id
-      const fileName = `${crypto.randomUUID()}.${fileExt}`
-      const filePath = `user-${userId}/${fileName}`
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("Not authenticated")
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${crypto.randomUUID()}.${fileExt}`
+      const filePath = `user-${user.id}/${fileName}`
+
+      // Upload file to storage
+      const { error: uploadError } = await supabase.storage
         .from('resumes-files')
         .upload(filePath, file)
 
@@ -117,24 +121,20 @@ export default function CVUploadPage() {
 
       setUploadProgress(50)
 
-      const { data: { publicUrl } } = await supabase.storage
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
         .from('resumes-files')
         .getPublicUrl(filePath)
 
-      const { data: resumeData, error: dbError } = await supabase
-        .from('resumes')
-        .insert([{
-          userId,
-          fileUrl: publicUrl,
-          fileName: file.name,
-          fileType: file.type,
-          fileSize: file.size,
-          isActive: true
-        }])
-        .select()
-        .single()
+      // Use createResume action to save to database
+      const { data: resumeData, error: dbError } = await createResume({
+        fileUrl: publicUrl,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+      })
 
-      if (dbError) throw dbError
+      if (dbError) throw new Error(dbError)
 
       // 🔥 Step 1 — Uploaded
       setProcessStep(1)
@@ -142,12 +142,10 @@ export default function CVUploadPage() {
       setIsUploaded(true)
 
       // 🔥 Begin parsing
-      setProcessStep(1)
-
       const response = await fetch("/api/parse-resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resumeId: resumeData.id })
+        body: JSON.stringify({ resumeId: resumeData?.id })
       })
 
       const result = await response.json()

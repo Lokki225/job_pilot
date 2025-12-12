@@ -1,8 +1,8 @@
 // app/api/parse-resume/route.ts
 import { adminSupabase } from '@/lib/supabase/server'
-import { calculateCompletionScore, transformResumeData } from '@/lib/utils'
+import { calculateCompletionScore } from '@/lib/utils'
+import { aiService } from '@/lib/services/ai'
 import { NextResponse } from 'next/server'
-import { string } from 'zod'
 
 export async function POST(request: Request) {
   try {
@@ -52,25 +52,42 @@ export async function POST(request: Request) {
     console.log('[parse-resume] Using fileUrl for Affinda:', finalUrl)
 
     // 3️⃣ Parse the resume via Affinda
-    let parsedData: any
+    let affindaData: any
     try {
-      parsedData = await parseResume(finalUrl, resume.fileName)
-      console.log('[parse-resume] Parsed data:', parsedData)
+      affindaData = await parseResumeWithAffinda(finalUrl, resume.fileName)
+      console.log('[parse-resume] Affinda raw data received')
     } catch (err: any) {
-      console.error('[parse-resume] Error parsing resume:', err)
+      console.error('[parse-resume] Error parsing resume with Affinda:', err)
       return NextResponse.json(
         { 
           error: 'Failed to parse resume',
-          details: JSON.parse(err.message)
+          details: err.message
         },
         { status: 500 }
       )
     }
 
-    // 4️⃣ Update resume record with parsed data
+    // 4️⃣ Use AI to transform Affinda data into structured profile data
+    let parsedData: any
+    try {
+      console.log('[parse-resume] Using AI to parse Affinda data...')
+      parsedData = await aiService.parseResumeData(affindaData)
+      console.log('[parse-resume] AI parsed data:', parsedData)
+    } catch (aiError: any) {
+      console.error('[parse-resume] AI parsing failed, using fallback:', aiError)
+      // The AI service has a built-in fallback, so this should rarely happen
+      parsedData = await aiService.parseResumeData(affindaData)
+    }
+
+    // 5️⃣ Update resume record with both raw and parsed data
     const { error: updateError } = await adminSupabase
       .from('resumes')
-      .update({ parsedData })
+      .update({ 
+        parsedData: {
+          raw: affindaData,
+          structured: parsedData
+        }
+      })
       .eq('id', resumeId)
 
     if (updateError) {
@@ -82,11 +99,10 @@ export async function POST(request: Request) {
     }
     
     // ----------------------------
-    // 5️⃣ Update user profile
+    // 6️⃣ Update user profile with AI-parsed data
     // ----------------------------
     try {
-      const parsedResume = transformResumeData(parsedData);
-      await updateUserProfile(resume.userId, parsedResume, finalUrl)
+      await updateUserProfileWithAIParsedData(resume.userId, parsedData, finalUrl)
     } catch (profileError: any) {
       console.error('Error updating user profile:', profileError)
       throw new Error('Failed to update user profile: ' + profileError.message)
@@ -103,7 +119,7 @@ export async function POST(request: Request) {
 }
 
 // Helper function to parse resume via Affinda
-async function parseResume(fileUrl: string, fileName: string) {
+async function parseResumeWithAffinda(fileUrl: string, fileName: string) {
   try {
     console.log('[parse-resume] Fetching file from URL:', fileUrl);
     
@@ -151,11 +167,13 @@ async function parseResume(fileUrl: string, fileName: string) {
 }
 
 // ----------------------------
-// Helper: Update user profile and skills
+// Helper: Update user profile with AI-parsed data
 // ----------------------------
-// Update user profile and related data
-async function updateUserProfile(userId: string, parsedData: any, resumeUrl: string) {
+async function updateUserProfileWithAIParsedData(userId: string, parsedData: any, resumeUrl: string) {
   try {
+    // AI-parsed data has structure: { profile: {...}, skills: [...], experiences: [...], etc. }
+    const profileData = parsedData.profile || {}
+    
     // 1. Try to get the existing profile or create a new one if it doesn't exist
     let profileId: string;
     
@@ -172,16 +190,19 @@ async function updateUserProfile(userId: string, parsedData: any, resumeUrl: str
         .from('profiles')
         .insert({
           userId: userId,
-          firstName: parsedData.firstName || null,
-          lastName: parsedData.lastName || null,
-          phone: parsedData.phone || null,
-          location: parsedData.location || null,
-          headline: parsedData.headline || null,
-          bio: parsedData.summary || null,
+          firstName: profileData.firstName || null,
+          lastName: profileData.lastName || null,
+          phone: profileData.phone || null,
+          location: profileData.location || null,
+          headline: profileData.headline || null,
+          bio: profileData.bio || null,
+          website: profileData.website || null,
+          linkedinUrl: profileData.linkedinUrl || null,
+          githubUrl: profileData.githubUrl || null,
           completionScore: 0,
           isComplete: false,
           resumeUrl: resumeUrl,
-          languages: parsedData.languages || [],
+          languages: profileData.languages || [],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
         })
@@ -199,14 +220,21 @@ async function updateUserProfile(userId: string, parsedData: any, resumeUrl: str
 
       // 2. Update core profile fields for existing profile
       const profileUpdates: any = {
-        firstName: parsedData.firstName || null,
-        lastName: parsedData.lastName || null,
-        phone: parsedData.phone || null,
-        location: parsedData.location || null,
-        headline: parsedData.headline || null,
-        bio: parsedData.summary || null,
+        resumeUrl: resumeUrl,
         updatedAt: new Date().toISOString()
       };
+      
+      // Only update fields that have values from AI parsing
+      if (profileData.firstName) profileUpdates.firstName = profileData.firstName;
+      if (profileData.lastName) profileUpdates.lastName = profileData.lastName;
+      if (profileData.phone) profileUpdates.phone = profileData.phone;
+      if (profileData.location) profileUpdates.location = profileData.location;
+      if (profileData.headline) profileUpdates.headline = profileData.headline;
+      if (profileData.bio) profileUpdates.bio = profileData.bio;
+      if (profileData.website) profileUpdates.website = profileData.website;
+      if (profileData.linkedinUrl) profileUpdates.linkedinUrl = profileData.linkedinUrl;
+      if (profileData.githubUrl) profileUpdates.githubUrl = profileData.githubUrl;
+      if (profileData.languages?.length) profileUpdates.languages = profileData.languages;
 
       const { error: updateProfileError } = await adminSupabase
         .from('profiles')
@@ -216,11 +244,13 @@ async function updateUserProfile(userId: string, parsedData: any, resumeUrl: str
       if (updateProfileError) throw updateProfileError;
     }
 
-    // 3. Handle skills
+    // 3. Handle skills (AI-parsed format: { name, level, category })
     if (parsedData.skills?.length) {
-      const skillsToInsert = parsedData.skills.map((skill: string) => ({
+      const skillsToInsert = parsedData.skills.map((skill: any) => ({
         profileId,
-        name: skill,
+        name: skill.name || skill,
+        level: skill.level || 3,
+        category: skill.category || 'General',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       }))

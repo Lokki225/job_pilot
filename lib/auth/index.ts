@@ -157,10 +157,13 @@ export const signInWithGoogle = async () => {
 
 // Add this function to handle the OAuth callback
 export const handleOAuthCallback = async () => {
+  // Import adminSupabase for database operations (bypasses RLS)
+  const { adminSupabase } = await import('@/lib/supabase/server')
+  
   try {
     const supabase = await createAuthClient()
     
-    // Get the authenticated user
+    // Get the authenticated user from Supabase Auth
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {
@@ -170,72 +173,57 @@ export const handleOAuthCallback = async () => {
         error: userError?.message || 'No authenticated user found' 
       }
     }
-    console.log("Processing OAuth callback for user:", user.id);
+    console.log("Processing OAuth callback for user:", user.id)
+    
+    // Extract user metadata from Google OAuth
+    const userMetadata = user.user_metadata || {}
+    const fullName = userMetadata.full_name || 
+                    userMetadata.name || 
+                    (user.email?.split('@')[0] || 'User')
+    
+    // Split full name into first and last name
+    const nameParts = fullName.trim().split(/\s+/)
+    const firstName = nameParts[0] || ''
+    const lastName = nameParts.slice(1).join(' ') || ''
+    const avatarUrl = userMetadata.avatar_url || userMetadata.picture || ''
     
     try {
-      // Check if user exists in your profiles table
-      const { data: profile, error: profileError } = await supabase
+      // Use admin client for database operations to bypass RLS
+      // Step 1: Create user in users table (upsert to handle race conditions)
+      const { error: userInsertError } = await adminSupabase
+        .from('users')
+        .upsert({
+          id: user.id,
+          email: user.email!,
+          role: 'USER',
+        }, { onConflict: 'id' })
+
+      if (userInsertError) {
+        console.error('Error creating user:', userInsertError)
+        throw new Error('Failed to create user')
+      }
+      console.log('Created/updated user in users table:', user.id)
+
+      // Step 2: Create profile (upsert to handle race conditions)
+      const { error: profileInsertError } = await adminSupabase
         .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
+        .upsert({
+          userId: user.id,
+          firstName: firstName,
+          lastName: lastName,
+          avatarUrl: avatarUrl,
+        }, { onConflict: 'userId' })
 
-      // If profile doesn't exist or there was an error (other than not found)
-      if (profileError && profileError.code !== 'PGRST116') {
-        console.error('Error checking for existing profile:', profileError)
-        throw new Error('Failed to check user profile')
+      if (profileInsertError) {
+        console.error('Error creating profile:', profileInsertError)
+        throw new Error('Failed to create profile')
       }
+      console.log('Created/updated profile for user:', user.id)
 
-      // If no profile exists, create one
-      if (!profile) {
-        // Get the latest user data with metadata
-        const { data: { user: userWithMetadata }, error: userMetadataError } = await supabase.auth.admin.getUserById(user.id)
-        
-        if (userMetadataError) {
-          console.error('Error getting user metadata:', userMetadataError)
-          throw new Error('Failed to get user metadata')
-        }
-        
-        const userData = userWithMetadata || user
-        const userMetadata = userData.user_metadata || {}
-        
-        const fullName = userMetadata.full_name || 
-                        userMetadata.name || 
-                        (userData.email?.split('@')[0] || 'User')
-        
-        // Split full name into first and last name
-        const nameParts = fullName.trim().split(/\s+/)
-        const firstName = nameParts[0] || ''
-        const lastName = nameParts.slice(1).join(' ') || ''
-        
-        const { error: insertError } = await supabase
-          .from('profiles')
-          .insert({
-            id: user.id,
-            email: userData.email || '',
-            firstName: firstName,
-            lastName: lastName,
-            avatarUrl: userMetadata.avatar_url || userMetadata.picture || '',
-            updatedAt: new Date().toISOString()
-          })
-          .select()
-          .single()
-
-        if (insertError) {
-          console.error('Error creating profile:', insertError)
-          throw new Error('Failed to create user profile')
-        }
-        
-        console.log('Successfully created profile for user:', user.id)
-        return { success: true }
-      }
-      
-      // If we get here, profile already exists
-      console.log('Profile already exists for user:', user.id)
-      return { success: true }
+      return { success: true, isNewUser: true }
       
     } catch (error) {
-      console.error('Error in profile handling:', error)
+      console.error('Error in user/profile handling:', error)
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error during profile handling'
