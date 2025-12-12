@@ -29,11 +29,13 @@ export type AggregateJobSearchPreference = {
 export type JobSearchPreferenceAvgAggregateOutputType = {
   minSalary: number | null
   maxSalary: number | null
+  yearsExperience: number | null
 }
 
 export type JobSearchPreferenceSumAggregateOutputType = {
   minSalary: number | null
   maxSalary: number | null
+  yearsExperience: number | null
 }
 
 export type JobSearchPreferenceMinAggregateOutputType = {
@@ -41,7 +43,12 @@ export type JobSearchPreferenceMinAggregateOutputType = {
   userId: string | null
   minSalary: number | null
   maxSalary: number | null
+  currency: string | null
   experienceLevel: string | null
+  yearsExperience: number | null
+  autoSearch: boolean | null
+  notifyOnMatch: boolean | null
+  searchFrequency: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,7 +58,12 @@ export type JobSearchPreferenceMaxAggregateOutputType = {
   userId: string | null
   minSalary: number | null
   maxSalary: number | null
+  currency: string | null
   experienceLevel: string | null
+  yearsExperience: number | null
+  autoSearch: boolean | null
+  notifyOnMatch: boolean | null
+  searchFrequency: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,13 +72,22 @@ export type JobSearchPreferenceCountAggregateOutputType = {
   id: number
   userId: number
   jobTitles: number
+  keywords: number
   locations: number
   minSalary: number
   maxSalary: number
+  currency: number
   experienceLevel: number
+  yearsExperience: number
   workTypes: number
   remoteOptions: number
   skills: number
+  industries: number
+  companySize: number
+  excludeCompanies: number
+  autoSearch: number
+  notifyOnMatch: number
+  searchFrequency: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -76,11 +97,13 @@ export type JobSearchPreferenceCountAggregateOutputType = {
 export type JobSearchPreferenceAvgAggregateInputType = {
   minSalary?: true
   maxSalary?: true
+  yearsExperience?: true
 }
 
 export type JobSearchPreferenceSumAggregateInputType = {
   minSalary?: true
   maxSalary?: true
+  yearsExperience?: true
 }
 
 export type JobSearchPreferenceMinAggregateInputType = {
@@ -88,7 +111,12 @@ export type JobSearchPreferenceMinAggregateInputType = {
   userId?: true
   minSalary?: true
   maxSalary?: true
+  currency?: true
   experienceLevel?: true
+  yearsExperience?: true
+  autoSearch?: true
+  notifyOnMatch?: true
+  searchFrequency?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -98,7 +126,12 @@ export type JobSearchPreferenceMaxAggregateInputType = {
   userId?: true
   minSalary?: true
   maxSalary?: true
+  currency?: true
   experienceLevel?: true
+  yearsExperience?: true
+  autoSearch?: true
+  notifyOnMatch?: true
+  searchFrequency?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -107,13 +140,22 @@ export type JobSearchPreferenceCountAggregateInputType = {
   id?: true
   userId?: true
   jobTitles?: true
+  keywords?: true
   locations?: true
   minSalary?: true
   maxSalary?: true
+  currency?: true
   experienceLevel?: true
+  yearsExperience?: true
   workTypes?: true
   remoteOptions?: true
   skills?: true
+  industries?: true
+  companySize?: true
+  excludeCompanies?: true
+  autoSearch?: true
+  notifyOnMatch?: true
+  searchFrequency?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -209,13 +251,22 @@ export type JobSearchPreferenceGroupByOutputType = {
   id: string
   userId: string
   jobTitles: string[]
+  keywords: string[]
   locations: string[]
   minSalary: number | null
   maxSalary: number | null
+  currency: string | null
   experienceLevel: string | null
+  yearsExperience: number | null
   workTypes: string[]
   remoteOptions: string[]
   skills: string[]
+  industries: string[]
+  companySize: string[]
+  excludeCompanies: string[]
+  autoSearch: boolean
+  notifyOnMatch: boolean
+  searchFrequency: string | null
   createdAt: Date
   updatedAt: Date
   _count: JobSearchPreferenceCountAggregateOutputType | null
@@ -247,13 +298,22 @@ export type JobSearchPreferenceWhereInput = {
   id?: Prisma.StringFilter<"JobSearchPreference"> | string
   userId?: Prisma.UuidFilter<"JobSearchPreference"> | string
   jobTitles?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  keywords?: Prisma.StringNullableListFilter<"JobSearchPreference">
   locations?: Prisma.StringNullableListFilter<"JobSearchPreference">
   minSalary?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
   maxSalary?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
+  currency?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
   experienceLevel?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
+  yearsExperience?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
   workTypes?: Prisma.StringNullableListFilter<"JobSearchPreference">
   remoteOptions?: Prisma.StringNullableListFilter<"JobSearchPreference">
   skills?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  industries?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  companySize?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  excludeCompanies?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  autoSearch?: Prisma.BoolFilter<"JobSearchPreference"> | boolean
+  notifyOnMatch?: Prisma.BoolFilter<"JobSearchPreference"> | boolean
+  searchFrequency?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
   createdAt?: Prisma.DateTimeFilter<"JobSearchPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSearchPreference"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -263,13 +323,22 @@ export type JobSearchPreferenceOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   jobTitles?: Prisma.SortOrder
+  keywords?: Prisma.SortOrder
   locations?: Prisma.SortOrder
   minSalary?: Prisma.SortOrderInput | Prisma.SortOrder
   maxSalary?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
   experienceLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrderInput | Prisma.SortOrder
   workTypes?: Prisma.SortOrder
   remoteOptions?: Prisma.SortOrder
   skills?: Prisma.SortOrder
+  industries?: Prisma.SortOrder
+  companySize?: Prisma.SortOrder
+  excludeCompanies?: Prisma.SortOrder
+  autoSearch?: Prisma.SortOrder
+  notifyOnMatch?: Prisma.SortOrder
+  searchFrequency?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -282,13 +351,22 @@ export type JobSearchPreferenceWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.JobSearchPreferenceWhereInput[]
   NOT?: Prisma.JobSearchPreferenceWhereInput | Prisma.JobSearchPreferenceWhereInput[]
   jobTitles?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  keywords?: Prisma.StringNullableListFilter<"JobSearchPreference">
   locations?: Prisma.StringNullableListFilter<"JobSearchPreference">
   minSalary?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
   maxSalary?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
+  currency?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
   experienceLevel?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
+  yearsExperience?: Prisma.IntNullableFilter<"JobSearchPreference"> | number | null
   workTypes?: Prisma.StringNullableListFilter<"JobSearchPreference">
   remoteOptions?: Prisma.StringNullableListFilter<"JobSearchPreference">
   skills?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  industries?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  companySize?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  excludeCompanies?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  autoSearch?: Prisma.BoolFilter<"JobSearchPreference"> | boolean
+  notifyOnMatch?: Prisma.BoolFilter<"JobSearchPreference"> | boolean
+  searchFrequency?: Prisma.StringNullableFilter<"JobSearchPreference"> | string | null
   createdAt?: Prisma.DateTimeFilter<"JobSearchPreference"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobSearchPreference"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -298,13 +376,22 @@ export type JobSearchPreferenceOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   jobTitles?: Prisma.SortOrder
+  keywords?: Prisma.SortOrder
   locations?: Prisma.SortOrder
   minSalary?: Prisma.SortOrderInput | Prisma.SortOrder
   maxSalary?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrderInput | Prisma.SortOrder
   experienceLevel?: Prisma.SortOrderInput | Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrderInput | Prisma.SortOrder
   workTypes?: Prisma.SortOrder
   remoteOptions?: Prisma.SortOrder
   skills?: Prisma.SortOrder
+  industries?: Prisma.SortOrder
+  companySize?: Prisma.SortOrder
+  excludeCompanies?: Prisma.SortOrder
+  autoSearch?: Prisma.SortOrder
+  notifyOnMatch?: Prisma.SortOrder
+  searchFrequency?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.JobSearchPreferenceCountOrderByAggregateInput
@@ -321,13 +408,22 @@ export type JobSearchPreferenceScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"JobSearchPreference"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"JobSearchPreference"> | string
   jobTitles?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  keywords?: Prisma.StringNullableListFilter<"JobSearchPreference">
   locations?: Prisma.StringNullableListFilter<"JobSearchPreference">
   minSalary?: Prisma.IntNullableWithAggregatesFilter<"JobSearchPreference"> | number | null
   maxSalary?: Prisma.IntNullableWithAggregatesFilter<"JobSearchPreference"> | number | null
+  currency?: Prisma.StringNullableWithAggregatesFilter<"JobSearchPreference"> | string | null
   experienceLevel?: Prisma.StringNullableWithAggregatesFilter<"JobSearchPreference"> | string | null
+  yearsExperience?: Prisma.IntNullableWithAggregatesFilter<"JobSearchPreference"> | number | null
   workTypes?: Prisma.StringNullableListFilter<"JobSearchPreference">
   remoteOptions?: Prisma.StringNullableListFilter<"JobSearchPreference">
   skills?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  industries?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  companySize?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  excludeCompanies?: Prisma.StringNullableListFilter<"JobSearchPreference">
+  autoSearch?: Prisma.BoolWithAggregatesFilter<"JobSearchPreference"> | boolean
+  notifyOnMatch?: Prisma.BoolWithAggregatesFilter<"JobSearchPreference"> | boolean
+  searchFrequency?: Prisma.StringNullableWithAggregatesFilter<"JobSearchPreference"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JobSearchPreference"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"JobSearchPreference"> | Date | string
 }
@@ -335,13 +431,22 @@ export type JobSearchPreferenceScalarWhereWithAggregatesInput = {
 export type JobSearchPreferenceCreateInput = {
   id?: string
   jobTitles?: Prisma.JobSearchPreferenceCreatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceCreatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceCreatelocationsInput | string[]
   minSalary?: number | null
   maxSalary?: number | null
+  currency?: string | null
   experienceLevel?: string | null
+  yearsExperience?: number | null
   workTypes?: Prisma.JobSearchPreferenceCreateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceCreateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceCreateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceCreateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceCreatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceCreateexcludeCompaniesInput | string[]
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutPreferencesInput
@@ -351,13 +456,22 @@ export type JobSearchPreferenceUncheckedCreateInput = {
   id?: string
   userId: string
   jobTitles?: Prisma.JobSearchPreferenceCreatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceCreatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceCreatelocationsInput | string[]
   minSalary?: number | null
   maxSalary?: number | null
+  currency?: string | null
   experienceLevel?: string | null
+  yearsExperience?: number | null
   workTypes?: Prisma.JobSearchPreferenceCreateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceCreateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceCreateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceCreateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceCreatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceCreateexcludeCompaniesInput | string[]
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -365,13 +479,22 @@ export type JobSearchPreferenceUncheckedCreateInput = {
 export type JobSearchPreferenceUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutPreferencesNestedInput
@@ -381,13 +504,22 @@ export type JobSearchPreferenceUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,13 +528,22 @@ export type JobSearchPreferenceCreateManyInput = {
   id?: string
   userId: string
   jobTitles?: Prisma.JobSearchPreferenceCreatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceCreatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceCreatelocationsInput | string[]
   minSalary?: number | null
   maxSalary?: number | null
+  currency?: string | null
   experienceLevel?: string | null
+  yearsExperience?: number | null
   workTypes?: Prisma.JobSearchPreferenceCreateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceCreateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceCreateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceCreateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceCreatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceCreateexcludeCompaniesInput | string[]
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -410,13 +551,22 @@ export type JobSearchPreferenceCreateManyInput = {
 export type JobSearchPreferenceUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,13 +575,22 @@ export type JobSearchPreferenceUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -445,13 +604,22 @@ export type JobSearchPreferenceCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   jobTitles?: Prisma.SortOrder
+  keywords?: Prisma.SortOrder
   locations?: Prisma.SortOrder
   minSalary?: Prisma.SortOrder
   maxSalary?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrder
   workTypes?: Prisma.SortOrder
   remoteOptions?: Prisma.SortOrder
   skills?: Prisma.SortOrder
+  industries?: Prisma.SortOrder
+  companySize?: Prisma.SortOrder
+  excludeCompanies?: Prisma.SortOrder
+  autoSearch?: Prisma.SortOrder
+  notifyOnMatch?: Prisma.SortOrder
+  searchFrequency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -459,6 +627,7 @@ export type JobSearchPreferenceCountOrderByAggregateInput = {
 export type JobSearchPreferenceAvgOrderByAggregateInput = {
   minSalary?: Prisma.SortOrder
   maxSalary?: Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrder
 }
 
 export type JobSearchPreferenceMaxOrderByAggregateInput = {
@@ -466,7 +635,12 @@ export type JobSearchPreferenceMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   minSalary?: Prisma.SortOrder
   maxSalary?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrder
+  autoSearch?: Prisma.SortOrder
+  notifyOnMatch?: Prisma.SortOrder
+  searchFrequency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -476,7 +650,12 @@ export type JobSearchPreferenceMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   minSalary?: Prisma.SortOrder
   maxSalary?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
   experienceLevel?: Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrder
+  autoSearch?: Prisma.SortOrder
+  notifyOnMatch?: Prisma.SortOrder
+  searchFrequency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -484,6 +663,7 @@ export type JobSearchPreferenceMinOrderByAggregateInput = {
 export type JobSearchPreferenceSumOrderByAggregateInput = {
   minSalary?: Prisma.SortOrder
   maxSalary?: Prisma.SortOrder
+  yearsExperience?: Prisma.SortOrder
 }
 
 export type JobSearchPreferenceCreateNestedOneWithoutUserInput = {
@@ -522,6 +702,10 @@ export type JobSearchPreferenceCreatejobTitlesInput = {
   set: string[]
 }
 
+export type JobSearchPreferenceCreatekeywordsInput = {
+  set: string[]
+}
+
 export type JobSearchPreferenceCreatelocationsInput = {
   set: string[]
 }
@@ -538,7 +722,24 @@ export type JobSearchPreferenceCreateskillsInput = {
   set: string[]
 }
 
+export type JobSearchPreferenceCreateindustriesInput = {
+  set: string[]
+}
+
+export type JobSearchPreferenceCreatecompanySizeInput = {
+  set: string[]
+}
+
+export type JobSearchPreferenceCreateexcludeCompaniesInput = {
+  set: string[]
+}
+
 export type JobSearchPreferenceUpdatejobTitlesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type JobSearchPreferenceUpdatekeywordsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -563,16 +764,40 @@ export type JobSearchPreferenceUpdateskillsInput = {
   push?: string | string[]
 }
 
+export type JobSearchPreferenceUpdateindustriesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type JobSearchPreferenceUpdatecompanySizeInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type JobSearchPreferenceUpdateexcludeCompaniesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type JobSearchPreferenceCreateWithoutUserInput = {
   id?: string
   jobTitles?: Prisma.JobSearchPreferenceCreatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceCreatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceCreatelocationsInput | string[]
   minSalary?: number | null
   maxSalary?: number | null
+  currency?: string | null
   experienceLevel?: string | null
+  yearsExperience?: number | null
   workTypes?: Prisma.JobSearchPreferenceCreateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceCreateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceCreateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceCreateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceCreatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceCreateexcludeCompaniesInput | string[]
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -580,13 +805,22 @@ export type JobSearchPreferenceCreateWithoutUserInput = {
 export type JobSearchPreferenceUncheckedCreateWithoutUserInput = {
   id?: string
   jobTitles?: Prisma.JobSearchPreferenceCreatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceCreatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceCreatelocationsInput | string[]
   minSalary?: number | null
   maxSalary?: number | null
+  currency?: string | null
   experienceLevel?: string | null
+  yearsExperience?: number | null
   workTypes?: Prisma.JobSearchPreferenceCreateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceCreateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceCreateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceCreateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceCreatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceCreateexcludeCompaniesInput | string[]
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -610,13 +844,22 @@ export type JobSearchPreferenceUpdateToOneWithWhereWithoutUserInput = {
 export type JobSearchPreferenceUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -624,13 +867,22 @@ export type JobSearchPreferenceUpdateWithoutUserInput = {
 export type JobSearchPreferenceUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitles?: Prisma.JobSearchPreferenceUpdatejobTitlesInput | string[]
+  keywords?: Prisma.JobSearchPreferenceUpdatekeywordsInput | string[]
   locations?: Prisma.JobSearchPreferenceUpdatelocationsInput | string[]
   minSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxSalary?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   experienceLevel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  yearsExperience?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   workTypes?: Prisma.JobSearchPreferenceUpdateworkTypesInput | string[]
   remoteOptions?: Prisma.JobSearchPreferenceUpdateremoteOptionsInput | string[]
   skills?: Prisma.JobSearchPreferenceUpdateskillsInput | string[]
+  industries?: Prisma.JobSearchPreferenceUpdateindustriesInput | string[]
+  companySize?: Prisma.JobSearchPreferenceUpdatecompanySizeInput | string[]
+  excludeCompanies?: Prisma.JobSearchPreferenceUpdateexcludeCompaniesInput | string[]
+  autoSearch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifyOnMatch?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  searchFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -641,13 +893,22 @@ export type JobSearchPreferenceSelect<ExtArgs extends runtime.Types.Extensions.I
   id?: boolean
   userId?: boolean
   jobTitles?: boolean
+  keywords?: boolean
   locations?: boolean
   minSalary?: boolean
   maxSalary?: boolean
+  currency?: boolean
   experienceLevel?: boolean
+  yearsExperience?: boolean
   workTypes?: boolean
   remoteOptions?: boolean
   skills?: boolean
+  industries?: boolean
+  companySize?: boolean
+  excludeCompanies?: boolean
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -657,13 +918,22 @@ export type JobSearchPreferenceSelectCreateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   userId?: boolean
   jobTitles?: boolean
+  keywords?: boolean
   locations?: boolean
   minSalary?: boolean
   maxSalary?: boolean
+  currency?: boolean
   experienceLevel?: boolean
+  yearsExperience?: boolean
   workTypes?: boolean
   remoteOptions?: boolean
   skills?: boolean
+  industries?: boolean
+  companySize?: boolean
+  excludeCompanies?: boolean
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -673,13 +943,22 @@ export type JobSearchPreferenceSelectUpdateManyAndReturn<ExtArgs extends runtime
   id?: boolean
   userId?: boolean
   jobTitles?: boolean
+  keywords?: boolean
   locations?: boolean
   minSalary?: boolean
   maxSalary?: boolean
+  currency?: boolean
   experienceLevel?: boolean
+  yearsExperience?: boolean
   workTypes?: boolean
   remoteOptions?: boolean
   skills?: boolean
+  industries?: boolean
+  companySize?: boolean
+  excludeCompanies?: boolean
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -689,18 +968,27 @@ export type JobSearchPreferenceSelectScalar = {
   id?: boolean
   userId?: boolean
   jobTitles?: boolean
+  keywords?: boolean
   locations?: boolean
   minSalary?: boolean
   maxSalary?: boolean
+  currency?: boolean
   experienceLevel?: boolean
+  yearsExperience?: boolean
   workTypes?: boolean
   remoteOptions?: boolean
   skills?: boolean
+  industries?: boolean
+  companySize?: boolean
+  excludeCompanies?: boolean
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type JobSearchPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "jobTitles" | "locations" | "minSalary" | "maxSalary" | "experienceLevel" | "workTypes" | "remoteOptions" | "skills" | "createdAt" | "updatedAt", ExtArgs["result"]["jobSearchPreference"]>
+export type JobSearchPreferenceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "jobTitles" | "keywords" | "locations" | "minSalary" | "maxSalary" | "currency" | "experienceLevel" | "yearsExperience" | "workTypes" | "remoteOptions" | "skills" | "industries" | "companySize" | "excludeCompanies" | "autoSearch" | "notifyOnMatch" | "searchFrequency" | "createdAt" | "updatedAt", ExtArgs["result"]["jobSearchPreference"]>
 export type JobSearchPreferenceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -720,13 +1008,22 @@ export type $JobSearchPreferencePayload<ExtArgs extends runtime.Types.Extensions
     id: string
     userId: string
     jobTitles: string[]
+    keywords: string[]
     locations: string[]
     minSalary: number | null
     maxSalary: number | null
+    currency: string | null
     experienceLevel: string | null
+    yearsExperience: number | null
     workTypes: string[]
     remoteOptions: string[]
     skills: string[]
+    industries: string[]
+    companySize: string[]
+    excludeCompanies: string[]
+    autoSearch: boolean
+    notifyOnMatch: boolean
+    searchFrequency: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["jobSearchPreference"]>
@@ -1156,13 +1453,22 @@ export interface JobSearchPreferenceFieldRefs {
   readonly id: Prisma.FieldRef<"JobSearchPreference", 'String'>
   readonly userId: Prisma.FieldRef<"JobSearchPreference", 'String'>
   readonly jobTitles: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
+  readonly keywords: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
   readonly locations: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
   readonly minSalary: Prisma.FieldRef<"JobSearchPreference", 'Int'>
   readonly maxSalary: Prisma.FieldRef<"JobSearchPreference", 'Int'>
+  readonly currency: Prisma.FieldRef<"JobSearchPreference", 'String'>
   readonly experienceLevel: Prisma.FieldRef<"JobSearchPreference", 'String'>
+  readonly yearsExperience: Prisma.FieldRef<"JobSearchPreference", 'Int'>
   readonly workTypes: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
   readonly remoteOptions: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
   readonly skills: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
+  readonly industries: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
+  readonly companySize: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
+  readonly excludeCompanies: Prisma.FieldRef<"JobSearchPreference", 'String[]'>
+  readonly autoSearch: Prisma.FieldRef<"JobSearchPreference", 'Boolean'>
+  readonly notifyOnMatch: Prisma.FieldRef<"JobSearchPreference", 'Boolean'>
+  readonly searchFrequency: Prisma.FieldRef<"JobSearchPreference", 'String'>
   readonly createdAt: Prisma.FieldRef<"JobSearchPreference", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"JobSearchPreference", 'DateTime'>
 }

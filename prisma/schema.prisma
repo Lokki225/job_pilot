@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // URL handled in prisma.config.ts (Supabase)
+  // URLs handled in prisma.config.ts
 }
 
 // ===========================================================
@@ -26,16 +26,24 @@ enum JobPlatform {
   FIVERR
   UPWORK
   INDEED
+  GLASSDOOR
+  ADZUNA
+  JSEARCH
+  THE_MUSE
+  COMPANY_WEBSITE
+  REFERRAL
+  PASTED        // Manually pasted job
   OTHER
 }
 
 enum ApplicationStatus {
-  PENDING
-  SENT
-  VIEWED
-  REPLIED
-  REJECTED
-  ACCEPTED
+  WISHLIST      // Saved/bookmarked jobs
+  APPLIED       // Application submitted
+  INTERVIEWING  // In interview process
+  OFFERED       // Received job offer
+  REJECTED      // Application rejected
+  ACCEPTED      // Offer accepted
+  WITHDRAWN     // User withdrew application
 }
 
 // ===========================================================
@@ -232,23 +240,56 @@ model Project {
 // JOB APPLYING MODULE
 // ===========================================================
 model JobApplication {
-  id          String           @id @default(cuid())
-  userId      String           @db.Uuid
+  id              String            @id @default(cuid())
+  userId          String            @db.Uuid
 
-  jobTitle    String
-  company     String
-  status      ApplicationStatus @default(PENDING)
+  // Core Job Details
+  jobTitle        String
+  company         String
+  location        String?
+  jobType         String?           // Full-time, Part-time, Contract, Remote, Hybrid
+  salary          String?           // Salary range as string (e.g., "$80k-$120k")
+  description     String?           @db.Text
+  requirements    String?           @db.Text
+  jobPostUrl      String?
 
-  appliedAt   DateTime @default(now()) @db.Timestamptz(6)
-  source      JobPlatform?
-  jobPostUrl  String?
-  notes       String?
+  // Application Tracking
+  status          ApplicationStatus @default(WISHLIST)
+  appliedDate     DateTime?         @db.Timestamptz(6)  // When user actually applied
+  source          JobPlatform?      // Where the job came from
+  notes           String?           @db.Text            // User's notes about this job
+  
+  // External Job Data (if from API)
+  externalJobId   String?           // Job ID from external source
+  externalSource  String?           // API source name (adzuna, jsearch, etc.)
+  externalData    Json?             // Raw data from API for reference
+  
+  // Contact & Follow-up
+  contactName     String?           // Recruiter/hiring manager name
+  contactEmail    String?           // Contact email
+  contactPhone    String?           // Contact phone
+  
+  // Interview Tracking
+  interviewDate   DateTime?         @db.Timestamptz(6)
+  interviewNotes  String?           @db.Text
+  
+  // Offer Details
+  offerAmount     String?           // Actual offer amount
+  offerDeadline   DateTime?         @db.Timestamptz(6)
+  
+  // Metadata
+  isPasted        Boolean           @default(false)     // True if manually pasted
+  isFavorite      Boolean           @default(false)     // Star/favorite flag
+  reminderDate    DateTime?         @db.Timestamptz(6)  // Follow-up reminder
+  
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime          @updatedAt @db.Timestamptz(6)
 
-  createdAt   DateTime @default(now()) @db.Timestamptz(6)
-  updatedAt   DateTime @updatedAt @db.Timestamptz(6)
-
+  @@index([userId])
+  @@index([status])
+  @@index([userId, status])
   @@map("job_applications")
 }
 
@@ -259,21 +300,72 @@ model JobSearchPreference {
   id              String   @id @default(cuid())
   userId          String   @unique @db.Uuid
 
-  jobTitles       String[] // preferred titles
-  locations       String[] // preferred locations
+  // Search Keywords
+  jobTitles       String[] // preferred titles (e.g., ["Software Engineer", "Full Stack Developer"])
+  keywords        String[] // additional keywords (e.g., ["React", "Node.js"])
+  
+  // Location Preferences
+  locations       String[] // preferred locations (e.g., ["San Francisco", "Remote"])
+  
+  // Salary Range
   minSalary       Int?
   maxSalary       Int?
-  experienceLevel String?
-  workTypes       String[] // ["full-time", "contract"]
-  remoteOptions   String[] // ["remote", "on-site"]
-  skills          String[]
-
+  currency        String?  @default("USD")
+  
+  // Experience & Level
+  experienceLevel String?  // entry, mid, senior, lead, executive
+  yearsExperience Int?     // Minimum years of experience
+  
+  // Job Type Preferences
+  workTypes       String[] // ["full-time", "part-time", "contract", "freelance"]
+  remoteOptions   String[] // ["remote", "hybrid", "on-site"]
+  
+  // Skills & Requirements
+  skills          String[] // Required/preferred skills
+  
+  // Industry & Company Preferences
+  industries      String[] // Preferred industries
+  companySize     String[] // ["startup", "small", "medium", "large", "enterprise"]
+  excludeCompanies String[] // Companies to exclude from search
+  
+  // Search Settings
+  autoSearch      Boolean  @default(false) // Auto-search for matching jobs
+  notifyOnMatch   Boolean  @default(true)  // Send notifications for matches
+  searchFrequency String?  @default("daily") // daily, weekly, manual
+  
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt       DateTime @default(now()) @db.Timestamptz(6)
   updatedAt       DateTime @updatedAt @db.Timestamptz(6)
 
   @@map("job_search_preferences")
+}
+
+// ===========================================================
+// CACHED JOB RECOMMENDATIONS (Daily refresh, personalized)
+// ===========================================================
+model CachedJobRecommendation {
+  id              String   @id @default(cuid())
+  userId          String   @db.Uuid
+  
+  // Job data (stored as JSON for flexibility)
+  jobs            Json     // Array of NormalizedJob objects
+  
+  // Recommendation metadata
+  matchScore      Float?   // Overall match score for the batch
+  searchQuery     String?  // Query used to fetch these jobs
+  sources         String[] // Which APIs were used
+  
+  // Cache control
+  expiresAt       DateTime @db.Timestamptz(6) // When to refresh (next day)
+  lastRefreshedAt DateTime @default(now()) @db.Timestamptz(6)
+  
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @updatedAt @db.Timestamptz(6)
+
+  @@unique([userId])
+  @@index([userId, expiresAt])
+  @@map("cached_job_recommendations")
 }
 
 // ===========================================================

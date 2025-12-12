@@ -1,135 +1,233 @@
 "use server"
 
-import { adminSupabase } from '../supabase/server'
+import { z } from "zod"
+import { createClient } from "@/lib/supabase/server"
+import { adminSupabase } from '@/lib/supabase/server'
 
-type JobPreference = {
-  id?: string
-  userId: string
-  jobTitles: string[]
-  locations: string[]
-  minSalary: number
-  maxSalary: number
-  experienceLevel: string
-  workTypes: string[]
-  remoteOptions: string[]
-  skills: string[]
-  createdAt?: string
-  updatedAt?: string
-}
+// ===========================================================
+// SCHEMAS
+// ===========================================================
 
-export async function createJobPreference(preference: Omit<JobPreference, 'id' | 'createdAt' | 'updatedAt'>) {
+const JobPreferenceSchema = z.object({
+  jobTitles: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).default([]),
+  locations: z.array(z.string()).default([]),
   
-  const { data, error } = await adminSupabase
-    .from('job_search_preferences')
-    .insert([{
-      userId: preference.userId,
-      jobTitles: preference.jobTitles,
-      locations: preference.locations,
-      minSalary: preference.minSalary,
-      maxSalary: preference.maxSalary,
-      experienceLevel: preference.experienceLevel,
-      workTypes: preference.workTypes,
-      remoteOptions: preference.remoteOptions,
-      skills: preference.skills
-    }])
-    .select()
-    .single()
+  minSalary: z.number().optional().nullable(),
+  maxSalary: z.number().optional().nullable(),
+  currency: z.string().default("USD"),
+  
+  experienceLevel: z.string().optional().nullable(),
+  yearsExperience: z.number().optional().nullable(),
+  
+  workTypes: z.array(z.string()).default([]),
+  remoteOptions: z.array(z.string()).default([]),
+  skills: z.array(z.string()).default([]),
+  
+  industries: z.array(z.string()).default([]),
+  companySize: z.array(z.string()).default([]),
+  excludeCompanies: z.array(z.string()).default([]),
+  
+  autoSearch: z.boolean().default(false),
+  notifyOnMatch: z.boolean().default(true),
+  searchFrequency: z.string().default("daily"),
+})
 
-  if (error) {
-    console.error('Error creating job preference:', error.message)
-    throw new Error(`Failed to create job preference: ${error.message}`)
+const JobPreferenceUpdateSchema = JobPreferenceSchema.partial()
+
+// ===========================================================
+// GET JOB PREFERENCES
+// ===========================================================
+
+export async function getJobPreferences() {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: "Unauthorized" }
+    }
+
+    const { data, error } = await adminSupabase
+      .from('job_search_preferences')
+      .select('*')
+      .eq('userId', user.id)
+      .single()
+
+    if (error && error.code !== 'PGRST116') {
+      console.error('Database error:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Unexpected error getting preferences:', err)
+    return { data: null, error: "Failed to get preferences" }
   }
-
-  return data
 }
 
-export async function getJobPreference(userId: string) {
-  
-  
-  const { data, error } = await adminSupabase
-    .from('job_search_preferences')
-    .select('*')
-    .eq('userId', userId)
-    .single()
+// ===========================================================
+// UPSERT JOB PREFERENCES
+// ===========================================================
 
-  if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-    console.error('Error fetching job preference:', error)
-    throw new Error('Failed to fetch job preference')
+export async function upsertJobPreferences(values: z.infer<typeof JobPreferenceSchema>) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: "Unauthorized" }
+    }
+
+    const parsed = JobPreferenceSchema.safeParse(values)
+    if (!parsed.success) {
+      console.error("Preferences validation errors:", parsed.error.issues)
+      return { 
+        data: null, 
+        error: `Invalid input: ${parsed.error.issues.map(e => e.message).join(", ")}` 
+      }
+    }
+
+    const { data, error } = await adminSupabase
+      .from('job_search_preferences')
+      .upsert({
+        userId: user.id,
+        ...parsed.data
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Database error:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Unexpected error upserting preferences:', err)
+    return { data: null, error: "Failed to save preferences" }
   }
-
-  return data ? {
-    id: data.id,
-    userId: data.user_id,
-    jobTitles: data.job_titles || [],
-    locations: data.locations || [],
-    minSalary: data.min_salary || 0,
-    maxSalary: data.max_salary || 0,
-    experienceLevel: data.experience_level || 'Mid-Level',
-    workTypes: data.work_types || [],
-    remoteOptions: data.remote_options || [],
-    skills: data.skills || [],
-    createdAt: data.created_at,
-    updatedAt: data.updated_at
-  } : null
 }
 
-export async function updateJobPreference(
-  id: string, 
-  updates: Partial<Omit<JobPreference, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>
-) {
-  
-  
-  const { error } = await adminSupabase
-    .from('job_search_preferences')
-    .update({
-      jobTitles: updates.jobTitles,
-      locations: updates.locations,
-      minSalary: updates.minSalary,
-      maxSalary: updates.maxSalary,
-      experienceLevel: updates.experienceLevel,
-      workTypes: updates.workTypes,
-      remoteOptions: updates.remoteOptions,
-      skills: updates.skills,
-      updatedAt: new Date().toISOString()
-    })
-    .eq('id', id)
+// ===========================================================
+// UPDATE SEARCH SETTINGS
+// ===========================================================
 
-  if (error) {
-    console.error('Error updating job preference:', error)
-    throw new Error('Failed to update job preference')
+export async function updateSearchSettings(settings: {
+  autoSearch?: boolean
+  notifyOnMatch?: boolean
+  searchFrequency?: string
+}) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: "Unauthorized" }
+    }
+
+    const { data, error } = await adminSupabase
+      .from('job_search_preferences')
+      .update(settings)
+      .eq('userId', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Database error:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Unexpected error updating settings:', err)
+    return { data: null, error: "Failed to update settings" }
   }
-
-  return { success: true }
 }
 
-export async function deleteJobPreference(id: string) {
-  
-  
-  const { error } = await adminSupabase
-    .from('job_search_preferences')
-    .delete()
-    .eq('id', id)
+// ===========================================================
+// ADD EXCLUDED COMPANY
+// ===========================================================
 
-  if (error) {
-    console.error('Error deleting job preference:', error)
-    throw new Error('Failed to delete job preference')
+export async function addExcludedCompany(company: string) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: "Unauthorized" }
+    }
+
+    // Get current preferences
+    const { data: current } = await adminSupabase
+      .from('job_search_preferences')
+      .select('excludeCompanies')
+      .eq('userId', user.id)
+      .single()
+
+    const excludeCompanies = current?.excludeCompanies || []
+    if (!excludeCompanies.includes(company)) {
+      excludeCompanies.push(company)
+    }
+
+    const { data, error } = await adminSupabase
+      .from('job_search_preferences')
+      .update({ excludeCompanies })
+      .eq('userId', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Database error:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Unexpected error adding excluded company:', err)
+    return { data: null, error: "Failed to add excluded company" }
   }
-
-  return { success: true }
 }
 
-export async function upsertJobPreference(preference: Omit<JobPreference, 'id' | 'createdAt' | 'updatedAt'>) {
-  
-  
-  const { data: existing } = await adminSupabase
-    .from('job_search_preferences')
-    .select('id')
-    .eq('userId', preference.userId)
-    .single()
+// ===========================================================
+// REMOVE EXCLUDED COMPANY
+// ===========================================================
 
-  if (existing) {
-    return updateJobPreference(existing.id, preference)
-  } else {
-    return createJobPreference(preference)
+export async function removeExcludedCompany(company: string) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { data: null, error: "Unauthorized" }
+    }
+
+    // Get current preferences
+    const { data: current } = await adminSupabase
+      .from('job_search_preferences')
+      .select('excludeCompanies')
+      .eq('userId', user.id)
+      .single()
+
+    const excludeCompanies = (current?.excludeCompanies || []).filter(
+      (c: string) => c !== company
+    )
+
+    const { data, error } = await adminSupabase
+      .from('job_search_preferences')
+      .update({ excludeCompanies })
+      .eq('userId', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Database error:', error)
+      return { data: null, error: error.message }
+    }
+
+    return { data, error: null }
+  } catch (err) {
+    console.error('Unexpected error removing excluded company:', err)
+    return { data: null, error: "Failed to remove excluded company" }
   }
 }

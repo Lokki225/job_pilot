@@ -24,6 +24,13 @@ export const JobPlatform = {
   FIVERR: 'FIVERR',
   UPWORK: 'UPWORK',
   INDEED: 'INDEED',
+  GLASSDOOR: 'GLASSDOOR',
+  ADZUNA: 'ADZUNA',
+  JSEARCH: 'JSEARCH',
+  THE_MUSE: 'THE_MUSE',
+  COMPANY_WEBSITE: 'COMPANY_WEBSITE',
+  REFERRAL: 'REFERRAL',
+  PASTED: 'PASTED',
   OTHER: 'OTHER'
 } as const
 
@@ -31,12 +38,13 @@ export type JobPlatform = (typeof JobPlatform)[keyof typeof JobPlatform]
 
 
 export const ApplicationStatus = {
-  PENDING: 'PENDING',
-  SENT: 'SENT',
-  VIEWED: 'VIEWED',
-  REPLIED: 'REPLIED',
+  WISHLIST: 'WISHLIST',
+  APPLIED: 'APPLIED',
+  INTERVIEWING: 'INTERVIEWING',
+  OFFERED: 'OFFERED',
   REJECTED: 'REJECTED',
-  ACCEPTED: 'ACCEPTED'
+  ACCEPTED: 'ACCEPTED',
+  WITHDRAWN: 'WITHDRAWN'
 } as const
 
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]

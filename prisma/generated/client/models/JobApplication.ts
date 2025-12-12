@@ -29,11 +29,28 @@ export type JobApplicationMinAggregateOutputType = {
   userId: string | null
   jobTitle: string | null
   company: string | null
-  status: $Enums.ApplicationStatus | null
-  appliedAt: Date | null
-  source: $Enums.JobPlatform | null
+  location: string | null
+  jobType: string | null
+  salary: string | null
+  description: string | null
+  requirements: string | null
   jobPostUrl: string | null
+  status: $Enums.ApplicationStatus | null
+  appliedDate: Date | null
+  source: $Enums.JobPlatform | null
   notes: string | null
+  externalJobId: string | null
+  externalSource: string | null
+  contactName: string | null
+  contactEmail: string | null
+  contactPhone: string | null
+  interviewDate: Date | null
+  interviewNotes: string | null
+  offerAmount: string | null
+  offerDeadline: Date | null
+  isPasted: boolean | null
+  isFavorite: boolean | null
+  reminderDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -43,11 +60,28 @@ export type JobApplicationMaxAggregateOutputType = {
   userId: string | null
   jobTitle: string | null
   company: string | null
-  status: $Enums.ApplicationStatus | null
-  appliedAt: Date | null
-  source: $Enums.JobPlatform | null
+  location: string | null
+  jobType: string | null
+  salary: string | null
+  description: string | null
+  requirements: string | null
   jobPostUrl: string | null
+  status: $Enums.ApplicationStatus | null
+  appliedDate: Date | null
+  source: $Enums.JobPlatform | null
   notes: string | null
+  externalJobId: string | null
+  externalSource: string | null
+  contactName: string | null
+  contactEmail: string | null
+  contactPhone: string | null
+  interviewDate: Date | null
+  interviewNotes: string | null
+  offerAmount: string | null
+  offerDeadline: Date | null
+  isPasted: boolean | null
+  isFavorite: boolean | null
+  reminderDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -57,11 +91,29 @@ export type JobApplicationCountAggregateOutputType = {
   userId: number
   jobTitle: number
   company: number
-  status: number
-  appliedAt: number
-  source: number
+  location: number
+  jobType: number
+  salary: number
+  description: number
+  requirements: number
   jobPostUrl: number
+  status: number
+  appliedDate: number
+  source: number
   notes: number
+  externalJobId: number
+  externalSource: number
+  externalData: number
+  contactName: number
+  contactEmail: number
+  contactPhone: number
+  interviewDate: number
+  interviewNotes: number
+  offerAmount: number
+  offerDeadline: number
+  isPasted: number
+  isFavorite: number
+  reminderDate: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -73,11 +125,28 @@ export type JobApplicationMinAggregateInputType = {
   userId?: true
   jobTitle?: true
   company?: true
-  status?: true
-  appliedAt?: true
-  source?: true
+  location?: true
+  jobType?: true
+  salary?: true
+  description?: true
+  requirements?: true
   jobPostUrl?: true
+  status?: true
+  appliedDate?: true
+  source?: true
   notes?: true
+  externalJobId?: true
+  externalSource?: true
+  contactName?: true
+  contactEmail?: true
+  contactPhone?: true
+  interviewDate?: true
+  interviewNotes?: true
+  offerAmount?: true
+  offerDeadline?: true
+  isPasted?: true
+  isFavorite?: true
+  reminderDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -87,11 +156,28 @@ export type JobApplicationMaxAggregateInputType = {
   userId?: true
   jobTitle?: true
   company?: true
-  status?: true
-  appliedAt?: true
-  source?: true
+  location?: true
+  jobType?: true
+  salary?: true
+  description?: true
+  requirements?: true
   jobPostUrl?: true
+  status?: true
+  appliedDate?: true
+  source?: true
   notes?: true
+  externalJobId?: true
+  externalSource?: true
+  contactName?: true
+  contactEmail?: true
+  contactPhone?: true
+  interviewDate?: true
+  interviewNotes?: true
+  offerAmount?: true
+  offerDeadline?: true
+  isPasted?: true
+  isFavorite?: true
+  reminderDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -101,11 +187,29 @@ export type JobApplicationCountAggregateInputType = {
   userId?: true
   jobTitle?: true
   company?: true
-  status?: true
-  appliedAt?: true
-  source?: true
+  location?: true
+  jobType?: true
+  salary?: true
+  description?: true
+  requirements?: true
   jobPostUrl?: true
+  status?: true
+  appliedDate?: true
+  source?: true
   notes?: true
+  externalJobId?: true
+  externalSource?: true
+  externalData?: true
+  contactName?: true
+  contactEmail?: true
+  contactPhone?: true
+  interviewDate?: true
+  interviewNotes?: true
+  offerAmount?: true
+  offerDeadline?: true
+  isPasted?: true
+  isFavorite?: true
+  reminderDate?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -188,11 +292,29 @@ export type JobApplicationGroupByOutputType = {
   userId: string
   jobTitle: string
   company: string
-  status: $Enums.ApplicationStatus
-  appliedAt: Date
-  source: $Enums.JobPlatform | null
+  location: string | null
+  jobType: string | null
+  salary: string | null
+  description: string | null
+  requirements: string | null
   jobPostUrl: string | null
+  status: $Enums.ApplicationStatus
+  appliedDate: Date | null
+  source: $Enums.JobPlatform | null
   notes: string | null
+  externalJobId: string | null
+  externalSource: string | null
+  externalData: runtime.JsonValue | null
+  contactName: string | null
+  contactEmail: string | null
+  contactPhone: string | null
+  interviewDate: Date | null
+  interviewNotes: string | null
+  offerAmount: string | null
+  offerDeadline: Date | null
+  isPasted: boolean
+  isFavorite: boolean
+  reminderDate: Date | null
   createdAt: Date
   updatedAt: Date
   _count: JobApplicationCountAggregateOutputType | null
@@ -223,11 +345,29 @@ export type JobApplicationWhereInput = {
   userId?: Prisma.UuidFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringFilter<"JobApplication"> | string
   company?: Prisma.StringFilter<"JobApplication"> | string
-  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
-  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
+  location?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  jobType?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  salary?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  description?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  requirements?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   jobPostUrl?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
+  appliedDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
   notes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalJobId?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalData?: Prisma.JsonNullableFilter<"JobApplication">
+  contactName?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  interviewDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  interviewNotes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerAmount?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerDeadline?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  isPasted?: Prisma.BoolFilter<"JobApplication"> | boolean
+  isFavorite?: Prisma.BoolFilter<"JobApplication"> | boolean
+  reminderDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -238,11 +378,29 @@ export type JobApplicationOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   jobTitle?: Prisma.SortOrder
   company?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  appliedAt?: Prisma.SortOrder
-  source?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobType?: Prisma.SortOrderInput | Prisma.SortOrder
+  salary?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  requirements?: Prisma.SortOrderInput | Prisma.SortOrder
   jobPostUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  appliedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalJobId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalSource?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalData?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactName?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  interviewDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  interviewNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  offerAmount?: Prisma.SortOrderInput | Prisma.SortOrder
+  offerDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPasted?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
+  reminderDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -256,11 +414,29 @@ export type JobApplicationWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.UuidFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringFilter<"JobApplication"> | string
   company?: Prisma.StringFilter<"JobApplication"> | string
-  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
-  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
+  location?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  jobType?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  salary?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  description?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  requirements?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   jobPostUrl?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
+  appliedDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
   notes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalJobId?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalData?: Prisma.JsonNullableFilter<"JobApplication">
+  contactName?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  interviewDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  interviewNotes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerAmount?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerDeadline?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  isPasted?: Prisma.BoolFilter<"JobApplication"> | boolean
+  isFavorite?: Prisma.BoolFilter<"JobApplication"> | boolean
+  reminderDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -271,11 +447,29 @@ export type JobApplicationOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   jobTitle?: Prisma.SortOrder
   company?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  appliedAt?: Prisma.SortOrder
-  source?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
+  jobType?: Prisma.SortOrderInput | Prisma.SortOrder
+  salary?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  requirements?: Prisma.SortOrderInput | Prisma.SortOrder
   jobPostUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  appliedDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalJobId?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalSource?: Prisma.SortOrderInput | Prisma.SortOrder
+  externalData?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactName?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  interviewDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  interviewNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  offerAmount?: Prisma.SortOrderInput | Prisma.SortOrder
+  offerDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
+  isPasted?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
+  reminderDate?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.JobApplicationCountOrderByAggregateInput
@@ -291,11 +485,29 @@ export type JobApplicationScalarWhereWithAggregatesInput = {
   userId?: Prisma.UuidWithAggregatesFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   company?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
-  status?: Prisma.EnumApplicationStatusWithAggregatesFilter<"JobApplication"> | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
-  source?: Prisma.EnumJobPlatformNullableWithAggregatesFilter<"JobApplication"> | $Enums.JobPlatform | null
+  location?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  jobType?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  salary?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  description?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  requirements?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
   jobPostUrl?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  status?: Prisma.EnumApplicationStatusWithAggregatesFilter<"JobApplication"> | $Enums.ApplicationStatus
+  appliedDate?: Prisma.DateTimeNullableWithAggregatesFilter<"JobApplication"> | Date | string | null
+  source?: Prisma.EnumJobPlatformNullableWithAggregatesFilter<"JobApplication"> | $Enums.JobPlatform | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  externalJobId?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  externalSource?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  externalData?: Prisma.JsonNullableWithAggregatesFilter<"JobApplication">
+  contactName?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  contactEmail?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  contactPhone?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  interviewDate?: Prisma.DateTimeNullableWithAggregatesFilter<"JobApplication"> | Date | string | null
+  interviewNotes?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  offerAmount?: Prisma.StringNullableWithAggregatesFilter<"JobApplication"> | string | null
+  offerDeadline?: Prisma.DateTimeNullableWithAggregatesFilter<"JobApplication"> | Date | string | null
+  isPasted?: Prisma.BoolWithAggregatesFilter<"JobApplication"> | boolean
+  isFavorite?: Prisma.BoolWithAggregatesFilter<"JobApplication"> | boolean
+  reminderDate?: Prisma.DateTimeNullableWithAggregatesFilter<"JobApplication"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"JobApplication"> | Date | string
 }
@@ -304,11 +516,29 @@ export type JobApplicationCreateInput = {
   id?: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutJobApplicationsInput
@@ -319,11 +549,29 @@ export type JobApplicationUncheckedCreateInput = {
   userId: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -332,11 +580,29 @@ export type JobApplicationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutJobApplicationsNestedInput
@@ -347,11 +613,29 @@ export type JobApplicationUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -361,11 +645,29 @@ export type JobApplicationCreateManyInput = {
   userId: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -374,11 +676,29 @@ export type JobApplicationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -388,11 +708,29 @@ export type JobApplicationUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -412,11 +750,29 @@ export type JobApplicationCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   jobTitle?: Prisma.SortOrder
   company?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  appliedAt?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  jobType?: Prisma.SortOrder
+  salary?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
   jobPostUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  appliedDate?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  externalJobId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
+  externalData?: Prisma.SortOrder
+  contactName?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  interviewDate?: Prisma.SortOrder
+  interviewNotes?: Prisma.SortOrder
+  offerAmount?: Prisma.SortOrder
+  offerDeadline?: Prisma.SortOrder
+  isPasted?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
+  reminderDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -426,11 +782,28 @@ export type JobApplicationMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   jobTitle?: Prisma.SortOrder
   company?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  appliedAt?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  jobType?: Prisma.SortOrder
+  salary?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
   jobPostUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  appliedDate?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  externalJobId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
+  contactName?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  interviewDate?: Prisma.SortOrder
+  interviewNotes?: Prisma.SortOrder
+  offerAmount?: Prisma.SortOrder
+  offerDeadline?: Prisma.SortOrder
+  isPasted?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
+  reminderDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -440,11 +813,28 @@ export type JobApplicationMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   jobTitle?: Prisma.SortOrder
   company?: Prisma.SortOrder
-  status?: Prisma.SortOrder
-  appliedAt?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  location?: Prisma.SortOrder
+  jobType?: Prisma.SortOrder
+  salary?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
   jobPostUrl?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  appliedDate?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  externalJobId?: Prisma.SortOrder
+  externalSource?: Prisma.SortOrder
+  contactName?: Prisma.SortOrder
+  contactEmail?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
+  interviewDate?: Prisma.SortOrder
+  interviewNotes?: Prisma.SortOrder
+  offerAmount?: Prisma.SortOrder
+  offerDeadline?: Prisma.SortOrder
+  isPasted?: Prisma.SortOrder
+  isFavorite?: Prisma.SortOrder
+  reminderDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -503,11 +893,29 @@ export type JobApplicationCreateWithoutUserInput = {
   id?: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -516,11 +924,29 @@ export type JobApplicationUncheckedCreateWithoutUserInput = {
   id?: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -559,11 +985,29 @@ export type JobApplicationScalarWhereInput = {
   userId?: Prisma.UuidFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringFilter<"JobApplication"> | string
   company?: Prisma.StringFilter<"JobApplication"> | string
-  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
-  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
+  location?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  jobType?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  salary?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  description?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  requirements?: Prisma.StringNullableFilter<"JobApplication"> | string | null
   jobPostUrl?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  status?: Prisma.EnumApplicationStatusFilter<"JobApplication"> | $Enums.ApplicationStatus
+  appliedDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  source?: Prisma.EnumJobPlatformNullableFilter<"JobApplication"> | $Enums.JobPlatform | null
   notes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalJobId?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalSource?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  externalData?: Prisma.JsonNullableFilter<"JobApplication">
+  contactName?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactEmail?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  interviewDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  interviewNotes?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerAmount?: Prisma.StringNullableFilter<"JobApplication"> | string | null
+  offerDeadline?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
+  isPasted?: Prisma.BoolFilter<"JobApplication"> | boolean
+  isFavorite?: Prisma.BoolFilter<"JobApplication"> | boolean
+  reminderDate?: Prisma.DateTimeNullableFilter<"JobApplication"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"JobApplication"> | Date | string
 }
@@ -572,11 +1016,29 @@ export type JobApplicationCreateManyUserInput = {
   id?: string
   jobTitle: string
   company: string
-  status?: $Enums.ApplicationStatus
-  appliedAt?: Date | string
-  source?: $Enums.JobPlatform | null
+  location?: string | null
+  jobType?: string | null
+  salary?: string | null
+  description?: string | null
+  requirements?: string | null
   jobPostUrl?: string | null
+  status?: $Enums.ApplicationStatus
+  appliedDate?: Date | string | null
+  source?: $Enums.JobPlatform | null
   notes?: string | null
+  externalJobId?: string | null
+  externalSource?: string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: string | null
+  contactEmail?: string | null
+  contactPhone?: string | null
+  interviewDate?: Date | string | null
+  interviewNotes?: string | null
+  offerAmount?: string | null
+  offerDeadline?: Date | string | null
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -585,11 +1047,29 @@ export type JobApplicationUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -598,11 +1078,29 @@ export type JobApplicationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -611,11 +1109,29 @@ export type JobApplicationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   jobTitle?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-  appliedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  jobType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requirements?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   jobPostUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
+  appliedDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  source?: Prisma.NullableEnumJobPlatformFieldUpdateOperationsInput | $Enums.JobPlatform | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalJobId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  externalData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  contactName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interviewDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  interviewNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerAmount?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offerDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isPasted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFavorite?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reminderDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -627,11 +1143,29 @@ export type JobApplicationSelect<ExtArgs extends runtime.Types.Extensions.Intern
   userId?: boolean
   jobTitle?: boolean
   company?: boolean
-  status?: boolean
-  appliedAt?: boolean
-  source?: boolean
+  location?: boolean
+  jobType?: boolean
+  salary?: boolean
+  description?: boolean
+  requirements?: boolean
   jobPostUrl?: boolean
+  status?: boolean
+  appliedDate?: boolean
+  source?: boolean
   notes?: boolean
+  externalJobId?: boolean
+  externalSource?: boolean
+  externalData?: boolean
+  contactName?: boolean
+  contactEmail?: boolean
+  contactPhone?: boolean
+  interviewDate?: boolean
+  interviewNotes?: boolean
+  offerAmount?: boolean
+  offerDeadline?: boolean
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -642,11 +1176,29 @@ export type JobApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   userId?: boolean
   jobTitle?: boolean
   company?: boolean
-  status?: boolean
-  appliedAt?: boolean
-  source?: boolean
+  location?: boolean
+  jobType?: boolean
+  salary?: boolean
+  description?: boolean
+  requirements?: boolean
   jobPostUrl?: boolean
+  status?: boolean
+  appliedDate?: boolean
+  source?: boolean
   notes?: boolean
+  externalJobId?: boolean
+  externalSource?: boolean
+  externalData?: boolean
+  contactName?: boolean
+  contactEmail?: boolean
+  contactPhone?: boolean
+  interviewDate?: boolean
+  interviewNotes?: boolean
+  offerAmount?: boolean
+  offerDeadline?: boolean
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -657,11 +1209,29 @@ export type JobApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   userId?: boolean
   jobTitle?: boolean
   company?: boolean
-  status?: boolean
-  appliedAt?: boolean
-  source?: boolean
+  location?: boolean
+  jobType?: boolean
+  salary?: boolean
+  description?: boolean
+  requirements?: boolean
   jobPostUrl?: boolean
+  status?: boolean
+  appliedDate?: boolean
+  source?: boolean
   notes?: boolean
+  externalJobId?: boolean
+  externalSource?: boolean
+  externalData?: boolean
+  contactName?: boolean
+  contactEmail?: boolean
+  contactPhone?: boolean
+  interviewDate?: boolean
+  interviewNotes?: boolean
+  offerAmount?: boolean
+  offerDeadline?: boolean
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -672,16 +1242,34 @@ export type JobApplicationSelectScalar = {
   userId?: boolean
   jobTitle?: boolean
   company?: boolean
-  status?: boolean
-  appliedAt?: boolean
-  source?: boolean
+  location?: boolean
+  jobType?: boolean
+  salary?: boolean
+  description?: boolean
+  requirements?: boolean
   jobPostUrl?: boolean
+  status?: boolean
+  appliedDate?: boolean
+  source?: boolean
   notes?: boolean
+  externalJobId?: boolean
+  externalSource?: boolean
+  externalData?: boolean
+  contactName?: boolean
+  contactEmail?: boolean
+  contactPhone?: boolean
+  interviewDate?: boolean
+  interviewNotes?: boolean
+  offerAmount?: boolean
+  offerDeadline?: boolean
+  isPasted?: boolean
+  isFavorite?: boolean
+  reminderDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "jobTitle" | "company" | "status" | "appliedAt" | "source" | "jobPostUrl" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["jobApplication"]>
+export type JobApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "jobTitle" | "company" | "location" | "jobType" | "salary" | "description" | "requirements" | "jobPostUrl" | "status" | "appliedDate" | "source" | "notes" | "externalJobId" | "externalSource" | "externalData" | "contactName" | "contactEmail" | "contactPhone" | "interviewDate" | "interviewNotes" | "offerAmount" | "offerDeadline" | "isPasted" | "isFavorite" | "reminderDate" | "createdAt" | "updatedAt", ExtArgs["result"]["jobApplication"]>
 export type JobApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -702,11 +1290,29 @@ export type $JobApplicationPayload<ExtArgs extends runtime.Types.Extensions.Inte
     userId: string
     jobTitle: string
     company: string
-    status: $Enums.ApplicationStatus
-    appliedAt: Date
-    source: $Enums.JobPlatform | null
+    location: string | null
+    jobType: string | null
+    salary: string | null
+    description: string | null
+    requirements: string | null
     jobPostUrl: string | null
+    status: $Enums.ApplicationStatus
+    appliedDate: Date | null
+    source: $Enums.JobPlatform | null
     notes: string | null
+    externalJobId: string | null
+    externalSource: string | null
+    externalData: runtime.JsonValue | null
+    contactName: string | null
+    contactEmail: string | null
+    contactPhone: string | null
+    interviewDate: Date | null
+    interviewNotes: string | null
+    offerAmount: string | null
+    offerDeadline: Date | null
+    isPasted: boolean
+    isFavorite: boolean
+    reminderDate: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["jobApplication"]>
@@ -1137,11 +1743,29 @@ export interface JobApplicationFieldRefs {
   readonly userId: Prisma.FieldRef<"JobApplication", 'String'>
   readonly jobTitle: Prisma.FieldRef<"JobApplication", 'String'>
   readonly company: Prisma.FieldRef<"JobApplication", 'String'>
-  readonly status: Prisma.FieldRef<"JobApplication", 'ApplicationStatus'>
-  readonly appliedAt: Prisma.FieldRef<"JobApplication", 'DateTime'>
-  readonly source: Prisma.FieldRef<"JobApplication", 'JobPlatform'>
+  readonly location: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly jobType: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly salary: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly description: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly requirements: Prisma.FieldRef<"JobApplication", 'String'>
   readonly jobPostUrl: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly status: Prisma.FieldRef<"JobApplication", 'ApplicationStatus'>
+  readonly appliedDate: Prisma.FieldRef<"JobApplication", 'DateTime'>
+  readonly source: Prisma.FieldRef<"JobApplication", 'JobPlatform'>
   readonly notes: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly externalJobId: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly externalSource: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly externalData: Prisma.FieldRef<"JobApplication", 'Json'>
+  readonly contactName: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly contactEmail: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly contactPhone: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly interviewDate: Prisma.FieldRef<"JobApplication", 'DateTime'>
+  readonly interviewNotes: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly offerAmount: Prisma.FieldRef<"JobApplication", 'String'>
+  readonly offerDeadline: Prisma.FieldRef<"JobApplication", 'DateTime'>
+  readonly isPasted: Prisma.FieldRef<"JobApplication", 'Boolean'>
+  readonly isFavorite: Prisma.FieldRef<"JobApplication", 'Boolean'>
+  readonly reminderDate: Prisma.FieldRef<"JobApplication", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"JobApplication", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"JobApplication", 'DateTime'>
 }
