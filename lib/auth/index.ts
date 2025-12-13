@@ -83,7 +83,12 @@ export const login = async (email: string, password: string) => {
       email, 
       password 
     });
-    return { data, error };
+    
+    if (error) {
+      return { data: null, error: error.message };
+    }
+    
+    return { data, error: null };
   } catch (error: any) {
     console.error('Login error:', error);
     return { data: null, error: error.message || 'Login failed' };

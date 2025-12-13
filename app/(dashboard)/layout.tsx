@@ -4,21 +4,24 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { LanguageSelector } from "@/components/ui/language-selector"
+import { useLanguage } from "@/components/providers/language-provider"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase/client"
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
-  { name: "Cover Letters", href: "/dashboard/letters", icon: FileText },
-  { name: "Study Room", href: "/dashboard/study", icon: BookOpen },
-  { name: "Content Gen", href: "/dashboard/admin/study-content", icon: Sparkles },
-  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+const navigationItems = [
+  { key: "nav.dashboard", href: "/dashboard", icon: Home },
+  { key: "nav.jobs", href: "/dashboard/jobs", icon: Briefcase },
+  { key: "nav.coverLetters", href: "/dashboard/letters", icon: FileText },
+  { key: "nav.studyRoom", href: "/dashboard/study", icon: BookOpen },
+  { key: "nav.trainingRoom", href: "/dashboard/training", icon: Mic },
+  { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles },
+  { key: "nav.settings", href: "/dashboard/settings", icon: Settings },
 ]
 
 export default function DashboardLayout({
@@ -31,6 +34,7 @@ export default function DashboardLayout({
   const pathname = usePathname()
   const router = useRouter();
   const [session, setSession] = useState<any>()
+  const { t } = useLanguage()
 
   const fetchSession = async () => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -46,8 +50,8 @@ export default function DashboardLayout({
 
   const getPageTitle = (path: string): string => {
     // First try to find a matching navigation item
-    const navItem = navigation.find(item => path.startsWith(item.href));
-    if (navItem) return navItem.name;
+    const navItem = navigationItems.find(item => path.startsWith(item.href));
+    if (navItem) return t(navItem.key);
 
     // If no match, try to derive from URL
     const lastSegment = path.split('/').pop() || '';
@@ -115,12 +119,12 @@ export default function DashboardLayout({
 
           {/* Navigation */}
           <nav className="flex-1 space-y-1 overflow-y-auto p-2">
-            {navigation.map((item) => {
+            {navigationItems.map((item) => {
               const isActive = pathname === item.href || 
                 (item.href !== '/dashboard' && pathname.startsWith(`${item.href}/`));
               return (
                 <Link
-                  key={item.name}
+                  key={item.key}
                   href={item.href}
                   className={cn(
                     "group flex items-center rounded-md p-2 text-sm font-medium",
@@ -129,7 +133,7 @@ export default function DashboardLayout({
                       : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-white",
                     isCollapsed ? "justify-center" : "px-3"
                   )}
-                  title={isCollapsed ? item.name : undefined}
+                  title={isCollapsed ? t(item.key) : undefined}
                 >
                   <item.icon
                     className={cn(
@@ -140,7 +144,7 @@ export default function DashboardLayout({
                     )}
                   />
                   {!isCollapsed && (
-                    <span className="ml-3">{item.name}</span>
+                    <span className="ml-3">{t(item.key)}</span>
                   )}
                 </Link>
               )
@@ -171,7 +175,7 @@ export default function DashboardLayout({
                     {session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || 'User'}
                   </p>
                   <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                    View profile
+                    {t('nav.viewProfile')}
                   </p>
                 </div>
               )}
@@ -203,12 +207,13 @@ export default function DashboardLayout({
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <LanguageSelector variant="compact" />
               <ThemeToggle />
               {session ? (<Button onClick={() => {
                 logout();
                 router.push("/login");
               }}>
-                Logout
+                {t('common.logout')}
               </Button>): null}
             </div>
           </div>

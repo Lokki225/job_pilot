@@ -7,11 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { login } from "@/lib/auth";
-import { supabase } from "@/lib/supabase/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
@@ -30,24 +29,14 @@ export default function LoginPage() {
         throw new Error(error);
       }
 
-      // If we have a session, set it in the browser
       if (data?.session) {
-        const { data: { session: currentSession }, error: sessionError } = await supabase.auth.setSession({
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token!,
-        });
-
-        if (sessionError) throw sessionError;
-
         toast({
           title: "Login successful!",
           description: "Welcome back to JobPilot",
         });
 
-        // Force a refresh to update the auth state
         router.refresh();
         router.push('/dashboard');
-        return;
       }
 
     } catch (error: any) {
