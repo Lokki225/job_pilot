@@ -3,6 +3,8 @@
 import { adminSupabase } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/auth'
 import { generateInterviewQuestion, analyzeAnswer, type InterviewQuestion, type AnswerFeedback } from '@/lib/services/training/interview-ai.service'
+import { awardXP } from '@/lib/services/gamification.service'
+import { triggerAchievementCheck } from '@/lib/services/achievements.service'
 
 // ===========================================================
 // TYPES
@@ -20,6 +22,8 @@ interface StartSessionParams {
   companyName?: string
   jobTitle?: string
   jobApplicationId?: string
+  prepPackId?: string
+  prepStepId?: string
   focusAreas?: string[]
   difficulty?: 'EASY' | 'MEDIUM' | 'HARD'
   language?: string
@@ -41,6 +45,7 @@ interface SessionResults {
   completedQuestions: number
   overallScore: number
   durationSeconds: number
+  xpEarned?: number
   questions: {
     questionText: string
     userAnswer: string
@@ -85,6 +90,8 @@ export async function startTrainingSession(
         companyName: params.companyName || null,
         jobTitle: params.jobTitle || null,
         jobApplicationId: params.jobApplicationId || null,
+        prepPackId: params.prepPackId || null,
+        prepStepId: params.prepStepId || null,
         focusAreas: params.focusAreas || null,
         difficulty: params.difficulty || 'MEDIUM',
         totalQuestions,
@@ -410,6 +417,57 @@ export async function completeSession(
     // Update user interview stats
     await updateUserInterviewStats(user.id, session, overallScore)
 
+    // If this session is linked to a prep pack step, auto-mark the step complete
+    if (session.prepPackId && session.prepStepId) {
+      try {
+        const { data: pack } = await adminSupabase
+          .from('interview_prep_packs')
+          .select('completedSteps, totalSteps')
+          .eq('id', session.prepPackId)
+          .eq('userId', user.id)
+          .single()
+
+        if (pack) {
+          const completedSteps = (pack.completedSteps as string[] | null) || []
+          const stepId = session.prepStepId as string
+
+          const nextCompletedSteps = completedSteps.includes(stepId)
+            ? completedSteps
+            : [...completedSteps, stepId]
+
+          const totalSteps = pack.totalSteps || 0
+          const progressPercent = totalSteps > 0
+            ? Math.round((nextCompletedSteps.length / totalSteps) * 100)
+            : 0
+
+          await adminSupabase
+            .from('interview_prep_packs')
+            .update({
+              completedSteps: nextCompletedSteps,
+              progressPercent,
+            })
+            .eq('id', session.prepPackId)
+            .eq('userId', user.id)
+        }
+      } catch (err) {
+        console.error('Error updating prep pack progress:', err)
+      }
+    }
+
+    // Award XP for completing training session
+    let xpEarned = 0
+    const xpResult = await awardXP(user.id, 'training_session_complete', sessionId)
+    xpEarned = xpResult.data?.xpAwarded || 30
+
+    // Bonus XP for high score (90+)
+    if (overallScore >= 90) {
+      const bonusResult = await awardXP(user.id, 'training_perfect_score', sessionId)
+      xpEarned += bonusResult.data?.xpAwarded || 100
+    }
+
+    // Check achievements
+    await triggerAchievementCheck(user.id, ['training_sessions', 'high_score_sessions', 'current_streak'])
+
     const results: SessionResults = {
       sessionId,
       sessionType: session.sessionType,
@@ -417,6 +475,7 @@ export async function completeSession(
       completedQuestions: answeredQuestions.length,
       overallScore,
       durationSeconds,
+      xpEarned,
       questions: answeredQuestions.map((q: any) => ({
         questionText: q.questionText,
         userAnswer: q.userAnswer,

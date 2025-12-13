@@ -45,6 +45,7 @@ export async function GET(
     const results = {
       sessionId,
       sessionType: session.sessionType,
+      prepPackId: session.prepPackId || null,
       totalQuestions: session.totalQuestions,
       completedQuestions: answeredQuestions.length,
       overallScore: session.overallScore || 0,

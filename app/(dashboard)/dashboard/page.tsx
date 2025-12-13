@@ -1,625 +1,638 @@
-"use client"
+"use client";
 
-import { 
-  ArrowRight, 
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  ArrowRight,
   ArrowUpRight,
-  Award, 
-  Briefcase, 
+  Award,
+  BookOpen,
+  Briefcase,
   Calendar,
-  CheckCircle, 
+  CheckCircle,
   Clock,
-  FileText, 
-  Heart,
+  Flame,
   Loader2,
-  MapPin,
-  Plus,
-  Search, 
-  Sparkles, 
-  Star,
-  Target, 
-  TrendingUp, 
-  User, 
-  X,
+  Target,
+  TrendingUp,
+  Trophy,
+  Users,
   Zap,
-  Building2,
-  Send,
-  Eye,
-  ThumbsUp,
-  AlertCircle,
-  ChevronRight,
   BarChart3,
-  Rocket
-} from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import { getProfile, getProfileDetails } from "@/lib/actions/profile.action"
-import { getJobApplicationStats, getRecentApplications, getUpcomingInterviews } from "@/lib/actions/job-applications.action"
-import { getJobPreferences } from "@/lib/actions/job-preferences.action"
-import { getCurrentUser } from "@/lib/auth"
+  Brain,
+  Sparkles,
+  ChevronRight,
+  Star,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+import { getDashboardAnalytics } from "@/lib/actions/dashboard-analytics.action";
+import { getProfile } from "@/lib/actions/profile.action";
 
-// Helper function for relative time
-const getRelativeTime = (date: string) => {
-  const now = new Date()
-  const then = new Date(date)
-  const diffMs = now.getTime() - then.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
-  
-  if (diffDays === 0) return 'Today'
-  if (diffDays === 1) return 'Yesterday'
-  if (diffDays < 7) return `${diffDays} days ago`
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-  return `${Math.floor(diffDays / 30)} months ago`
-}
+const STATUS_COLORS: Record<string, string> = {
+  WISHLIST: "#94a3b8",
+  APPLIED: "#3b82f6",
+  INTERVIEWING: "#8b5cf6",
+  OFFER: "#22c55e",
+  REJECTED: "#ef4444",
+  ACCEPTED: "#10b981",
+};
 
-// Status badge helper
-const getStatusBadge = (status: string) => {
-  const statusConfig: Record<string, { label: string; className: string }> = {
-    WISHLIST: { label: 'Wishlist', className: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' },
-    APPLIED: { label: 'Applied', className: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-    INTERVIEWING: { label: 'Interview', className: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-    OFFER: { label: 'Offer', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
-    REJECTED: { label: 'Rejected', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' },
-    ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' },
-  }
-  const config = statusConfig[status] || { label: status, className: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300' }
-  return <Badge className={config.className}>{config.label}</Badge>
-}
+const CHART_COLORS = ["#8b5cf6", "#3b82f6", "#22c55e", "#f59e0b", "#ef4444"];
 
 export default function DashboardPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const onboardingComplete = searchParams.get('onboarding_complete') === 'true'
-
-  const [showOnboardingHero, setShowOnboardingHero] = useState(false)
-  const [profileCompleteness, setProfileCompleteness] = useState(0)
-  const [completionItems, setCompletionItems] = useState([
-    { label: 'Basic Info', completed: false, icon: User, link: '/dashboard/profile' },
-    { label: 'Resume Uploaded', completed: false, icon: FileText, link: '/dashboard/profile' },
-    { label: 'Job Preferences', completed: false, icon: Target, link: '/dashboard/onboarding/preferences' },
-    { label: 'Skills & Experience', completed: false, icon: Award, link: '/dashboard/profile' },
-  ])
-  const [stats, setStats] = useState({
-    total: 0,
-    pending: 0,
-    sent: 0,
-    replied: 0,
-    rejected: 0,
-    accepted: 0,
-  })
-  const [recentApplications, setRecentApplications] = useState<any[]>([])
-  const [upcomingInterviews, setUpcomingInterviews] = useState<any[]>([])
-  const [userName, setUserName] = useState('')
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [profileError, setProfileError] = useState<string | null>(null)
+  const router = useRouter();
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadDashboardData()
-  }, []) 
+    loadData();
+  }, []);
 
-  const loadDashboardData = async () => {
+  async function loadData() {
     try {
-      setIsLoading(true)
-      setProfileError(null)
+      const [analyticsResult, profileResult] = await Promise.all([
+        getDashboardAnalytics(),
+        getProfile(),
+      ]);
 
-      const { user, error: userError } = await getCurrentUser()
-      
-      if (!user || userError) {
-        console.error('No authenticated user:', userError)
-        router.push('/login')
-        return
+      if (analyticsResult.data) {
+        setAnalytics(analyticsResult.data);
       }
 
-      // Check if should show onboarding hero
-      const dismissed = typeof window !== 'undefined' ? localStorage.getItem('onboarding_hero_dismissed') : null
-      if (onboardingComplete && !dismissed) {
-        setShowOnboardingHero(true)
+      if (profileResult.data) {
+        setUserName(profileResult.data.firstName || "there");
       }
-
-      // Load profile and related data
-      try {
-        const [profileResult, profileDetailsResult, preferencesResult] = await Promise.all([
-          getProfile(user.id),
-          getProfileDetails(user.id),
-          getJobPreferences()
-        ])
-        
-        const profile = profileResult.data
-        const profileDetails = profileDetailsResult.data
-        const preferences = preferencesResult.data
-        
-        if (profile) {
-          setUserName(profile.firstName || 'there')
-          const completeness = calculateCompleteness(profile, profileDetails, preferences)
-          setProfileCompleteness(completeness.percentage)
-          setCompletionItems(completeness.items)
-        } else {
-          setProfileError('Please complete your profile to get started')
-          setProfileCompleteness(0)
-        }
-      } catch (error) {
-        console.error('Error loading profile:', error)
-        setProfileError('Failed to load profile. Please try refreshing the page.')
-      }
-
-      // Load stats
-      const { data: applicationStats } = await getJobApplicationStats()
-      if (applicationStats) {
-        setStats(applicationStats)
-      }
-
-      // Load recent applications
-      const { data: recent } = await getRecentApplications(5)
-      if (recent) {
-        setRecentApplications(recent)
-      }
-
-      // Load upcoming interviews
-      const { data: interviews } = await getUpcomingInterviews()
-      if (interviews) {
-        setUpcomingInterviews(interviews)
-      }
-    } catch (error) {
-      console.error('Dashboard loading error:', error)
+    } catch (err) {
+      console.error("Error loading dashboard:", err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
-
-  const calculateCompleteness = (profile: any, profileDetails: any, preferences: any) => {
-    // Check if job preferences exist and have at least some data
-    const hasJobPreferences = preferences && (
-      (preferences.jobTitles && preferences.jobTitles.length > 0) ||
-      (preferences.locations && preferences.locations.length > 0) ||
-      (preferences.workTypes && preferences.workTypes.length > 0) ||
-      preferences.experienceLevel
-    )
-    
-    // Check if skills exist (from profileDetails or profile)
-    const hasSkills = (profileDetails?.skills && profileDetails.skills.length > 0) ||
-                      (profile.skills && profile.skills.length > 0)
-    
-    // Check if has experience
-    const hasExperience = profileDetails?.experiences && profileDetails.experiences.length > 0
-
-    const items = [
-      { 
-        label: 'Basic Info', 
-        completed: !!(profile.firstName && profile.lastName && profile.location),
-        icon: User,
-        link: '/dashboard/profile'
-      },
-      { 
-        label: 'Resume Uploaded', 
-        completed: !!profile.resumeUrl,
-        icon: FileText,
-        link: '/dashboard/profile'
-      },
-      { 
-        label: 'Job Preferences', 
-        completed: hasJobPreferences,
-        icon: Target,
-        link: '/dashboard/onboarding/preferences'
-      },
-      { 
-        label: 'Skills & Experience', 
-        completed: hasSkills || hasExperience,
-        icon: Award,
-        link: '/dashboard/profile'
-      },
-    ]
-
-    const completed = items.filter(item => item.completed).length
-    const percentage = Math.round((completed / items.length) * 100)
-
-    return { percentage, items }
-  }
-
-  const handleDismissHero = () => {
-    setIsAnimating(true)
-    setTimeout(() => {
-      setShowOnboardingHero(false)
-      localStorage.setItem('onboarding_hero_dismissed', 'true')
-      router.replace('/dashboard', { scroll: false })
-    }, 300)
-  }
-
-  // Get greeting based on time of day
-  const getGreeting = () => {
-    const hour = new Date().getHours()
-    if (hour < 12) return 'Good morning'
-    if (hour < 18) return 'Good afternoon'
-    return 'Good evening'
   }
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <Loader2 className="h-12 w-12 animate-spin text-indigo-600 dark:text-indigo-400" />
-        <p className="text-slate-500 dark:text-slate-400">Loading your dashboard...</p>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <Loader2 className="h-10 w-10 animate-spin text-blue-500 mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400">Loading your dashboard...</p>
+        </div>
       </div>
-    )
+    );
   }
 
-  if (profileError) {
+  if (!analytics) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-4">
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 p-6 rounded-2xl max-w-md w-full">
-          <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2 text-slate-900 dark:text-white">Profile Incomplete</h2>
-          <p className="text-slate-600 dark:text-slate-300 mb-4">{profileError}</p>
-          <Button 
-            onClick={() => router.push('/dashboard/profile')}
-            className="w-full bg-indigo-600 hover:bg-indigo-700"
-          >
-            Complete Your Profile
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <p className="text-gray-500 dark:text-gray-400">Failed to load analytics</p>
+          <Button onClick={loadData} className="mt-4">
+            Try Again
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
+  const levelProgress = analytics.xpToNextLevel > 0
+    ? Math.round(((analytics.totalXp % 500) / 500) * 100)
+    : 100;
+
   return (
-    <div className="space-y-8">
+    <div className="container mx-auto px-4 py-6 max-w-7xl space-y-6">
       {/* Welcome Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 rounded-2xl p-8 text-white">
-        {/* Background decoration */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Welcome back, {userName}! 👋
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Here's your job search progress at a glance
+          </p>
         </div>
-        
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-yellow-300" />
-              <span className="text-indigo-200 text-sm font-medium">
-                {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-              </span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">
-              {getGreeting()}, {userName}! 👋
-            </h1>
-            <p className="text-indigo-100 text-lg">
-              {stats.total === 0 
-                ? "Ready to start your job search journey?"
-                : `You have ${stats.total} application${stats.total !== 1 ? 's' : ''} in progress`
-              }
-            </p>
-          </div>
-          
-          <div className="flex flex-wrap gap-3">
-            <Button 
-              onClick={() => router.push('/dashboard/jobs')}
-              className="bg-white text-indigo-600 hover:bg-indigo-50 shadow-lg"
-            >
-              <Search className="w-4 h-4 mr-2" />
-              Find Jobs
-            </Button>
-            <Button 
-              onClick={() => router.push('/dashboard/jobs/applications')}
-              variant="outline"
-              className="border-white/30 text-black hover:bg-white/10"
-            >
-              <Briefcase className="w-4 h-4 mr-2" />
-              My Applications
-            </Button>
-          </div>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => router.push("/dashboard/jobs")}>
+            <Briefcase className="h-4 w-4 mr-2" />
+            Browse Jobs
+          </Button>
+          <Button onClick={() => router.push("/dashboard/training")}>
+            <Brain className="h-4 w-4 mr-2" />
+            Practice Interview
+          </Button>
         </div>
       </div>
 
-      {/* Profile Completion Banner (if not complete) */}
-      {profileCompleteness < 100 && !showOnboardingHero && (
-        <Card className="border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Target className="w-5 h-5 text-amber-600" />
-                  <h3 className="font-semibold text-slate-900">Complete Your Profile</h3>
-                </div>
-                <p className="text-slate-600 text-sm mb-3">
-                  A complete profile helps you get better job matches and increases your chances of getting hired.
+      {/* Top Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">Applications</p>
+                <p className="text-3xl font-bold text-blue-700 dark:text-blue-300">{analytics.totalApplications}</p>
+                <p className="text-xs text-blue-500 dark:text-blue-400 mt-1">
+                  +{analytics.applicationsThisWeek} this week
                 </p>
-                <div className="flex items-center gap-3">
-                  <Progress value={profileCompleteness} className="flex-1 h-2" />
-                  <span className="text-sm font-medium text-amber-700">{profileCompleteness}%</span>
-                </div>
               </div>
-              <Button 
-                onClick={() => router.push('/dashboard/profile')}
-                className="bg-amber-600 hover:bg-amber-700"
-              >
-                Complete Now
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+              <div className="p-3 bg-blue-500 rounded-xl">
+                <Briefcase className="h-6 w-6 text-white" />
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications')}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Briefcase className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+        <Card className="bg-linear-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border-purple-200 dark:border-purple-800">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">Training Sessions</p>
+                <p className="text-3xl font-bold text-purple-700 dark:text-purple-300">{analytics.totalTrainingSessions}</p>
+                <p className="text-xs text-purple-500 dark:text-purple-400 mt-1">
+                  Avg score: {analytics.avgTrainingScore}%
+                </p>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
+              <div className="p-3 bg-purple-500 rounded-xl">
+                <Brain className="h-6 w-6 text-white" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.total}</div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Total Applications</p>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=APPLIED')}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Send className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+        <Card className="bg-linear-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border-green-200 dark:border-green-800">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-green-600 dark:text-green-400 font-medium">Lessons Completed</p>
+                <p className="text-3xl font-bold text-green-700 dark:text-green-300">{analytics.totalLessonsCompleted}</p>
+                <p className="text-xs text-green-500 dark:text-green-400 mt-1">
+                  {analytics.chaptersCompleted} chapters done
+                </p>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+              <div className="p-3 bg-green-500 rounded-xl">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.sent}</div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Applications Sent</p>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=INTERVIEWING')}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+        <Card className="bg-linear-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border-orange-200 dark:border-orange-800">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-orange-600 dark:text-orange-400 font-medium">Current Streak</p>
+                <p className="text-3xl font-bold text-orange-700 dark:text-orange-300">{analytics.currentStreak} days</p>
+                <p className="text-xs text-orange-500 dark:text-orange-400 mt-1">
+                  Best: {analytics.longestStreak} days
+                </p>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors" />
-            </div>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.replied}</div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Interviews</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-all cursor-pointer group" onClick={() => router.push('/dashboard/jobs/applications?status=OFFER')}>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <ThumbsUp className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-orange-500 rounded-xl">
+                <Flame className="h-6 w-6 text-white" />
               </div>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors" />
             </div>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{stats.accepted}</div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">Offers Received</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Recent Applications */}
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Charts */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Weekly Activity Chart */}
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-indigo-600" />
-                  Recent Applications
-                </CardTitle>
-                <CardDescription>Your latest job applications</CardDescription>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => router.push('/dashboard/jobs/applications')}
-                className="text-indigo-600"
-              >
-                View All
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-blue-500" />
+                Weekly Activity
+              </CardTitle>
+              <CardDescription>Your activity over the last 7 days</CardDescription>
             </CardHeader>
             <CardContent>
-              {recentApplications.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Briefcase className="w-8 h-8 text-slate-400" />
+              <div className="h-[280px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={analytics.weeklyActivity}>
+                    <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+                    <XAxis dataKey="day" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--background)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <Legend />
+                    <Bar dataKey="applications" name="Applications" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="training" name="Training" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="study" name="Study" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Training Score Trend */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-purple-500" />
+                Training Score Trend
+              </CardTitle>
+              <CardDescription>Your performance over recent sessions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[250px]">
+                {analytics.trainingScoreTrend.length > 0 ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={analytics.trainingScoreTrend}>
+                      <defs>
+                        <linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+                      <XAxis dataKey="date" className="text-xs" />
+                      <YAxis domain={[0, 100]} className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--background)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="score"
+                        stroke="#8b5cf6"
+                        strokeWidth={2}
+                        fill="url(#scoreGradient)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="text-center">
+                      <Brain className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                      <p className="text-gray-500 dark:text-gray-400">Complete training sessions to see your progress</p>
+                      <Button variant="outline" className="mt-3" onClick={() => router.push("/dashboard/training")}>
+                        Start Training
+                      </Button>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-slate-900 dark:text-white mb-2">No applications yet</h3>
-                  <p className="text-slate-500 dark:text-slate-400 mb-4">Start your job search and track your applications here</p>
-                  <Button onClick={() => router.push('/dashboard/jobs')}>
-                    <Search className="w-4 h-4 mr-2" />
-                    Browse Jobs
-                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Application Status Breakdown */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-blue-500" />
+                Application Pipeline
+              </CardTitle>
+              <CardDescription>Status breakdown of your applications</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="h-[200px]">
+                  {analytics.applicationsByStatus.length > 0 ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={analytics.applicationsByStatus}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={50}
+                          outerRadius={80}
+                          paddingAngle={2}
+                          dataKey="count"
+                          nameKey="status"
+                        >
+                          {analytics.applicationsByStatus.map((entry: any, index: number) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={STATUS_COLORS[entry.status] || CHART_COLORS[index % CHART_COLORS.length]}
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: "var(--background)",
+                            border: "1px solid var(--border)",
+                            borderRadius: "8px",
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-gray-500 dark:text-gray-400">No applications yet</p>
+                    </div>
+                  )}
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {recentApplications.map((app) => (
-                    <div 
-                      key={app.id}
-                      className="flex items-center gap-4 p-4 rounded-xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 hover:bg-indigo-50/50 dark:hover:bg-indigo-900/20 transition-all cursor-pointer"
-                      onClick={() => router.push(`/dashboard/jobs/${app.id}`)}
-                    >
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                        {app.company?.charAt(0) || 'J'}
+                <div className="space-y-3">
+                  {analytics.applicationsByStatus.map((item: any) => (
+                    <div key={item.status} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-3 h-3 rounded-full"
+                          style={{ backgroundColor: STATUS_COLORS[item.status] || "#94a3b8" }}
+                        />
+                        <span className="text-sm text-gray-600 dark:text-gray-400 capitalize">
+                          {item.status.toLowerCase()}
+                        </span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-slate-900 dark:text-white truncate">{app.jobTitle}</h4>
-                        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                          <Building2 className="w-3 h-3" />
-                          <span className="truncate">{app.company}</span>
-                          {app.location && (
-                            <>
-                              <span>•</span>
-                              <MapPin className="w-3 h-3" />
-                              <span className="truncate">{app.location}</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        {getStatusBadge(app.status)}
-                        <span className="text-xs text-slate-400 dark:text-slate-500">{getRelativeTime(app.createdAt)}</span>
-                      </div>
+                      <span className="font-semibold text-gray-900 dark:text-white">{item.count}</span>
                     </div>
                   ))}
+                  {analytics.applicationsByStatus.length === 0 && (
+                    <Button variant="outline" className="w-full" onClick={() => router.push("/dashboard/jobs")}>
+                      <Briefcase className="h-4 w-4 mr-2" />
+                      Find Jobs to Apply
+                    </Button>
+                  )}
                 </div>
-              )}
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Sidebar */}
+        {/* Right Column - Stats & Quick Actions */}
         <div className="space-y-6">
-          {/* Quick Actions */}
-          <Card>
-            <CardHeader>
+          {/* XP & Level Card */}
+          <Card className="bg-linear-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-800">
+            <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-amber-500" />
-                Quick Actions
+                <Trophy className="h-5 w-5 text-yellow-500" />
+                Level {analytics.currentLevel}
               </CardTitle>
+              <CardDescription>{analytics.levelTitle}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <Button 
-                variant="outline" 
-                className="w-full justify-start gap-3 h-12"
-                onClick={() => router.push('/dashboard/jobs')}
-              >
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                  <Search className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            <CardContent className="space-y-4">
+              <div className="text-center">
+                <p className="text-4xl font-bold text-purple-600 dark:text-purple-400">
+                  {analytics.totalXp.toLocaleString()}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total XP</p>
+              </div>
+              <div>
+                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  <span>Progress to Level {analytics.currentLevel + 1}</span>
+                  <span>{analytics.xpToNextLevel} XP to go</span>
                 </div>
-                <span>Search Jobs</span>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="w-full justify-start gap-3 h-12"
-                onClick={() => router.push('/dashboard/jobs/applications')}
-              >
-                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <Progress value={levelProgress} className="h-2" />
+              </div>
+              <div className="flex justify-between text-sm">
+                <div className="text-center">
+                  <p className="font-bold text-green-600 dark:text-green-400">+{analytics.weeklyXp}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">This Week</p>
                 </div>
-                <span>View Applications</span>
-              </Button>
-              <Button 
-                variant="outline" 
-                className="w-full justify-start gap-3 h-12"
-                onClick={() => router.push('/dashboard/profile')}
-              >
-                <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                  <User className="w-4 h-4 text-green-600 dark:text-green-400" />
+                <div className="text-center">
+                  <p className="font-bold text-yellow-600 dark:text-yellow-400">
+                    {analytics.achievementsUnlocked}/{analytics.totalAchievements}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Achievements</p>
                 </div>
-                <span>Edit Profile</span>
-              </Button>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Upcoming Interviews */}
+          {/* Skills Overview */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-purple-600" />
-                Upcoming Interviews
+                <Sparkles className="h-5 w-5 text-yellow-500" />
+                Skills Overview
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              {upcomingInterviews.length === 0 ? (
-                <div className="text-center py-6">
-                  <Calendar className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                  <p className="text-slate-500 dark:text-slate-400 text-sm">No upcoming interviews</p>
+            <CardContent className="space-y-4">
+              {analytics.topStrengths.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-green-600 dark:text-green-400 mb-2">
+                    ✓ Strengths
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {analytics.topStrengths.map((skill: string, idx: number) => (
+                      <Badge key={idx} variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <div className="space-y-3">
-                  {upcomingInterviews.map((interview) => (
-                    <div 
-                      key={interview.id}
-                      className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800"
-                    >
-                      <h4 className="font-medium text-slate-900 dark:text-white text-sm">{interview.jobTitle}</h4>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{interview.company}</p>
-                      <div className="flex items-center gap-1 mt-2 text-xs text-purple-600 dark:text-purple-400">
-                        <Clock className="w-3 h-3" />
-                        {new Date(interview.interviewDate).toLocaleDateString('en-US', {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </div>
-                    </div>
-                  ))}
+              )}
+              {analytics.areasToImprove.length > 0 && (
+                <div>
+                  <p className="text-sm font-medium text-orange-600 dark:text-orange-400 mb-2">
+                    ↗ Areas to Improve
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {analytics.areasToImprove.map((skill: string, idx: number) => (
+                      <Badge key={idx} variant="secondary" className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {analytics.topStrengths.length === 0 && analytics.areasToImprove.length === 0 && (
+                <div className="text-center py-4">
+                  <Brain className="h-10 w-10 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Complete training sessions to discover your skills
+                  </p>
                 </div>
               )}
             </CardContent>
           </Card>
 
-          {/* Profile Checklist */}
-          {profileCompleteness < 100 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
-                  Profile Checklist
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {completionItems.map((item, index) => (
-                    <div 
-                      key={index}
-                      className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                        item.completed 
-                          ? 'bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800' 
-                          : 'bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 cursor-pointer'
-                      }`}
-                      onClick={() => !item.completed && router.push(item.link)}
-                    >
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        item.completed ? 'bg-green-500 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
-                      }`}>
-                        {item.completed ? (
-                          <CheckCircle className="w-4 h-4" />
-                        ) : (
-                          <item.icon className="w-4 h-4" />
-                        )}
-                      </div>
-                      <span className={`text-sm ${item.completed ? 'text-green-700 dark:text-green-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                        {item.label}
-                      </span>
-                      {!item.completed && (
-                        <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-amber-500" />
+                Quick Actions
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button
+                variant="outline"
+                className="w-full justify-between h-12"
+                onClick={() => router.push("/dashboard/jobs")}
+              >
+                <span className="flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-blue-500" />
+                  Search Jobs
+                </span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-between h-12"
+                onClick={() => router.push("/dashboard/training")}
+              >
+                <span className="flex items-center gap-2">
+                  <Brain className="h-4 w-4 text-purple-500" />
+                  Practice Interview
+                </span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-between h-12"
+                onClick={() => router.push("/dashboard/study")}
+              >
+                <span className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-green-500" />
+                  Study Room
+                </span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-between h-12"
+                onClick={() => router.push("/dashboard/community")}
+              >
+                <span className="flex items-center gap-2">
+                  <Users className="h-4 w-4 text-orange-500" />
+                  Community
+                </span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
 
-          {/* Tips Card */}
-          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-indigo-100 dark:border-indigo-800">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center shrink-0">
-                  <Rocket className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Pro Tip</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-300">
-                    {stats.total === 0 
-                      ? "Start by browsing our job recommendations tailored to your profile!"
-                      : stats.replied === 0 
-                        ? "Follow up on your applications after a week to show your interest."
-                        : "Keep your profile updated to get better job matches."
-                    }
-                  </p>
-                </div>
+          {/* Application Trend Mini Chart */}
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <TrendingUp className="h-4 w-4 text-blue-500" />
+                Application Trend
+              </CardTitle>
+              <CardDescription>Last 4 weeks</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[120px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={analytics.applicationTrend}>
+                    <XAxis dataKey="week" className="text-xs" tick={{ fontSize: 10 }} />
+                    <YAxis className="text-xs" tick={{ fontSize: 10 }} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--background)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "8px",
+                        fontSize: "12px",
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="count"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      dot={{ fill: "#3b82f6", strokeWidth: 2 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
+
+      {/* Bottom Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
+                <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {Math.round(analytics.totalStudyTimeMinutes / 60)}h
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Study Time</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
+                <Star className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {analytics.highestScore}%
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Best Score</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg">
+                <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {analytics.applicationsThisMonth}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Apps This Month</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg">
+                <Award className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {analytics.achievementsUnlocked}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Achievements</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  )
+  );
 }

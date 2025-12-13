@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BookOpen, Trophy, Clock, Flame, ChevronRight, Lock, CheckCircle2, Loader2 } from "lucide-react";
+import { BookOpen, Trophy, Clock, Flame, ChevronRight, Lock, CheckCircle2, Loader2, Briefcase } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { StudyRoomHomeData, ChapterWithProgress } from "@/lib/types/study.types";
-import { getChaptersWithProgress } from "@/lib/actions/study.action";
+import { getChaptersWithProgress, getJobStudyModules, type JobStudyModuleSummary } from "@/lib/actions/study.action";
 
 export default function StudyRoomPage() {
   const [data, setData] = useState<StudyRoomHomeData | null>(null);
+  const [modules, setModules] = useState<JobStudyModuleSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,11 +20,16 @@ export default function StudyRoomPage() {
     async function loadStudyData() {
       try {
         const result = await getChaptersWithProgress();
+        const modulesResult = await getJobStudyModules();
         
         if (result.error) {
           setError(result.error);
         } else if (result.data) {
           setData(result.data);
+        }
+
+        if (!modulesResult.error && modulesResult.data) {
+          setModules(modulesResult.data);
         }
       } catch (err) {
         console.error("Error loading study data:", err);
@@ -127,6 +133,58 @@ export default function StudyRoomPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="mb-8 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
+            <Briefcase className="h-5 w-5" />
+            Job-specific Modules
+          </CardTitle>
+          <CardDescription>
+            Mini study tracks generated from your Interview Prep Packs
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {modules.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {modules.map((m) => (
+                <Link key={m.id} href={`/dashboard/study/module/${m.id}`}>
+                  <Card className="hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all duration-200">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base text-gray-900 dark:text-white">
+                        {m.jobTitle} @ {m.companyName}
+                      </CardTitle>
+                      <CardDescription>
+                        {m.moduleGenerated ? `${m.moduleProgressPercent}% complete` : "Not generated"} • {m.totalTopics} topics
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Progress value={m.moduleProgressPercent} />
+                      <div className="mt-3 flex justify-end">
+                        <Button size="sm" variant="outline">
+                          Open Module <ChevronRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Briefcase className="h-12 w-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-gray-500 dark:text-gray-400 mb-4">
+                No job-specific modules yet. Create an Interview Prep Pack to get started.
+              </p>
+              <Button asChild variant="outline">
+                <Link href="/dashboard/training/prep">
+                  Create Prep Pack <ChevronRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Continue Learning */}
       {data.nextLesson && (

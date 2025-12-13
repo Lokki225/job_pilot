@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   Zap,
   Target,
@@ -17,6 +18,7 @@ import {
   Sparkles,
   ArrowRight,
   BarChart3,
+  FileText,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -98,11 +100,11 @@ export default function TrainingRoomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         
         {/* Header with Gradient */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 md:p-12 text-white shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600 p-8 md:p-12 text-white shadow-2xl">
           <div className="absolute inset-0 bg-grid-white/10 [mask-image:linear-gradient(0deg,transparent,black)]" />
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-4">
@@ -124,7 +126,7 @@ export default function TrainingRoomPage() {
         {/* Stats Cards */}
         {!isLoading && stats && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -140,7 +142,7 @@ export default function TrainingRoomPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -156,7 +158,7 @@ export default function TrainingRoomPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -172,7 +174,7 @@ export default function TrainingRoomPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -215,11 +217,11 @@ export default function TrainingRoomPage() {
                   onClick={() => setSelectedType(session.id)}
                 >
                   {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${session.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                  <div className={`absolute inset-0 bg-linear-to-br ${session.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                   
                   <CardContent className="relative z-10 p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div className={`p-4 bg-gradient-to-br ${session.gradient} rounded-2xl shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
+                      <div className={`p-4 bg-linear-to-br ${session.gradient} rounded-2xl shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
                         <Icon className="w-8 h-8 text-white" />
                       </div>
                       {isSelected && (
@@ -257,7 +259,7 @@ export default function TrainingRoomPage() {
                           e.stopPropagation()
                           handleStartSession(session.id)
                         }}
-                        className={`w-full mt-6 bg-gradient-to-r ${session.gradient} text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group`}
+                        className={`w-full mt-6 bg-linear-to-r ${session.gradient} text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 group`}
                       >
                         Start Session
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -267,7 +269,7 @@ export default function TrainingRoomPage() {
 
                   {/* Shine Effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -skew-x-12 transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
                   </div>
                 </Card>
               )
@@ -275,31 +277,106 @@ export default function TrainingRoomPage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 hover:shadow-xl transition-shadow cursor-pointer group">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="p-4 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
-                  <Calendar className="w-6 h-6 text-white" />
+        {/* Interview Prep Packs - Feature Highlight */}
+        <Card className="border-2 border-indigo-200 dark:border-indigo-800 shadow-xl bg-linear-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950/30 dark:via-purple-950/30 dark:to-pink-950/30 overflow-hidden">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center gap-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge className="bg-indigo-500 text-white border-0">New Feature</Badge>
                 </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
-                    View History
-                  </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Review past sessions and track progress
-                  </p>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+                  Interview Prep Packs
+                </h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
+                  Paste a job description and get an AI-generated preparation plan with custom interview questions, study topics, and STAR stories tailored to the role.
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <Badge variant="outline">AI Job Analysis</Badge>
+                  <Badge variant="outline">Custom Questions</Badge>
+                  <Badge variant="outline">Study Plan</Badge>
+                  <Badge variant="outline">STAR Stories</Badge>
                 </div>
-                <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all" />
+                <Button asChild className="bg-linear-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-lg hover:shadow-xl">
+                  <Link href="/dashboard/training/prep">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Create Prep Pack
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
               </div>
-            </CardContent>
-          </Card>
+              <div className="hidden md:flex p-8 bg-white/50 dark:bg-slate-800/50 rounded-2xl">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+                    <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400 mx-auto mb-1" />
+                    <span className="text-xs font-medium text-blue-700 dark:text-blue-300">Job Post</span>
+                  </div>
+                  <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-center">
+                    <Sparkles className="w-6 h-6 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
+                    <span className="text-xs font-medium text-purple-700 dark:text-purple-300">AI Analysis</span>
+                  </div>
+                  <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+                    <Target className="w-6 h-6 text-green-600 dark:text-green-400 mx-auto mb-1" />
+                    <span className="text-xs font-medium text-green-700 dark:text-green-300">Practice</span>
+                  </div>
+                  <div className="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-lg text-center">
+                    <Trophy className="w-6 h-6 text-orange-600 dark:text-orange-400 mx-auto mb-1" />
+                    <span className="text-xs font-medium text-orange-700 dark:text-orange-300">Success</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 hover:shadow-xl transition-shadow cursor-pointer group">
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link href="/dashboard/training/prep">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 hover:shadow-xl transition-shadow cursor-pointer group h-full">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-4 bg-linear-to-br from-indigo-500 to-purple-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                    <FileText className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                      My Prep Packs
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Job-specific interview plans
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/training/history">
+            <Card className="border-0 shadow-lg bg-linear-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 hover:shadow-xl transition-shadow cursor-pointer group h-full">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="p-4 bg-linear-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                    <Calendar className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+                      View History
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      Past sessions & progress
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Card className="border-0 shadow-lg bg-linear-to-br from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 hover:shadow-xl transition-shadow cursor-pointer group">
             <CardContent className="p-6">
               <div className="flex items-center gap-4">
-                <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
+                <div className="p-4 bg-linear-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg group-hover:scale-110 transition-transform">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
@@ -307,7 +384,7 @@ export default function TrainingRoomPage() {
                     Analytics
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
-                    Deep dive into your performance metrics
+                    Performance metrics
                   </p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all" />

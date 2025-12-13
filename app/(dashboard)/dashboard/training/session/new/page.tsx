@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import {
   ArrowLeft,
   Sparkles,
@@ -29,6 +30,7 @@ import {
 } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { startTrainingSession } from '@/lib/actions/training.action'
+import { getPrepPack } from '@/lib/actions/prep-pack.action'
 import { toast } from '@/components/ui/use-toast'
 
 const FOCUS_AREAS = [
@@ -96,13 +98,39 @@ const SESSION_INFO: Record<string, any> = {
 export default function NewSessionPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const sessionType = searchParams.get('type') || 'QUICK'
+  const sessionType = searchParams.get('type') || searchParams.get('sessionType') || 'QUICK'
+  const prepPackId = searchParams.get('prepPackId')
+  const prepStepId = searchParams.get('prepStepId')
+  const prepFocusAreas = searchParams.get('focusAreas')
+  const prepDifficulty = searchParams.get('difficulty')
 
   const [jobTitle, setJobTitle] = useState('')
   const [companyName, setCompanyName] = useState('')
-  const [difficulty, setDifficulty] = useState<'EASY' | 'MEDIUM' | 'HARD'>('MEDIUM')
-  const [selectedFocusAreas, setSelectedFocusAreas] = useState<string[]>(['BEHAVIORAL'])
+  const [difficulty, setDifficulty] = useState<'EASY' | 'MEDIUM' | 'HARD'>(
+    (prepDifficulty as 'EASY' | 'MEDIUM' | 'HARD') || 'MEDIUM'
+  )
+  const [selectedFocusAreas, setSelectedFocusAreas] = useState<string[]>(
+    prepFocusAreas ? prepFocusAreas.split(',') : ['BEHAVIORAL']
+  )
   const [isStarting, setIsStarting] = useState(false)
+  const [prepPackName, setPrepPackName] = useState<string | null>(null)
+
+  // Load prep pack data if prepPackId is provided
+  useEffect(() => {
+    if (prepPackId) {
+      loadPrepPackData()
+    }
+  }, [prepPackId])
+
+  const loadPrepPackData = async () => {
+    if (!prepPackId) return
+    const result = await getPrepPack(prepPackId)
+    if (result.success && result.data) {
+      setJobTitle(result.data.jobTitle)
+      setCompanyName(result.data.companyName)
+      setPrepPackName(`${result.data.jobTitle} at ${result.data.companyName}`)
+    }
+  }
 
   const sessionInfo = SESSION_INFO[sessionType]
   const SessionIcon = sessionInfo?.icon || Sparkles
@@ -140,6 +168,8 @@ export default function NewSessionPage() {
         sessionType: sessionType as any,
         jobTitle: jobTitle || undefined,
         companyName: companyName || undefined,
+        prepPackId: prepPackId || undefined,
+        prepStepId: prepStepId || undefined,
         difficulty,
         focusAreas: selectedFocusAreas,
       })

@@ -32,6 +32,7 @@ import confetti from 'canvas-confetti'
 interface SessionResult {
   sessionId: string
   sessionType: string
+  prepPackId?: string | null
   totalQuestions: number
   completedQuestions: number
   overallScore: number
@@ -178,6 +179,16 @@ export default function SessionResultsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <div className="max-w-4xl mx-auto px-4 py-8">
+
+        {results.prepPackId && (
+          <div className="mb-6 flex justify-center">
+            <Button asChild variant="outline" className="bg-white/10 text-white border-white/20 hover:bg-white/20">
+              <Link href={`/dashboard/training/prep/${results.prepPackId}`}>
+                Back to Prep Pack
+              </Link>
+            </Button>
+          </div>
+        )}
         
         {/* Hero Score Section */}
         <div className="text-center mb-12 pt-8">

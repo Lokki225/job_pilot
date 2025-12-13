@@ -150,6 +150,7 @@ model User {
   trainingSessions      TrainingSession[]
   interviewStats        UserInterviewStats?
   companyResearch       CompanyResearch[]
+  interviewPrepPacks    InterviewPrepPack[]
   peerPracticeProfile   PeerPracticeProfile?
   peerSessionsRequested PeerPracticeSession[] @relation("requester")
   peerSessionsPartner   PeerPracticeSession[] @relation("partner")
@@ -715,6 +716,8 @@ model TrainingSession {
   companyName       String?       @db.VarChar(255)
   jobTitle          String?       @db.VarChar(255)
   jobApplicationId  String?       @db.Uuid
+  prepPackId        String?       @db.Uuid
+  prepStepId        String?       @db.VarChar(100)
   focusAreas        Json?         // Array of focus areas
   difficulty        Difficulty    @default(MEDIUM)
   totalQuestions    Int           @default(0)
@@ -729,6 +732,7 @@ model TrainingSession {
   // Relations
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   company           CompanyResearch?  @relation(fields: [companyId], references: [id])
+  prepPack          InterviewPrepPack? @relation(fields: [prepPackId], references: [id])
   questions         TrainingQuestion[]
 
   createdAt         DateTime @default(now()) @db.Timestamptz(6)
@@ -1004,7 +1008,7 @@ model SuccessStory {
   isAnonymous           Boolean  @default(false)
   displayName           String?  @db.VarChar(255)
   isFeatured            Boolean  @default(false)
-  isPublished           Boolean  @default(false)
+  isPublished           Boolean  @default(true)
 
   // Engagement
   viewCount             Int      @default(0)
@@ -1109,6 +1113,56 @@ model UserXP {
 }
 
 // ===========================================================
+// INTERVIEW PREP PACKS
+// ===========================================================
+enum PrepPackStatus {
+  DRAFT
+  GENERATING
+  READY
+  ARCHIVED
+}
+
+model InterviewPrepPack {
+  id                  String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String         @db.Uuid
+  jobApplicationId    String?        @db.Uuid
+
+  // Job/Company Info
+  companyName         String         @db.VarChar(255)
+  jobTitle            String         @db.VarChar(255)
+  jobPostText         String?        @db.Text
+  jobPostUrl          String?        @db.Text
+  companyWebsite      String?        @db.Text
+
+  // Extracted Data (AI-generated JSON)
+  extractedData       Json?          // responsibilities, skills, keywords, techStack, etc.
+
+  // Generated Plan (AI-generated JSON)
+  prepPlan            Json?          // sessions, studyTopics, questionBank, checklist, starStories
+
+  // Job-specific Study Module (generated curriculum inside Study Room)
+  studyModule          Json?
+  studyModuleProgress  Json?
+
+  // Tracking
+  status              PrepPackStatus @default(DRAFT)
+  completedSteps      Json?          // Array of completed step IDs
+  totalSteps          Int            @default(0)
+  progressPercent     Int            @default(0)
+
+  // Relations
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingSessions    TrainingSession[]
+
+  createdAt           DateTime       @default(now()) @db.Timestamptz(6)
+  updatedAt           DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("interview_prep_packs")
+}
+
+// ===========================================================
 // GAMIFICATION - XP TRANSACTIONS
 // ===========================================================
 model XPTransaction {
@@ -1127,3 +1181,4 @@ model XPTransaction {
   @@index([userId])
   @@map("xp_transactions")
 }
+
