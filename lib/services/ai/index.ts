@@ -36,6 +36,10 @@ export interface CoverLetterInput {
   }
   tone?: 'professional' | 'friendly' | 'formal' | 'enthusiastic'
   customInstructions?: string
+  template?: {
+    name: string
+    content: string
+  }
 }
 
 export interface CoverLetterOutput {
@@ -205,6 +209,10 @@ class AIService {
 
     const skillsText = input.userProfile.skills.join(', ')
 
+    const templateText = input.template?.content
+      ? `\nTEMPLATE (follow this structure):\n- Template name: ${input.template.name}\n- Use the template as a structural guide (sections/order/style).\n- Replace placeholders with real details and do NOT output placeholder tokens like [YOUR_NAME] or [COMPANY].\n- Keep it natural and tailored to the job.\n\n${input.template.content}\n`
+      : ''
+
     const prompt = `You are an expert career coach and professional writer. Generate a compelling cover letter for a job application.
 
 JOB DETAILS:
@@ -226,6 +234,8 @@ ${experienceText}
 TONE: ${toneInstructions[tone]}
 
 ${input.customInstructions ? `ADDITIONAL INSTRUCTIONS: ${input.customInstructions}` : ''}
+
+${templateText}
 
 REQUIREMENTS:
 1. Write a compelling cover letter (300-400 words)

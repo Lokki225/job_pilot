@@ -201,7 +201,7 @@ export type AIGeneratedContentWhereInput = {
   AND?: Prisma.AIGeneratedContentWhereInput | Prisma.AIGeneratedContentWhereInput[]
   OR?: Prisma.AIGeneratedContentWhereInput[]
   NOT?: Prisma.AIGeneratedContentWhereInput | Prisma.AIGeneratedContentWhereInput[]
-  id?: Prisma.StringFilter<"AIGeneratedContent"> | string
+  id?: Prisma.UuidFilter<"AIGeneratedContent"> | string
   userId?: Prisma.UuidFilter<"AIGeneratedContent"> | string
   type?: Prisma.StringFilter<"AIGeneratedContent"> | string
   prompt?: Prisma.StringFilter<"AIGeneratedContent"> | string
@@ -261,7 +261,7 @@ export type AIGeneratedContentScalarWhereWithAggregatesInput = {
   AND?: Prisma.AIGeneratedContentScalarWhereWithAggregatesInput | Prisma.AIGeneratedContentScalarWhereWithAggregatesInput[]
   OR?: Prisma.AIGeneratedContentScalarWhereWithAggregatesInput[]
   NOT?: Prisma.AIGeneratedContentScalarWhereWithAggregatesInput | Prisma.AIGeneratedContentScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"AIGeneratedContent"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"AIGeneratedContent"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"AIGeneratedContent"> | string
   type?: Prisma.StringWithAggregatesFilter<"AIGeneratedContent"> | string
   prompt?: Prisma.StringWithAggregatesFilter<"AIGeneratedContent"> | string
@@ -493,7 +493,7 @@ export type AIGeneratedContentScalarWhereInput = {
   AND?: Prisma.AIGeneratedContentScalarWhereInput | Prisma.AIGeneratedContentScalarWhereInput[]
   OR?: Prisma.AIGeneratedContentScalarWhereInput[]
   NOT?: Prisma.AIGeneratedContentScalarWhereInput | Prisma.AIGeneratedContentScalarWhereInput[]
-  id?: Prisma.StringFilter<"AIGeneratedContent"> | string
+  id?: Prisma.UuidFilter<"AIGeneratedContent"> | string
   userId?: Prisma.UuidFilter<"AIGeneratedContent"> | string
   type?: Prisma.StringFilter<"AIGeneratedContent"> | string
   prompt?: Prisma.StringFilter<"AIGeneratedContent"> | string

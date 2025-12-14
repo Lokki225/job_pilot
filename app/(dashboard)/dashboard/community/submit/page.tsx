@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { getUserSuccessStats, submitSuccessStory, type SuccessStoryStats } from "@/lib/actions/success-stories.action";
+import { deleteSuccessStoryCoverImage, getUserSuccessStats, submitSuccessStory, uploadSuccessStoryCoverImage, type SuccessStoryStats } from "@/lib/actions/success-stories.action";
 
 const INDUSTRIES = [
   "Technology",
@@ -47,6 +47,9 @@ export default function SubmitStoryPage() {
   const [salaryRange, setSalaryRange] = useState("");
   const [title, setTitle] = useState("");
   const [story, setStory] = useState("");
+  const [tagsInput, setTagsInput] = useState("");
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [keyLearnings, setKeyLearnings] = useState<string[]>([""]);
   const [adviceForOthers, setAdviceForOthers] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -98,6 +101,30 @@ export default function SubmitStoryPage() {
     setIsSubmitting(true);
 
     try {
+      let uploadedCover: { url: string; path: string } | null = null;
+      if (coverImageFile) {
+        const uploadResult = await uploadSuccessStoryCoverImage(coverImageFile);
+        if (uploadResult.error || !uploadResult.data) {
+          setError(uploadResult.error || "Failed to upload cover image");
+          return;
+        }
+        uploadedCover = uploadResult.data;
+      }
+
+      const rawTags = tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
+
+      const tagSet = new Set<string>();
+      const tags: string[] = [];
+      for (const t of rawTags) {
+        const key = t.toLowerCase();
+        if (tagSet.has(key)) continue;
+        tagSet.add(key);
+        tags.push(t);
+      }
+
       const result = await submitSuccessStory({
         jobTitle: jobTitle.trim(),
         companyName: companyName.trim(),
@@ -108,11 +135,17 @@ export default function SubmitStoryPage() {
         story: story.trim(),
         keyLearnings: keyLearnings.filter((l) => l.trim()),
         adviceForOthers: adviceForOthers || undefined,
+        tags: tags.slice(0, 10),
+        coverImageUrl: uploadedCover?.url,
+        coverImagePath: uploadedCover?.path,
         isAnonymous,
         displayName: isAnonymous ? displayName || undefined : undefined,
       });
 
       if (result.error) {
+        if (uploadedCover?.path) {
+          await deleteSuccessStoryCoverImage(uploadedCover.path);
+        }
         setError(result.error);
         return;
       }
@@ -242,6 +275,43 @@ export default function SubmitStoryPage() {
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. From bootcamp to FAANG in 6 months"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="coverImage">Cover Image</Label>
+                  <Input
+                    id="coverImage"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0] || null;
+                      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+                      setCoverImageFile(f);
+                      setCoverPreviewUrl(f ? URL.createObjectURL(f) : null);
+                    }}
+                  />
+                  {coverPreviewUrl && (
+                    <div className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                      <img
+                        src={coverPreviewUrl}
+                        alt="Cover preview"
+                        className="w-full h-48 object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tags">Tags</Label>
+                  <Input
+                    id="tags"
+                    value={tagsInput}
+                    onChange={(e) => setTagsInput(e.target.value)}
+                    placeholder="e.g. interview, negotiation, career-change"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Separate tags with commas (max 10).
+                  </p>
                 </div>
 
                 <div className="space-y-2">

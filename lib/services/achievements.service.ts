@@ -2,6 +2,7 @@
 
 import { adminSupabase, createClient } from "@/lib/supabase/server";
 import { awardXP } from "./gamification.service";
+import { notifyAchievementUnlock } from "@/lib/actions/notifications.action";
 
 // ===========================================================
 // ACHIEVEMENT DEFINITIONS
@@ -331,6 +332,9 @@ export async function checkAndUnlockAchievements(
 
         // Award XP for achievement
         await awardXP(userId, "achievement_unlock" as any, achievement.id, achievement.points);
+
+        // Send notification
+        await notifyAchievementUnlock(userId, achievement.title, achievement.icon || "🏅");
 
         unlockedAchievements.push({
           id: achievement.id,

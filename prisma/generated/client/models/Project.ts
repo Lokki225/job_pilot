@@ -212,8 +212,8 @@ export type ProjectWhereInput = {
   AND?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
   OR?: Prisma.ProjectWhereInput[]
   NOT?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
-  id?: Prisma.StringFilter<"Project"> | string
-  profileId?: Prisma.StringFilter<"Project"> | string
+  id?: Prisma.UuidFilter<"Project"> | string
+  profileId?: Prisma.UuidFilter<"Project"> | string
   name?: Prisma.StringFilter<"Project"> | string
   description?: Prisma.StringFilter<"Project"> | string
   url?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -244,7 +244,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
   OR?: Prisma.ProjectWhereInput[]
   NOT?: Prisma.ProjectWhereInput | Prisma.ProjectWhereInput[]
-  profileId?: Prisma.StringFilter<"Project"> | string
+  profileId?: Prisma.UuidFilter<"Project"> | string
   name?: Prisma.StringFilter<"Project"> | string
   description?: Prisma.StringFilter<"Project"> | string
   url?: Prisma.StringNullableFilter<"Project"> | string | null
@@ -276,8 +276,8 @@ export type ProjectScalarWhereWithAggregatesInput = {
   AND?: Prisma.ProjectScalarWhereWithAggregatesInput | Prisma.ProjectScalarWhereWithAggregatesInput[]
   OR?: Prisma.ProjectScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ProjectScalarWhereWithAggregatesInput | Prisma.ProjectScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Project"> | string
-  profileId?: Prisma.StringWithAggregatesFilter<"Project"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Project"> | string
+  profileId?: Prisma.UuidWithAggregatesFilter<"Project"> | string
   name?: Prisma.StringWithAggregatesFilter<"Project"> | string
   description?: Prisma.StringWithAggregatesFilter<"Project"> | string
   url?: Prisma.StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -523,8 +523,8 @@ export type ProjectScalarWhereInput = {
   AND?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
   OR?: Prisma.ProjectScalarWhereInput[]
   NOT?: Prisma.ProjectScalarWhereInput | Prisma.ProjectScalarWhereInput[]
-  id?: Prisma.StringFilter<"Project"> | string
-  profileId?: Prisma.StringFilter<"Project"> | string
+  id?: Prisma.UuidFilter<"Project"> | string
+  profileId?: Prisma.UuidFilter<"Project"> | string
   name?: Prisma.StringFilter<"Project"> | string
   description?: Prisma.StringFilter<"Project"> | string
   url?: Prisma.StringNullableFilter<"Project"> | string | null

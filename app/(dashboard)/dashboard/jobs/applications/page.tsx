@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ApplicationKanban, type JobApplication, type ApplicationStatus } from '@/components/jobs/ApplicationKanban'
+import { OfferCongratulationsModal } from '@/components/jobs/OfferCongratulationsModal'
 import { 
   listJobApplications, 
   updateApplicationStatus,
@@ -28,6 +29,8 @@ export default function ApplicationsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban')
+  const [showOfferCongratsModal, setShowOfferCongratsModal] = useState(false)
+  const [offeredJob, setOfferedJob] = useState<{ jobTitle: string; company: string } | null>(null)
 
   useEffect(() => {
     loadApplications()
@@ -83,10 +86,17 @@ export default function ApplicationsPage() {
           variant: 'destructive',
         })
       } else {
-        toast({
-          title: 'Status Updated',
-          description: `Moved to ${newStatus.toLowerCase()}`,
-        })
+        // Show congratulations modal if moved to OFFERED or ACCEPTED
+        const app = applications.find(a => a.id === id)
+        if ((newStatus === 'OFFERED' || newStatus === 'ACCEPTED') && app) {
+          setOfferedJob({ jobTitle: app.jobTitle, company: app.company })
+          setShowOfferCongratsModal(true)
+        } else {
+          toast({
+            title: 'Status Updated',
+            description: `Moved to ${newStatus.toLowerCase()}`,
+          })
+        }
       }
     } catch (err) {
       loadApplications()
@@ -340,6 +350,19 @@ export default function ApplicationsPage() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Offer Congratulations Modal */}
+      {offeredJob && (
+        <OfferCongratulationsModal
+          isOpen={showOfferCongratsModal}
+          onClose={() => {
+            setShowOfferCongratsModal(false)
+            setOfferedJob(null)
+          }}
+          jobTitle={offeredJob.jobTitle}
+          company={offeredJob.company}
+        />
       )}
     </div>
   )

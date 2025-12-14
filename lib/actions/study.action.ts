@@ -242,17 +242,34 @@ export async function getChaptersWithProgress(): Promise<{
       .select("lessonId, status, progressPercentage, timeSpentSeconds")
       .eq("userId", user.id);
 
-    // Calculate progress per chapter
-    const chaptersWithProgress: ChapterWithProgress[] = (chapters || []).map((chapter, index) => {
+    // Group chapters by careerTrackId for unlock logic
+    const chaptersByTrack: Record<string, typeof chapters> = {};
+    for (const chapter of chapters || []) {
+      const trackId = chapter.careerTrackId || "general";
+      if (!chaptersByTrack[trackId]) chaptersByTrack[trackId] = [];
+      chaptersByTrack[trackId].push(chapter);
+    }
+
+    // Sort chapters within each track by orderIndex
+    for (const trackId of Object.keys(chaptersByTrack)) {
+      chaptersByTrack[trackId].sort((a: any, b: any) => a.orderIndex - b.orderIndex);
+    }
+
+    // Calculate progress per chapter with new unlock logic
+    const chaptersWithProgress: ChapterWithProgress[] = (chapters || []).map((chapter) => {
       const chapterLessons = lessons?.filter(l => l.chapterId === chapter.id) || [];
       const completedLessons = chapterLessons.filter(l =>
         progress?.find(p => p.lessonId === l.id && p.status === "COMPLETED")
       );
 
-      // Chapter is unlocked if it's the first one OR previous chapter is complete
-      let isUnlocked = index === 0;
-      if (index > 0 && chapters) {
-        const prevChapter = chapters[index - 1];
+      const trackId = chapter.careerTrackId || "general";
+      const trackChapters = chaptersByTrack[trackId] || [];
+      const chapterIndexInTrack = trackChapters.findIndex((c: any) => c.id === chapter.id);
+
+      // Chapter is unlocked if it's the first in its track OR previous chapter in same track is complete
+      let isUnlocked = chapterIndexInTrack === 0;
+      if (chapterIndexInTrack > 0) {
+        const prevChapter = trackChapters[chapterIndexInTrack - 1];
         const prevChapterLessons = lessons?.filter(l => l.chapterId === prevChapter.id) || [];
         const prevCompleted = prevChapterLessons.filter(l =>
           progress?.find(p => p.lessonId === l.id && p.status === "COMPLETED")

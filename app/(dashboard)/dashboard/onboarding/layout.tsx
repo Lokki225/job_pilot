@@ -1,37 +1,24 @@
 // app/(dashboard)/dashboard/onboarding/layout.tsx
-"use client"
+import { redirect } from "next/navigation"
+import { getCurrentUser } from "@/lib/auth"
 
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import { getAuthUser } from "@/lib/auth"
-import { getCurrentSession } from "@/lib/auth/session"
+export const dynamic = 'force-dynamic'
 
-export default function OnboardingLayout({
+export default async function OnboardingLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const router = useRouter()
-
-  // Check if user is authenticated
-  useEffect(() => {
-    const checkUser = async () => {
-      const session = await getCurrentSession()
-      if (!session) {
-        router.push('/login')
-        return
-      }
-      // User is authenticated, you can access user properties here
-    }
-
-    checkUser()
-  }, [router])
+  const { user } = await getCurrentUser()
+  if (!user) {
+    redirect('/login')
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-linear-to-b from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-center mb-8">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold bg-linear-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
             JobPilot AI
           </h1>
         </div>

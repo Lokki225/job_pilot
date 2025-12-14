@@ -1,126 +1,327 @@
-// lib/actions/notifications.ts
 "use server"
 
-import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { adminSupabase, createClient } from "@/lib/supabase/server";
+import { AppEvent } from "@/lib/types/app-events";
+import {
+  notifyAchievement,
+  notifyLevelUp as emitLevelUp,
+  notifyInterviewReminder as emitInterviewReminder,
+  notifyApplicationUpdate as emitApplicationUpdate,
+  notifyStoryLiked as emitStoryLiked,
+  notifyStreakMilestone as emitStreakMilestone,
+} from "@/lib/services/event-dispatcher";
 
-const NotificationSchema = z.object({
-  type: z.string().min(1),
-  title: z.string().min(1),
-  message: z.string().min(1),
-  link: z.string().optional(),
-})
+// ===========================================================
+// TYPES (kept for backward compatibility)
+// ===========================================================
 
-export async function createNotification(values: z.infer<typeof NotificationSchema>) {
+type NotificationType =
+  | "achievement_unlock"
+  | "achievement_unlocked"
+  | "level_up"
+  | "xp_earned"
+  | "story_liked"
+  | "interview_reminder"
+  | "interview_reminder_24h"
+  | "interview_reminder_1h"
+  | "application_update"
+  | "application_status_changed"
+  | "streak_milestone"
+  | "system"
+  | AppEvent;
+
+interface CreateNotificationInput {
+  userId: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  link?: string;
+  metadata?: Record<string, any>;
+}
+
+// ===========================================================
+// CREATE NOTIFICATION (internal use)
+// ===========================================================
+
+export async function createNotification(
+  input: CreateNotificationInput
+): Promise<{ data: any | null; error: string | null }> {
   try {
-    
-    const parsed = NotificationSchema.safeParse(values)
-    if (!parsed.success) return { data: null, error: "Invalid input format" }
-
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
-
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from("notifications")
       .insert({
-        userId: user.id,
-        ...parsed.data,
+        userId: input.userId,
+        type: input.type,
+        title: input.title,
+        message: input.message,
+        link: input.link || null,
+        metadata: input.metadata || null,
       })
       .select("*")
-      .single()
+      .single();
 
-    if (error) return { data: null, error: error.message }
-
-    return { data, error: null }
+    if (error) return { data: null, error: error.message };
+    return { data, error: null };
   } catch (err) {
-    return { data: null, error: "Unexpected error creating notification" }
+    console.error("Error creating notification:", err);
+    return { data: null, error: "Failed to create notification" };
   }
 }
 
-export async function listNotifications(onlyUnread: boolean = false) {
-  try {
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+// ===========================================================
+// NOTIFICATION HELPERS (using new event dispatcher)
+// These maintain backward compatibility while using the new system
+// ===========================================================
 
-    let query = supabase
+export async function notifyAchievementUnlock(
+  userId: string,
+  achievementTitle: string,
+  achievementIcon: string
+): Promise<void> {
+  await notifyAchievement(userId, achievementTitle, achievementIcon);
+}
+
+export async function notifyLevelUp(
+  userId: string,
+  newLevel: number,
+  levelTitle: string
+): Promise<void> {
+  await emitLevelUp(userId, newLevel, levelTitle);
+}
+
+export async function notifyStoryLiked(
+  userId: string,
+  storyTitle: string,
+  storyId?: string
+): Promise<void> {
+  await emitStoryLiked(userId, storyTitle, storyId || "");
+}
+
+export async function notifyStreakMilestone(
+  userId: string,
+  streakDays: number
+): Promise<void> {
+  await emitStreakMilestone(userId, streakDays);
+}
+
+export async function notifyApplicationUpdate(
+  userId: string,
+  jobTitle: string,
+  company: string,
+  applicationId: string,
+  updateType: "status_change" | "interview_scheduled" | "interview_updated",
+  details: string
+): Promise<void> {
+  const statusMap: Record<string, string> = {
+    status_change: "UPDATED",
+    interview_scheduled: "INTERVIEWING",
+    interview_updated: "INTERVIEWING",
+  };
+  await emitApplicationUpdate(
+    userId,
+    jobTitle,
+    company,
+    applicationId,
+    statusMap[updateType] || "UPDATED",
+    details
+  );
+}
+
+export async function notifyInterviewReminder(
+  userId: string,
+  jobTitle: string,
+  company: string,
+  applicationId: string,
+  interviewDate: Date,
+  hoursUntil: number
+): Promise<void> {
+  await emitInterviewReminder(
+    userId,
+    jobTitle,
+    company,
+    applicationId,
+    interviewDate,
+    hoursUntil
+  );
+}
+
+// ===========================================================
+// CHECK FOR DUPLICATE REMINDER (idempotency)
+// ===========================================================
+
+export async function hasRecentReminder(
+  userId: string,
+  applicationId: string,
+  reminderWindow: "1h" | "24h"
+): Promise<boolean> {
+  try {
+    const cutoff = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours ago
+    const titlePattern = reminderWindow === "1h" ? "%1 hour%" : "%tomorrow%";
+
+    const { data } = await adminSupabase
+      .from("notifications")
+      .select("id")
+      .eq("userId", userId)
+      .eq("type", "interview_reminder")
+      .ilike("link", `%${applicationId}%`)
+      .ilike("title", titlePattern)
+      .gte("createdAt", cutoff.toISOString())
+      .limit(1);
+
+    return (data?.length || 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
+// ===========================================================
+// GET NOTIFICATIONS
+// ===========================================================
+
+export async function getNotifications(params?: {
+  limit?: number;
+  onlyUnread?: boolean;
+}): Promise<{ data: any[] | null; error: string | null }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const limit = params?.limit || 20;
+
+    let query = adminSupabase
       .from("notifications")
       .select("*")
       .eq("userId", user.id)
       .order("createdAt", { ascending: false })
+      .limit(limit);
 
-    if (onlyUnread) {
-      query = query.eq("isRead", false)
+    if (params?.onlyUnread) {
+      query = query.eq("isRead", false);
     }
 
-    const { data, error } = await query
+    const { data, error } = await query;
 
-    if (error) return { data: null, error: error.message }
-
-    return { data, error: null }
+    if (error) return { data: null, error: error.message };
+    return { data: data || [], error: null };
   } catch (err) {
-    return { data: null, error: "Unexpected error listing notifications" }
+    console.error("Error getting notifications:", err);
+    return { data: null, error: "Failed to load notifications" };
   }
 }
 
-export async function markNotificationAsRead(id: string) {
-  try {
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+// ===========================================================
+// GET UNREAD COUNT
+// ===========================================================
 
-    const { data, error } = await supabase
+export async function getUnreadCount(): Promise<{
+  data: number;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: 0, error: "Unauthorized" };
+
+    const { count, error } = await adminSupabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("userId", user.id)
+      .eq("isRead", false);
+
+    if (error) return { data: 0, error: error.message };
+    return { data: count || 0, error: null };
+  } catch (err) {
+    console.error("Error getting unread count:", err);
+    return { data: 0, error: "Failed to get unread count" };
+  }
+}
+
+// ===========================================================
+// MARK AS READ
+// ===========================================================
+
+export async function markAsRead(
+  notificationId: string
+): Promise<{ data: boolean; error: string | null }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: false, error: "Unauthorized" };
+
+    const { error } = await adminSupabase
       .from("notifications")
       .update({ isRead: true })
-      .eq("id", id)
-      .eq("userId", user.id)
-      .select("*")
-      .single()
+      .eq("id", notificationId)
+      .eq("userId", user.id);
 
-    if (error) return { data: null, error: error.message }
-
-    return { data, error: null }
+    if (error) return { data: false, error: error.message };
+    return { data: true, error: null };
   } catch (err) {
-    return { data: null, error: "Unexpected error marking notification as read" }
+    console.error("Error marking as read:", err);
+    return { data: false, error: "Failed to mark as read" };
   }
 }
 
-export async function markAllNotificationsAsRead() {
-  try {
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+// ===========================================================
+// MARK ALL AS READ
+// ===========================================================
 
-    const { error } = await supabase
+export async function markAllAsRead(): Promise<{
+  data: boolean;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: false, error: "Unauthorized" };
+
+    const { error } = await adminSupabase
       .from("notifications")
       .update({ isRead: true })
       .eq("userId", user.id)
-      .eq("isRead", false)
+      .eq("isRead", false);
 
-    if (error) return { data: null, error: error.message }
-
-    return { data: true, error: null }
+    if (error) return { data: false, error: error.message };
+    return { data: true, error: null };
   } catch (err) {
-    return { data: null, error: "Unexpected error marking all as read" }
+    console.error("Error marking all as read:", err);
+    return { data: false, error: "Failed to mark all as read" };
   }
 }
 
-export async function deleteNotification(id: string) {
-  try {
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { data: null, error: "Unauthorized" }
+// ===========================================================
+// DELETE NOTIFICATION
+// ===========================================================
 
-    const { error } = await supabase
+export async function deleteNotification(
+  notificationId: string
+): Promise<{ data: boolean; error: string | null }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: false, error: "Unauthorized" };
+
+    const { error } = await adminSupabase
       .from("notifications")
       .delete()
-      .eq("id", id)
-      .eq("userId", user.id)
+      .eq("id", notificationId)
+      .eq("userId", user.id);
 
-    if (error) return { data: null, error: error.message }
-
-    return { data: true, error: null }
+    if (error) return { data: false, error: error.message };
+    return { data: true, error: null };
   } catch (err) {
-    return { data: null, error: "Unexpected error deleting notification" }
+    console.error("Error deleting notification:", err);
+    return { data: false, error: "Failed to delete notification" };
   }
 }

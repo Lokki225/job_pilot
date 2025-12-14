@@ -27,8 +27,10 @@ import {
   LetterCard, 
   LetterPreview, 
   LetterEditor, 
-  EmptyLettersState 
+  EmptyLettersState,
+  TemplatesSection 
 } from '@/components/letters';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   getAllCoverLetters, 
   updateCoverLetter, 
@@ -64,6 +66,7 @@ export default function CoverLettersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [toneFilter, setToneFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [activeTab, setActiveTab] = useState<'letters' | 'templates'>('letters');
   
   // Modal State
   const [selectedLetter, setSelectedLetter] = useState<CoverLetter | null>(null);
@@ -279,7 +282,7 @@ export default function CoverLettersPage() {
                     Cover Letters
                   </h1>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                    Manage your AI-generated cover letters
+                    Manage your AI-generated cover letters and templates
                   </p>
                 </div>
               </div>
@@ -293,6 +296,14 @@ export default function CoverLettersPage() {
               Generate New Letter
             </Button>
           </div>
+
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'letters' | 'templates')} className="mt-6">
+            <TabsList>
+              <TabsTrigger value="letters">My Letters</TabsTrigger>
+              <TabsTrigger value="templates">Templates</TabsTrigger>
+            </TabsList>
+          </Tabs>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
@@ -316,119 +327,128 @@ export default function CoverLettersPage() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <div className="flex flex-1 gap-3 w-full sm:w-auto">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                placeholder="Search letters..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
-              />
-            </div>
-            
-            <Select value={toneFilter} onValueChange={setToneFilter}>
-              <SelectTrigger className="w-40 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
-                <SlidersHorizontal className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Filter by tone" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Tones</SelectItem>
-                <SelectItem value="professional">Professional</SelectItem>
-                <SelectItem value="friendly">Friendly</SelectItem>
-                <SelectItem value="formal">Formal</SelectItem>
-                <SelectItem value="enthusiastic">Enthusiastic</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              {filteredLetters.length} letter{filteredLetters.length !== 1 ? 's' : ''}
-            </span>
-            <div className="flex border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 ${viewMode === 'grid' 
-                  ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
-                  : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
-                }`}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 ${viewMode === 'list' 
-                  ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
-                  : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
-                }`}
-              >
-                <List className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+      {/* Content based on active tab */}
+      {activeTab === 'templates' ? (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-12">
+          <TemplatesSection />
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Filters */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+              <div className="flex flex-1 gap-3 w-full sm:w-auto">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    placeholder="Search letters..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700"
+                  />
+                </div>
+                
+                <Select value={toneFilter} onValueChange={setToneFilter}>
+                  <SelectTrigger className="w-40 bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+                    <SlidersHorizontal className="w-4 h-4 mr-2" />
+                    <SelectValue placeholder="Filter by tone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Tones</SelectItem>
+                    <SelectItem value="professional">Professional</SelectItem>
+                    <SelectItem value="friendly">Friendly</SelectItem>
+                    <SelectItem value="formal">Formal</SelectItem>
+                    <SelectItem value="enthusiastic">Enthusiastic</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
-            <p className="text-gray-600 dark:text-gray-400">{error}</p>
-            <Button 
-              onClick={loadLetters} 
-              variant="outline" 
-              className="mt-4 dark:border-slate-600 dark:text-gray-300"
-            >
-              Try Again
-            </Button>
-          </div>
-        ) : filteredLetters.length === 0 ? (
-          letters.length === 0 ? (
-            <EmptyLettersState onCreateNew={() => router.push('/dashboard/jobs')} />
-          ) : (
-            <div className="flex flex-col items-center justify-center py-20">
-              <Search className="w-12 h-12 text-gray-400 mb-4" />
-              <p className="text-gray-600 dark:text-gray-400">No letters match your search</p>
-              <Button 
-                onClick={() => {
-                  setSearchQuery('');
-                  setToneFilter('all');
-                }} 
-                variant="outline" 
-                className="mt-4 dark:border-slate-600 dark:text-gray-300"
-              >
-                Clear Filters
-              </Button>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {filteredLetters.length} letter{filteredLetters.length !== 1 ? 's' : ''}
+                </span>
+                <div className="flex border border-gray-200 dark:border-slate-700 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2 ${viewMode === 'grid' 
+                      ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
+                      : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-2 ${viewMode === 'list' 
+                      ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
+                      : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </div>
-          )
-        ) : (
-          <div className={viewMode === 'grid' 
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' 
-            : 'space-y-4'
-          }>
-            {filteredLetters.map((letter) => (
-              <LetterCard
-                key={letter.id}
-                letter={letter}
-                onView={handleView}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onCopy={handleCopy}
-                onDownload={handleDownload}
-              />
-            ))}
           </div>
-        )}
-      </div>
+
+          {/* Content */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+              </div>
+            ) : error ? (
+              <div className="flex flex-col items-center justify-center py-20">
+                <AlertCircle className="w-12 h-12 text-red-500 mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">{error}</p>
+                <Button 
+                  onClick={loadLetters} 
+                  variant="outline" 
+                  className="mt-4 dark:border-slate-600 dark:text-gray-300"
+                >
+                  Try Again
+                </Button>
+              </div>
+            ) : filteredLetters.length === 0 ? (
+              letters.length === 0 ? (
+                <EmptyLettersState onCreateNew={() => router.push('/dashboard/jobs')} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <Search className="w-12 h-12 text-gray-400 mb-4" />
+                  <p className="text-gray-600 dark:text-gray-400">No letters match your search</p>
+                  <Button 
+                    onClick={() => {
+                      setSearchQuery('');
+                      setToneFilter('all');
+                    }} 
+                    variant="outline" 
+                    className="mt-4 dark:border-slate-600 dark:text-gray-300"
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              )
+            ) : (
+              <div className={viewMode === 'grid' 
+                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' 
+                : 'space-y-4'
+              }>
+                {filteredLetters.map((letter) => (
+                  <LetterCard
+                    key={letter.id}
+                    letter={letter}
+                    onView={handleView}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onCopy={handleCopy}
+                    onDownload={handleDownload}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Modals */}
       <LetterPreview

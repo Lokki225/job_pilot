@@ -205,8 +205,8 @@ export type CertificationWhereInput = {
   AND?: Prisma.CertificationWhereInput | Prisma.CertificationWhereInput[]
   OR?: Prisma.CertificationWhereInput[]
   NOT?: Prisma.CertificationWhereInput | Prisma.CertificationWhereInput[]
-  id?: Prisma.StringFilter<"Certification"> | string
-  profileId?: Prisma.StringFilter<"Certification"> | string
+  id?: Prisma.UuidFilter<"Certification"> | string
+  profileId?: Prisma.UuidFilter<"Certification"> | string
   name?: Prisma.StringFilter<"Certification"> | string
   issuer?: Prisma.StringFilter<"Certification"> | string
   issueDate?: Prisma.DateTimeFilter<"Certification"> | Date | string
@@ -235,7 +235,7 @@ export type CertificationWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.CertificationWhereInput | Prisma.CertificationWhereInput[]
   OR?: Prisma.CertificationWhereInput[]
   NOT?: Prisma.CertificationWhereInput | Prisma.CertificationWhereInput[]
-  profileId?: Prisma.StringFilter<"Certification"> | string
+  profileId?: Prisma.UuidFilter<"Certification"> | string
   name?: Prisma.StringFilter<"Certification"> | string
   issuer?: Prisma.StringFilter<"Certification"> | string
   issueDate?: Prisma.DateTimeFilter<"Certification"> | Date | string
@@ -265,8 +265,8 @@ export type CertificationScalarWhereWithAggregatesInput = {
   AND?: Prisma.CertificationScalarWhereWithAggregatesInput | Prisma.CertificationScalarWhereWithAggregatesInput[]
   OR?: Prisma.CertificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CertificationScalarWhereWithAggregatesInput | Prisma.CertificationScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Certification"> | string
-  profileId?: Prisma.StringWithAggregatesFilter<"Certification"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Certification"> | string
+  profileId?: Prisma.UuidWithAggregatesFilter<"Certification"> | string
   name?: Prisma.StringWithAggregatesFilter<"Certification"> | string
   issuer?: Prisma.StringWithAggregatesFilter<"Certification"> | string
   issueDate?: Prisma.DateTimeWithAggregatesFilter<"Certification"> | Date | string
@@ -499,8 +499,8 @@ export type CertificationScalarWhereInput = {
   AND?: Prisma.CertificationScalarWhereInput | Prisma.CertificationScalarWhereInput[]
   OR?: Prisma.CertificationScalarWhereInput[]
   NOT?: Prisma.CertificationScalarWhereInput | Prisma.CertificationScalarWhereInput[]
-  id?: Prisma.StringFilter<"Certification"> | string
-  profileId?: Prisma.StringFilter<"Certification"> | string
+  id?: Prisma.UuidFilter<"Certification"> | string
+  profileId?: Prisma.UuidFilter<"Certification"> | string
   name?: Prisma.StringFilter<"Certification"> | string
   issuer?: Prisma.StringFilter<"Certification"> | string
   issueDate?: Prisma.DateTimeFilter<"Certification"> | Date | string

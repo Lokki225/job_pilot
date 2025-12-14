@@ -48,3 +48,176 @@ export const ApplicationStatus = {
 } as const
 
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
+
+
+export const SessionType = {
+  QUICK: 'QUICK',
+  FULL_MOCK: 'FULL_MOCK',
+  TARGETED: 'TARGETED',
+  COMPANY_PREP: 'COMPANY_PREP'
+} as const
+
+export type SessionType = (typeof SessionType)[keyof typeof SessionType]
+
+
+export const SessionStatus = {
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  ABANDONED: 'ABANDONED'
+} as const
+
+export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
+
+
+export const QuestionType = {
+  BEHAVIORAL: 'BEHAVIORAL',
+  TECHNICAL: 'TECHNICAL',
+  SITUATIONAL: 'SITUATIONAL',
+  GENERAL: 'GENERAL'
+} as const
+
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
+
+
+export const Difficulty = {
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD'
+} as const
+
+export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]
+
+
+export const StudyStatus = {
+  NOT_STARTED: 'NOT_STARTED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
+} as const
+
+export type StudyStatus = (typeof StudyStatus)[keyof typeof StudyStatus]
+
+
+export const ContentType = {
+  TEXT: 'TEXT',
+  VIDEO: 'VIDEO',
+  INTERACTIVE: 'INTERACTIVE',
+  QUIZ: 'QUIZ',
+  PRACTICE: 'PRACTICE'
+} as const
+
+export type ContentType = (typeof ContentType)[keyof typeof ContentType]
+
+
+export const ResearchType = {
+  AI_GENERATED: 'AI_GENERATED',
+  USER_PROVIDED: 'USER_PROVIDED'
+} as const
+
+export type ResearchType = (typeof ResearchType)[keyof typeof ResearchType]
+
+
+export const ExperienceLevel = {
+  ENTRY: 'ENTRY',
+  MID: 'MID',
+  SENIOR: 'SENIOR',
+  EXECUTIVE: 'EXECUTIVE'
+} as const
+
+export type ExperienceLevel = (typeof ExperienceLevel)[keyof typeof ExperienceLevel]
+
+
+export const PeerSessionStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PeerSessionStatus = (typeof PeerSessionStatus)[keyof typeof PeerSessionStatus]
+
+
+export const CalendarProvider = {
+  GOOGLE: 'GOOGLE',
+  OUTLOOK: 'OUTLOOK',
+  APPLE: 'APPLE'
+} as const
+
+export type CalendarProvider = (typeof CalendarProvider)[keyof typeof CalendarProvider]
+
+
+export const InterviewOutcome = {
+  PENDING: 'PENDING',
+  PASSED: 'PASSED',
+  REJECTED: 'REJECTED',
+  UNKNOWN: 'UNKNOWN'
+} as const
+
+export type InterviewOutcome = (typeof InterviewOutcome)[keyof typeof InterviewOutcome]
+
+
+export const AchievementCategory = {
+  STUDY: 'STUDY',
+  TRAINING: 'TRAINING',
+  COMMUNITY: 'COMMUNITY',
+  MILESTONE: 'MILESTONE'
+} as const
+
+export type AchievementCategory = (typeof AchievementCategory)[keyof typeof AchievementCategory]
+
+
+export const PrepPackStatus = {
+  DRAFT: 'DRAFT',
+  GENERATING: 'GENERATING',
+  READY: 'READY',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type PrepPackStatus = (typeof PrepPackStatus)[keyof typeof PrepPackStatus]
+
+
+export const CommunityPostType = {
+  TIP: 'TIP',
+  QUESTION: 'QUESTION',
+  DISCUSSION: 'DISCUSSION',
+  RESOURCE: 'RESOURCE',
+  ANNOUNCEMENT: 'ANNOUNCEMENT'
+} as const
+
+export type CommunityPostType = (typeof CommunityPostType)[keyof typeof CommunityPostType]
+
+
+export const ChatRoomType = {
+  PUBLIC: 'PUBLIC',
+  PREMIUM: 'PREMIUM',
+  ROLE_SPECIFIC: 'ROLE_SPECIFIC'
+} as const
+
+export type ChatRoomType = (typeof ChatRoomType)[keyof typeof ChatRoomType]
+
+
+export const CommunityBadgeType = {
+  FIRST_POST: 'FIRST_POST',
+  CONVERSATIONALIST: 'CONVERSATIONALIST',
+  COMMUNITY_FAVORITE: 'COMMUNITY_FAVORITE',
+  RESOURCE_SHARER: 'RESOURCE_SHARER',
+  SUCCESS_STORYTELLER: 'SUCCESS_STORYTELLER',
+  MENTOR: 'MENTOR',
+  ON_FIRE: 'ON_FIRE',
+  EXPERT: 'EXPERT',
+  LEGEND: 'LEGEND',
+  HELPFUL: 'HELPFUL',
+  MODERATOR: 'MODERATOR'
+} as const
+
+export type CommunityBadgeType = (typeof CommunityBadgeType)[keyof typeof CommunityBadgeType]
+
+
+export const ModerationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  FLAGGED: 'FLAGGED'
+} as const
+
+export type ModerationStatus = (typeof ModerationStatus)[keyof typeof ModerationStatus]

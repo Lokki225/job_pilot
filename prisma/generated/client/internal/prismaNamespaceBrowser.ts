@@ -61,8 +61,62 @@ export const ModelName = {
   Project: 'Project',
   JobApplication: 'JobApplication',
   JobSearchPreference: 'JobSearchPreference',
+  CachedJobRecommendation: 'CachedJobRecommendation',
   AIGeneratedContent: 'AIGeneratedContent',
-  Notification: 'Notification'
+  CoverLetter: 'CoverLetter',
+  EmailApplication: 'EmailApplication',
+  Notification: 'Notification',
+  StudyChapter: 'StudyChapter',
+  StudyLesson: 'StudyLesson',
+  StudyQuiz: 'StudyQuiz',
+  StudyResource: 'StudyResource',
+  UserStudyProgress: 'UserStudyProgress',
+  TrainingSession: 'TrainingSession',
+  TrainingQuestion: 'TrainingQuestion',
+  UserInterviewStats: 'UserInterviewStats',
+  CompanyResearch: 'CompanyResearch',
+  PeerPracticeProfile: 'PeerPracticeProfile',
+  PeerPracticeSession: 'PeerPracticeSession',
+  UserCalendarConnection: 'UserCalendarConnection',
+  DetectedInterview: 'DetectedInterview',
+  SuccessStory: 'SuccessStory',
+  SuccessStoryLike: 'SuccessStoryLike',
+  SuccessStoryBookmark: 'SuccessStoryBookmark',
+  SuccessStoryHide: 'SuccessStoryHide',
+  SuccessStoryReport: 'SuccessStoryReport',
+  SuccessStoryComment: 'SuccessStoryComment',
+  SuccessStoryCommentLike: 'SuccessStoryCommentLike',
+  Achievement: 'Achievement',
+  UserAchievement: 'UserAchievement',
+  UserXP: 'UserXP',
+  InterviewPrepPack: 'InterviewPrepPack',
+  XPTransaction: 'XPTransaction',
+  CommunityProfile: 'CommunityProfile',
+  CommunityBadge: 'CommunityBadge',
+  CommunityPost: 'CommunityPost',
+  CommunityPostLike: 'CommunityPostLike',
+  CommunityPostComment: 'CommunityPostComment',
+  CommunityPostCommentLike: 'CommunityPostCommentLike',
+  CommunityPostBookmark: 'CommunityPostBookmark',
+  CommunityPostReport: 'CommunityPostReport',
+  ChatRoom: 'ChatRoom',
+  ChatRoomMember: 'ChatRoomMember',
+  ChatMessage: 'ChatMessage',
+  ChatMessageReaction: 'ChatMessageReaction',
+  UserFollow: 'UserFollow',
+  MentorProfile: 'MentorProfile',
+  Mentorship: 'Mentorship',
+  CustomStudyPlan: 'CustomStudyPlan',
+  CustomStudyPlanLike: 'CustomStudyPlanLike',
+  CustomStudyPlanComment: 'CustomStudyPlanComment',
+  CustomStudyChapter: 'CustomStudyChapter',
+  CustomStudyLesson: 'CustomStudyLesson',
+  CustomStudyQuiz: 'CustomStudyQuiz',
+  CoverLetterTemplate: 'CoverLetterTemplate',
+  NotificationPreference: 'NotificationPreference',
+  NotificationQueue: 'NotificationQueue',
+  EmailQueue: 'EmailQueue',
+  EventLog: 'EventLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -275,6 +329,22 @@ export const JobSearchPreferenceScalarFieldEnum = {
 export type JobSearchPreferenceScalarFieldEnum = (typeof JobSearchPreferenceScalarFieldEnum)[keyof typeof JobSearchPreferenceScalarFieldEnum]
 
 
+export const CachedJobRecommendationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobs: 'jobs',
+  matchScore: 'matchScore',
+  searchQuery: 'searchQuery',
+  sources: 'sources',
+  expiresAt: 'expiresAt',
+  lastRefreshedAt: 'lastRefreshedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CachedJobRecommendationScalarFieldEnum = (typeof CachedJobRecommendationScalarFieldEnum)[keyof typeof CachedJobRecommendationScalarFieldEnum]
+
+
 export const AIGeneratedContentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -290,6 +360,50 @@ export const AIGeneratedContentScalarFieldEnum = {
 export type AIGeneratedContentScalarFieldEnum = (typeof AIGeneratedContentScalarFieldEnum)[keyof typeof AIGeneratedContentScalarFieldEnum]
 
 
+export const CoverLetterScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobApplicationId: 'jobApplicationId',
+  content: 'content',
+  subject: 'subject',
+  aiModel: 'aiModel',
+  promptUsed: 'promptUsed',
+  tone: 'tone',
+  isDefault: 'isDefault',
+  isSent: 'isSent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoverLetterScalarFieldEnum = (typeof CoverLetterScalarFieldEnum)[keyof typeof CoverLetterScalarFieldEnum]
+
+
+export const EmailApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobApplicationId: 'jobApplicationId',
+  coverLetterId: 'coverLetterId',
+  recipientEmail: 'recipientEmail',
+  recipientName: 'recipientName',
+  companyName: 'companyName',
+  subject: 'subject',
+  body: 'body',
+  resumeUrl: 'resumeUrl',
+  attachments: 'attachments',
+  status: 'status',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  openedAt: 'openedAt',
+  failureReason: 'failureReason',
+  emailServiceId: 'emailServiceId',
+  emailServiceResponse: 'emailServiceResponse',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailApplicationScalarFieldEnum = (typeof EmailApplicationScalarFieldEnum)[keyof typeof EmailApplicationScalarFieldEnum]
+
+
 export const NotificationScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -298,11 +412,849 @@ export const NotificationScalarFieldEnum = {
   message: 'message',
   isRead: 'isRead',
   link: 'link',
+  metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const StudyChapterScalarFieldEnum = {
+  id: 'id',
+  careerTrackId: 'careerTrackId',
+  orderIndex: 'orderIndex',
+  title: 'title',
+  description: 'description',
+  estimatedMinutes: 'estimatedMinutes',
+  icon: 'icon',
+  isPremium: 'isPremium',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyChapterScalarFieldEnum = (typeof StudyChapterScalarFieldEnum)[keyof typeof StudyChapterScalarFieldEnum]
+
+
+export const StudyLessonScalarFieldEnum = {
+  id: 'id',
+  chapterId: 'chapterId',
+  orderIndex: 'orderIndex',
+  title: 'title',
+  description: 'description',
+  estimatedMinutes: 'estimatedMinutes',
+  contentType: 'contentType',
+  content: 'content',
+  isPremium: 'isPremium',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyLessonScalarFieldEnum = (typeof StudyLessonScalarFieldEnum)[keyof typeof StudyLessonScalarFieldEnum]
+
+
+export const StudyQuizScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  passingScore: 'passingScore',
+  questions: 'questions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StudyQuizScalarFieldEnum = (typeof StudyQuizScalarFieldEnum)[keyof typeof StudyQuizScalarFieldEnum]
+
+
+export const StudyResourceScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  isPremium: 'isPremium',
+  downloadCount: 'downloadCount',
+  createdAt: 'createdAt'
+} as const
+
+export type StudyResourceScalarFieldEnum = (typeof StudyResourceScalarFieldEnum)[keyof typeof StudyResourceScalarFieldEnum]
+
+
+export const UserStudyProgressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lessonId: 'lessonId',
+  status: 'status',
+  progressPercentage: 'progressPercentage',
+  quizScore: 'quizScore',
+  quizAttempts: 'quizAttempts',
+  timeSpentSeconds: 'timeSpentSeconds',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserStudyProgressScalarFieldEnum = (typeof UserStudyProgressScalarFieldEnum)[keyof typeof UserStudyProgressScalarFieldEnum]
+
+
+export const TrainingSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionType: 'sessionType',
+  companyId: 'companyId',
+  companyName: 'companyName',
+  jobTitle: 'jobTitle',
+  jobApplicationId: 'jobApplicationId',
+  prepPackId: 'prepPackId',
+  prepStepId: 'prepStepId',
+  focusAreas: 'focusAreas',
+  difficulty: 'difficulty',
+  totalQuestions: 'totalQuestions',
+  completedQuestions: 'completedQuestions',
+  durationSeconds: 'durationSeconds',
+  overallScore: 'overallScore',
+  status: 'status',
+  feedbackSummary: 'feedbackSummary',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TrainingSessionScalarFieldEnum = (typeof TrainingSessionScalarFieldEnum)[keyof typeof TrainingSessionScalarFieldEnum]
+
+
+export const TrainingQuestionScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  orderIndex: 'orderIndex',
+  questionType: 'questionType',
+  questionText: 'questionText',
+  questionContext: 'questionContext',
+  userAnswer: 'userAnswer',
+  answerAudioUrl: 'answerAudioUrl',
+  answerDurationSeconds: 'answerDurationSeconds',
+  aiFeedback: 'aiFeedback',
+  score: 'score',
+  improvementTips: 'improvementTips',
+  keywordsUsed: 'keywordsUsed',
+  keywordsMissing: 'keywordsMissing',
+  revisedAnswer: 'revisedAnswer',
+  answeredAt: 'answeredAt',
+  createdAt: 'createdAt'
+} as const
+
+export type TrainingQuestionScalarFieldEnum = (typeof TrainingQuestionScalarFieldEnum)[keyof typeof TrainingQuestionScalarFieldEnum]
+
+
+export const UserInterviewStatsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  totalSessions: 'totalSessions',
+  totalQuestionsAnswered: 'totalQuestionsAnswered',
+  totalPracticeTimeSeconds: 'totalPracticeTimeSeconds',
+  avgSessionScore: 'avgSessionScore',
+  highestScore: 'highestScore',
+  currentStreakDays: 'currentStreakDays',
+  longestStreakDays: 'longestStreakDays',
+  lastPracticeDate: 'lastPracticeDate',
+  weakAreas: 'weakAreas',
+  strongAreas: 'strongAreas',
+  scoreHistory: 'scoreHistory',
+  skillScores: 'skillScores',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserInterviewStatsScalarFieldEnum = (typeof UserInterviewStatsScalarFieldEnum)[keyof typeof UserInterviewStatsScalarFieldEnum]
+
+
+export const CompanyResearchScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  companyName: 'companyName',
+  companyWebsite: 'companyWebsite',
+  researchType: 'researchType',
+  missionStatement: 'missionStatement',
+  coreValues: 'coreValues',
+  companyCulture: 'companyCulture',
+  industry: 'industry',
+  companySize: 'companySize',
+  foundedYear: 'foundedYear',
+  headquarters: 'headquarters',
+  mainProducts: 'mainProducts',
+  keyAchievements: 'keyAchievements',
+  recentNews: 'recentNews',
+  leadershipTeam: 'leadershipTeam',
+  commonInterviewQuestions: 'commonInterviewQuestions',
+  interviewProcess: 'interviewProcess',
+  glassdoorRating: 'glassdoorRating',
+  glassdoorSummary: 'glassdoorSummary',
+  companyChallenges: 'companyChallenges',
+  growthOpportunities: 'growthOpportunities',
+  userNotes: 'userNotes',
+  lastAiRefresh: 'lastAiRefresh',
+  isVerified: 'isVerified',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyResearchScalarFieldEnum = (typeof CompanyResearchScalarFieldEnum)[keyof typeof CompanyResearchScalarFieldEnum]
+
+
+export const PeerPracticeProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  isAvailable: 'isAvailable',
+  preferredTimes: 'preferredTimes',
+  timezone: 'timezone',
+  targetRoles: 'targetRoles',
+  industries: 'industries',
+  experienceLevel: 'experienceLevel',
+  languages: 'languages',
+  bio: 'bio',
+  totalSessions: 'totalSessions',
+  avgRating: 'avgRating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PeerPracticeProfileScalarFieldEnum = (typeof PeerPracticeProfileScalarFieldEnum)[keyof typeof PeerPracticeProfileScalarFieldEnum]
+
+
+export const PeerPracticeSessionScalarFieldEnum = {
+  id: 'id',
+  requesterId: 'requesterId',
+  partnerId: 'partnerId',
+  scheduledAt: 'scheduledAt',
+  durationMinutes: 'durationMinutes',
+  meetingUrl: 'meetingUrl',
+  status: 'status',
+  focusArea: 'focusArea',
+  notes: 'notes',
+  requesterRating: 'requesterRating',
+  requesterFeedback: 'requesterFeedback',
+  partnerRating: 'partnerRating',
+  partnerFeedback: 'partnerFeedback',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PeerPracticeSessionScalarFieldEnum = (typeof PeerPracticeSessionScalarFieldEnum)[keyof typeof PeerPracticeSessionScalarFieldEnum]
+
+
+export const UserCalendarConnectionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  tokenExpiresAt: 'tokenExpiresAt',
+  calendarId: 'calendarId',
+  isActive: 'isActive',
+  lastSyncAt: 'lastSyncAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserCalendarConnectionScalarFieldEnum = (typeof UserCalendarConnectionScalarFieldEnum)[keyof typeof UserCalendarConnectionScalarFieldEnum]
+
+
+export const DetectedInterviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  calendarConnectionId: 'calendarConnectionId',
+  calendarEventId: 'calendarEventId',
+  companyName: 'companyName',
+  jobTitle: 'jobTitle',
+  interviewType: 'interviewType',
+  scheduledAt: 'scheduledAt',
+  durationMinutes: 'durationMinutes',
+  location: 'location',
+  description: 'description',
+  jobApplicationId: 'jobApplicationId',
+  companyResearchId: 'companyResearchId',
+  reminder5DaysSent: 'reminder5DaysSent',
+  reminder2DaysSent: 'reminder2DaysSent',
+  reminder1DaySent: 'reminder1DaySent',
+  reminder2HoursSent: 'reminder2HoursSent',
+  outcome: 'outcome',
+  userNotes: 'userNotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DetectedInterviewScalarFieldEnum = (typeof DetectedInterviewScalarFieldEnum)[keyof typeof DetectedInterviewScalarFieldEnum]
+
+
+export const SuccessStoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobTitle: 'jobTitle',
+  companyName: 'companyName',
+  industry: 'industry',
+  salaryRange: 'salaryRange',
+  location: 'location',
+  title: 'title',
+  story: 'story',
+  keyLearnings: 'keyLearnings',
+  adviceForOthers: 'adviceForOthers',
+  tags: 'tags',
+  coverImageUrl: 'coverImageUrl',
+  coverImagePath: 'coverImagePath',
+  totalApplications: 'totalApplications',
+  totalTrainingSessions: 'totalTrainingSessions',
+  totalStudyTimeMinutes: 'totalStudyTimeMinutes',
+  totalQuestionsPracticed: 'totalQuestionsPracticed',
+  avgTrainingScore: 'avgTrainingScore',
+  daysToOffer: 'daysToOffer',
+  isAnonymous: 'isAnonymous',
+  displayName: 'displayName',
+  isFeatured: 'isFeatured',
+  isPublished: 'isPublished',
+  viewCount: 'viewCount',
+  likeCount: 'likeCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SuccessStoryScalarFieldEnum = (typeof SuccessStoryScalarFieldEnum)[keyof typeof SuccessStoryScalarFieldEnum]
+
+
+export const SuccessStoryLikeScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SuccessStoryLikeScalarFieldEnum = (typeof SuccessStoryLikeScalarFieldEnum)[keyof typeof SuccessStoryLikeScalarFieldEnum]
+
+
+export const SuccessStoryBookmarkScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SuccessStoryBookmarkScalarFieldEnum = (typeof SuccessStoryBookmarkScalarFieldEnum)[keyof typeof SuccessStoryBookmarkScalarFieldEnum]
+
+
+export const SuccessStoryHideScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SuccessStoryHideScalarFieldEnum = (typeof SuccessStoryHideScalarFieldEnum)[keyof typeof SuccessStoryHideScalarFieldEnum]
+
+
+export const SuccessStoryReportScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  reporterId: 'reporterId',
+  reason: 'reason',
+  details: 'details',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SuccessStoryReportScalarFieldEnum = (typeof SuccessStoryReportScalarFieldEnum)[keyof typeof SuccessStoryReportScalarFieldEnum]
+
+
+export const SuccessStoryCommentScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  userId: 'userId',
+  parentId: 'parentId',
+  content: 'content',
+  likeCount: 'likeCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SuccessStoryCommentScalarFieldEnum = (typeof SuccessStoryCommentScalarFieldEnum)[keyof typeof SuccessStoryCommentScalarFieldEnum]
+
+
+export const SuccessStoryCommentLikeScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SuccessStoryCommentLikeScalarFieldEnum = (typeof SuccessStoryCommentLikeScalarFieldEnum)[keyof typeof SuccessStoryCommentLikeScalarFieldEnum]
+
+
+export const AchievementScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  title: 'title',
+  description: 'description',
+  icon: 'icon',
+  category: 'category',
+  points: 'points',
+  requirementType: 'requirementType',
+  requirementValue: 'requirementValue',
+  requirementField: 'requirementField',
+  isSecret: 'isSecret',
+  createdAt: 'createdAt'
+} as const
+
+export type AchievementScalarFieldEnum = (typeof AchievementScalarFieldEnum)[keyof typeof AchievementScalarFieldEnum]
+
+
+export const UserAchievementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  achievementId: 'achievementId',
+  progress: 'progress',
+  unlockedAt: 'unlockedAt',
+  isNotified: 'isNotified',
+  createdAt: 'createdAt'
+} as const
+
+export type UserAchievementScalarFieldEnum = (typeof UserAchievementScalarFieldEnum)[keyof typeof UserAchievementScalarFieldEnum]
+
+
+export const UserXPScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  totalXp: 'totalXp',
+  currentLevel: 'currentLevel',
+  xpToNextLevel: 'xpToNextLevel',
+  weeklyXp: 'weeklyXp',
+  monthlyXp: 'monthlyXp',
+  lastXpReset: 'lastXpReset',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserXPScalarFieldEnum = (typeof UserXPScalarFieldEnum)[keyof typeof UserXPScalarFieldEnum]
+
+
+export const InterviewPrepPackScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  jobApplicationId: 'jobApplicationId',
+  companyName: 'companyName',
+  jobTitle: 'jobTitle',
+  jobPostText: 'jobPostText',
+  jobPostUrl: 'jobPostUrl',
+  companyWebsite: 'companyWebsite',
+  extractedData: 'extractedData',
+  prepPlan: 'prepPlan',
+  studyModule: 'studyModule',
+  studyModuleProgress: 'studyModuleProgress',
+  status: 'status',
+  completedSteps: 'completedSteps',
+  totalSteps: 'totalSteps',
+  progressPercent: 'progressPercent',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewPrepPackScalarFieldEnum = (typeof InterviewPrepPackScalarFieldEnum)[keyof typeof InterviewPrepPackScalarFieldEnum]
+
+
+export const XPTransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  source: 'source',
+  sourceId: 'sourceId',
+  description: 'description',
+  createdAt: 'createdAt'
+} as const
+
+export type XPTransactionScalarFieldEnum = (typeof XPTransactionScalarFieldEnum)[keyof typeof XPTransactionScalarFieldEnum]
+
+
+export const CommunityProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  reputationPoints: 'reputationPoints',
+  level: 'level',
+  postsCount: 'postsCount',
+  commentsCount: 'commentsCount',
+  helpfulVotes: 'helpfulVotes',
+  successStoriesShared: 'successStoriesShared',
+  isModerator: 'isModerator',
+  isExpert: 'isExpert',
+  isMentor: 'isMentor',
+  isBanned: 'isBanned',
+  banReason: 'banReason',
+  banExpiresAt: 'banExpiresAt',
+  favoriteTopics: 'favoriteTopics',
+  bio: 'bio',
+  lastActiveAt: 'lastActiveAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityProfileScalarFieldEnum = (typeof CommunityProfileScalarFieldEnum)[keyof typeof CommunityProfileScalarFieldEnum]
+
+
+export const CommunityBadgeScalarFieldEnum = {
+  id: 'id',
+  communityProfileId: 'communityProfileId',
+  badgeType: 'badgeType',
+  earnedAt: 'earnedAt'
+} as const
+
+export type CommunityBadgeScalarFieldEnum = (typeof CommunityBadgeScalarFieldEnum)[keyof typeof CommunityBadgeScalarFieldEnum]
+
+
+export const CommunityPostScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  content: 'content',
+  tags: 'tags',
+  attachments: 'attachments',
+  isPinned: 'isPinned',
+  isFeatured: 'isFeatured',
+  isHighlighted: 'isHighlighted',
+  likesCount: 'likesCount',
+  commentsCount: 'commentsCount',
+  sharesCount: 'sharesCount',
+  viewsCount: 'viewsCount',
+  moderationStatus: 'moderationStatus',
+  moderationNote: 'moderationNote',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityPostScalarFieldEnum = (typeof CommunityPostScalarFieldEnum)[keyof typeof CommunityPostScalarFieldEnum]
+
+
+export const CommunityPostLikeScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityPostLikeScalarFieldEnum = (typeof CommunityPostLikeScalarFieldEnum)[keyof typeof CommunityPostLikeScalarFieldEnum]
+
+
+export const CommunityPostCommentScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  parentId: 'parentId',
+  content: 'content',
+  likesCount: 'likesCount',
+  isEdited: 'isEdited',
+  isDeleted: 'isDeleted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityPostCommentScalarFieldEnum = (typeof CommunityPostCommentScalarFieldEnum)[keyof typeof CommunityPostCommentScalarFieldEnum]
+
+
+export const CommunityPostCommentLikeScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityPostCommentLikeScalarFieldEnum = (typeof CommunityPostCommentLikeScalarFieldEnum)[keyof typeof CommunityPostCommentLikeScalarFieldEnum]
+
+
+export const CommunityPostBookmarkScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type CommunityPostBookmarkScalarFieldEnum = (typeof CommunityPostBookmarkScalarFieldEnum)[keyof typeof CommunityPostBookmarkScalarFieldEnum]
+
+
+export const CommunityPostReportScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  reporterId: 'reporterId',
+  reason: 'reason',
+  details: 'details',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityPostReportScalarFieldEnum = (typeof CommunityPostReportScalarFieldEnum)[keyof typeof CommunityPostReportScalarFieldEnum]
+
+
+export const ChatRoomScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  slug: 'slug',
+  type: 'type',
+  category: 'category',
+  icon: 'icon',
+  memberCount: 'memberCount',
+  isActive: 'isActive',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatRoomScalarFieldEnum = (typeof ChatRoomScalarFieldEnum)[keyof typeof ChatRoomScalarFieldEnum]
+
+
+export const ChatRoomMemberScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  userId: 'userId',
+  isMuted: 'isMuted',
+  lastReadAt: 'lastReadAt',
+  joinedAt: 'joinedAt'
+} as const
+
+export type ChatRoomMemberScalarFieldEnum = (typeof ChatRoomMemberScalarFieldEnum)[keyof typeof ChatRoomMemberScalarFieldEnum]
+
+
+export const ChatMessageScalarFieldEnum = {
+  id: 'id',
+  roomId: 'roomId',
+  userId: 'userId',
+  replyToId: 'replyToId',
+  content: 'content',
+  attachments: 'attachments',
+  isEdited: 'isEdited',
+  isDeleted: 'isDeleted',
+  isPinned: 'isPinned',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChatMessageScalarFieldEnum = (typeof ChatMessageScalarFieldEnum)[keyof typeof ChatMessageScalarFieldEnum]
+
+
+export const ChatMessageReactionScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  userId: 'userId',
+  emoji: 'emoji',
+  createdAt: 'createdAt'
+} as const
+
+export type ChatMessageReactionScalarFieldEnum = (typeof ChatMessageReactionScalarFieldEnum)[keyof typeof ChatMessageReactionScalarFieldEnum]
+
+
+export const UserFollowScalarFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserFollowScalarFieldEnum = (typeof UserFollowScalarFieldEnum)[keyof typeof UserFollowScalarFieldEnum]
+
+
+export const MentorProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  expertise: 'expertise',
+  availability: 'availability',
+  maxMentees: 'maxMentees',
+  currentMentees: 'currentMentees',
+  isActive: 'isActive',
+  bio: 'bio',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MentorProfileScalarFieldEnum = (typeof MentorProfileScalarFieldEnum)[keyof typeof MentorProfileScalarFieldEnum]
+
+
+export const MentorshipScalarFieldEnum = {
+  id: 'id',
+  mentorId: 'mentorId',
+  menteeId: 'menteeId',
+  status: 'status',
+  message: 'message',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MentorshipScalarFieldEnum = (typeof MentorshipScalarFieldEnum)[keyof typeof MentorshipScalarFieldEnum]
+
+
+export const CustomStudyPlanScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  icon: 'icon',
+  coverImageUrl: 'coverImageUrl',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomStudyPlanScalarFieldEnum = (typeof CustomStudyPlanScalarFieldEnum)[keyof typeof CustomStudyPlanScalarFieldEnum]
+
+
+export const CustomStudyPlanLikeScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type CustomStudyPlanLikeScalarFieldEnum = (typeof CustomStudyPlanLikeScalarFieldEnum)[keyof typeof CustomStudyPlanLikeScalarFieldEnum]
+
+
+export const CustomStudyPlanCommentScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  userId: 'userId',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomStudyPlanCommentScalarFieldEnum = (typeof CustomStudyPlanCommentScalarFieldEnum)[keyof typeof CustomStudyPlanCommentScalarFieldEnum]
+
+
+export const CustomStudyChapterScalarFieldEnum = {
+  id: 'id',
+  planId: 'planId',
+  orderIndex: 'orderIndex',
+  title: 'title',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomStudyChapterScalarFieldEnum = (typeof CustomStudyChapterScalarFieldEnum)[keyof typeof CustomStudyChapterScalarFieldEnum]
+
+
+export const CustomStudyLessonScalarFieldEnum = {
+  id: 'id',
+  chapterId: 'chapterId',
+  orderIndex: 'orderIndex',
+  title: 'title',
+  content: 'content',
+  estimatedMinutes: 'estimatedMinutes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomStudyLessonScalarFieldEnum = (typeof CustomStudyLessonScalarFieldEnum)[keyof typeof CustomStudyLessonScalarFieldEnum]
+
+
+export const CustomStudyQuizScalarFieldEnum = {
+  id: 'id',
+  lessonId: 'lessonId',
+  title: 'title',
+  passingScore: 'passingScore',
+  questions: 'questions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CustomStudyQuizScalarFieldEnum = (typeof CustomStudyQuizScalarFieldEnum)[keyof typeof CustomStudyQuizScalarFieldEnum]
+
+
+export const CoverLetterTemplateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  content: 'content',
+  tone: 'tone',
+  category: 'category',
+  isSystem: 'isSystem',
+  isActive: 'isActive',
+  userId: 'userId',
+  usageCount: 'usageCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CoverLetterTemplateScalarFieldEnum = (typeof CoverLetterTemplateScalarFieldEnum)[keyof typeof CoverLetterTemplateScalarFieldEnum]
+
+
+export const NotificationPreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  emailEnabled: 'emailEnabled',
+  pushEnabled: 'pushEnabled',
+  inAppEnabled: 'inAppEnabled',
+  smsEnabled: 'smsEnabled',
+  mutedCategories: 'mutedCategories',
+  mutedEvents: 'mutedEvents',
+  quietHoursStart: 'quietHoursStart',
+  quietHoursEnd: 'quietHoursEnd',
+  quietHoursTimezone: 'quietHoursTimezone',
+  emailDigestFrequency: 'emailDigestFrequency',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationPreferenceScalarFieldEnum = (typeof NotificationPreferenceScalarFieldEnum)[keyof typeof NotificationPreferenceScalarFieldEnum]
+
+
+export const NotificationQueueScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  event: 'event',
+  title: 'title',
+  message: 'message',
+  link: 'link',
+  metadata: 'metadata',
+  scheduledFor: 'scheduledFor',
+  status: 'status',
+  attempts: 'attempts',
+  lastAttemptAt: 'lastAttemptAt',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type NotificationQueueScalarFieldEnum = (typeof NotificationQueueScalarFieldEnum)[keyof typeof NotificationQueueScalarFieldEnum]
+
+
+export const EmailQueueScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  event: 'event',
+  subject: 'subject',
+  message: 'message',
+  link: 'link',
+  metadata: 'metadata',
+  digestType: 'digestType',
+  status: 'status',
+  sentAt: 'sentAt',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailQueueScalarFieldEnum = (typeof EmailQueueScalarFieldEnum)[keyof typeof EmailQueueScalarFieldEnum]
+
+
+export const EventLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  event: 'event',
+  channels: 'channels',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type EventLogScalarFieldEnum = (typeof EventLogScalarFieldEnum)[keyof typeof EventLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -319,6 +1271,13 @@ export const NullableJsonNullValueInput = {
 } as const
 
 export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {

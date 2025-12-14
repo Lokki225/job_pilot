@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Crown, Loader2, Medal, Trophy, TrendingUp } from "lucide-react";
+import { ArrowLeft, Crown, Loader2, Medal, Trophy, TrendingUp, Users } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -117,12 +117,20 @@ export default function LeaderboardPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <Button variant="outline" asChild className="mb-6">
-        <Link href="/dashboard/community">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Community
-        </Link>
-      </Button>
+      <div className="mb-6 flex flex-wrap gap-2">
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/community">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Community
+          </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link href="/dashboard/community/hub">
+            <Users className="h-4 w-4 mr-2" />
+            Community Hub
+          </Link>
+        </Button>
+      </div>
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>

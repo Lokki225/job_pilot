@@ -158,9 +158,40 @@ model User {
   detectedInterviews    DetectedInterview[]
   successStories        SuccessStory[]
   storyLikes            SuccessStoryLike[]
+  storyBookmarks        SuccessStoryBookmark[]
+  storyHides            SuccessStoryHide[]
+  storyReports          SuccessStoryReport[]
+  storyComments         SuccessStoryComment[]
+  storyCommentLikes     SuccessStoryCommentLike[]
   achievements          UserAchievement[]
   xp                    UserXP?
   xpTransactions        XPTransaction[]
+
+  // Community Relations
+  communityProfile          CommunityProfile?
+  communityPosts            CommunityPost[]
+  communityPostLikes        CommunityPostLike[]
+  communityPostComments     CommunityPostComment[]
+  communityPostCommentLikes CommunityPostCommentLike[]
+  communityPostBookmarks    CommunityPostBookmark[]
+  communityPostReports      CommunityPostReport[]
+  chatRoomMemberships       ChatRoomMember[]
+  chatMessages              ChatMessage[]
+  chatMessageReactions      ChatMessageReaction[]
+  followers                 UserFollow[] @relation("Following")
+  following                 UserFollow[] @relation("Followers")
+  mentorProfile             MentorProfile?
+  mentorships               Mentorship[]
+  coverLetterTemplates      CoverLetterTemplate[]
+  customStudyPlans          CustomStudyPlan[]
+  customStudyPlanLikes      CustomStudyPlanLike[]
+  customStudyPlanComments   CustomStudyPlanComment[]
+
+  // Notification System Relations
+  notificationPreference    NotificationPreference?
+  notificationQueue         NotificationQueue[]
+  emailQueue                EmailQueue[]
+  eventLogs                 EventLog[]
 
   // Onboarding state
   onboardingStep  Int       @default(0)   // 0 = fresh user, 1-5 steps...
@@ -575,17 +606,20 @@ model Notification {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId      String   @db.Uuid
 
-  type        String   // “job_match”, “reminder”
+  type        String   // AppEvent enum value
   title       String
   message     String
   isRead      Boolean  @default(false)
   link        String?
+  metadata    Json?    // Additional event-specific data
 
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
+  @@index([userId, isRead])
+  @@index([type])
   @@map("notifications")
 }
 
@@ -594,6 +628,7 @@ model Notification {
 // ===========================================================
 model StudyChapter {
   id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  careerTrackId   String?  @db.VarChar(50) // e.g. 'software-engineer', 'data-analyst'
   orderIndex      Int
   title           String   @db.VarChar(255)
   description     String?  @db.Text
@@ -995,6 +1030,9 @@ model SuccessStory {
   story                 String   @db.Text
   keyLearnings          Json?    // Array of key takeaways
   adviceForOthers       String?  @db.Text
+  tags                  Json?
+  coverImageUrl         String?  @db.Text
+  coverImagePath        String?  @db.Text
 
   // Auto-populated stats
   totalApplications     Int?
@@ -1017,6 +1055,10 @@ model SuccessStory {
   // Relations
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes                 SuccessStoryLike[]
+  bookmarks             SuccessStoryBookmark[]
+  hides                 SuccessStoryHide[]
+  reports               SuccessStoryReport[]
+  comments              SuccessStoryComment[]
 
   createdAt             DateTime @default(now()) @db.Timestamptz(6)
   updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
@@ -1042,6 +1084,106 @@ model SuccessStoryLike {
 
   @@unique([storyId, userId])
   @@map("success_story_likes")
+}
+
+model SuccessStoryBookmark {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storyId   String   @db.Uuid
+  userId    String   @db.Uuid
+
+  story     SuccessStory @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([storyId, userId])
+  @@index([userId])
+  @@index([storyId])
+  @@map("success_story_bookmarks")
+}
+
+model SuccessStoryHide {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storyId   String   @db.Uuid
+  userId    String   @db.Uuid
+
+  story     SuccessStory @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([storyId, userId])
+  @@index([userId])
+  @@index([storyId])
+  @@map("success_story_hides")
+}
+
+model SuccessStoryReport {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storyId    String   @db.Uuid
+  reporterId String   @db.Uuid
+  reason     String   @db.VarChar(100)
+  details    String?  @db.Text
+  status     String   @default("OPEN") @db.VarChar(20)
+
+  story      SuccessStory @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  reporter   User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([storyId, reporterId])
+  @@index([storyId])
+  @@index([reporterId])
+  @@index([status])
+  @@map("success_story_reports")
+}
+
+// ===========================================================
+// SUCCESS STORY COMMENTS
+// ===========================================================
+model SuccessStoryComment {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  storyId   String   @db.Uuid
+  userId    String   @db.Uuid
+  parentId  String?  @db.Uuid
+  content   String   @db.Text
+  likeCount Int      @default(0)
+
+  // Relations
+  story     SuccessStory @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    SuccessStoryComment? @relation("SuccessStoryCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   SuccessStoryComment[] @relation("SuccessStoryCommentReplies")
+  likes     SuccessStoryCommentLike[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([storyId])
+  @@index([userId])
+  @@index([parentId])
+  @@map("success_story_comments")
+}
+
+// ===========================================================
+// SUCCESS STORY COMMENT LIKES
+// ===========================================================
+model SuccessStoryCommentLike {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commentId String   @db.Uuid
+  userId    String   @db.Uuid
+
+  // Relations
+  comment   SuccessStoryComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([commentId, userId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("success_story_comment_likes")
 }
 
 // ===========================================================
@@ -1180,5 +1322,676 @@ model XPTransaction {
 
   @@index([userId])
   @@map("xp_transactions")
+}
+
+// ===========================================================
+// COMMUNITY - ENUMS
+// ===========================================================
+enum CommunityPostType {
+  TIP
+  QUESTION
+  DISCUSSION
+  RESOURCE
+  ANNOUNCEMENT
+}
+
+enum ChatRoomType {
+  PUBLIC
+  PREMIUM
+  ROLE_SPECIFIC
+}
+
+enum CommunityBadgeType {
+  FIRST_POST
+  CONVERSATIONALIST
+  COMMUNITY_FAVORITE
+  RESOURCE_SHARER
+  SUCCESS_STORYTELLER
+  MENTOR
+  ON_FIRE
+  EXPERT
+  LEGEND
+  HELPFUL
+  MODERATOR
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FLAGGED
+}
+
+// ===========================================================
+// COMMUNITY - USER PROFILE
+// ===========================================================
+model CommunityProfile {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String   @unique @db.Uuid
+  
+  reputationPoints      Int      @default(0)
+  level                 Int      @default(1)
+  
+  postsCount            Int      @default(0)
+  commentsCount         Int      @default(0)
+  helpfulVotes          Int      @default(0)
+  successStoriesShared  Int      @default(0)
+  
+  isModerator           Boolean  @default(false)
+  isExpert              Boolean  @default(false)
+  isMentor              Boolean  @default(false)
+  isBanned              Boolean  @default(false)
+  banReason             String?  @db.Text
+  banExpiresAt          DateTime? @db.Timestamptz(6)
+  
+  favoriteTopics        Json?
+  bio                   String?  @db.Text
+  
+  lastActiveAt          DateTime? @db.Timestamptz(6)
+  
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badges                CommunityBadge[]
+  
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([reputationPoints])
+  @@index([level])
+  @@map("community_profiles")
+}
+
+// ===========================================================
+// COMMUNITY - BADGES
+// ===========================================================
+model CommunityBadge {
+  id                  String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  communityProfileId  String             @db.Uuid
+  badgeType           CommunityBadgeType
+  earnedAt            DateTime           @default(now()) @db.Timestamptz(6)
+  
+  communityProfile    CommunityProfile   @relation(fields: [communityProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([communityProfileId, badgeType])
+  @@index([communityProfileId])
+  @@map("community_badges")
+}
+
+// ===========================================================
+// COMMUNITY - POSTS (Feed)
+// ===========================================================
+model CommunityPost {
+  id              String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String            @db.Uuid
+  
+  type            CommunityPostType @default(DISCUSSION)
+  title           String?           @db.VarChar(255)
+  content         String            @db.Text
+  tags            Json?
+  attachments     Json?
+  
+  isPinned        Boolean           @default(false)
+  isFeatured      Boolean           @default(false)
+  isHighlighted   Boolean           @default(false)
+  
+  likesCount      Int               @default(0)
+  commentsCount   Int               @default(0)
+  sharesCount     Int               @default(0)
+  viewsCount      Int               @default(0)
+  
+  moderationStatus ModerationStatus @default(APPROVED)
+  moderationNote   String?          @db.Text
+  
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes           CommunityPostLike[]
+  comments        CommunityPostComment[]
+  bookmarks       CommunityPostBookmark[]
+  reports         CommunityPostReport[]
+  
+  createdAt       DateTime          @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime          @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([type])
+  @@index([isPinned])
+  @@index([isFeatured])
+  @@index([createdAt])
+  @@index([likesCount])
+  @@map("community_posts")
+}
+
+// ===========================================================
+// COMMUNITY - POST LIKES
+// ===========================================================
+model CommunityPostLike {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  postId    String        @db.Uuid
+  userId    String        @db.Uuid
+  
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime      @default(now()) @db.Timestamptz(6)
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+  @@map("community_post_likes")
+}
+
+// ===========================================================
+// COMMUNITY - POST COMMENTS
+// ===========================================================
+model CommunityPostComment {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  postId      String        @db.Uuid
+  userId      String        @db.Uuid
+  parentId    String?       @db.Uuid
+  
+  content     String        @db.Text
+  likesCount  Int           @default(0)
+  
+  isEdited    Boolean       @default(false)
+  isDeleted   Boolean       @default(false)
+  
+  post        CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent      CommunityPostComment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies     CommunityPostComment[] @relation("CommentReplies")
+  likes       CommunityPostCommentLike[]
+  
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([postId])
+  @@index([userId])
+  @@index([parentId])
+  @@map("community_post_comments")
+}
+
+// ===========================================================
+// COMMUNITY - POST COMMENT LIKES
+// ===========================================================
+model CommunityPostCommentLike {
+  id        String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  commentId String               @db.Uuid
+  userId    String               @db.Uuid
+  
+  comment   CommunityPostComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime             @default(now()) @db.Timestamptz(6)
+
+  @@unique([commentId, userId])
+  @@index([commentId])
+  @@index([userId])
+  @@map("community_post_comment_likes")
+}
+
+// ===========================================================
+// COMMUNITY - POST BOOKMARKS
+// ===========================================================
+model CommunityPostBookmark {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  postId    String        @db.Uuid
+  userId    String        @db.Uuid
+  
+  post      CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime      @default(now()) @db.Timestamptz(6)
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+  @@map("community_post_bookmarks")
+}
+
+// ===========================================================
+// COMMUNITY - POST REPORTS
+// ===========================================================
+model CommunityPostReport {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  postId      String        @db.Uuid
+  reporterId  String        @db.Uuid
+  reason      String        @db.VarChar(100)
+  details     String?       @db.Text
+  status      String        @default("OPEN") @db.VarChar(20)
+  
+  post        CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  reporter    User          @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([postId, reporterId])
+  @@index([postId])
+  @@index([reporterId])
+  @@index([status])
+  @@map("community_post_reports")
+}
+
+// ===========================================================
+// COMMUNITY - CHAT ROOMS
+// ===========================================================
+model ChatRoom {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  name          String       @db.VarChar(100)
+  description   String?      @db.Text
+  slug          String       @unique @db.VarChar(100)
+  type          ChatRoomType @default(PUBLIC)
+  category      String?      @db.VarChar(50)
+  icon          String?      @db.VarChar(50)
+  
+  memberCount   Int          @default(0)
+  isActive      Boolean      @default(true)
+  isArchived    Boolean      @default(false)
+  
+  messages      ChatMessage[]
+  members       ChatRoomMember[]
+  
+  createdAt     DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
+  @@map("chat_rooms")
+}
+
+// ===========================================================
+// COMMUNITY - CHAT ROOM MEMBERS
+// ===========================================================
+model ChatRoomMember {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  roomId      String    @db.Uuid
+  userId      String    @db.Uuid
+  
+  isMuted     Boolean   @default(false)
+  lastReadAt  DateTime? @db.Timestamptz(6)
+  
+  room        ChatRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  joinedAt    DateTime  @default(now()) @db.Timestamptz(6)
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+  @@map("chat_room_members")
+}
+
+// ===========================================================
+// COMMUNITY - CHAT MESSAGES
+// ===========================================================
+model ChatMessage {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  roomId      String    @db.Uuid
+  userId      String    @db.Uuid
+  replyToId   String?   @db.Uuid
+  
+  content     String    @db.Text
+  attachments Json?
+  
+  isEdited    Boolean   @default(false)
+  isDeleted   Boolean   @default(false)
+  isPinned    Boolean   @default(false)
+  
+  room        ChatRoom  @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replyTo     ChatMessage?  @relation("MessageReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies     ChatMessage[] @relation("MessageReplies")
+  reactions   ChatMessageReaction[]
+  
+  createdAt   DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([roomId])
+  @@index([userId])
+  @@index([roomId, createdAt])
+  @@map("chat_messages")
+}
+
+// ===========================================================
+// COMMUNITY - CHAT MESSAGE REACTIONS
+// ===========================================================
+model ChatMessageReaction {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  messageId   String      @db.Uuid
+  userId      String      @db.Uuid
+  emoji       String      @db.VarChar(10)
+  
+  message     ChatMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime    @default(now()) @db.Timestamptz(6)
+
+  @@unique([messageId, userId, emoji])
+  @@index([messageId])
+  @@index([userId])
+  @@map("chat_message_reactions")
+}
+
+// ===========================================================
+// COMMUNITY - USER FOLLOWS
+// ===========================================================
+model UserFollow {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  followerId  String   @db.Uuid
+  followingId String   @db.Uuid
+  
+  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("user_follows")
+}
+
+// ===========================================================
+// COMMUNITY - MENTORSHIP
+// ===========================================================
+model MentorProfile {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @unique @db.Uuid
+  
+  expertise       Json?
+  availability    Json?
+  maxMentees      Int      @default(3)
+  currentMentees  Int      @default(0)
+  
+  isActive        Boolean  @default(true)
+  bio             String?  @db.Text
+  
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mentorships     Mentorship[] @relation("Mentor")
+  
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([isActive])
+  @@map("mentor_profiles")
+}
+
+model Mentorship {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  mentorId    String   @db.Uuid
+  menteeId    String   @db.Uuid
+  
+  status      String   @default("PENDING") @db.VarChar(20)
+  message     String?  @db.Text
+  
+  mentor      MentorProfile @relation("Mentor", fields: [mentorId], references: [id], onDelete: Cascade)
+  mentee      User          @relation(fields: [menteeId], references: [id], onDelete: Cascade)
+  
+  startedAt   DateTime?     @db.Timestamptz(6)
+  endedAt     DateTime?     @db.Timestamptz(6)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([mentorId, menteeId])
+  @@index([mentorId])
+  @@index([menteeId])
+  @@index([status])
+  @@map("mentorships")
+}
+
+// ===========================================================
+// CUSTOM STUDY PLANS (User-created)
+// ===========================================================
+model CustomStudyPlan {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String   @db.Uuid
+  
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  icon          String?  @db.VarChar(50)
+  coverImageUrl String?  @db.Text
+  isPublic      Boolean  @default(false)
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapters      CustomStudyChapter[]
+  likes         CustomStudyPlanLike[]
+  comments      CustomStudyPlanComment[]
+  
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@index([isPublic])
+  @@map("custom_study_plans")
+}
+
+model CustomStudyPlanLike {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  planId    String        @db.Uuid
+  userId    String        @db.Uuid
+
+  plan      CustomStudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime      @default(now()) @db.Timestamptz(6)
+
+  @@unique([planId, userId])
+  @@index([planId])
+  @@index([userId])
+  @@map("custom_study_plan_likes")
+}
+
+model CustomStudyPlanComment {
+  id        String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  planId    String        @db.Uuid
+  userId    String        @db.Uuid
+
+  content   String        @db.Text
+
+  plan      CustomStudyPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime      @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([planId])
+  @@index([userId])
+  @@map("custom_study_plan_comments")
+}
+
+model CustomStudyChapter {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  planId        String   @db.Uuid
+  
+  orderIndex    Int      @default(0)
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  
+  plan          CustomStudyPlan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  lessons       CustomStudyLesson[]
+  
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([planId])
+  @@map("custom_study_chapters")
+}
+
+model CustomStudyLesson {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapterId       String   @db.Uuid
+  
+  orderIndex      Int      @default(0)
+  title           String   @db.VarChar(255)
+  content         String   @db.Text
+  estimatedMinutes Int     @default(10)
+  
+  chapter         CustomStudyChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  quiz            CustomStudyQuiz?
+  
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([chapterId])
+  @@map("custom_study_lessons")
+}
+
+model CustomStudyQuiz {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId      String   @unique @db.Uuid
+  
+  title         String?  @db.VarChar(255)
+  passingScore  Int      @default(70)
+  questions     Json
+  
+  lesson        CustomStudyLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("custom_study_quizzes")
+}
+
+// ===========================================================
+// COVER LETTER TEMPLATES
+// ===========================================================
+model CoverLetterTemplate {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  
+  name          String   @db.VarChar(100)
+  description   String?  @db.Text
+  content       String   @db.Text
+  tone          String   @default("professional") @db.VarChar(30)
+  category      String?  @db.VarChar(50)
+  
+  isSystem      Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  
+  userId        String?  @db.Uuid
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  usageCount    Int      @default(0)
+  
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([isSystem])
+  @@index([isActive])
+  @@index([userId])
+  @@index([category])
+  @@map("cover_letter_templates")
+}
+
+// ===========================================================
+// NOTIFICATION PREFERENCES
+// ===========================================================
+model NotificationPreference {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String   @unique @db.Uuid
+
+  // Channel toggles
+  emailEnabled          Boolean  @default(true)
+  pushEnabled           Boolean  @default(true)
+  inAppEnabled          Boolean  @default(true)
+  smsEnabled            Boolean  @default(false)
+
+  // Muted categories (stored as JSON array of category strings)
+  mutedCategories       String[] @default([])
+  
+  // Muted specific events (stored as JSON array of event strings)
+  mutedEvents           String[] @default([])
+
+  // Quiet hours (HH:MM format)
+  quietHoursStart       String?  @db.VarChar(5)
+  quietHoursEnd         String?  @db.VarChar(5)
+  quietHoursTimezone    String?  @db.VarChar(50)
+
+  // Email digest preferences
+  emailDigestFrequency  String   @default("instant") @db.VarChar(20) // instant, daily, weekly, never
+
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt             DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt             DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@map("notification_preferences")
+}
+
+// ===========================================================
+// NOTIFICATION QUEUE (for scheduled/delayed notifications)
+// ===========================================================
+model NotificationQueue {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @db.Uuid
+
+  event           String   @db.VarChar(100)
+  title           String?
+  message         String
+  link            String?
+  metadata        Json?
+
+  scheduledFor    DateTime @db.Timestamptz(6)
+  status          String   @default("pending") @db.VarChar(20) // pending, processing, sent, failed
+  attempts        Int      @default(0)
+  lastAttemptAt   DateTime? @db.Timestamptz(6)
+  errorMessage    String?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([status, scheduledFor])
+  @@index([userId])
+  @@map("notification_queue")
+}
+
+// ===========================================================
+// EMAIL QUEUE (for email notifications and digests)
+// ===========================================================
+model EmailQueue {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @db.Uuid
+
+  event           String   @db.VarChar(100)
+  subject         String
+  message         String
+  link            String?
+  metadata        Json?
+
+  digestType      String   @default("instant") @db.VarChar(20) // instant, daily, weekly
+  status          String   @default("pending") @db.VarChar(20) // pending, queued_for_digest, sent, failed
+  sentAt          DateTime? @db.Timestamptz(6)
+  errorMessage    String?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([status, digestType])
+  @@index([userId])
+  @@map("email_queue")
+}
+
+// ===========================================================
+// EVENT LOGS (for analytics and debugging)
+// ===========================================================
+model EventLog {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String?  @db.Uuid
+
+  event           String   @db.VarChar(100)
+  channels        String[] @default([])
+  metadata        Json?
+
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([event])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("event_logs")
 }
 

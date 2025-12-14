@@ -34,7 +34,9 @@ import {
   generateCoverLetter, 
   updateCoverLetter,
   improveCoverLetter,
-  getCoverLettersForJob 
+  getCoverLettersForJob,
+  getCoverLetterTemplates,
+  type CoverLetterTemplateData,
 } from '@/lib/actions/cover-letter.action'
 import { toast } from '@/components/ui/use-toast'
 
@@ -75,6 +77,9 @@ export function CoverLetterGenerator({
   const [tone, setTone] = useState<Tone>('professional')
   const [customInstructions, setCustomInstructions] = useState('')
   const [showAdvanced, setShowAdvanced] = useState(false)
+
+  const [templates, setTemplates] = useState<CoverLetterTemplateData[]>([])
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string>('__default')
   
   const [coverLetter, setCoverLetter] = useState<CoverLetter | null>(null)
   const [editedContent, setEditedContent] = useState('')
@@ -88,8 +93,16 @@ export function CoverLetterGenerator({
   useEffect(() => {
     if (isOpen && jobApplicationId) {
       loadPreviousLetters()
+      loadTemplates()
     }
   }, [isOpen, jobApplicationId])
+
+  const loadTemplates = async () => {
+    const result = await getCoverLetterTemplates()
+    if (result.data) {
+      setTemplates(result.data)
+    }
+  }
 
   const loadPreviousLetters = async () => {
     const result = await getCoverLettersForJob(jobApplicationId)
@@ -112,6 +125,7 @@ export function CoverLetterGenerator({
         jobApplicationId,
         tone,
         customInstructions: customInstructions || undefined,
+        templateId: selectedTemplateId === '__default' ? undefined : selectedTemplateId,
       })
 
       if (result.data) {
@@ -252,6 +266,28 @@ export function CoverLetterGenerator({
           {!coverLetter && (
             <div className="space-y-4">
               <div>
+                <Label>Template</Label>
+                <Select value={selectedTemplateId} onValueChange={setSelectedTemplateId}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Default" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__default">Default (AI structured)</SelectItem>
+                    {templates.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {selectedTemplateId !== '__default' && (
+                  <p className="mt-1 text-xs text-slate-500">
+                    {templates.find((t) => t.id === selectedTemplateId)?.description || 'Uses the selected template structure.'}
+                  </p>
+                )}
+              </div>
+
+              <div>
                 <Label>Tone</Label>
                 <Select value={tone} onValueChange={(v) => setTone(v as Tone)}>
                   <SelectTrigger>
@@ -292,7 +328,7 @@ export function CoverLetterGenerator({
               <Button
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className="w-full gap-2 bg-gradient-to-r from-purple-600 to-indigo-600"
+                className="w-full h-11 gap-2 bg-gradient-to-r from-purple-600 to-indigo-600"
               >
                 {isGenerating ? (
                   <>
@@ -456,7 +492,7 @@ export function CoverLetterGenerator({
               {onSendApplication && (
                 <Button
                   onClick={handleSendApplication}
-                  className="w-full gap-2 bg-gradient-to-r from-green-600 to-emerald-600"
+                  className="w-full h-11 gap-2 bg-gradient-to-r from-green-600 to-emerald-600"
                 >
                   <Send className="w-4 h-4" />
                   Continue to Send Application

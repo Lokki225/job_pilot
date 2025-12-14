@@ -1,27 +1,38 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
-import { User, Bell, Shield, CreditCard, Briefcase, MapPin, DollarSign, Clock, FileText, Sparkles, Check, Upload, Mail, Lock, Globe, Trash2, Download, Eye, EyeOff, LogOut, ChevronRight, Save, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { User, Bell, Shield, CreditCard, Briefcase, MapPin, DollarSign, FileText, Sparkles, Check, Upload, Trash2, Eye, LogOut, Save, Loader2 } from 'lucide-react';
 import { FormData } from '@/lib/constants';
 import { getProfile, upsertProfile } from '@/lib/actions/profile.action';
 import { getJobPreferences, upsertJobPreferences } from '@/lib/actions/job-preferences.action';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUser, logout } from '@/lib/auth';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase/client';
 import { createResume, deleteResume, listResumes } from '@/lib/actions/resume.action';
+import { NotificationSettings } from '@/components/notifications';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { LanguageSelector } from '@/components/ui/language-selector';
 
 export default function JobSettingsPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('profile');
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState('');
+
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [currentResume, setCurrentResume] = useState<{ id: string; fileName: string; fileUrl: string } | null>(null);
   const [isUploadingResume, setIsUploadingResume] = useState(false);
   const [resumeUploadProgress, setResumeUploadProgress] = useState(0);
+
+  const [newLanguage, setNewLanguage] = useState('');
+  const [newJobTitle, setNewJobTitle] = useState('');
+  const [newKeyword, setNewKeyword] = useState('');
+  const [newPreferredLocation, setNewPreferredLocation] = useState('');
+  const [newIndustry, setNewIndustry] = useState('');
+  const [newExcludedCompany, setNewExcludedCompany] = useState('');
 
   const [formData, setFormData] = useState<FormData>({
     // Profile
@@ -32,18 +43,35 @@ export default function JobSettingsPage() {
     location: '',
     title: '',
     bio: '',
+    website: '',
+    linkedinUrl: '',
+    githubUrl: '',
+    twitterUrl: '',
+    languages: [],
     
     // Job Preferences
+    jobTitles: [],
+    keywords: [],
     jobTypes: [],
+    remoteOptions: [],
+    industries: [],
+    companySize: [],
+    excludeCompanies: [],
     experienceLevel: '',
+    yearsExperience: '',
     salaryMin: '',
     salaryMax: '',
+    currency: 'USD',
     preferredLocations: [],
     skills: [],
+    autoSearch: false,
+    notifyOnMatch: true,
+    searchFrequency: 'daily',
     
     // Notifications
     emailNotifications: true,
     jobAlerts: true,
+
     weeklyDigest: true,
     applicationUpdates: true,
     similarJobs: false,
@@ -57,12 +85,7 @@ export default function JobSettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Load user data on mount
-  useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = async () => {
+  const loadUserData = useCallback(async () => {
     try {
       setIsLoading(true);
       const { user, error: userError } = await getCurrentUser();
@@ -85,18 +108,34 @@ export default function JobSettingsPage() {
           location: profile.location || '',
           title: profile.headline || '',
           bio: profile.bio || '',
+          website: profile.website || '',
+          linkedinUrl: profile.linkedinUrl || '',
+          githubUrl: profile.githubUrl || '',
+          twitterUrl: profile.twitterUrl || '',
+          languages: profile.languages || [],
         }));
       }
 
       if (preferences) {
         setFormData(prev => ({
           ...prev,
+          jobTitles: preferences.jobTitles || [],
+          keywords: preferences.keywords || [],
           jobTypes: preferences.workTypes || [],
+          remoteOptions: preferences.remoteOptions || [],
+          industries: preferences.industries || [],
+          companySize: preferences.companySize || [],
+          excludeCompanies: preferences.excludeCompanies || [],
           experienceLevel: preferences.experienceLevel || '',
+          yearsExperience: preferences.yearsExperience?.toString() || '',
           salaryMin: preferences.minSalary?.toString() || '',
           salaryMax: preferences.maxSalary?.toString() || '',
+          currency: preferences.currency || 'USD',
           preferredLocations: preferences.locations || [],
           skills: preferences.skills || [],
+          autoSearch: preferences.autoSearch ?? false,
+          notifyOnMatch: preferences.notifyOnMatch ?? true,
+          searchFrequency: preferences.searchFrequency || 'daily',
         }));
       }
 
@@ -110,19 +149,34 @@ export default function JobSettingsPage() {
           fileUrl: latestResume.fileUrl,
         });
       }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-      toast({ title: 'Error', description: 'Failed to load settings', variant: 'destructive' });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [router]);
+
+  // Load user data on mount
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleArrayToggle = (field: 'jobTypes' | 'preferredLocations' | 'skills', value: string) => {
+  const handleArrayToggle = (
+    field:
+      | 'jobTypes'
+      | 'preferredLocations'
+      | 'skills'
+      | 'jobTitles'
+      | 'keywords'
+      | 'remoteOptions'
+      | 'industries'
+      | 'companySize'
+      | 'excludeCompanies'
+      | 'languages',
+    value: string
+  ) => {
     setFormData(prev => ({
       ...prev,
       [field]: prev[field].includes(value)
@@ -130,6 +184,30 @@ export default function JobSettingsPage() {
         : [...(prev[field] as string[]), value]
     }));
   };
+
+  const handleArrayAdd = (
+    field:
+      | 'jobTypes'
+      | 'preferredLocations'
+      | 'skills'
+      | 'jobTitles'
+      | 'keywords'
+      | 'remoteOptions'
+      | 'industries'
+      | 'companySize'
+      | 'excludeCompanies'
+      | 'languages',
+    value: string
+  ) => {
+    const next = value.trim();
+    if (!next) return;
+
+    setFormData(prev => {
+      const current = prev[field] as string[];
+      if (current.includes(next)) return prev;
+      return { ...prev, [field]: [...current, next] };
+    });
+  }
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -141,35 +219,42 @@ export default function JobSettingsPage() {
         location: formData.location,
         headline: formData.title,
         bio: formData.bio,
+        website: formData.website,
+        linkedinUrl: formData.linkedinUrl,
+        githubUrl: formData.githubUrl,
+        twitterUrl: formData.twitterUrl,
+        languages: formData.languages,
       });
       if (profileError) throw new Error(profileError);
 
       const { error: prefsError } = await upsertJobPreferences({
         workTypes: formData.jobTypes,
-        experienceLevel: formData.experienceLevel || null,
+        jobTitles: formData.jobTitles,
+        keywords: formData.keywords,
+        locations: formData.preferredLocations,
         minSalary: formData.salaryMin ? parseInt(formData.salaryMin) : null,
         maxSalary: formData.salaryMax ? parseInt(formData.salaryMax) : null,
-        locations: formData.preferredLocations,
+        currency: formData.currency || 'USD',
+        experienceLevel: formData.experienceLevel || null,
+        yearsExperience: formData.yearsExperience ? parseInt(formData.yearsExperience) : null,
+        remoteOptions: formData.remoteOptions,
         skills: formData.skills,
-        jobTitles: [],
-        keywords: [],
-        remoteOptions: [],
-        industries: [],
-        companySize: [],
-        excludeCompanies: [],
-        currency: 'USD',
-        autoSearch: false,
-        notifyOnMatch: true,
-        searchFrequency: 'daily',
+        industries: formData.industries,
+        companySize: formData.companySize,
+        excludeCompanies: formData.excludeCompanies,
+        autoSearch: formData.autoSearch,
+        notifyOnMatch: formData.notifyOnMatch,
+        searchFrequency: formData.searchFrequency || 'daily',
       });
       if (prefsError) throw new Error(prefsError);
 
       setSaved(true);
       toast({ title: 'Settings saved', description: 'Your changes have been saved successfully' });
       setTimeout(() => setSaved(false), 3000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error saving settings:', error);
-      toast({ title: 'Error', description: error.message || 'Failed to save settings', variant: 'destructive' });
+      const message = error instanceof Error ? error.message : 'Failed to save settings';
+      toast({ title: 'Error', description: message, variant: 'destructive' });
     } finally {
       setIsSaving(false);
     }
@@ -267,9 +352,10 @@ export default function JobSettingsPage() {
       } else {
         toast({ title: 'Resume uploaded', description: 'Resume uploaded but parsing failed. Your profile was not updated.', variant: 'destructive' });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error uploading resume:', error);
-      toast({ title: 'Upload failed', description: error.message || 'Failed to upload resume', variant: 'destructive' });
+      const message = error instanceof Error ? error.message : 'Failed to upload resume';
+      toast({ title: 'Upload failed', description: message, variant: 'destructive' });
     } finally {
       setIsUploadingResume(false);
       setResumeUploadProgress(0);
@@ -285,7 +371,7 @@ export default function JobSettingsPage() {
       await supabase.storage.from('resumes-files').remove([filePath]);
       setCurrentResume(null);
       toast({ title: 'Resume removed', description: 'Your resume has been removed' });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error removing resume:', error);
       toast({ title: 'Error', description: 'Failed to remove resume', variant: 'destructive' });
     }
@@ -295,29 +381,15 @@ export default function JobSettingsPage() {
     { id: 'profile', name: 'Profile', icon: User },
     { id: 'preferences', name: 'Job Preferences', icon: Briefcase },
     { id: 'notifications', name: 'Notifications', icon: Bell },
-    { id: 'privacy', name: 'Privacy & Security', icon: Shield },
+    { id: 'privacy', name: 'App & Account', icon: Shield },
     { id: 'billing', name: 'Billing', icon: CreditCard },
   ];
 
-  const notificationsData = [
-    { 
-        key: 'weeklyDigest', 
-        label: 'Weekly Digest', 
-        description: 'Summary of top jobs every week' 
-    },
-    { 
-        key: 'applicationUpdates', 
-        label: 'Application Updates', 
-        description: 'Updates on your job applications' 
-    },
-    { 
-        key: 'similarJobs', 
-        label: 'Similar Job Recommendations', 
-        description: 'Get suggestions for jobs similar to those you saved' 
-    },
- ]
-
-  const jobTypeOptions = ['Full-time', 'Part-time', 'Contract', 'Freelance', 'Remote'];
+  const jobTypeOptions = ['Full-time', 'Part-time', 'Contract', 'Freelance'];
+  const remoteOptionChoices = ['Remote', 'Hybrid', 'On-site'];
+  const companySizeChoices = ['Startup', 'Small', 'Medium', 'Large', 'Enterprise'];
+  const currencyChoices = ['USD', 'EUR', 'GBP', 'CAD'];
+  const searchFrequencyChoices = ['daily', 'weekly', 'manual'];
   const experienceLevels = ['Entry', 'Mid-level', 'Senior', 'Lead', 'Executive'];
   const availableSkills = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python', 'Java', 'AWS', 'Docker', 'SQL', 'GraphQL', 'Vue.js', 'Angular'];
 
@@ -379,7 +451,7 @@ export default function JobSettingsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex gap-6">
           {/* Sidebar Navigation */}
-          <div className="w-64 flex-shrink-0">
+          <div className="w-64 shrink-0">
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-2 sticky top-6">
               {tabs.map(tab => {
                 const Icon = tab.icon;
@@ -415,7 +487,13 @@ export default function JobSettingsPage() {
                   {/* Profile Photo */}
                   <div className="flex items-center gap-6 pb-6 border-b border-slate-200 dark:border-slate-700">
                     {avatarUrl ? (
-                      <img src={avatarUrl} alt="Profile" className="w-24 h-24 rounded-full object-cover" />
+                      <Image
+                        src={avatarUrl}
+                        alt="Profile"
+                        width={96}
+                        height={96}
+                        className="w-24 h-24 rounded-full object-cover"
+                      />
                     ) : (
                       <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-3xl text-white font-bold">
                         {formData.firstName?.[0]?.toUpperCase() || ''}{formData.lastName?.[0]?.toUpperCase() || ''}
@@ -459,7 +537,7 @@ export default function JobSettingsPage() {
                       <input
                         type="email"
                         value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        disabled
                         className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       />
                     </div>
@@ -508,6 +586,99 @@ export default function JobSettingsPage() {
                       className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                       placeholder="Tell us about yourself..."
                     />
+                  </div>
+
+                  {/* Social Links */}
+                  <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Social Links</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Website</label>
+                        <input
+                          type="url"
+                          value={formData.website}
+                          onChange={(e) => handleInputChange('website', e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                          placeholder="https://"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">LinkedIn</label>
+                        <input
+                          type="url"
+                          value={formData.linkedinUrl}
+                          onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                          placeholder="https://linkedin.com/in/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">GitHub</label>
+                        <input
+                          type="url"
+                          value={formData.githubUrl}
+                          onChange={(e) => handleInputChange('githubUrl', e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                          placeholder="https://github.com/..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Twitter/X</label>
+                        <input
+                          type="url"
+                          value={formData.twitterUrl}
+                          onChange={(e) => handleInputChange('twitterUrl', e.target.value)}
+                          className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                          placeholder="https://x.com/..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Languages */}
+                  <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Languages</h3>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newLanguage}
+                        onChange={(e) => setNewLanguage(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="Add a language (e.g., English)"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleArrayAdd('languages', newLanguage);
+                            setNewLanguage('');
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleArrayAdd('languages', newLanguage);
+                          setNewLanguage('');
+                        }}
+                        className="px-4 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {formData.languages.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {formData.languages.map(lang => (
+                          <span
+                            key={lang}
+                            className="px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium flex items-center gap-2"
+                          >
+                            {lang}
+                            <button type="button" onClick={() => handleArrayToggle('languages', lang)} className="hover:text-red-600">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Resume */}
@@ -635,6 +806,98 @@ export default function JobSettingsPage() {
                     <p className="text-slate-600 dark:text-slate-400">Set your job search criteria to get better matches</p>
                   </div>
 
+                  {/* Job Titles */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Target Job Titles</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newJobTitle}
+                        onChange={(e) => setNewJobTitle(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="e.g., Frontend Engineer"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleArrayAdd('jobTitles', newJobTitle);
+                            setNewJobTitle('');
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleArrayAdd('jobTitles', newJobTitle);
+                          setNewJobTitle('');
+                        }}
+                        className="px-4 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {formData.jobTitles.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {formData.jobTitles.map(title => (
+                          <span
+                            key={title}
+                            className="px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg text-sm font-medium flex items-center gap-2"
+                          >
+                            {title}
+                            <button type="button" onClick={() => handleArrayToggle('jobTitles', title)} className="hover:text-blue-900">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Keywords */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Keywords</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newKeyword}
+                        onChange={(e) => setNewKeyword(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="e.g., React, Next.js"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleArrayAdd('keywords', newKeyword);
+                            setNewKeyword('');
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleArrayAdd('keywords', newKeyword);
+                          setNewKeyword('');
+                        }}
+                        className="px-4 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {formData.keywords.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {formData.keywords.map(k => (
+                          <span
+                            key={k}
+                            className="px-3 py-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-medium flex items-center gap-2"
+                          >
+                            {k}
+                            <button type="button" onClick={() => handleArrayToggle('keywords', k)} className="hover:text-indigo-900">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                   {/* Job Types */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Job Types</label>
@@ -650,6 +913,27 @@ export default function JobSettingsPage() {
                           }`}
                         >
                           {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Remote Options */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Remote Preference</label>
+                    <div className="flex flex-wrap gap-2">
+                      {remoteOptionChoices.map(opt => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => handleArrayToggle('remoteOptions', opt)}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                            formData.remoteOptions.includes(opt)
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                          }`}
+                        >
+                          {opt}
                         </button>
                       ))}
                     </div>
@@ -677,7 +961,18 @@ export default function JobSettingsPage() {
 
                   {/* Salary Range */}
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Expected Salary (USD/year)</label>
+                    <div className="flex items-center justify-between gap-4 mb-3">
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Expected Salary ({formData.currency}/year)</label>
+                      <select
+                        value={formData.currency}
+                        onChange={(e) => handleInputChange('currency', e.target.value)}
+                        className="px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                      >
+                        {currencyChoices.map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs text-slate-500 dark:text-slate-400 mb-2">Minimum</label>
@@ -730,9 +1025,44 @@ export default function JobSettingsPage() {
                     </div>
                     <input
                       type="text"
-                      placeholder="Add a location..."
+                      value={newPreferredLocation}
+                      onChange={(e) => setNewPreferredLocation(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleArrayAdd('preferredLocations', newPreferredLocation);
+                          setNewPreferredLocation('');
+                        }
+                      }}
+                      placeholder="Add a location and press Enter..."
                       className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                     />
+                  </div>
+
+                  {/* Experience & Search */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Years of Experience</label>
+                      <input
+                        type="number"
+                        value={formData.yearsExperience}
+                        onChange={(e) => handleInputChange('yearsExperience', e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="e.g., 3"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Search Frequency</label>
+                      <select
+                        value={formData.searchFrequency}
+                        onChange={(e) => handleInputChange('searchFrequency', e.target.value)}
+                        className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                      >
+                        {searchFrequencyChoices.map(v => (
+                          <option key={v} value={v}>{v}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   {/* Skills */}
@@ -745,10 +1075,7 @@ export default function JobSettingsPage() {
                           className="px-3 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded-lg text-sm font-medium flex items-center gap-2"
                         >
                           {skill}
-                          <button
-                            onClick={() => handleArrayToggle('skills', skill)}
-                            className="hover:text-green-900"
-                          >
+                          <button type="button" onClick={() => handleArrayToggle('skills', skill)} className="hover:text-green-900">
                             <Trash2 className="w-3 h-3" />
                           </button>
                         </span>
@@ -760,12 +1087,170 @@ export default function JobSettingsPage() {
                         .map(skill => (
                           <button
                             key={skill}
-                            onClick={() => handleArrayToggle('skills', skill)}
+                            onClick={() => handleArrayAdd('skills', skill)}
                             className="px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                           >
                             + {skill}
                           </button>
                         ))}
+                    </div>
+                  </div>
+
+                  {/* Industries */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Industries</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newIndustry}
+                        onChange={(e) => setNewIndustry(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="e.g., Fintech"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleArrayAdd('industries', newIndustry);
+                            setNewIndustry('');
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleArrayAdd('industries', newIndustry);
+                          setNewIndustry('');
+                        }}
+                        className="px-4 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {formData.industries.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {formData.industries.map(ind => (
+                          <span
+                            key={ind}
+                            className="px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium flex items-center gap-2"
+                          >
+                            {ind}
+                            <button type="button" onClick={() => handleArrayToggle('industries', ind)} className="hover:text-red-600">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Company Size */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Company Size</label>
+                    <div className="flex flex-wrap gap-2">
+                      {companySizeChoices.map(size => (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => handleArrayToggle('companySize', size)}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                            formData.companySize.includes(size)
+                              ? 'bg-blue-600 text-white'
+                              : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Exclude Companies */}
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Exclude Companies</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newExcludedCompany}
+                        onChange={(e) => setNewExcludedCompany(e.target.value)}
+                        className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
+                        placeholder="e.g., CompanyName"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            handleArrayAdd('excludeCompanies', newExcludedCompany);
+                            setNewExcludedCompany('');
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleArrayAdd('excludeCompanies', newExcludedCompany);
+                          setNewExcludedCompany('');
+                        }}
+                        className="px-4 py-3 bg-slate-900 dark:bg-slate-700 text-white rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-600 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
+                    {formData.excludeCompanies.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {formData.excludeCompanies.map(c => (
+                          <span
+                            key={c}
+                            className="px-3 py-2 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-lg text-sm font-medium flex items-center gap-2"
+                          >
+                            {c}
+                            <button type="button" onClick={() => handleArrayToggle('excludeCompanies', c)} className="hover:text-red-900">
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Automation */}
+                  <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Automation</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                        <div>
+                          <h4 className="font-medium text-slate-900 dark:text-white">Auto Search</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">Run scheduled searches automatically</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('autoSearch', !formData.autoSearch)}
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                            formData.autoSearch ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              formData.autoSearch ? 'translate-x-6' : 'translate-x-1'
+                            }`}
+                          />
+                        </button>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
+                        <div>
+                          <h4 className="font-medium text-slate-900 dark:text-white">Notify on Match</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">Get notified when matches are found</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange('notifyOnMatch', !formData.notifyOnMatch)}
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                            formData.notifyOnMatch ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+                          }`}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              formData.notifyOnMatch ? 'translate-x-6' : 'translate-x-1'
+                            }`}
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -776,31 +1261,10 @@ export default function JobSettingsPage() {
                 <div className="space-y-6">
                   <div>
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Notification Settings</h2>
-                    <p className="text-slate-600 dark:text-slate-400">Choose what updates you want to receive</p>
+                    <p className="text-slate-600 dark:text-slate-400">Manage channels, quiet hours, and notification categories</p>
                   </div>
 
-                  <div className="space-y-4">
-                    {notificationsData.map(item => (
-                      <div key={item.key} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                        <div>
-                          <h3 className="font-medium text-slate-900 dark:text-white">{item.label}</h3>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">{item.description}</p>
-                        </div>
-                        <button
-                            onClick={() => handleInputChange(item.key as keyof FormData, !formData[item.key as keyof FormData])}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                                formData[item.key as keyof FormData] ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
-                            }`}
-                            >
-                            <span
-                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                formData[item.key as keyof FormData] ? 'translate-x-6' : 'translate-x-1'
-                            }`}
-                            />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                  <NotificationSettings />
                 </div>
               )}
 
@@ -808,136 +1272,63 @@ export default function JobSettingsPage() {
               {activeTab === 'privacy' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Privacy & Security</h2>
-                    <p className="text-slate-600 dark:text-slate-400">Manage your privacy settings and account security</p>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">App & Account</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Personalize the app UI and manage your session.</p>
                   </div>
 
-                  {/* Change Password */}
-                  <div className="pb-6 border-b border-slate-200 dark:border-slate-700">
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Change Password</h3>
-                    <div className="space-y-4">
+                  {/* Preferences */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg flex items-center justify-between">
                       <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Current Password</label>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                          <input
-                            type={showPassword ? 'text' : 'password'}
-                            className="w-full pl-10 pr-12 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                            placeholder="Enter your current password"
-                          />
-                          <button
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                          >
-                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                          </button>
-                        </div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">Theme</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Light / dark mode</p>
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-2">New Password</label>
-                          <input
-                            type="password"
-                            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                            placeholder="Enter your new password"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
-                          <input
-                            type="password"
-                            className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                            placeholder="Confirm your new password"
-                          />
-                        </div>
+                      <ThemeToggle />
+                    </div>
+                    <div className="p-4 bg-slate-50 dark:bg-slate-700 rounded-lg flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-slate-900 dark:text-white">Language</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Stored locally in your browser</p>
                       </div>
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                        Update Password
-                      </button>
+                      <LanguageSelector variant="compact" />
                     </div>
                   </div>
 
-                  {/* Privacy Settings */}
-                  <div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Privacy Settings</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-slate-900 dark:text-white">Profile Visibility</h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">Who can see your profile</p>
-                        </div>
-                        <select
-                          value={formData.profileVisibility}
-                          onChange={(e) => handleInputChange('profileVisibility', e.target.value)}
-                          className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
-                        >
-                          <option value="public">Public</option>
-                          <option value="recruiters">Recruiters Only</option>
-                          <option value="private">Private</option>
-                        </select>
-                      </div>
-                      <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700 rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-slate-900 dark:text-white">Show Salary Expectations</h4>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">Display your salary range to recruiters</p>
-                        </div>
-                        <button
-                          onClick={() => handleInputChange('showSalary', !formData.showSalary)}
-                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            formData.showSalary ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
-                          }`}
-                        >
-                          <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                              formData.showSalary ? 'translate-x-6' : 'translate-x-1'
-                            }`}
-                          />
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
-                        <div>
-                          <h4 className="font-medium text-slate-900">Show Contact Information</h4>
-                          <p className="text-sm text-slate-600">Allow recruiters to contact you directly</p>
-                        </div>
-                        <button
-                          onClick={() => handleInputChange('showContact', !formData.showContact)}
-                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                            formData.showContact ? 'bg-blue-600' : 'bg-slate-300'
-                          }`}
-                        >
-                          <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                              formData.showContact ? 'translate-x-6' : 'translate-x-1'
-                            }`}
-                          />
-                        </button>
-                      </div>
-                    </div>
+                  {/* Session */}
+                  <div className="pt-6 border-t border-slate-200 dark:border-slate-700">
+                    <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Session</h3>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const result = await logout();
+                        if (!result.success) {
+                          toast({
+                            title: 'Error',
+                            description: result.error || 'Logout failed',
+                            variant: 'destructive',
+                          });
+                          return;
+                        }
+                        router.push('/login');
+                      }}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-lg font-medium hover:bg-white dark:hover:bg-slate-600 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </button>
                   </div>
 
                   {/* Data Management */}
                   <div className="pt-6 border-t border-slate-200">
                     <h3 className="font-semibold text-slate-900 mb-4">Data Management</h3>
                     <div className="space-y-3">
-                      <button className="w-full flex items-center justify-between p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <Download className="w-5 h-5 text-slate-600" />
-                          <div className="text-left">
-                            <h4 className="font-medium text-slate-900">Download Your Data</h4>
-                            <p className="text-sm text-slate-600">Get a copy of all your data</p>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-slate-400" />
+                      <button disabled className="w-full p-4 bg-slate-50 rounded-lg opacity-60 cursor-not-allowed text-left">
+                        <h4 className="font-medium text-slate-900">Download Your Data (coming soon)</h4>
+                        <p className="text-sm text-slate-600">Get a copy of all your data</p>
                       </button>
-                      <button className="w-full flex items-center justify-between p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
-                        <div className="flex items-center gap-3">
-                          <Trash2 className="w-5 h-5 text-red-600" />
-                          <div className="text-left">
-                            <h4 className="font-medium text-red-900">Delete Account</h4>
-                            <p className="text-sm text-red-700">Permanently delete your account and data</p>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-red-400" />
+                      <button disabled className="w-full p-4 bg-red-50 rounded-lg opacity-60 cursor-not-allowed text-left">
+                        <h4 className="font-medium text-red-900">Delete Account (coming soon)</h4>
+                        <p className="text-sm text-red-700">Permanently delete your account and data</p>
                       </button>
                     </div>
                   </div>
@@ -948,7 +1339,8 @@ export default function JobSettingsPage() {
               {activeTab === 'billing' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Billing & Subscription</h2>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Billing & Subscription</h2>
+                    <p className="text-slate-600 dark:text-slate-400">Manage your subscription and payment methods</p>
                     <p className="text-slate-600">Manage your subscription and payment methods</p>
                   </div>
 

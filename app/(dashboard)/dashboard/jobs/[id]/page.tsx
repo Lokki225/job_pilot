@@ -47,6 +47,7 @@ import { getCoverLettersForJob } from '@/lib/actions/cover-letter.action'
 import { toast } from '@/components/ui/use-toast'
 import { CoverLetterGenerator } from '@/components/jobs/CoverLetterGenerator'
 import { AutoApplyModal } from '@/components/jobs/AutoApplyModal'
+import { OfferCongratulationsModal } from '@/components/jobs/OfferCongratulationsModal'
 
 type ApplicationStatus = 'WISHLIST' | 'APPLIED' | 'INTERVIEWING' | 'OFFERED' | 'REJECTED' | 'ACCEPTED' | 'WITHDRAWN'
 
@@ -95,6 +96,7 @@ export default function JobDetailsPage() {
   // Cover letter & auto-apply modals
   const [showCoverLetterModal, setShowCoverLetterModal] = useState(false)
   const [showAutoApplyModal, setShowAutoApplyModal] = useState(false)
+  const [showOfferCongratsModal, setShowOfferCongratsModal] = useState(false)
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState<{
     id: string
     content: string
@@ -209,12 +211,24 @@ export default function JobDetailsPage() {
       })
 
       if (result.data) {
-        setJob(result.data as JobApplication)
+        const updatedJob = result.data as JobApplication
+        const previousStatus = job?.status
+        setJob(updatedJob)
         setIsEditing(false)
-        toast({
-          title: 'Saved',
-          description: 'Job application updated successfully',
-        })
+        
+        // Show congratulations modal if status changed to OFFERED or ACCEPTED
+        if (
+          (editForm.status === 'OFFERED' || editForm.status === 'ACCEPTED') &&
+          previousStatus !== 'OFFERED' &&
+          previousStatus !== 'ACCEPTED'
+        ) {
+          setShowOfferCongratsModal(true)
+        } else {
+          toast({
+            title: 'Saved',
+            description: 'Job application updated successfully',
+          })
+        }
       } else {
         toast({
           title: 'Error',
@@ -312,7 +326,7 @@ export default function JobDetailsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-4">
@@ -400,9 +414,9 @@ export default function JobDetailsPage() {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Column - Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-3 space-y-6">
           {/* Quick Info */}
           <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
             <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Job Details</h2>
@@ -559,7 +573,7 @@ export default function JobDetailsPage() {
         </div>
 
         {/* Right Column - Status & Timeline */}
-        <div className="space-y-6">
+        <div className="space-y-6 lg:col-span-2">
           {/* Status Card */}
           <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
             <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Application Status</h2>
@@ -762,6 +776,16 @@ export default function JobDetailsPage() {
           onSuccess={() => {
             loadJob() // Refresh job data after sending
           }}
+        />
+      )}
+
+      {/* Offer Congratulations Modal */}
+      {job && (
+        <OfferCongratulationsModal
+          isOpen={showOfferCongratsModal}
+          onClose={() => setShowOfferCongratsModal(false)}
+          jobTitle={job.jobTitle}
+          company={job.company}
         />
       )}
     </div>

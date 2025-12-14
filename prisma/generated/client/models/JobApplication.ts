@@ -341,7 +341,7 @@ export type JobApplicationWhereInput = {
   AND?: Prisma.JobApplicationWhereInput | Prisma.JobApplicationWhereInput[]
   OR?: Prisma.JobApplicationWhereInput[]
   NOT?: Prisma.JobApplicationWhereInput | Prisma.JobApplicationWhereInput[]
-  id?: Prisma.StringFilter<"JobApplication"> | string
+  id?: Prisma.UuidFilter<"JobApplication"> | string
   userId?: Prisma.UuidFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringFilter<"JobApplication"> | string
   company?: Prisma.StringFilter<"JobApplication"> | string
@@ -481,7 +481,7 @@ export type JobApplicationScalarWhereWithAggregatesInput = {
   AND?: Prisma.JobApplicationScalarWhereWithAggregatesInput | Prisma.JobApplicationScalarWhereWithAggregatesInput[]
   OR?: Prisma.JobApplicationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.JobApplicationScalarWhereWithAggregatesInput | Prisma.JobApplicationScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"JobApplication"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
   company?: Prisma.StringWithAggregatesFilter<"JobApplication"> | string
@@ -981,7 +981,7 @@ export type JobApplicationScalarWhereInput = {
   AND?: Prisma.JobApplicationScalarWhereInput | Prisma.JobApplicationScalarWhereInput[]
   OR?: Prisma.JobApplicationScalarWhereInput[]
   NOT?: Prisma.JobApplicationScalarWhereInput | Prisma.JobApplicationScalarWhereInput[]
-  id?: Prisma.StringFilter<"JobApplication"> | string
+  id?: Prisma.UuidFilter<"JobApplication"> | string
   userId?: Prisma.UuidFilter<"JobApplication"> | string
   jobTitle?: Prisma.StringFilter<"JobApplication"> | string
   company?: Prisma.StringFilter<"JobApplication"> | string

@@ -295,7 +295,7 @@ export type JobSearchPreferenceWhereInput = {
   AND?: Prisma.JobSearchPreferenceWhereInput | Prisma.JobSearchPreferenceWhereInput[]
   OR?: Prisma.JobSearchPreferenceWhereInput[]
   NOT?: Prisma.JobSearchPreferenceWhereInput | Prisma.JobSearchPreferenceWhereInput[]
-  id?: Prisma.StringFilter<"JobSearchPreference"> | string
+  id?: Prisma.UuidFilter<"JobSearchPreference"> | string
   userId?: Prisma.UuidFilter<"JobSearchPreference"> | string
   jobTitles?: Prisma.StringNullableListFilter<"JobSearchPreference">
   keywords?: Prisma.StringNullableListFilter<"JobSearchPreference">
@@ -405,7 +405,7 @@ export type JobSearchPreferenceScalarWhereWithAggregatesInput = {
   AND?: Prisma.JobSearchPreferenceScalarWhereWithAggregatesInput | Prisma.JobSearchPreferenceScalarWhereWithAggregatesInput[]
   OR?: Prisma.JobSearchPreferenceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.JobSearchPreferenceScalarWhereWithAggregatesInput | Prisma.JobSearchPreferenceScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"JobSearchPreference"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"JobSearchPreference"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"JobSearchPreference"> | string
   jobTitles?: Prisma.StringNullableListFilter<"JobSearchPreference">
   keywords?: Prisma.StringNullableListFilter<"JobSearchPreference">

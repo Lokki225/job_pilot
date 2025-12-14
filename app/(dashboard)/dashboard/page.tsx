@@ -54,6 +54,7 @@ import {
 } from "recharts";
 import { getDashboardAnalytics } from "@/lib/actions/dashboard-analytics.action";
 import { getProfile } from "@/lib/actions/profile.action";
+import { getCurrentUser } from "@/lib/auth";
 
 const STATUS_COLORS: Record<string, string> = {
   WISHLIST: "#94a3b8",
@@ -78,9 +79,15 @@ export default function DashboardPage() {
 
   async function loadData() {
     try {
+      const { user } = await getCurrentUser();
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+
       const [analyticsResult, profileResult] = await Promise.all([
         getDashboardAnalytics(),
-        getProfile(),
+        getProfile(user.id),
       ]);
 
       if (analyticsResult.data) {

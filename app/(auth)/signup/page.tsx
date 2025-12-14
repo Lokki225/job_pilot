@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { signUp } from "@/lib/auth";
-import { supabase } from "@/lib/supabase/client";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -62,14 +61,6 @@ export default function SignupPage() {
 
       // If we have a session, the user is immediately logged in
       if (session) {
-          // Set the session in the browser
-          const { data: { session: currentSession }, error } = await supabase.auth.setSession({
-            access_token: session.access_token,
-            refresh_token: session.refresh_token!,
-          });
-
-          if (error) throw error;
-
           toast({
             title: "Account created!",
             description: "Welcome to JobPilot AI",

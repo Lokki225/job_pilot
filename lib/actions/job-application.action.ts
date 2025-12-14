@@ -4,6 +4,8 @@ import { z } from "zod"
 import { createClient } from "@/lib/supabase/server"
 import { adminSupabase } from "@/lib/supabase/server"
 import { ApplicationStatus, JobPlatform } from "@/prisma/generated/client/enums"
+import { emitEvent } from "@/lib/services/event-dispatcher"
+import { AppEvent } from "@/lib/types/app-events"
 
 // ===========================================================
 // SCHEMAS
@@ -105,6 +107,18 @@ export async function createJobApplication(values: z.infer<typeof JobApplication
       console.error("Database error:", error)
       return { data: null, error: error.message }
     }
+
+    await emitEvent({
+      event: AppEvent.APPLICATION_CREATED,
+      userId: user.id,
+      message: `You're now tracking ${data.jobTitle} at ${data.company}.`,
+      link: `/dashboard/jobs/${data.id}`,
+      metadata: {
+        jobApplicationId: data.id,
+        jobTitle: data.jobTitle,
+        company: data.company,
+      },
+    })
 
     return { data, error: null }
   } catch (err) {
@@ -223,6 +237,13 @@ export async function updateJobApplication(
       }
     }
 
+    // Get existing data for comparison
+    const { data: existing } = await adminSupabase
+      .from("job_applications")
+      .select("jobTitle, company, interviewDate, status")
+      .eq("id", id)
+      .single()
+
     // Convert date strings to Date objects
     const dataToUpdate: any = { ...parsed.data }
 
@@ -250,6 +271,37 @@ export async function updateJobApplication(
     if (error) {
       console.error("Database error:", error)
       return { data: null, error: error.message }
+    }
+
+    // Send notification for interview date changes
+    if (existing && parsed.data.interviewDate) {
+      const oldInterviewDate = existing.interviewDate ? new Date(existing.interviewDate).toISOString() : null
+      const newInterviewDate = new Date(parsed.data.interviewDate).toISOString()
+      
+      if (oldInterviewDate !== newInterviewDate) {
+        const event = oldInterviewDate ? AppEvent.INTERVIEW_UPDATED : AppEvent.INTERVIEW_SCHEDULED
+        const interviewDateFormatted = new Date(parsed.data.interviewDate).toLocaleString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+        })
+
+        await emitEvent({
+          event,
+          userId: user.id,
+          message: `Interview ${oldInterviewDate ? "rescheduled" : "scheduled"} for ${interviewDateFormatted}.`,
+          link: `/dashboard/jobs/${id}`,
+          metadata: {
+            jobApplicationId: id,
+            jobTitle: existing.jobTitle,
+            company: existing.company,
+            oldInterviewDate,
+            newInterviewDate,
+          },
+        })
+      }
     }
 
     return { data, error: null }
@@ -303,19 +355,20 @@ export async function updateApplicationStatus(id: string, status: ApplicationSta
       return { data: null, error: "Unauthorized" }
     }
 
+    // Get current application data for comparison
+    const { data: existing } = await adminSupabase
+      .from("job_applications")
+      .select("status, jobTitle, company, appliedDate")
+      .eq("id", id)
+      .single()
+
+    const oldStatus = existing?.status
+
     const updateData: any = { status }
 
     // Auto-set appliedDate when status changes to APPLIED
-    if (status === ApplicationStatus.APPLIED) {
-      const { data: existing } = await adminSupabase
-        .from("job_applications")
-        .select("appliedDate")
-        .eq("id", id)
-        .single()
-
-      if (existing && !existing.appliedDate) {
-        updateData.appliedDate = new Date()
-      }
+    if (status === ApplicationStatus.APPLIED && existing && !existing.appliedDate) {
+      updateData.appliedDate = new Date()
     }
 
     const { data, error } = await adminSupabase
@@ -329,6 +382,23 @@ export async function updateApplicationStatus(id: string, status: ApplicationSta
     if (error) {
       console.error("Database error:", error)
       return { data: null, error: error.message }
+    }
+
+    // Send notification if status actually changed
+    if (existing && oldStatus !== status) {
+      await emitEvent({
+        event: AppEvent.APPLICATION_STATUS_CHANGED,
+        userId: user.id,
+        message: `Status changed from ${oldStatus} to ${status} for ${existing.jobTitle} at ${existing.company}.`,
+        link: `/dashboard/jobs/${id}`,
+        metadata: {
+          jobApplicationId: id,
+          jobTitle: existing.jobTitle,
+          company: existing.company,
+          oldStatus,
+          newStatus: status,
+        },
+      })
     }
 
     return { data, error: null }

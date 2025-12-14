@@ -2,34 +2,46 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Heart, Eye, ChevronRight, Filter, Loader2, Trophy, Sparkles, PenLine, BarChart3 } from "lucide-react";
+import { Heart, Eye, ChevronRight, Filter, Loader2, Trophy, Sparkles, PenLine, BarChart3, Bookmark, Users } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getSuccessStories, getStoryIndustries, likeStory, unlikeStory, type SuccessStorySummary } from "@/lib/actions/success-stories.action";
+import { getSuccessStories, getStoryIndustries, getStoryTags, likeStory, unlikeStory, bookmarkStory, unbookmarkStory, type SuccessStorySummary } from "@/lib/actions/success-stories.action";
 
 export default function CommunityPage() {
   const [stories, setStories] = useState<SuccessStorySummary[]>([]);
   const [industries, setIndustries] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const [selectedIndustry, setSelectedIndustry] = useState<string>("all");
+  const [selectedTag, setSelectedTag] = useState<string>("all");
+  const [sort, setSort] = useState<"newest" | "most_liked" | "most_viewed">("newest");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadData();
-  }, [selectedIndustry]);
+    const t = setTimeout(() => {
+      loadData();
+    }, 300);
+    return () => clearTimeout(t);
+  }, [selectedIndustry, selectedTag, sort, searchQuery]);
 
   async function loadData() {
     setIsLoading(true);
     setError(null);
 
     try {
-      const [storiesResult, industriesResult] = await Promise.all([
+      const [storiesResult, industriesResult, tagsResult] = await Promise.all([
         getSuccessStories({
           industry: selectedIndustry === "all" ? undefined : selectedIndustry,
+          query: searchQuery.trim() ? searchQuery.trim() : undefined,
+          tag: selectedTag === "all" ? undefined : selectedTag,
+          sort,
         }),
         getStoryIndustries(),
+        getStoryTags(),
       ]);
 
       if (storiesResult.error) {
@@ -41,11 +53,47 @@ export default function CommunityPage() {
       if (industriesResult.data) {
         setIndustries(industriesResult.data);
       }
+
+      if (tagsResult.data) {
+        setTags(tagsResult.data);
+      }
     } catch (err) {
       console.error("Error loading community data:", err);
       setError("Failed to load stories");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleBookmark(storyId: string, hasBookmarked: boolean) {
+    setStories((prev) =>
+      prev.map((s) =>
+        s.id === storyId
+          ? { ...s, hasBookmarked: !hasBookmarked }
+          : s
+      )
+    );
+
+    try {
+      const result = hasBookmarked ? await unbookmarkStory(storyId) : await bookmarkStory(storyId);
+      if (result.error) {
+        setStories((prev) =>
+          prev.map((s) =>
+            s.id === storyId
+              ? { ...s, hasBookmarked: hasBookmarked }
+              : s
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error toggling bookmark:", err);
+      setStories((prev) =>
+        prev.map((s) =>
+          s.id === storyId
+            ? { ...s, hasBookmarked: hasBookmarked }
+            : s
+        )
+      );
     }
   }
 
@@ -94,9 +142,21 @@ export default function CommunityPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" asChild>
+            <Link href="/dashboard/community/hub">
+              <Users className="h-4 w-4 mr-2" />
+              Community Hub
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
             <Link href="/dashboard/community/leaderboard">
               <BarChart3 className="h-4 w-4 mr-2" />
               Leaderboard
+            </Link>
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/community/saved">
+              <Bookmark className="h-4 w-4 mr-2" />
+              Saved
             </Link>
           </Button>
           <Button asChild>
@@ -109,24 +169,59 @@ export default function CommunityPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-gray-500" />
           <span className="text-sm text-gray-600 dark:text-gray-400">Filter by:</span>
         </div>
-        <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="All Industries" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Industries</SelectItem>
-            {industries.map((ind) => (
-              <SelectItem key={ind} value={ind}>
-                {ind}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+
+        <div className="flex flex-col md:flex-row gap-3 md:items-center flex-1">
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search stories (title, company, role...)"
+            className="md:max-w-sm"
+          />
+
+          <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="All Industries" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Industries</SelectItem>
+              {industries.map((ind) => (
+                <SelectItem key={ind} value={ind}>
+                  {ind}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={selectedTag} onValueChange={setSelectedTag}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="All Tags" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Tags</SelectItem>
+              {tags.map((t) => (
+                <SelectItem key={t} value={t}>
+                  {t}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={sort} onValueChange={(v) => setSort(v as any)}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Sort" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="newest">Newest</SelectItem>
+              <SelectItem value="most_liked">Most Liked</SelectItem>
+              <SelectItem value="most_viewed">Most Viewed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {isLoading ? (
@@ -169,7 +264,7 @@ export default function CommunityPage() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {featuredStories.map((story) => (
-                  <StoryCard key={story.id} story={story} onLike={handleLike} featured />
+                  <StoryCard key={story.id} story={story} onLike={handleLike} onBookmark={handleBookmark} featured />
                 ))}
               </div>
             </div>
@@ -182,7 +277,7 @@ export default function CommunityPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {regularStories.map((story) => (
-                <StoryCard key={story.id} story={story} onLike={handleLike} />
+                <StoryCard key={story.id} story={story} onLike={handleLike} onBookmark={handleBookmark} />
               ))}
             </div>
           </div>
@@ -195,13 +290,16 @@ export default function CommunityPage() {
 function StoryCard({
   story,
   onLike,
+  onBookmark,
   featured = false,
 }: {
   story: SuccessStorySummary;
   onLike: (id: string, hasLiked: boolean) => void;
+  onBookmark: (id: string, hasBookmarked: boolean) => void;
   featured?: boolean;
 }) {
   const truncatedStory = story.story.length > 150 ? story.story.slice(0, 150) + "..." : story.story;
+  const visibleTags = (story.tags || []).slice(0, 3);
 
   return (
     <Card
@@ -229,6 +327,30 @@ function StoryCard({
         </div>
       </CardHeader>
       <CardContent>
+        {story.coverImageUrl && (
+          <div className="mb-3 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
+            <img
+              src={story.coverImageUrl}
+              alt="Story cover"
+              className="h-40 w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
+        {visibleTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {visibleTags.map((t) => (
+              <Badge key={t} variant="secondary" className="text-xs">
+                {t}
+              </Badge>
+            ))}
+            {(story.tags || []).length > visibleTags.length && (
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                +{(story.tags || []).length - visibleTags.length}
+              </span>
+            )}
+          </div>
+        )}
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{truncatedStory}</p>
 
         <div className="flex items-center justify-between">
@@ -245,6 +367,19 @@ function StoryCard({
               <Heart className={`h-4 w-4 ${story.hasLiked ? "fill-current" : ""}`} />
               {story.likeCount}
             </button>
+
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                onBookmark(story.id, story.hasBookmarked || false);
+              }}
+              className={`flex items-center gap-1 hover:text-blue-500 transition-colors ${
+                story.hasBookmarked ? "text-blue-500" : ""
+              }`}
+            >
+              <Bookmark className={`h-4 w-4 ${story.hasBookmarked ? "fill-current" : ""}`} />
+            </button>
+
             <span className="flex items-center gap-1">
               <Eye className="h-4 w-4" />
               {story.viewCount}

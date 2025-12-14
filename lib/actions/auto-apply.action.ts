@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { adminSupabase } from '@/lib/supabase/server'
 import { emailService } from '@/lib/services/email'
+import { emitEvent } from '@/lib/services/event-dispatcher'
+import { AppEvent } from '@/lib/types/app-events'
 
 // ===========================================================
 // SCHEMAS
@@ -136,6 +138,19 @@ export async function sendJobApplication(values: z.infer<typeof SendApplicationS
       .update({ isSent: true })
       .eq('id', parsed.data.coverLetterId)
 
+    await emitEvent({
+      event: AppEvent.COVER_LETTER_SENT,
+      userId: user.id,
+      message: `Application sent to ${jobApp.company} for ${jobApp.jobTitle}.`,
+      link: `/dashboard/jobs/${jobApp.id}`,
+      metadata: {
+        jobApplicationId: jobApp.id,
+        coverLetterId: parsed.data.coverLetterId,
+        emailApplicationId: emailApp?.id || null,
+        recipientEmail: parsed.data.recipientEmail,
+      },
+    })
+
     // Update job application status to APPLIED if it was WISHLIST
     if (jobApp.status === 'WISHLIST') {
       await adminSupabase
@@ -147,6 +162,20 @@ export async function sendJobApplication(values: z.infer<typeof SendApplicationS
           contactName: parsed.data.recipientName,
         })
         .eq('id', parsed.data.jobApplicationId)
+
+      await emitEvent({
+        event: AppEvent.APPLICATION_STATUS_CHANGED,
+        userId: user.id,
+        message: `Status changed from WISHLIST to APPLIED for ${jobApp.jobTitle} at ${jobApp.company}.`,
+        link: `/dashboard/jobs/${jobApp.id}`,
+        metadata: {
+          jobApplicationId: jobApp.id,
+          jobTitle: jobApp.jobTitle,
+          company: jobApp.company,
+          oldStatus: 'WISHLIST',
+          newStatus: 'APPLIED',
+        },
+      })
     }
 
     return { 

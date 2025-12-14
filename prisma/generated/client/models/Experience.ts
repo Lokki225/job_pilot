@@ -219,8 +219,8 @@ export type ExperienceWhereInput = {
   AND?: Prisma.ExperienceWhereInput | Prisma.ExperienceWhereInput[]
   OR?: Prisma.ExperienceWhereInput[]
   NOT?: Prisma.ExperienceWhereInput | Prisma.ExperienceWhereInput[]
-  id?: Prisma.StringFilter<"Experience"> | string
-  profileId?: Prisma.StringFilter<"Experience"> | string
+  id?: Prisma.UuidFilter<"Experience"> | string
+  profileId?: Prisma.UuidFilter<"Experience"> | string
   title?: Prisma.StringFilter<"Experience"> | string
   company?: Prisma.StringFilter<"Experience"> | string
   location?: Prisma.StringNullableFilter<"Experience"> | string | null
@@ -253,7 +253,7 @@ export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ExperienceWhereInput | Prisma.ExperienceWhereInput[]
   OR?: Prisma.ExperienceWhereInput[]
   NOT?: Prisma.ExperienceWhereInput | Prisma.ExperienceWhereInput[]
-  profileId?: Prisma.StringFilter<"Experience"> | string
+  profileId?: Prisma.UuidFilter<"Experience"> | string
   title?: Prisma.StringFilter<"Experience"> | string
   company?: Prisma.StringFilter<"Experience"> | string
   location?: Prisma.StringNullableFilter<"Experience"> | string | null
@@ -287,8 +287,8 @@ export type ExperienceScalarWhereWithAggregatesInput = {
   AND?: Prisma.ExperienceScalarWhereWithAggregatesInput | Prisma.ExperienceScalarWhereWithAggregatesInput[]
   OR?: Prisma.ExperienceScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ExperienceScalarWhereWithAggregatesInput | Prisma.ExperienceScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Experience"> | string
-  profileId?: Prisma.StringWithAggregatesFilter<"Experience"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Experience"> | string
+  profileId?: Prisma.UuidWithAggregatesFilter<"Experience"> | string
   title?: Prisma.StringWithAggregatesFilter<"Experience"> | string
   company?: Prisma.StringWithAggregatesFilter<"Experience"> | string
   location?: Prisma.StringNullableWithAggregatesFilter<"Experience"> | string | null
@@ -551,8 +551,8 @@ export type ExperienceScalarWhereInput = {
   AND?: Prisma.ExperienceScalarWhereInput | Prisma.ExperienceScalarWhereInput[]
   OR?: Prisma.ExperienceScalarWhereInput[]
   NOT?: Prisma.ExperienceScalarWhereInput | Prisma.ExperienceScalarWhereInput[]
-  id?: Prisma.StringFilter<"Experience"> | string
-  profileId?: Prisma.StringFilter<"Experience"> | string
+  id?: Prisma.UuidFilter<"Experience"> | string
+  profileId?: Prisma.UuidFilter<"Experience"> | string
   title?: Prisma.StringFilter<"Experience"> | string
   company?: Prisma.StringFilter<"Experience"> | string
   location?: Prisma.StringNullableFilter<"Experience"> | string | null

@@ -4,10 +4,12 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { LanguageSelector } from "@/components/ui/language-selector"
+import { NotificationBell } from "@/components/notifications/NotificationBell"
+import { NotificationToastProvider } from "@/components/notifications"
 import { useLanguage } from "@/components/providers/language-provider"
 import { cn } from "@/lib/utils"
 import { logout } from "@/lib/auth"
@@ -20,7 +22,8 @@ const navigationItems = [
   { key: "nav.coverLetters", href: "/dashboard/letters", icon: FileText },
   { key: "nav.studyRoom", href: "/dashboard/study", icon: BookOpen },
   { key: "nav.trainingRoom", href: "/dashboard/training", icon: Mic },
-  { key: "nav.community", href: "/dashboard/community", icon: Trophy },
+  { key: "nav.community", href: "/dashboard/community/hub", icon: Trophy },
+  { key: "nav.notifications", href: "/dashboard/notifications", icon: Bell },
   { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles },
   { key: "nav.settings", href: "/dashboard/settings", icon: Settings },
 ]
@@ -50,6 +53,9 @@ export default function DashboardLayout({
   }, [pathname])
 
   const getPageTitle = (path: string): string => {
+    if (path.startsWith("/dashboard/community")) {
+      return t("nav.community");
+    }
     // First try to find a matching navigation item
     const navItem = navigationItems.find(item => path.startsWith(item.href));
     if (navItem) return t(navItem.key);
@@ -121,8 +127,11 @@ export default function DashboardLayout({
           {/* Navigation */}
           <nav className="flex-1 space-y-1 overflow-y-auto p-2">
             {navigationItems.map((item) => {
-              const isActive = pathname === item.href || 
-                (item.href !== '/dashboard' && pathname.startsWith(`${item.href}/`));
+              const isActive =
+                item.key === "nav.community"
+                  ? pathname.startsWith("/dashboard/community")
+                  : pathname === item.href ||
+                    (item.href !== '/dashboard' && pathname.startsWith(`${item.href}/`));
               return (
                 <Link
                   key={item.key}
@@ -208,6 +217,7 @@ export default function DashboardLayout({
               </h1>
             </div>
             <div className="flex items-center gap-3">
+              <NotificationBell />
               <LanguageSelector variant="compact" />
               <ThemeToggle />
               {session ? (<Button onClick={() => {
@@ -222,7 +232,9 @@ export default function DashboardLayout({
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto bg-gray-50 p-4 dark:bg-slate-900 sm:p-6 lg:p-8">
-          {children}
+          <NotificationToastProvider>
+            {children}
+          </NotificationToastProvider>
         </main>
       </div>
     </div>

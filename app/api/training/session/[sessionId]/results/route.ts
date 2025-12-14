@@ -4,7 +4,7 @@ import { getCurrentUser } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { sessionId: string } }
+  context: { params: Promise<{ sessionId: string }> }
 ) {
   try {
     const { user, error: authError } = await getCurrentUser()
@@ -12,7 +12,7 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const sessionId = params.sessionId
+    const { sessionId } = await context.params
 
     // Get session with all questions
     const { data: session, error: sessionError } = await adminSupabase

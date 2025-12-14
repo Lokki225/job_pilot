@@ -3,14 +3,21 @@
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { adminSupabase } from '@/lib/supabase/server'
 
 // Helper to create server-side Supabase client
 async function createAuthClient() {
   const cookieStore = await cookies()
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase environment variables are missing (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY)')
+  }
   
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         get(name: string) {
@@ -45,17 +52,28 @@ export const signUp = async (email: string, password: string) => {
     }
 
     // Create user in your database
-    const { error: userError } = await supabase
-      .from('users')
-      .insert({
-        id: data.user.id,
-        email: data.user.email!,
-        role: 'USER',
-      });
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return {
+        user: null,
+        session: null,
+        error: 'Server misconfigured: SUPABASE_SERVICE_ROLE_KEY is missing',
+      }
+    }
 
-    if (userError && userError.code !== '23505') { // 23505 is unique violation
+    const { error: userError } = await adminSupabase
+      .from('users')
+      .upsert(
+        {
+          id: data.user.id,
+          email: data.user.email!,
+          role: 'USER',
+        },
+        { onConflict: 'id' }
+      );
+
+    if (userError) {
       console.error('User creation error:', userError);
-      return { user: null, session: null, error: 'Failed to create user' };
+      return { user: null, session: null, error: userError.message || 'Failed to create user' };
     }
 
     // Return both user and session

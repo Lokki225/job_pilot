@@ -90,12 +90,282 @@ export type JobApplication = Prisma.JobApplicationModel
  */
 export type JobSearchPreference = Prisma.JobSearchPreferenceModel
 /**
+ * Model CachedJobRecommendation
+ * 
+ */
+export type CachedJobRecommendation = Prisma.CachedJobRecommendationModel
+/**
  * Model AIGeneratedContent
  * 
  */
 export type AIGeneratedContent = Prisma.AIGeneratedContentModel
 /**
+ * Model CoverLetter
+ * 
+ */
+export type CoverLetter = Prisma.CoverLetterModel
+/**
+ * Model EmailApplication
+ * 
+ */
+export type EmailApplication = Prisma.EmailApplicationModel
+/**
  * Model Notification
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model StudyChapter
+ * 
+ */
+export type StudyChapter = Prisma.StudyChapterModel
+/**
+ * Model StudyLesson
+ * 
+ */
+export type StudyLesson = Prisma.StudyLessonModel
+/**
+ * Model StudyQuiz
+ * 
+ */
+export type StudyQuiz = Prisma.StudyQuizModel
+/**
+ * Model StudyResource
+ * 
+ */
+export type StudyResource = Prisma.StudyResourceModel
+/**
+ * Model UserStudyProgress
+ * 
+ */
+export type UserStudyProgress = Prisma.UserStudyProgressModel
+/**
+ * Model TrainingSession
+ * 
+ */
+export type TrainingSession = Prisma.TrainingSessionModel
+/**
+ * Model TrainingQuestion
+ * 
+ */
+export type TrainingQuestion = Prisma.TrainingQuestionModel
+/**
+ * Model UserInterviewStats
+ * 
+ */
+export type UserInterviewStats = Prisma.UserInterviewStatsModel
+/**
+ * Model CompanyResearch
+ * 
+ */
+export type CompanyResearch = Prisma.CompanyResearchModel
+/**
+ * Model PeerPracticeProfile
+ * 
+ */
+export type PeerPracticeProfile = Prisma.PeerPracticeProfileModel
+/**
+ * Model PeerPracticeSession
+ * 
+ */
+export type PeerPracticeSession = Prisma.PeerPracticeSessionModel
+/**
+ * Model UserCalendarConnection
+ * 
+ */
+export type UserCalendarConnection = Prisma.UserCalendarConnectionModel
+/**
+ * Model DetectedInterview
+ * 
+ */
+export type DetectedInterview = Prisma.DetectedInterviewModel
+/**
+ * Model SuccessStory
+ * 
+ */
+export type SuccessStory = Prisma.SuccessStoryModel
+/**
+ * Model SuccessStoryLike
+ * 
+ */
+export type SuccessStoryLike = Prisma.SuccessStoryLikeModel
+/**
+ * Model SuccessStoryBookmark
+ * 
+ */
+export type SuccessStoryBookmark = Prisma.SuccessStoryBookmarkModel
+/**
+ * Model SuccessStoryHide
+ * 
+ */
+export type SuccessStoryHide = Prisma.SuccessStoryHideModel
+/**
+ * Model SuccessStoryReport
+ * 
+ */
+export type SuccessStoryReport = Prisma.SuccessStoryReportModel
+/**
+ * Model SuccessStoryComment
+ * 
+ */
+export type SuccessStoryComment = Prisma.SuccessStoryCommentModel
+/**
+ * Model SuccessStoryCommentLike
+ * 
+ */
+export type SuccessStoryCommentLike = Prisma.SuccessStoryCommentLikeModel
+/**
+ * Model Achievement
+ * 
+ */
+export type Achievement = Prisma.AchievementModel
+/**
+ * Model UserAchievement
+ * 
+ */
+export type UserAchievement = Prisma.UserAchievementModel
+/**
+ * Model UserXP
+ * 
+ */
+export type UserXP = Prisma.UserXPModel
+/**
+ * Model InterviewPrepPack
+ * 
+ */
+export type InterviewPrepPack = Prisma.InterviewPrepPackModel
+/**
+ * Model XPTransaction
+ * 
+ */
+export type XPTransaction = Prisma.XPTransactionModel
+/**
+ * Model CommunityProfile
+ * 
+ */
+export type CommunityProfile = Prisma.CommunityProfileModel
+/**
+ * Model CommunityBadge
+ * 
+ */
+export type CommunityBadge = Prisma.CommunityBadgeModel
+/**
+ * Model CommunityPost
+ * 
+ */
+export type CommunityPost = Prisma.CommunityPostModel
+/**
+ * Model CommunityPostLike
+ * 
+ */
+export type CommunityPostLike = Prisma.CommunityPostLikeModel
+/**
+ * Model CommunityPostComment
+ * 
+ */
+export type CommunityPostComment = Prisma.CommunityPostCommentModel
+/**
+ * Model CommunityPostCommentLike
+ * 
+ */
+export type CommunityPostCommentLike = Prisma.CommunityPostCommentLikeModel
+/**
+ * Model CommunityPostBookmark
+ * 
+ */
+export type CommunityPostBookmark = Prisma.CommunityPostBookmarkModel
+/**
+ * Model CommunityPostReport
+ * 
+ */
+export type CommunityPostReport = Prisma.CommunityPostReportModel
+/**
+ * Model ChatRoom
+ * 
+ */
+export type ChatRoom = Prisma.ChatRoomModel
+/**
+ * Model ChatRoomMember
+ * 
+ */
+export type ChatRoomMember = Prisma.ChatRoomMemberModel
+/**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
+ * Model ChatMessageReaction
+ * 
+ */
+export type ChatMessageReaction = Prisma.ChatMessageReactionModel
+/**
+ * Model UserFollow
+ * 
+ */
+export type UserFollow = Prisma.UserFollowModel
+/**
+ * Model MentorProfile
+ * 
+ */
+export type MentorProfile = Prisma.MentorProfileModel
+/**
+ * Model Mentorship
+ * 
+ */
+export type Mentorship = Prisma.MentorshipModel
+/**
+ * Model CustomStudyPlan
+ * 
+ */
+export type CustomStudyPlan = Prisma.CustomStudyPlanModel
+/**
+ * Model CustomStudyPlanLike
+ * 
+ */
+export type CustomStudyPlanLike = Prisma.CustomStudyPlanLikeModel
+/**
+ * Model CustomStudyPlanComment
+ * 
+ */
+export type CustomStudyPlanComment = Prisma.CustomStudyPlanCommentModel
+/**
+ * Model CustomStudyChapter
+ * 
+ */
+export type CustomStudyChapter = Prisma.CustomStudyChapterModel
+/**
+ * Model CustomStudyLesson
+ * 
+ */
+export type CustomStudyLesson = Prisma.CustomStudyLessonModel
+/**
+ * Model CustomStudyQuiz
+ * 
+ */
+export type CustomStudyQuiz = Prisma.CustomStudyQuizModel
+/**
+ * Model CoverLetterTemplate
+ * 
+ */
+export type CoverLetterTemplate = Prisma.CoverLetterTemplateModel
+/**
+ * Model NotificationPreference
+ * 
+ */
+export type NotificationPreference = Prisma.NotificationPreferenceModel
+/**
+ * Model NotificationQueue
+ * 
+ */
+export type NotificationQueue = Prisma.NotificationQueueModel
+/**
+ * Model EmailQueue
+ * 
+ */
+export type EmailQueue = Prisma.EmailQueueModel
+/**
+ * Model EventLog
+ * 
+ */
+export type EventLog = Prisma.EventLogModel

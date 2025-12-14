@@ -225,8 +225,8 @@ export type SkillWhereInput = {
   AND?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
   OR?: Prisma.SkillWhereInput[]
   NOT?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
-  id?: Prisma.StringFilter<"Skill"> | string
-  profileId?: Prisma.StringFilter<"Skill"> | string
+  id?: Prisma.UuidFilter<"Skill"> | string
+  profileId?: Prisma.UuidFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
   level?: Prisma.IntNullableFilter<"Skill"> | number | null
   category?: Prisma.StringNullableFilter<"Skill"> | string | null
@@ -251,7 +251,7 @@ export type SkillWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
   OR?: Prisma.SkillWhereInput[]
   NOT?: Prisma.SkillWhereInput | Prisma.SkillWhereInput[]
-  profileId?: Prisma.StringFilter<"Skill"> | string
+  profileId?: Prisma.UuidFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
   level?: Prisma.IntNullableFilter<"Skill"> | number | null
   category?: Prisma.StringNullableFilter<"Skill"> | string | null
@@ -279,8 +279,8 @@ export type SkillScalarWhereWithAggregatesInput = {
   AND?: Prisma.SkillScalarWhereWithAggregatesInput | Prisma.SkillScalarWhereWithAggregatesInput[]
   OR?: Prisma.SkillScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SkillScalarWhereWithAggregatesInput | Prisma.SkillScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Skill"> | string
-  profileId?: Prisma.StringWithAggregatesFilter<"Skill"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Skill"> | string
+  profileId?: Prisma.UuidWithAggregatesFilter<"Skill"> | string
   name?: Prisma.StringWithAggregatesFilter<"Skill"> | string
   level?: Prisma.IntNullableWithAggregatesFilter<"Skill"> | number | null
   category?: Prisma.StringNullableWithAggregatesFilter<"Skill"> | string | null
@@ -503,8 +503,8 @@ export type SkillScalarWhereInput = {
   AND?: Prisma.SkillScalarWhereInput | Prisma.SkillScalarWhereInput[]
   OR?: Prisma.SkillScalarWhereInput[]
   NOT?: Prisma.SkillScalarWhereInput | Prisma.SkillScalarWhereInput[]
-  id?: Prisma.StringFilter<"Skill"> | string
-  profileId?: Prisma.StringFilter<"Skill"> | string
+  id?: Prisma.UuidFilter<"Skill"> | string
+  profileId?: Prisma.UuidFilter<"Skill"> | string
   name?: Prisma.StringFilter<"Skill"> | string
   level?: Prisma.IntNullableFilter<"Skill"> | number | null
   category?: Prisma.StringNullableFilter<"Skill"> | string | null

@@ -242,7 +242,7 @@ export type ResumeWhereInput = {
   AND?: Prisma.ResumeWhereInput | Prisma.ResumeWhereInput[]
   OR?: Prisma.ResumeWhereInput[]
   NOT?: Prisma.ResumeWhereInput | Prisma.ResumeWhereInput[]
-  id?: Prisma.StringFilter<"Resume"> | string
+  id?: Prisma.UuidFilter<"Resume"> | string
   userId?: Prisma.UuidFilter<"Resume"> | string
   fileUrl?: Prisma.StringFilter<"Resume"> | string
   fileName?: Prisma.StringFilter<"Resume"> | string
@@ -308,7 +308,7 @@ export type ResumeScalarWhereWithAggregatesInput = {
   AND?: Prisma.ResumeScalarWhereWithAggregatesInput | Prisma.ResumeScalarWhereWithAggregatesInput[]
   OR?: Prisma.ResumeScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ResumeScalarWhereWithAggregatesInput | Prisma.ResumeScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Resume"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Resume"> | string
   userId?: Prisma.UuidWithAggregatesFilter<"Resume"> | string
   fileUrl?: Prisma.StringWithAggregatesFilter<"Resume"> | string
   fileName?: Prisma.StringWithAggregatesFilter<"Resume"> | string
@@ -561,7 +561,7 @@ export type ResumeScalarWhereInput = {
   AND?: Prisma.ResumeScalarWhereInput | Prisma.ResumeScalarWhereInput[]
   OR?: Prisma.ResumeScalarWhereInput[]
   NOT?: Prisma.ResumeScalarWhereInput | Prisma.ResumeScalarWhereInput[]
-  id?: Prisma.StringFilter<"Resume"> | string
+  id?: Prisma.UuidFilter<"Resume"> | string
   userId?: Prisma.UuidFilter<"Resume"> | string
   fileUrl?: Prisma.StringFilter<"Resume"> | string
   fileName?: Prisma.StringFilter<"Resume"> | string

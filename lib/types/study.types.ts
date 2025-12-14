@@ -84,6 +84,7 @@ export type ContentType = 'TEXT' | 'INTERACTIVE' | 'QUIZ' | 'PRACTICE';
 
 export interface StudyChapter {
   id: string;
+  careerTrackId?: string | null;
   orderIndex: number;
   title: string;
   description?: string | null;
