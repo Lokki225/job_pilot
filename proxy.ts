@@ -1,82 +1,46 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { NextResponse, type NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
+import { updateSession } from '@/lib/supabase/middleware'
+import { checkRateLimit } from '@/lib/utils/rate-limit'
 
-export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
-};
+function getRequestId(request: NextRequest): string {
+  return request.headers.get('x-request-id') || crypto.randomUUID()
+}
+
+function getClientId(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) return forwarded.split(',')[0]?.trim() || forwarded
+
+  const realIp = request.headers.get('x-real-ip')
+  if (realIp) return realIp
+
+  return 'unknown'
+}
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  const requestId = getRequestId(request)
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          });
-        },
-      },
+  if (request.nextUrl.pathname.startsWith('/api/') && request.method === 'POST') {
+    const clientId = getClientId(request)
+
+    const rate = checkRateLimit(`mw:api:post:${clientId}`, 60, 60_000)
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { error: 'Too many requests' },
+        {
+          status: 429,
+          headers: {
+            'x-request-id': requestId,
+          },
+        }
+      )
     }
-  );
-
-  // Refresh session if expired
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const pathname = request.nextUrl.pathname;
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup');
-  const isDashboardRoute = pathname.startsWith('/dashboard');
-
-  // Redirect authenticated users away from auth pages
-  if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  // Redirect unauthenticated users to login (dashboard routes only)
-  if (isDashboardRoute && !user) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  const { response } = await updateSession(request)
+  response.headers.set('x-request-id', requestId)
+  return response
+}
 
-  // Allow public routes to pass through
-  return response;
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 }

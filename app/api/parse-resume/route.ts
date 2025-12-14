@@ -1,13 +1,41 @@
 // app/api/parse-resume/route.ts
 import { adminSupabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { calculateCompletionScore } from '@/lib/utils'
 import { aiService } from '@/lib/services/ai'
 import { cvExtractorService } from '@/lib/services/cv-extractor'
+import { checkRateLimit } from '@/lib/utils/rate-limit'
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
+
+const ParseResumeBodySchema = z.object({
+  resumeId: z.string().trim().min(1).max(128),
+})
 
 export async function POST(request: Request) {
   try {
-    const { resumeId } = await request.json()
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const rate = checkRateLimit(`api:parse-resume:${user.id}`, 10, 60 * 60_000)
+    if (!rate.allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
+
+    const body = await request.json().catch(() => null)
+    const parsedBody = ParseResumeBodySchema.safeParse(body)
+
+    if (!parsedBody.success) {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+    }
+
+    const { resumeId } = parsedBody.data
 
     console.log('[parse-resume] Resume ID:', resumeId)
 
@@ -16,13 +44,14 @@ export async function POST(request: Request) {
       .from('resumes')
       .select('*')
       .eq('id', resumeId)
+      .eq('userId', user.id)
       .single()
 
-    if (resumeError) {
+    if (resumeError || !resume) {
       console.error('[parse-resume] Error fetching resume record:', resumeError)
       return NextResponse.json(
-        { error: `Error fetching resume record: ${resumeError.message}` },
-        { status: 500 }
+        { error: 'Resume not found' },
+        { status: 404 }
       )
     }
 

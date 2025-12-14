@@ -1,5 +1,6 @@
 // next.config.ts
 import type { NextConfig } from 'next';
+import { withSentryConfig } from '@sentry/nextjs'
 
 const supabaseHost = (() => {
   const raw = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -16,18 +17,30 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   async headers() {
+    const isProd = process.env.NODE_ENV === 'production'
     return [
       {
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-DNS-Prefetch-Control', value: 'off' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           {
             key: 'Permissions-Policy',
             value:
               'camera=(), microphone=(), geolocation=(), interest-cohort=()'
           },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
+          ...(isProd
+            ? [
+                {
+                  key: 'Strict-Transport-Security',
+                  value: 'max-age=31536000; includeSubDomains; preload',
+                },
+              ]
+            : []),
         ],
       },
     ]
@@ -65,4 +78,6 @@ const nextConfig: NextConfig = {
   // images: { ... }
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: true,
+});

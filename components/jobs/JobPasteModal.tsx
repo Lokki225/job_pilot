@@ -44,7 +44,10 @@ export function JobPasteModal({
   const [parsedJob, setParsedJob] = useState<ParsedJob | null>(null)
   const [aiParsedJob, setAiParsedJob] = useState<AIParsedjob | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [useAI, setUseAI] = useState(true)
+  const [useAI, setUseAI] = useState(
+    process.env.NEXT_PUBLIC_DISABLE_AI_PARSING !== '1' &&
+      process.env.NEXT_PUBLIC_DISABLE_AI_PARSING !== 'true'
+  )
 
   const handleExtract = async () => {
     if (!pastedText.trim()) return
