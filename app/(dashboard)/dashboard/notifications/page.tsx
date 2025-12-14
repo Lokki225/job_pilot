@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Bell,
@@ -13,12 +13,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  getNotifications,
   markAsRead,
   markAllAsRead,
   deleteNotification,
 } from "@/lib/actions/notifications.action";
 import { toast } from "@/components/ui/use-toast";
+import { useRealtimeNotifications } from "@/lib/hooks/use-realtime-notifications";
 
 interface Notification {
   id: string;
@@ -53,52 +53,31 @@ const TYPE_COLORS: Record<string, string> = {
 
 export default function NotificationsPage() {
   const router = useRouter();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread">("all");
 
-  useEffect(() => {
-    loadNotifications();
-  }, []);
-
-  async function loadNotifications() {
-    setIsLoading(true);
-    try {
-      const result = await getNotifications({ limit: 50 });
-      if (result.data) {
-        setNotifications(result.data);
-      }
-    } catch (err) {
-      console.error("Error loading notifications:", err);
-      toast({
-        title: "Error",
-        description: "Failed to load notifications",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const {
+    notifications,
+    unreadCount,
+    isLoading,
+    markAsRead: markAsReadLocal,
+    markAllAsRead: markAllAsReadLocal,
+    removeNotification,
+  } = useRealtimeNotifications();
 
   async function handleMarkAsRead(id: string) {
     await markAsRead(id);
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    );
+    markAsReadLocal(id);
   }
 
   async function handleMarkAllAsRead() {
     await markAllAsRead();
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    toast({
-      title: "Done",
-      description: "All notifications marked as read",
-    });
+    markAllAsReadLocal();
+    toast({ title: "Done", description: "All notifications marked as read" });
   }
 
   async function handleDelete(id: string) {
     await deleteNotification(id);
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
+    removeNotification(id);
     toast({
       title: "Deleted",
       description: "Notification removed",
@@ -137,8 +116,6 @@ export default function NotificationsPage() {
     filter === "unread"
       ? notifications.filter((n) => !n.isRead)
       : notifications;
-
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">

@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { AppEvent, EVENT_META, shouldShowToast } from "@/lib/types/app-events";
+import { getNotifications, getUnreadCount } from "@/lib/actions/notifications.action";
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -28,7 +29,10 @@ export interface UseRealtimeNotificationsReturn {
   notifications: RealtimeNotification[];
   unreadCount: number;
   isConnected: boolean;
+  isLoading: boolean;
   markAsRead: (id: string) => void;
+  markAllAsRead: () => void;
+  removeNotification: (id: string) => void;
   clearAll: () => void;
 }
 
@@ -42,13 +46,46 @@ export function useRealtimeNotifications(
   const [notifications, setNotifications] = useState<RealtimeNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(options.userId || null);
+  const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
 
   // Initialize Supabase client
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
+
+  useEffect(() => {
+    if (!userId || hasLoadedInitial) return;
+
+    let cancelled = false;
+    setIsLoading(true);
+    Promise.all([getNotifications({ limit: 50 }), getUnreadCount()])
+      .then(([notificationsResult, unreadResult]) => {
+        if (cancelled) return;
+        if (notificationsResult.data) {
+          setNotifications(notificationsResult.data as RealtimeNotification[]);
+        }
+        if (typeof unreadResult.data === "number") {
+          setUnreadCount(unreadResult.data);
+        }
+        setHasLoadedInitial(true);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("Error loading initial notifications:", err);
+        setHasLoadedInitial(true);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, hasLoadedInitial]);
 
   // Get current user if not provided
   useEffect(() => {
@@ -65,8 +102,11 @@ export function useRealtimeNotifications(
   const handleNewNotification = useCallback(
     (notification: RealtimeNotification) => {
       // Add to local state
-      setNotifications((prev) => [notification, ...prev].slice(0, 50)); // Keep max 50
-      setUnreadCount((prev) => prev + 1);
+      setNotifications((prev) => {
+        const next = [notification, ...prev.filter((n) => n.id !== notification.id)];
+        return next.slice(0, 50);
+      });
+      setUnreadCount((prev) => prev + (notification.isRead ? 0 : 1));
 
       // Call callback
       options.onNewNotification?.(notification);
@@ -131,6 +171,23 @@ export function useRealtimeNotifications(
           }
         }
       )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "notifications",
+          filter: `userId=eq.${userId}`,
+        },
+        (payload) => {
+          const deletedId = payload.old?.id;
+          if (!deletedId) return;
+          setNotifications((prev) => prev.filter((n) => n.id !== deletedId));
+          if (payload.old && payload.old.isRead === false) {
+            setUnreadCount((prev) => Math.max(0, prev - 1));
+          }
+        }
+      )
       .subscribe((status) => {
         setIsConnected(status === "SUBSCRIBED");
       });
@@ -148,6 +205,21 @@ export function useRealtimeNotifications(
     setUnreadCount((prev) => Math.max(0, prev - 1));
   }, []);
 
+  const markAllAsRead = useCallback(() => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    setUnreadCount(0);
+  }, []);
+
+  const removeNotification = useCallback((id: string) => {
+    setNotifications((prev) => {
+      const toRemove = prev.find((n) => n.id === id);
+      if (toRemove && !toRemove.isRead) {
+        setUnreadCount((countPrev) => Math.max(0, countPrev - 1));
+      }
+      return prev.filter((n) => n.id !== id);
+    });
+  }, []);
+
   // Clear all notifications from local state
   const clearAll = useCallback(() => {
     setNotifications([]);
@@ -158,7 +230,10 @@ export function useRealtimeNotifications(
     notifications,
     unreadCount,
     isConnected,
+    isLoading,
     markAsRead,
+    markAllAsRead,
+    removeNotification,
     clearAll,
   };
 }

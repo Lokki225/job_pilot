@@ -2279,6 +2279,28 @@ export async function requestMentorship(
       .single();
 
     if (error) return { data: null, error: error.message };
+
+    // Get mentee's name for notification
+    const { data: menteeProfile } = await adminSupabase
+      .from("profiles")
+      .select("firstName, lastName")
+      .eq("userId", user.id)
+      .single();
+
+    const menteeName = menteeProfile
+      ? `${menteeProfile.firstName || ""} ${menteeProfile.lastName || ""}`.trim() || "Someone"
+      : "Someone";
+
+    // Send notification to mentor (X)
+    await emitEvent({
+      event: AppEvent.MENTORSHIP_REQUEST_RECEIVED,
+      userId: mentor.userId,
+      titleOverride: "New Mentorship Request",
+      message: `${menteeName} wants you to be their mentor`,
+      link: "/dashboard/community/hub/mentorship",
+      metadata: { mentorshipId: mentorship.id, menteeId: user.id },
+    });
+
     return { data: { id: mentorship.id }, error: null };
   } catch (err) {
     console.error("Error requesting mentorship:", err);
@@ -2334,6 +2356,38 @@ export async function respondToMentorshipRequest(
         .from("mentor_profiles")
         .update({ currentMentees: (mentorCounts?.currentMentees || 0) + 1 })
         .eq("id", mentorship.mentorId);
+    }
+
+    // Get mentee ID from mentorship
+    const { data: fullMentorship } = await adminSupabase
+      .from("mentorships")
+      .select("menteeId")
+      .eq("id", mentorshipId)
+      .single();
+
+    if (fullMentorship) {
+      // Get mentor's name for notification
+      const { data: mentorProfile } = await adminSupabase
+        .from("profiles")
+        .select("firstName, lastName")
+        .eq("userId", user.id)
+        .single();
+
+      const mentorName = mentorProfile
+        ? `${mentorProfile.firstName || ""} ${mentorProfile.lastName || ""}`.trim() || "The mentor"
+        : "The mentor";
+
+      // Send notification to mentee (Y)
+      await emitEvent({
+        event: accept ? AppEvent.MENTORSHIP_REQUEST_ACCEPTED : AppEvent.MENTORSHIP_REQUEST_DECLINED,
+        userId: fullMentorship.menteeId,
+        titleOverride: accept ? "Mentorship Request Accepted!" : "Mentorship Request Declined",
+        message: accept
+          ? `${mentorName} accepted your mentorship request`
+          : `${mentorName} declined your mentorship request`,
+        link: "/dashboard/community/hub/mentorship",
+        metadata: { mentorshipId, mentorId: mentorship.mentorId },
+      });
     }
 
     return { data: { success: true }, error: null };

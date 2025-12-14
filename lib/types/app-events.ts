@@ -79,6 +79,13 @@ export enum AppEvent {
   FOLLOWER_NEW = "follower_new",
 
   // ─────────────────────────────────────────────────────────────────────────
+  // MENTORSHIP
+  // ─────────────────────────────────────────────────────────────────────────
+  MENTORSHIP_REQUEST_RECEIVED = "mentorship_request_received",
+  MENTORSHIP_REQUEST_ACCEPTED = "mentorship_request_accepted",
+  MENTORSHIP_REQUEST_DECLINED = "mentorship_request_declined",
+
+  // ─────────────────────────────────────────────────────────────────────────
   // SYSTEM / ACCOUNT
   // ─────────────────────────────────────────────────────────────────────────
   WELCOME = "welcome",
@@ -610,6 +617,40 @@ export const EVENT_META: Record<AppEvent, EventMeta> = {
     defaultChannels: ["in_app"],
     description: "Someone started following you",
     actionLabel: "View Profile",
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // MENTORSHIP
+  // ─────────────────────────────────────────────────────────────────────────
+  [AppEvent.MENTORSHIP_REQUEST_RECEIVED]: {
+    icon: "🤝",
+    defaultTitle: "New Mentorship Request",
+    category: "community",
+    priority: "high",
+    defaultChannels: ["in_app", "email"],
+    description: "Someone wants you to be their mentor",
+    actionLabel: "Review Request",
+    actionUrl: "/dashboard/community/hub/mentorship",
+  },
+  [AppEvent.MENTORSHIP_REQUEST_ACCEPTED]: {
+    icon: "✅",
+    defaultTitle: "Mentorship Request Accepted!",
+    category: "community",
+    priority: "high",
+    defaultChannels: ["in_app", "email"],
+    description: "Your mentorship request was accepted",
+    actionLabel: "View Mentorship",
+    actionUrl: "/dashboard/community/hub/mentorship",
+  },
+  [AppEvent.MENTORSHIP_REQUEST_DECLINED]: {
+    icon: "😔",
+    defaultTitle: "Mentorship Request Declined",
+    category: "community",
+    priority: "medium",
+    defaultChannels: ["in_app"],
+    description: "Your mentorship request was declined",
+    actionLabel: "Find Other Mentors",
+    actionUrl: "/dashboard/community/hub/mentorship",
   },
 
   // ─────────────────────────────────────────────────────────────────────────

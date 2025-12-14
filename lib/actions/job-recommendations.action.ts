@@ -9,11 +9,14 @@ export interface RecommendationsResult {
   topPicks: NormalizedJob[]
   fromCache: boolean
   lastRefreshed: string | null
+  savedCount: number
+  dailyLimit: number
 }
 
 /**
  * Get job recommendations for the current user
  * Returns cached results if available and not expired (24h)
+ * Limits to 5 recommendations per day
  */
 export async function getJobRecommendations(): Promise<{
   data: RecommendationsResult | null
@@ -35,6 +38,8 @@ export async function getJobRecommendations(): Promise<{
         topPicks: result.topPicks,
         fromCache: result.fromCache,
         lastRefreshed: result.lastRefreshed?.toISOString() || null,
+        savedCount: result.savedCount,
+        dailyLimit: result.dailyLimit,
       },
       error: null,
     }
@@ -70,6 +75,8 @@ export async function refreshJobRecommendations(): Promise<{
         topPicks: result.topPicks,
         fromCache: result.fromCache,
         lastRefreshed: result.lastRefreshed?.toISOString() || null,
+        savedCount: result.savedCount,
+        dailyLimit: result.dailyLimit,
       },
       error: null,
     }
@@ -78,6 +85,59 @@ export async function refreshJobRecommendations(): Promise<{
     return {
       data: null,
       error: error instanceof Error ? error.message : 'Failed to refresh recommendations',
+    }
+  }
+}
+
+/**
+ * Mark a recommended job as saved (reduces daily picks count)
+ */
+export async function markRecommendedJobSaved(jobId: string): Promise<{
+  success: boolean
+  error: string | null
+}> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    await jobRecommendationService.markJobAsSaved(user.id, jobId)
+    
+    return { success: true, error: null }
+  } catch (error) {
+    console.error('Mark job saved error:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to mark job as saved',
+    }
+  }
+}
+
+/**
+ * Get similar jobs based on a reference job
+ */
+export async function getSimilarJobs(referenceJob: NormalizedJob): Promise<{
+  data: NormalizedJob[] | null
+  error: string | null
+}> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    // User is optional for similar jobs
+    const userId = user?.id
+
+    const similarJobs = await jobRecommendationService.getSimilarJobs(referenceJob, userId)
+    
+    return { data: similarJobs, error: null }
+  } catch (error) {
+    console.error('Get similar jobs error:', error)
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : 'Failed to get similar jobs',
     }
   }
 }

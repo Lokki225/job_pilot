@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Check, CheckCheck, ExternalLink, Loader2, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,12 +12,11 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  getNotifications,
-  getUnreadCount,
   markAsRead,
   markAllAsRead,
 } from "@/lib/actions/notifications.action";
 import { getEventIcon } from "@/lib/types/app-events";
+import { useRealtimeNotifications } from "@/lib/hooks/use-realtime-notifications";
 
 interface Notification {
   id: string;
@@ -31,57 +30,24 @@ interface Notification {
 
 export function NotificationBell() {
   const router = useRouter();
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    loadUnreadCount();
-    // Poll for new notifications every 30 seconds
-    const interval = setInterval(loadUnreadCount, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) {
-      loadNotifications();
-    }
-  }, [isOpen]);
-
-  async function loadUnreadCount() {
-    const result = await getUnreadCount();
-    if (result.data !== undefined) {
-      setUnreadCount(result.data);
-    }
-  }
-
-  async function loadNotifications() {
-    setIsLoading(true);
-    try {
-      const result = await getNotifications({ limit: 10 });
-      if (result.data) {
-        setNotifications(result.data);
-      }
-    } catch (err) {
-      console.error("Error loading notifications:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const {
+    notifications,
+    unreadCount,
+    isLoading,
+    markAsRead: markAsReadLocal,
+    markAllAsRead: markAllAsReadLocal,
+  } = useRealtimeNotifications();
 
   async function handleMarkAsRead(id: string) {
     await markAsRead(id);
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    );
-    setUnreadCount((prev) => Math.max(0, prev - 1));
+    markAsReadLocal(id);
   }
 
   async function handleMarkAllAsRead() {
     await markAllAsRead();
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-    setUnreadCount(0);
+    markAllAsReadLocal();
   }
 
   function handleNotificationClick(notification: Notification) {
@@ -151,7 +117,7 @@ export function NotificationBell() {
             </div>
           ) : (
             <div className="divide-y dark:divide-gray-700">
-              {notifications.map((notification) => (
+              {notifications.slice(0, 10).map((notification) => (
                 <div
                   key={notification.id}
                   className={`px-4 py-3 cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-gray-800 ${

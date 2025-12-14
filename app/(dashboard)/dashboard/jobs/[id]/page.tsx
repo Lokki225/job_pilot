@@ -38,16 +38,20 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { 
+  createJobApplication,
   getJobApplication, 
   updateJobApplication, 
   deleteJobApplication,
   toggleFavorite 
 } from '@/lib/actions/job-application.action'
+import { getSimilarJobs } from '@/lib/actions/job-recommendations.action'
 import { getCoverLettersForJob } from '@/lib/actions/cover-letter.action'
 import { toast } from '@/components/ui/use-toast'
 import { CoverLetterGenerator } from '@/components/jobs/CoverLetterGenerator'
 import { AutoApplyModal } from '@/components/jobs/AutoApplyModal'
 import { OfferCongratulationsModal } from '@/components/jobs/OfferCongratulationsModal'
+import { JobDetailsModal } from '@/components/jobs/JobDetailsModal'
+import type { NormalizedJob } from '@/lib/services/job-search/types'
 
 type ApplicationStatus = 'WISHLIST' | 'APPLIED' | 'INTERVIEWING' | 'OFFERED' | 'REJECTED' | 'ACCEPTED' | 'WITHDRAWN'
 
@@ -93,6 +97,11 @@ export default function JobDetailsPage() {
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const [similarJobs, setSimilarJobs] = useState<NormalizedJob[]>([])
+  const [isLoadingSimilarJobs, setIsLoadingSimilarJobs] = useState(false)
+  const [selectedSimilarJob, setSelectedSimilarJob] = useState<NormalizedJob | null>(null)
+  const [isSimilarModalOpen, setIsSimilarModalOpen] = useState(false)
+
   // Cover letter & auto-apply modals
   const [showCoverLetterModal, setShowCoverLetterModal] = useState(false)
   const [showAutoApplyModal, setShowAutoApplyModal] = useState(false)
@@ -129,6 +138,15 @@ export default function JobDetailsPage() {
   useEffect(() => {
     loadJob()
   }, [jobId])
+
+  useEffect(() => {
+    if (!job) {
+      setSimilarJobs([])
+      return
+    }
+
+    void loadSimilarJobs()
+  }, [job?.id])
 
   useEffect(() => {
     if (job?.id) {
@@ -190,6 +208,92 @@ export default function JobDetailsPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const buildReferenceJob = (app: JobApplication): NormalizedJob => {
+    const source: NormalizedJob['source'] =
+      app.source === 'ADZUNA' || app.source === 'JSEARCH' ? (app.source as NormalizedJob['source']) : 'OTHER'
+
+    const location = app.location || ''
+
+    return {
+      id: app.id,
+      title: app.jobTitle,
+      company: app.company,
+      location,
+      description: app.description || '',
+      requirements: app.requirements || undefined,
+      salary: app.salary || undefined,
+      jobType: app.jobType || undefined,
+      postedDate: undefined,
+      applyUrl: app.jobPostUrl || '',
+      source,
+      remote: location ? /\bremote\b/i.test(location) : undefined,
+      tags: undefined,
+      rawData: undefined,
+    }
+  }
+
+  const loadSimilarJobs = async () => {
+    if (!job) return
+    setIsLoadingSimilarJobs(true)
+    try {
+      const referenceJob = buildReferenceJob(job)
+      const result = await getSimilarJobs(referenceJob)
+      setSimilarJobs(result.data || [])
+    } catch (err) {
+      console.error('Failed to load similar jobs:', err)
+      setSimilarJobs([])
+    } finally {
+      setIsLoadingSimilarJobs(false)
+    }
+  }
+
+  const handleTrackSimilarJob = async (similarJob: NormalizedJob) => {
+    try {
+      const result = await createJobApplication({
+        jobTitle: similarJob.title,
+        company: similarJob.company,
+        location: similarJob.location,
+        jobType: similarJob.jobType || null,
+        salary: similarJob.salary || null,
+        description: similarJob.description,
+        requirements: similarJob.requirements || null,
+        jobPostUrl: similarJob.applyUrl,
+        status: 'WISHLIST',
+        source: 'OTHER',
+        isPasted: false,
+        isFavorite: true,
+        externalJobId: similarJob.id,
+        externalSource: similarJob.source,
+        externalData: similarJob.rawData,
+      })
+
+      if (result.data?.id) {
+        setIsSimilarModalOpen(false)
+        setSelectedSimilarJob(null)
+        router.push(`/dashboard/jobs/${result.data.id}`)
+        return
+      }
+
+      toast({
+        title: 'Error',
+        description: result.error || 'Failed to save job',
+        variant: 'destructive',
+      })
+    } catch (err) {
+      console.error('Failed to save similar job:', err)
+      toast({
+        title: 'Error',
+        description: 'Failed to save job',
+        variant: 'destructive',
+      })
+    }
+  }
+
+  const handleOpenSimilarJob = (similarJob: NormalizedJob) => {
+    setSelectedSimilarJob(similarJob)
+    setIsSimilarModalOpen(true)
   }
 
   const handleSave = async () => {
@@ -738,8 +842,97 @@ export default function JobDetailsPage() {
               Apply on Website
             </Button>
           )}
+
+          <div className="bg-white dark:bg-slate-800 rounded-xl border dark:border-slate-700 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold text-slate-900 dark:text-white">Similar Jobs</h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadSimilarJobs}
+                disabled={isLoadingSimilarJobs}
+              >
+                {isLoadingSimilarJobs ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  'Refresh'
+                )}
+              </Button>
+            </div>
+
+            {isLoadingSimilarJobs ? (
+              <div className="flex items-center justify-center py-6">
+                <Loader2 className="w-5 h-5 animate-spin text-slate-500" />
+                <span className="ml-2 text-sm text-slate-500">Loading similar jobs...</span>
+              </div>
+            ) : similarJobs.length > 0 ? (
+              <div className="space-y-3">
+                {similarJobs.slice(0, 5).map((sj) => (
+                  <div
+                    key={sj.id}
+                    className="rounded-lg border border-slate-200 dark:border-slate-700 p-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
+                    onClick={() => handleOpenSimilarJob(sj)}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-sm text-slate-900 dark:text-white truncate">
+                          {sj.title}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          {sj.company} • {sj.location}
+                        </p>
+                        {sj.salary && (
+                          <p className="text-xs text-green-600 dark:text-green-500 font-medium mt-1">
+                            {sj.salary}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            handleOpenSimilarJob(sj)
+                          }}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleTrackSimilarJob(sj)
+                          }}
+                        >
+                          Track
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-sm text-slate-500 dark:text-slate-400">No similar jobs found.</div>
+            )}
+          </div>
         </div>
       </div>
+
+      <JobDetailsModal
+        job={selectedSimilarJob}
+        isOpen={isSimilarModalOpen}
+        onClose={() => {
+          setIsSimilarModalOpen(false)
+          setSelectedSimilarJob(null)
+        }}
+        onApply={(j) => {
+          if (j.applyUrl) {
+            window.open(j.applyUrl, '_blank')
+          }
+        }}
+        onSave={(j) => handleTrackSimilarJob(j)}
+        onViewSimilar={(j) => setSelectedSimilarJob(j)}
+      />
 
       {/* Cover Letter Generator Modal */}
       {job && (

@@ -343,33 +343,63 @@ export default function MentorshipPage() {
                     )}
 
                     <div className="mt-4">
-                      {myUserId && mentor.userId === myUserId ? (
-                        <Button disabled className="w-full">
-                          This is you
-                        </Button>
-                      ) : mentor.currentMentees >= mentor.maxMentees ? (
-                        <Button disabled className="w-full">
-                          Not Accepting Mentees
-                        </Button>
-                      ) : (
-                        <Dialog
-                          open={requestMentorId === mentor.id}
-                          onOpenChange={(open) => {
-                            if (!open) {
-                              setRequestMentorId(null);
-                              setRequestMessage("");
-                            }
-                          }}
-                        >
-                          <DialogTrigger asChild>
-                            <Button
-                              className="w-full"
-                              onClick={() => setRequestMentorId(mentor.id)}
-                            >
-                              <MessageSquare className="mr-2 h-4 w-4" />
-                              Request Mentorship
+                      {(() => {
+                        // Check if user already has a pending or accepted request to this mentor
+                        const existingRequest = mentorships.asMentee.find(
+                          (m) => m.mentorId === mentor.id
+                        );
+                        const hasPending = existingRequest?.status === "PENDING";
+                        const hasAccepted = existingRequest?.status === "ACCEPTED";
+
+                        if (myUserId && mentor.userId === myUserId) {
+                          return (
+                            <Button disabled className="w-full">
+                              This is you
                             </Button>
-                          </DialogTrigger>
+                          );
+                        }
+                        if (hasAccepted) {
+                          return (
+                            <Button disabled className="w-full" variant="secondary">
+                              <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                              Already Your Mentor
+                            </Button>
+                          );
+                        }
+                        if (hasPending) {
+                          return (
+                            <Button disabled className="w-full" variant="outline">
+                              <Clock className="mr-2 h-4 w-4 text-yellow-500" />
+                              Request Pending
+                            </Button>
+                          );
+                        }
+                        if (mentor.currentMentees >= mentor.maxMentees) {
+                          return (
+                            <Button disabled className="w-full">
+                              Not Accepting Mentees
+                            </Button>
+                          );
+                        }
+                        return (
+                          <Dialog
+                            open={requestMentorId === mentor.id}
+                            onOpenChange={(open) => {
+                              if (!open) {
+                                setRequestMentorId(null);
+                                setRequestMessage("");
+                              }
+                            }}
+                          >
+                            <DialogTrigger asChild>
+                              <Button
+                                className="w-full"
+                                onClick={() => setRequestMentorId(mentor.id)}
+                              >
+                                <MessageSquare className="mr-2 h-4 w-4" />
+                                Request Mentorship
+                              </Button>
+                            </DialogTrigger>
                           <DialogContent>
                             <DialogHeader>
                               <DialogTitle>Request Mentorship</DialogTitle>
@@ -414,7 +444,8 @@ export default function MentorshipPage() {
                             </DialogFooter>
                           </DialogContent>
                         </Dialog>
-                      )}
+                        );
+                      })()}
                     </div>
                   </CardContent>
                 </Card>

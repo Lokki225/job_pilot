@@ -21,7 +21,7 @@ import { JobSearchBar, type JobSearchFilters } from '@/components/jobs/JobSearch
 import { JobDetailsModal } from '@/components/jobs/JobDetailsModal'
 import { JobPasteModal } from '@/components/jobs/JobPasteModal'
 import { searchJobsAction } from '@/lib/actions/job-search.action'
-import { getJobRecommendations, refreshJobRecommendations } from '@/lib/actions/job-recommendations.action'
+import { getJobRecommendations, refreshJobRecommendations, markRecommendedJobSaved } from '@/lib/actions/job-recommendations.action'
 import type { NormalizedJob, JobSearchParams } from '@/lib/services/job-search'
 import { createJobApplication } from '@/lib/actions/job-application.action'
 import { type ParsedJob } from '@/lib/utils/job-parser'
@@ -57,6 +57,22 @@ export default function JobsPage() {
   const [hasSearched, setHasSearched] = useState(false)
   const [isTopPicksCollapsed, setIsTopPicksCollapsed] = useState(false)
 
+  const getJobKey = useCallback((job: NormalizedJob) => {
+    return `${job.source || 'unknown'}:${job.id}`
+  }, [])
+
+  const dedupeJobs = useCallback((items: NormalizedJob[]) => {
+    const seen = new Set<string>()
+    const out: NormalizedJob[] = []
+    for (const job of items) {
+      const key = `${job.source || 'unknown'}:${job.id}`
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push(job)
+    }
+    return out
+  }, [])
+
   // Load cached recommendations on mount
   useEffect(() => {
     loadRecommendations()
@@ -67,10 +83,11 @@ export default function JobsPage() {
     try {
       const result = await getJobRecommendations()
       if (result.data) {
-        setTopPicks(result.data.topPicks)
+        setTopPicks(dedupeJobs(result.data.topPicks))
         setOriginalTopPicksCount(result.data.topPicks.length)
-        setJobs(result.data.jobs)
-        setTotalJobs(result.data.jobs.length)
+        const nextJobs = dedupeJobs(result.data.jobs)
+        setJobs(nextJobs)
+        setTotalJobs(nextJobs.length)
         setIsFromCache(result.data.fromCache)
         setLastRefreshed(result.data.lastRefreshed)
         setSavedJobIds(new Set()) // Reset saved jobs on fresh load
@@ -87,10 +104,11 @@ export default function JobsPage() {
     try {
       const result = await refreshJobRecommendations()
       if (result.data) {
-        setTopPicks(result.data.topPicks)
+        setTopPicks(dedupeJobs(result.data.topPicks))
         setOriginalTopPicksCount(result.data.topPicks.length)
-        setJobs(result.data.jobs)
-        setTotalJobs(result.data.jobs.length)
+        const nextJobs = dedupeJobs(result.data.jobs)
+        setJobs(nextJobs)
+        setTotalJobs(nextJobs.length)
         setIsFromCache(false)
         setLastRefreshed(result.data.lastRefreshed)
         setSavedJobIds(new Set()) // Reset saved jobs on refresh
@@ -133,7 +151,8 @@ export default function JobsPage() {
       const result = await searchJobsAction(params)
       
       if (result.data) {
-        setJobs(result.data.jobs)
+        const nextJobs = dedupeJobs(result.data.jobs)
+        setJobs(nextJobs)
         setTotalJobs(result.data.total)
         setHasMore(result.data.hasMore)
       } else {
@@ -170,7 +189,7 @@ export default function JobsPage() {
       const result = await searchJobsAction(params)
       
       if (result.data) {
-        setJobs(prev => [...prev, ...result.data!.jobs])
+        setJobs(prev => dedupeJobs([...prev, ...result.data!.jobs]))
         setCurrentPage(nextPage)
         setHasMore(result.data.hasMore)
       }
@@ -216,6 +235,8 @@ export default function JobsPage() {
         if (isFromTopPicks) {
           setTopPicks(prev => prev.filter(j => j.id !== job.id))
           setSavedJobIds(prev => new Set([...prev, job.id]))
+          // Mark as saved in the backend to persist across refreshes
+          await markRecommendedJobSaved(job.id)
         }
         
         toast({
@@ -233,6 +254,11 @@ export default function JobsPage() {
         variant: 'destructive',
       })
     }
+  }
+
+  const handleViewSimilar = (similarJob: NormalizedJob) => {
+    setSelectedJob(similarJob)
+    // Modal stays open, just switches to the new job
   }
 
   const handleJobParsed = async (parsedJob: ParsedJob) => {
@@ -287,7 +313,7 @@ export default function JobsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
             <Briefcase className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -309,7 +335,7 @@ export default function JobsPage() {
           </Button>
           <Button
             onClick={() => router.push('/dashboard/jobs/applications')}
-            className="gap-2 bg-gradient-to-r from-blue-600 to-indigo-600"
+            className="gap-2 bg-linear-to-r from-blue-600 to-indigo-600"
           >
             <Briefcase className="w-4 h-4" />
             My Applications
@@ -319,13 +345,13 @@ export default function JobsPage() {
 
       {/* Top Picks Section - Cached Daily */}
       {!hasSearched && (
-        <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-purple-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 p-6">
+        <div className="bg-linear-to-br from-indigo-50 via-blue-50 to-purple-50 dark:from-indigo-900/20 dark:via-blue-900/20 dark:to-purple-900/20 rounded-xl border border-indigo-100 dark:border-indigo-800 p-6">
           <div 
             className="flex items-center justify-between cursor-pointer"
             onClick={() => setIsTopPicksCollapsed(!isTopPicksCollapsed)}
           >
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-linear-to-br from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
                 <Zap className="w-4 h-4 text-white" />
               </div>
               <div>
@@ -369,7 +395,7 @@ export default function JobsPage() {
                 <div className="grid gap-3">
                   {topPicks.map((job, index) => (
                     <div
-                      key={job.id}
+                      key={getJobKey(job)}
                       className="bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 transition-all cursor-pointer"
                       onClick={() => handleViewDetails(job)}
                     >
@@ -506,7 +532,7 @@ export default function JobsPage() {
         <div className="space-y-4">
           {jobs.map((job) => (
             <JobCard
-              key={job.id}
+              key={getJobKey(job)}
               job={job}
               onSave={() => handleSaveJob(job)}
               onViewDetails={() => handleViewDetails(job)}
@@ -562,6 +588,7 @@ export default function JobsPage() {
           }
         }}
         onSave={() => selectedJob && handleSaveJob(selectedJob)}
+        onViewSimilar={handleViewSimilar}
       />
     </div>
   )
