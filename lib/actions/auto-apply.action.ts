@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { adminSupabase } from '@/lib/supabase/server'
+import { checkRateLimit } from '@/lib/utils/rate-limit'
 import { emailService } from '@/lib/services/email'
 import { emitEvent } from '@/lib/services/event-dispatcher'
 import { AppEvent } from '@/lib/types/app-events'
@@ -12,12 +13,12 @@ import { AppEvent } from '@/lib/types/app-events'
 // ===========================================================
 
 const SendApplicationSchema = z.object({
-  jobApplicationId: z.string(),
-  coverLetterId: z.string(),
-  recipientEmail: z.string().email(),
-  recipientName: z.string().optional(),
-  subject: z.string().min(1),
-  customBody: z.string().optional(),
+  jobApplicationId: z.string().trim().min(1).max(128),
+  coverLetterId: z.string().trim().min(1).max(128),
+  recipientEmail: z.string().trim().email().max(254),
+  recipientName: z.string().trim().max(120).optional(),
+  subject: z.string().trim().min(1).max(200),
+  customBody: z.string().trim().max(20000).optional(),
 })
 
 // ===========================================================
@@ -36,6 +37,11 @@ export async function sendJobApplication(values: z.infer<typeof SendApplicationS
     const parsed = SendApplicationSchema.safeParse(values)
     if (!parsed.success) {
       return { data: null, error: 'Invalid input: ' + parsed.error.issues.map(i => i.message).join(', ') }
+    }
+
+    const rate = checkRateLimit(`auto-apply:send:${user.id}`, 10, 60 * 60_000)
+    if (!rate.allowed) {
+      return { data: null, error: 'Too many requests' }
     }
 
     // Check if email service is configured

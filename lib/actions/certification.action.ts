@@ -2,7 +2,7 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server"
 
 const CertificationSchema = z.object({
   name: z.string().min(1),
@@ -18,6 +18,7 @@ export async function createCertification(values: z.infer<typeof CertificationSc
     const parsed = CertificationSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -39,7 +40,7 @@ export async function createCertification(values: z.infer<typeof CertificationSc
 
 export async function getCertifications() {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -58,7 +59,7 @@ export async function getCertifications() {
 
 export async function updateCertification(id: string, values: Partial<z.infer<typeof CertificationSchema>>) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -79,7 +80,7 @@ export async function updateCertification(id: string, values: Partial<z.infer<ty
 
 export async function deleteCertification(id: string) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 

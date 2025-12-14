@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { adminSupabase } from '@/lib/supabase/server'
 import { aiService } from '@/lib/services/ai'
+import { checkRateLimit } from '@/lib/utils/rate-limit'
 import { emitEvent } from '@/lib/services/event-dispatcher'
 import { AppEvent } from '@/lib/types/app-events'
 
@@ -12,20 +13,20 @@ import { AppEvent } from '@/lib/types/app-events'
 // ===========================================================
 
 const GenerateCoverLetterSchema = z.object({
-  jobApplicationId: z.string(),
+  jobApplicationId: z.string().trim().min(1).max(128),
   tone: z.enum(['professional', 'friendly', 'formal', 'enthusiastic']).optional(),
-  customInstructions: z.string().optional(),
-  templateId: z.string().optional(),
+  customInstructions: z.string().trim().max(2000).optional(),
+  templateId: z.string().trim().min(1).max(128).optional(),
 })
 
 const UpdateCoverLetterSchema = z.object({
-  content: z.string().min(1),
-  subject: z.string().optional(),
+  content: z.string().min(1).max(25000),
+  subject: z.string().trim().max(200).optional(),
 })
 
 const ImproveCoverLetterSchema = z.object({
-  coverLetterId: z.string(),
-  feedback: z.string().min(1),
+  coverLetterId: z.string().trim().min(1).max(128),
+  feedback: z.string().trim().min(1).max(2000),
 })
 
 // ===========================================================
@@ -44,6 +45,11 @@ export async function generateCoverLetter(values: z.infer<typeof GenerateCoverLe
     const parsed = GenerateCoverLetterSchema.safeParse(values)
     if (!parsed.success) {
       return { data: null, error: 'Invalid input' }
+    }
+
+    const rate = checkRateLimit(`cover-letter:generate:${user.id}`, 10, 60_000)
+    if (!rate.allowed) {
+      return { data: null, error: 'Too many requests' }
     }
 
     // Check if AI service is configured
@@ -364,6 +370,11 @@ export async function improveCoverLetter(values: z.infer<typeof ImproveCoverLett
     const parsed = ImproveCoverLetterSchema.safeParse(values)
     if (!parsed.success) {
       return { data: null, error: 'Invalid input' }
+    }
+
+    const rate = checkRateLimit(`cover-letter:improve:${user.id}`, 10, 60_000)
+    if (!rate.allowed) {
+      return { data: null, error: 'Too many requests' }
     }
 
     if (!aiService.isConfigured()) {

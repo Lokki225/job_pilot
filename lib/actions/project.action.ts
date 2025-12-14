@@ -2,7 +2,7 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server"
 
 const ProjectSchema = z.object({
   name: z.string().min(1),
@@ -19,6 +19,7 @@ export async function createProject(values: z.infer<typeof ProjectSchema>) {
     const parsed = ProjectSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -40,7 +41,7 @@ export async function createProject(values: z.infer<typeof ProjectSchema>) {
 
 export async function getProjects() {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -59,7 +60,7 @@ export async function getProjects() {
 
 export async function updateProject(id: string, values: Partial<z.infer<typeof ProjectSchema>>) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 
@@ -80,7 +81,7 @@ export async function updateProject(id: string, values: Partial<z.infer<typeof P
 
 export async function deleteProject(id: string) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
 

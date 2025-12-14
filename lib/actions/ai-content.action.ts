@@ -2,13 +2,14 @@
 "use server"
 
 import { z } from "zod"
-import { supabase } from "../supabase/client"
+import { createClient } from "../supabase/server"
+import { checkRateLimit } from "../utils/rate-limit"
 
 const AIContentSchema = z.object({
-  type: z.string().min(1),
-  prompt: z.string().min(1),
-  content: z.string().min(1),
-  model: z.string().min(1),
+  type: z.string().trim().min(1).max(64),
+  prompt: z.string().trim().min(1).max(4000),
+  content: z.string().trim().min(1).max(20000),
+  model: z.string().trim().min(1).max(128),
   metadata: z.any().optional(),
 })
 
@@ -18,8 +19,12 @@ export async function createAIContent(values: z.infer<typeof AIContentSchema>) {
     const parsed = AIContentSchema.safeParse(values)
     if (!parsed.success) return { data: null, error: "Invalid input format" }
 
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
+
+    const rate = checkRateLimit(`ai-content:create:${user.id}`, 30, 60_000)
+    if (!rate.allowed) return { data: null, error: "Too many requests" }
 
     const { data, error } = await supabase
       .from("ai_generated_content")
@@ -40,9 +45,11 @@ export async function createAIContent(values: z.infer<typeof AIContentSchema>) {
 
 export async function listAIContent(type?: string) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
+
+    const safeType = type?.trim().slice(0, 64)
 
     let query = supabase
       .from("ai_generated_content")
@@ -50,8 +57,8 @@ export async function listAIContent(type?: string) {
       .eq("userId", user.id)
       .order("createdAt", { ascending: false })
 
-    if (type) {
-      query = query.eq("type", type)
+    if (safeType) {
+      query = query.eq("type", safeType)
     }
 
     const { data, error } = await query
@@ -66,14 +73,20 @@ export async function listAIContent(type?: string) {
 
 export async function deleteAIContent(id: string) {
   try {
-    
+    const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { data: null, error: "Unauthorized" }
+
+    const safeId = typeof id === 'string' ? id.trim().slice(0, 128) : ''
+    if (!safeId) return { data: null, error: 'Invalid id' }
+
+    const rate = checkRateLimit(`ai-content:delete:${user.id}`, 60, 60_000)
+    if (!rate.allowed) return { data: null, error: "Too many requests" }
 
     const { error } = await supabase
       .from("ai_generated_content")
       .delete()
-      .eq("id", id)
+      .eq("id", safeId)
       .eq("userId", user.id)
 
     if (error) return { data: null, error: error.message }

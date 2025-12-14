@@ -3,12 +3,13 @@
 import { z } from "zod";
 import { adminSupabase } from "../supabase/server";
 import { createClient } from "../supabase/server";
+import { checkRateLimit } from "../utils/rate-limit";
 
 const ResumeSchema = z.object({
-  fileUrl: z.string(),
-  fileName: z.string(),
-  fileType: z.string(),
-  fileSize: z.number(),
+  fileUrl: z.string().trim().url().max(2000),
+  fileName: z.string().trim().min(1).max(255),
+  fileType: z.string().trim().min(1).max(100),
+  fileSize: z.number().int().min(0).max(50 * 1024 * 1024),
   parsedData: z.any().optional(),
 });
 
@@ -22,6 +23,9 @@ export async function createResume(values: z.infer<typeof ResumeSchema>) {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) return { data: null, error: "Unauthorized" };
+
+    const rate = checkRateLimit(`resume:create:${user.id}`, 10, 60_000);
+    if (!rate.allowed) return { data: null, error: "Too many requests" };
 
     // Ensure user exists in users table (handles case where OAuth callback didn't create it)
     const { data: existingUser, error: userCheckError } = await adminSupabase
@@ -144,10 +148,31 @@ export async function deleteResume(id: string) {
 
 export async function updateResumeParsedData(id: string, parsedData: any) {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const safeId = typeof id === 'string' ? id.trim().slice(0, 128) : '';
+    if (!safeId) return { data: null, error: "Invalid id" };
+
+    const rate = checkRateLimit(`resume:update-parsed:${user.id}`, 30, 60_000);
+    if (!rate.allowed) return { data: null, error: "Too many requests" };
+
+    const { data: resume, error: resumeError } = await adminSupabase
+      .from("resumes")
+      .select("id,userId")
+      .eq("id", safeId)
+      .single();
+
+    if (resumeError || !resume) return { data: null, error: "Resume not found" };
+    if (resume.userId !== user.id) return { data: null, error: "Unauthorized" };
+
     const { data, error } = await adminSupabase
       .from("resumes")
       .update({ parsedData })
-      .eq("id", id)
+      .eq("id", safeId)
+      .eq("userId", user.id)
       .select("*")
       .single();
 
@@ -165,6 +190,13 @@ export async function updateResumeParsedData(id: string, parsedData: any) {
  */
 export async function parseResumeWithAI(rawAffindaData: any) {
   try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const rate = checkRateLimit(`resume:parse:${user.id}`, 10, 60_000);
+    if (!rate.allowed) return { data: null, error: "Too many requests" };
+
     const { aiService } = await import("@/lib/services/ai");
     
     // Parse the raw data using AI
@@ -187,6 +219,21 @@ export async function parseAndSaveResumeToProfile(resumeId: string, rawAffindaDa
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) return { data: null, error: "Unauthorized" };
+
+    const safeResumeId = typeof resumeId === 'string' ? resumeId.trim().slice(0, 128) : '';
+    if (!safeResumeId) return { data: null, error: "Invalid resumeId" };
+
+    const rate = checkRateLimit(`resume:parse-save:${user.id}`, 5, 60_000);
+    if (!rate.allowed) return { data: null, error: "Too many requests" };
+
+    const { data: resume, error: resumeError } = await adminSupabase
+      .from("resumes")
+      .select("id,userId")
+      .eq("id", safeResumeId)
+      .single();
+
+    if (resumeError || !resume) return { data: null, error: "Resume not found" };
+    if (resume.userId !== user.id) return { data: null, error: "Unauthorized" };
 
     // Import AI service dynamically to avoid circular dependencies
     const { aiService } = await import("@/lib/services/ai");
@@ -328,7 +375,8 @@ export async function parseAndSaveResumeToProfile(resumeId: string, rawAffindaDa
     await adminSupabase
       .from("resumes")
       .update({ parsedData: rawAffindaData })
-      .eq("id", resumeId);
+      .eq("id", safeResumeId)
+      .eq("userId", user.id);
 
     // Update profile completion score
     const { updateCompletionScore } = await import("@/lib/actions/profile.action");
