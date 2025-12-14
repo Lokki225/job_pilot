@@ -192,6 +192,7 @@ export function JobSearchBar({
                   Remote only
                 </label>
                 <button
+                  aria-label="Remote only"
                   onClick={() => updateFilter('remote', !filters.remote)}
                   className={cn(
                     "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",

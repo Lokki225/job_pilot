@@ -151,7 +151,7 @@ export function ApplicationKanban({
                     
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                        <Button aria-label="Application actions" variant="ghost" size="sm" className="h-6 w-6 p-0">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>

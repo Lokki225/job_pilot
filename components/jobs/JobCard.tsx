@@ -168,6 +168,7 @@ export function JobCard({
         </div>
         
         <button
+          aria-label={saved ? 'Unsave job' : 'Save job'}
           onClick={(e) => {
             e.stopPropagation()
             handleSave()
