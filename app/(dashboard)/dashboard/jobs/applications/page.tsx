@@ -11,7 +11,8 @@ import {
   List,
   ArrowLeft,
   BarChart3,
-  Download
+  Download,
+  Calendar
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -207,6 +208,16 @@ export default function ApplicationsPage() {
           >
             <BarChart3 className="w-4 h-4" />
             Analytics
+          </Button>
+          <Button
+            variant="outline"
+            asChild
+            className="gap-2"
+          >
+            <a href="/api/calendar/ics">
+              <Calendar className="w-4 h-4" />
+              Calendar (.ics)
+            </a>
           </Button>
           <Button
             variant="outline"

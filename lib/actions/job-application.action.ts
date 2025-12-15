@@ -97,6 +97,18 @@ export async function createJobApplication(values: z.infer<typeof JobApplication
       dataToInsert.reminderDate = new Date(parsed.data.reminderDate)
     }
 
+    if (dataToInsert.status === ApplicationStatus.APPLIED) {
+      if (!dataToInsert.appliedDate) {
+        dataToInsert.appliedDate = new Date()
+      }
+      if (!dataToInsert.reminderDate) {
+        const base = new Date(dataToInsert.appliedDate)
+        if (!Number.isNaN(base.getTime())) {
+          dataToInsert.reminderDate = new Date(base.getTime() + 3 * 24 * 60 * 60 * 1000)
+        }
+      }
+    }
+
     const { data, error } = await adminSupabase
       .from("job_applications")
       .insert(dataToInsert)
@@ -240,7 +252,7 @@ export async function updateJobApplication(
     // Get existing data for comparison
     const { data: existing } = await adminSupabase
       .from("job_applications")
-      .select("jobTitle, company, interviewDate, status")
+      .select("jobTitle, company, interviewDate, status, appliedDate, reminderDate")
       .eq("id", id)
       .single()
 
@@ -258,6 +270,10 @@ export async function updateJobApplication(
     }
     if (parsed.data.reminderDate) {
       dataToUpdate.reminderDate = new Date(parsed.data.reminderDate)
+    }
+
+    if (dataToUpdate.appliedDate && !dataToUpdate.reminderDate && existing && !existing.reminderDate) {
+      dataToUpdate.reminderDate = new Date(new Date(dataToUpdate.appliedDate).getTime() + 3 * 24 * 60 * 60 * 1000)
     }
 
     const { data, error } = await adminSupabase
@@ -358,7 +374,7 @@ export async function updateApplicationStatus(id: string, status: ApplicationSta
     // Get current application data for comparison
     const { data: existing } = await adminSupabase
       .from("job_applications")
-      .select("status, jobTitle, company, appliedDate")
+      .select("status, jobTitle, company, appliedDate, reminderDate")
       .eq("id", id)
       .single()
 
@@ -369,6 +385,13 @@ export async function updateApplicationStatus(id: string, status: ApplicationSta
     // Auto-set appliedDate when status changes to APPLIED
     if (status === ApplicationStatus.APPLIED && existing && !existing.appliedDate) {
       updateData.appliedDate = new Date()
+    }
+
+    if (status === ApplicationStatus.APPLIED && existing && !existing.reminderDate) {
+      const base = updateData.appliedDate ? new Date(updateData.appliedDate) : existing.appliedDate ? new Date(existing.appliedDate) : null
+      if (base && !Number.isNaN(base.getTime())) {
+        updateData.reminderDate = new Date(base.getTime() + 3 * 24 * 60 * 60 * 1000)
+      }
     }
 
     const { data, error } = await adminSupabase

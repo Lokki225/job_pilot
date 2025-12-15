@@ -34,6 +34,9 @@ export enum AppEvent {
   INTERVIEW_REMINDER_24H = "interview_reminder_24h",
   INTERVIEW_REMINDER_1H = "interview_reminder_1h",
   APPLICATION_DEADLINE_APPROACHING = "application_deadline_approaching",
+  APPLICATION_FOLLOW_UP_3D = "application_follow_up_3d",
+  APPLICATION_FOLLOW_UP_7D = "application_follow_up_7d",
+  APPLICATION_FOLLOW_UP_14D = "application_follow_up_14d",
   JOB_ALERT_NEW_MATCHES = "job_alert_new_matches",
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -360,6 +363,33 @@ export const EVENT_META: Record<AppEvent, EventMeta> = {
     defaultChannels: ["in_app", "email"],
     description: "Application deadline is near",
     actionLabel: "Apply Now",
+  },
+  [AppEvent.APPLICATION_FOLLOW_UP_3D]: {
+    icon: "📨",
+    defaultTitle: "Follow-up Reminder (Day 3)",
+    category: "jobs",
+    priority: "medium",
+    defaultChannels: ["in_app"],
+    description: "Reminder to follow up after applying",
+    actionLabel: "View Application",
+  },
+  [AppEvent.APPLICATION_FOLLOW_UP_7D]: {
+    icon: "📨",
+    defaultTitle: "Follow-up Reminder (Day 7)",
+    category: "jobs",
+    priority: "medium",
+    defaultChannels: ["in_app"],
+    description: "Reminder to follow up after applying",
+    actionLabel: "View Application",
+  },
+  [AppEvent.APPLICATION_FOLLOW_UP_14D]: {
+    icon: "📨",
+    defaultTitle: "Follow-up Reminder (Day 14)",
+    category: "jobs",
+    priority: "high",
+    defaultChannels: ["in_app"],
+    description: "Reminder to follow up after applying",
+    actionLabel: "View Application",
   },
   [AppEvent.JOB_ALERT_NEW_MATCHES]: {
     icon: "🔔",
