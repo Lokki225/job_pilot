@@ -9,7 +9,9 @@ import {
   Search,
   LayoutGrid,
   List,
-  ArrowLeft
+  ArrowLeft,
+  BarChart3,
+  Download
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -198,6 +200,22 @@ export default function ApplicationsPage() {
         </div>
         
         <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => router.push('/dashboard/analytics')}
+            className="gap-2"
+          >
+            <BarChart3 className="w-4 h-4" />
+            Analytics
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => router.push('/dashboard/jobs/applications/portability')}
+            className="gap-2"
+          >
+            <Download className="w-4 h-4" />
+            Import/Export
+          </Button>
           <Button
             variant="outline"
             onClick={() => router.push('/dashboard/jobs')}

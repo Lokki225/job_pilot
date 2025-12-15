@@ -44,7 +44,7 @@ export default function DashboardLayout({
     const { data: { session } } = await supabase.auth.getSession()
     setSession(session)
   }
-
+  
   // Close mobile sidebar when route changes
   useEffect(() => {
     setSidebarOpen(false)
