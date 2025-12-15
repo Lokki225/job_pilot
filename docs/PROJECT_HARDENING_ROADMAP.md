@@ -99,6 +99,9 @@ Run on every PR:
 ### D) Data portability
 - Export/import applications (CSV/JSON)
 
+### E) Community peer interviews + calendar
+- MVP spec: [COMMUNITY_PEER_INTERVIEWS_MVP.md](./COMMUNITY_PEER_INTERVIEWS_MVP.md)
+
 ## Recommended implementation order
 1. Security headers + basic hardening (low-risk)
 2. RLS audit + server-action validation + rate limiting

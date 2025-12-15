@@ -16,6 +16,7 @@ This folder contains the comprehensive implementation plan for adding Training R
 | **Part 4** | [IMPLEMENTATION_PLAN_PART4.md](./IMPLEMENTATION_PLAN_PART4.md) | Company Research, Peer Practice, Calendar |
 | **Part 5** | [IMPLEMENTATION_PLAN_PART5.md](./IMPLEMENTATION_PLAN_PART5.md) | Success Stories, Gamification, Premium |
 | **Part 6** | [IMPLEMENTATION_PLAN_PART6.md](./IMPLEMENTATION_PLAN_PART6.md) | Implementation Phases & Timeline |
+| **MVP** | [COMMUNITY_PEER_INTERVIEWS_MVP.md](./COMMUNITY_PEER_INTERVIEWS_MVP.md) | Community People Search + Peer Interviews + Calendar + Kits + Mentor KYC |
 
 ---
 
