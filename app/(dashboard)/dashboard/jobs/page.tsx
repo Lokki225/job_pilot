@@ -16,12 +16,33 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { JobCard } from '@/components/jobs/JobCard'
 import { JobSearchBar, type JobSearchFilters } from '@/components/jobs/JobSearchBar'
 import { JobDetailsModal } from '@/components/jobs/JobDetailsModal'
 import { JobPasteModal } from '@/components/jobs/JobPasteModal'
 import { searchJobsAction } from '@/lib/actions/job-search.action'
 import { getJobRecommendations, refreshJobRecommendations, markRecommendedJobSaved } from '@/lib/actions/job-recommendations.action'
+import {
+  createSavedJobSearch,
+  deleteSavedJobSearch,
+  getSavedJobSearches,
+} from '@/lib/actions/saved-job-searches.action'
 import type { NormalizedJob, JobSearchParams } from '@/lib/services/job-search'
 import { createJobApplication } from '@/lib/actions/job-application.action'
 import { type ParsedJob } from '@/lib/utils/job-parser'
@@ -57,6 +78,12 @@ export default function JobsPage() {
   const [hasSearched, setHasSearched] = useState(false)
   const [isTopPicksCollapsed, setIsTopPicksCollapsed] = useState(false)
 
+  const [savedSearches, setSavedSearches] = useState<any[]>([])
+  const [savedSearchesLoading, setSavedSearchesLoading] = useState(true)
+  const [selectedSavedSearchId, setSelectedSavedSearchId] = useState<string>('')
+  const [isSaveSearchDialogOpen, setIsSaveSearchDialogOpen] = useState(false)
+  const [newSavedSearchName, setNewSavedSearchName] = useState('')
+
   const getJobKey = useCallback((job: NormalizedJob) => {
     return `${job.source || 'unknown'}:${job.id}`
   }, [])
@@ -73,64 +100,7 @@ export default function JobsPage() {
     return out
   }, [])
 
-  // Load cached recommendations on mount
-  useEffect(() => {
-    loadRecommendations()
-  }, [])
-
-  const loadRecommendations = async () => {
-    setRecommendationsLoading(true)
-    try {
-      const result = await getJobRecommendations()
-      if (result.data) {
-        setTopPicks(dedupeJobs(result.data.topPicks))
-        setOriginalTopPicksCount(result.data.topPicks.length)
-        const nextJobs = dedupeJobs(result.data.jobs)
-        setJobs(nextJobs)
-        setTotalJobs(nextJobs.length)
-        setIsFromCache(result.data.fromCache)
-        setLastRefreshed(result.data.lastRefreshed)
-        setSavedJobIds(new Set()) // Reset saved jobs on fresh load
-      }
-    } catch (err) {
-      console.error('Failed to load recommendations:', err)
-    } finally {
-      setRecommendationsLoading(false)
-    }
-  }
-
-  const handleRefreshRecommendations = async () => {
-    setIsRefreshing(true)
-    try {
-      const result = await refreshJobRecommendations()
-      if (result.data) {
-        setTopPicks(dedupeJobs(result.data.topPicks))
-        setOriginalTopPicksCount(result.data.topPicks.length)
-        const nextJobs = dedupeJobs(result.data.jobs)
-        setJobs(nextJobs)
-        setTotalJobs(nextJobs.length)
-        setIsFromCache(false)
-        setLastRefreshed(result.data.lastRefreshed)
-        setSavedJobIds(new Set()) // Reset saved jobs on refresh
-        toast({
-          title: 'Recommendations Updated',
-          description: 'Found new jobs matching your profile',
-        })
-      } else {
-        toast({
-          title: 'Error',
-          description: result.error || 'Failed to refresh recommendations',
-          variant: 'destructive',
-        })
-      }
-    } catch (err) {
-      console.error('Failed to refresh recommendations:', err)
-    } finally {
-      setIsRefreshing(false)
-    }
-  }
-
-  const handleSearch = async (filters: JobSearchFilters) => {
+  const handleSearch = useCallback(async (filters: JobSearchFilters) => {
     setIsLoading(true)
     setError(null)
     setLastSearch(filters)
@@ -165,6 +135,196 @@ export default function JobsPage() {
       setJobs([])
     } finally {
       setIsLoading(false)
+    }
+  }, [dedupeJobs])
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const result = await getSavedJobSearches()
+        if (result.data) {
+          setSavedSearches(result.data)
+        } else if (result.error) {
+          toast({
+            title: 'Error',
+            description: result.error,
+            variant: 'destructive',
+          })
+        }
+      } catch (err) {
+        console.error('Failed to load saved searches:', err)
+      } finally {
+        setSavedSearchesLoading(false)
+      }
+    })()
+  }, [])
+
+  const normalizeFilters = useCallback((raw: any): JobSearchFilters => {
+    return {
+      query: raw?.query ?? '',
+      location: raw?.location ?? '',
+      jobType: raw?.jobType ?? '',
+      datePosted: raw?.datePosted ?? 'month',
+      remote: Boolean(raw?.remote),
+      sortBy: raw?.sortBy ?? 'relevance',
+    }
+  }, [])
+
+  const handleApplySavedSearch = useCallback(
+    async (searchId: string) => {
+      const found = savedSearches.find((s) => s.id === searchId)
+      if (!found) return
+
+      setHasSearched(true)
+      await handleSearch(normalizeFilters(found.filters))
+    },
+    [handleSearch, normalizeFilters, savedSearches]
+  )
+
+  const handleOpenSaveSearchDialog = useCallback(() => {
+    if (!lastSearch) {
+      toast({
+        title: 'Nothing to save',
+        description: 'Run a search first, then save it.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const defaultName =
+      (lastSearch.query || 'Search') + (lastSearch.location ? ` • ${lastSearch.location}` : '')
+    setNewSavedSearchName(defaultName)
+    setIsSaveSearchDialogOpen(true)
+  }, [lastSearch])
+
+  const handleSaveSearch = useCallback(async () => {
+    if (!lastSearch) return
+    const name = newSavedSearchName.trim()
+    if (!name) {
+      toast({
+        title: 'Name required',
+        description: 'Please enter a name for this saved search.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    try {
+      const result = await createSavedJobSearch({
+        name,
+        filters: lastSearch as any,
+        isEnabled: true,
+        frequency: 'daily',
+        notifyOnMatch: true,
+      })
+
+      if (result.data) {
+        setSavedSearches((prev) => [result.data, ...prev])
+        setIsSaveSearchDialogOpen(false)
+        setSelectedSavedSearchId(result.data.id)
+        toast({
+          title: 'Saved',
+          description: 'Search saved successfully.',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error || 'Failed to save search',
+          variant: 'destructive',
+        })
+      }
+    } catch (err) {
+      console.error('Failed to save search:', err)
+      toast({
+        title: 'Error',
+        description: 'Failed to save search',
+        variant: 'destructive',
+      })
+    }
+  }, [lastSearch, newSavedSearchName])
+
+  const handleDeleteSelectedSavedSearch = useCallback(async () => {
+    if (!selectedSavedSearchId) return
+
+    try {
+      const result = await deleteSavedJobSearch(selectedSavedSearchId)
+      if (result.data) {
+        setSavedSearches((prev) => prev.filter((s) => s.id !== selectedSavedSearchId))
+        setSelectedSavedSearchId('')
+        toast({
+          title: 'Deleted',
+          description: 'Saved search deleted.',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error || 'Failed to delete saved search',
+          variant: 'destructive',
+        })
+      }
+    } catch (err) {
+      console.error('Failed to delete saved search:', err)
+      toast({
+        title: 'Error',
+        description: 'Failed to delete saved search',
+        variant: 'destructive',
+      })
+    }
+  }, [selectedSavedSearchId])
+
+  const loadRecommendations = useCallback(async () => {
+    setRecommendationsLoading(true)
+    try {
+      const result = await getJobRecommendations()
+      if (result.data) {
+        setTopPicks(dedupeJobs(result.data.topPicks))
+        setOriginalTopPicksCount(result.data.topPicks.length)
+        const nextJobs = dedupeJobs(result.data.jobs)
+        setJobs(nextJobs)
+        setTotalJobs(nextJobs.length)
+        setIsFromCache(result.data.fromCache)
+        setLastRefreshed(result.data.lastRefreshed)
+        setSavedJobIds(new Set()) // Reset saved jobs on fresh load
+      }
+    } catch (err) {
+      console.error('Failed to load recommendations:', err)
+    } finally {
+      setRecommendationsLoading(false)
+    }
+  }, [dedupeJobs])
+
+  useEffect(() => {
+    loadRecommendations()
+  }, [loadRecommendations])
+
+  const handleRefreshRecommendations = async () => {
+    setIsRefreshing(true)
+    try {
+      const result = await refreshJobRecommendations()
+      if (result.data) {
+        setTopPicks(dedupeJobs(result.data.topPicks))
+        setOriginalTopPicksCount(result.data.topPicks.length)
+        const nextJobs = dedupeJobs(result.data.jobs)
+        setJobs(nextJobs)
+        setTotalJobs(nextJobs.length)
+        setIsFromCache(false)
+        setLastRefreshed(result.data.lastRefreshed)
+        setSavedJobIds(new Set()) // Reset saved jobs on refresh
+        toast({
+          title: 'Recommendations Updated',
+          description: 'Found new jobs matching your profile',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error || 'Failed to refresh recommendations',
+          variant: 'destructive',
+        })
+      }
+    } catch (err) {
+      console.error('Failed to refresh recommendations:', err)
+    } finally {
+      setIsRefreshing(false)
     }
   }
 
@@ -480,6 +640,56 @@ export default function JobsPage() {
 
       {/* Search Bar */}
       <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
+            <Select
+              value={selectedSavedSearchId || undefined}
+              onValueChange={async (value) => {
+                setSelectedSavedSearchId(value)
+                await handleApplySavedSearch(value)
+              }}
+              disabled={savedSearchesLoading || savedSearches.length === 0}
+            >
+              <SelectTrigger className="w-full sm:w-72" size="sm">
+                <SelectValue
+                  placeholder={
+                    savedSearchesLoading
+                      ? 'Loading saved searches...'
+                      : savedSearches.length === 0
+                        ? 'No saved searches'
+                        : 'Saved searches'
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {savedSearches.map((s) => (
+                  <SelectItem key={s.id} value={s.id}>
+                    {s.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleOpenSaveSearchDialog}
+                disabled={!lastSearch}
+              >
+                Save search
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDeleteSelectedSavedSearch}
+                disabled={!selectedSavedSearchId}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
         <JobSearchBar 
           onSearch={(filters) => {
             setHasSearched(true)
@@ -489,6 +699,28 @@ export default function JobsPage() {
           initialFilters={lastSearch || undefined}
         />
       </div>
+
+      <Dialog open={isSaveSearchDialogOpen} onOpenChange={setIsSaveSearchDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save search</DialogTitle>
+            <DialogDescription>Save your current filters and get job alerts.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <Input
+              value={newSavedSearchName}
+              onChange={(e) => setNewSavedSearchName(e.target.value)}
+              placeholder="e.g. React Remote"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsSaveSearchDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveSearch}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Error State */}
       {error && (

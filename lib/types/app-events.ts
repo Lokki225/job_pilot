@@ -34,6 +34,7 @@ export enum AppEvent {
   INTERVIEW_REMINDER_24H = "interview_reminder_24h",
   INTERVIEW_REMINDER_1H = "interview_reminder_1h",
   APPLICATION_DEADLINE_APPROACHING = "application_deadline_approaching",
+  JOB_ALERT_NEW_MATCHES = "job_alert_new_matches",
 
   // ─────────────────────────────────────────────────────────────────────────
   // COVER LETTERS
@@ -359,6 +360,16 @@ export const EVENT_META: Record<AppEvent, EventMeta> = {
     defaultChannels: ["in_app", "email"],
     description: "Application deadline is near",
     actionLabel: "Apply Now",
+  },
+  [AppEvent.JOB_ALERT_NEW_MATCHES]: {
+    icon: "🔔",
+    defaultTitle: "New Job Matches",
+    category: "jobs",
+    priority: "medium",
+    defaultChannels: ["in_app"],
+    description: "New jobs matched one of your saved searches",
+    actionLabel: "View Jobs",
+    actionUrl: "/dashboard/jobs",
   },
 
   // ─────────────────────────────────────────────────────────────────────────

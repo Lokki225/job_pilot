@@ -24,6 +24,15 @@ vi.mock('@/lib/actions/job-search.action', () => ({
   searchJobsAction: (...args: any[]) => searchJobsActionMock(...args),
 }))
 
+const getSavedJobSearchesMock = vi.fn()
+
+vi.mock('@/lib/actions/saved-job-searches.action', () => ({
+  getSavedJobSearches: (...args: any[]) => getSavedJobSearchesMock(...args),
+  createSavedJobSearch: vi.fn(),
+  deleteSavedJobSearch: vi.fn(),
+  updateSavedJobSearch: vi.fn(),
+}))
+
 const createJobApplicationMock = vi.fn()
 
 vi.mock('@/lib/actions/job-application.action', () => ({
@@ -34,6 +43,8 @@ describe('JobsPage', () => {
   it('loads recommendations, can open Paste Job modal, and can navigate to My Applications', async () => {
     pushMock.mockReset()
     const user = userEvent.setup()
+
+    getSavedJobSearchesMock.mockResolvedValue({ data: [], error: null })
 
     getJobRecommendationsMock.mockResolvedValue({
       data: {

@@ -192,6 +192,7 @@ model User {
   notificationQueue         NotificationQueue[]
   emailQueue                EmailQueue[]
   eventLogs                 EventLog[]
+  savedJobSearches          SavedJobSearch[]
 
   // Onboarding state
   onboardingStep  Int       @default(0)   // 0 = fresh user, 1-5 steps...
@@ -497,6 +498,30 @@ model CachedJobRecommendation {
   @@unique([userId])
   @@index([userId, expiresAt])
   @@map("cached_job_recommendations")
+}
+
+model SavedJobSearch {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @db.Uuid
+
+  name              String   @db.VarChar(80)
+  filters           Json
+
+  isEnabled         Boolean  @default(true)
+  frequency         String   @default("daily")
+  notifyOnMatch     Boolean  @default(true)
+
+  lastRunAt         DateTime? @db.Timestamptz(6)
+  lastSeenJobKeys   String[] @default([])
+
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([userId])
+  @@unique([userId, name])
+  @@map("saved_job_searches")
 }
 
 // ===========================================================

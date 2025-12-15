@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Search, MapPin, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -53,6 +53,20 @@ export function JobSearchBar({
     ...initialFilters,
   })
   const [showAdvanced, setShowAdvanced] = useState(false)
+
+  useEffect(() => {
+    setFilters({
+      ...defaultFilters,
+      ...initialFilters,
+    })
+  }, [
+    initialFilters.query,
+    initialFilters.location,
+    initialFilters.jobType,
+    initialFilters.datePosted,
+    initialFilters.remote,
+    initialFilters.sortBy,
+  ])
 
   const handleSearch = () => {
     onSearch(filters)
