@@ -103,10 +103,27 @@ export function useRealtimeNotifications(
     (notification: RealtimeNotification) => {
       // Add to local state
       setNotifications((prev) => {
+        const existing = prev.find((n) => n.id === notification.id);
         const next = [notification, ...prev.filter((n) => n.id !== notification.id)];
+
+        setUnreadCount((countPrev) => {
+          const wasUnread = existing ? !existing.isRead : false;
+          const isUnread = !notification.isRead;
+
+          let delta = 0;
+          if (!existing) {
+            delta = isUnread ? 1 : 0;
+          } else if (wasUnread && !isUnread) {
+            delta = -1;
+          } else if (!wasUnread && isUnread) {
+            delta = 1;
+          }
+
+          return Math.max(0, countPrev + delta);
+        });
+
         return next.slice(0, 50);
       });
-      setUnreadCount((prev) => prev + (notification.isRead ? 0 : 1));
 
       // Call callback
       options.onNewNotification?.(notification);
@@ -168,6 +185,9 @@ export function useRealtimeNotifications(
           // Update unread count
           if (payload.new.isRead && !payload.old?.isRead) {
             setUnreadCount((prev) => Math.max(0, prev - 1));
+          }
+          if (!payload.new.isRead && payload.old?.isRead) {
+            setUnreadCount((prev) => prev + 1);
           }
         }
       )
