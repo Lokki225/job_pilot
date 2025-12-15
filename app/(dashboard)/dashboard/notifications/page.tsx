@@ -242,6 +242,7 @@ export default function NotificationsPage() {
                     variant="ghost"
                     size="icon"
                     className="shrink-0 text-gray-400 hover:text-red-500"
+                    aria-label={`Delete notification "${notification.title}"`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(notification.id);

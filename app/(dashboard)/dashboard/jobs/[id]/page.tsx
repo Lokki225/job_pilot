@@ -437,6 +437,7 @@ export default function JobDetailsPage() {
           <Button
             variant="ghost"
             size="sm"
+            aria-label="Back"
             onClick={() => router.back()}
             className="mt-1"
           >
@@ -470,6 +471,7 @@ export default function JobDetailsPage() {
           <Button
             variant="outline"
             size="sm"
+            aria-label="Toggle favorite"
             onClick={handleToggleFavorite}
           >
             <Star className={`w-4 h-4 ${job.isFavorite ? 'fill-yellow-400 text-yellow-400' : ''}`} />
@@ -509,6 +511,7 @@ export default function JobDetailsPage() {
           <Button
             variant="outline"
             size="sm"
+            aria-label="Delete application"
             onClick={handleDelete}
             className="text-red-600 hover:text-red-700"
           >

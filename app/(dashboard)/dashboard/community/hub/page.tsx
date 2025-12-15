@@ -641,6 +641,8 @@ function PostCard({
                 variant="ghost"
                 size="sm"
                 className={post.hasLiked ? "text-red-500" : ""}
+                aria-label={post.hasLiked ? `Unlike post` : `Like post`}
+                aria-pressed={post.hasLiked}
                 onClick={onLike}
               >
                 <Heart className={`mr-1 h-4 w-4 ${post.hasLiked ? "fill-current" : ""}`} />
@@ -660,6 +662,8 @@ function PostCard({
                 variant="ghost"
                 size="sm"
                 className={post.hasBookmarked ? "text-primary" : ""}
+                aria-label={post.hasBookmarked ? `Unsave post` : `Save post`}
+                aria-pressed={post.hasBookmarked}
                 onClick={onBookmark}
               >
                 {post.hasBookmarked ? (
@@ -670,7 +674,7 @@ function PostCard({
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="ml-auto">
+                  <Button variant="ghost" size="sm" className="ml-auto" aria-label="Post actions">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>

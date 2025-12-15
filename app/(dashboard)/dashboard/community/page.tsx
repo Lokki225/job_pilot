@@ -360,6 +360,8 @@ function StoryCard({
                 e.preventDefault();
                 onLike(story.id, story.hasLiked || false);
               }}
+              aria-label={story.hasLiked ? `Unlike story \"${story.title || `${story.jobTitle} at ${story.companyName}`}\"` : `Like story \"${story.title || `${story.jobTitle} at ${story.companyName}`}\"`}
+              aria-pressed={!!story.hasLiked}
               className={`flex items-center gap-1 hover:text-red-500 transition-colors ${
                 story.hasLiked ? "text-red-500" : ""
               }`}
@@ -373,6 +375,8 @@ function StoryCard({
                 e.preventDefault();
                 onBookmark(story.id, story.hasBookmarked || false);
               }}
+              aria-label={story.hasBookmarked ? `Remove bookmark for story \"${story.title || `${story.jobTitle} at ${story.companyName}`}\"` : `Bookmark story \"${story.title || `${story.jobTitle} at ${story.companyName}`}\"`}
+              aria-pressed={!!story.hasBookmarked}
               className={`flex items-center gap-1 hover:text-blue-500 transition-colors ${
                 story.hasBookmarked ? "text-blue-500" : ""
               }`}

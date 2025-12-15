@@ -298,6 +298,8 @@ export default function JobStudyModulePage() {
                             type="button"
                             variant="ghost"
                             size="icon"
+                            aria-label={isDone ? `Mark topic \"${t.title}\" incomplete` : `Mark topic \"${t.title}\" complete`}
+                            aria-pressed={isDone}
                             onClick={() => handleToggleTopic(t.id)}
                             className="mt-0.5"
                           >

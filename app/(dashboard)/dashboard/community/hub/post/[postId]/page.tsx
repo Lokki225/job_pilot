@@ -272,7 +272,7 @@ export default function PostDetailPage() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" aria-label="Post actions">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -305,6 +305,8 @@ export default function PostDetailPage() {
               variant="ghost"
               size="sm"
               className={post.hasLiked ? "text-red-500" : ""}
+              aria-label={post.hasLiked ? "Unlike post" : "Like post"}
+              aria-pressed={post.hasLiked}
               onClick={handleLike}
             >
               <Heart className={`mr-1 h-4 w-4 ${post.hasLiked ? "fill-current" : ""}`} />
@@ -322,6 +324,8 @@ export default function PostDetailPage() {
               variant="ghost"
               size="sm"
               className={`ml-auto ${post.hasBookmarked ? "text-primary" : ""}`}
+              aria-label={post.hasBookmarked ? "Unsave post" : "Save post"}
+              aria-pressed={post.hasBookmarked}
               onClick={handleBookmark}
             >
               {post.hasBookmarked ? (
@@ -448,6 +452,8 @@ function CommentItem({
                   variant="ghost"
                   size="sm"
                   className={`h-7 px-2 ${comment.hasLiked ? "text-red-500" : ""}`}
+                  aria-label={comment.hasLiked ? "Unlike comment" : "Like comment"}
+                  aria-pressed={comment.hasLiked}
                   onClick={() => onToggleLike(comment.id, comment.hasLiked)}
                 >
                   <Heart className={`mr-1 h-3 w-3 ${comment.hasLiked ? "fill-current" : ""}`} />
@@ -489,6 +495,7 @@ function CommentItem({
               variant="ghost"
               size="icon"
               className="h-8 w-8"
+              aria-label="Delete comment"
               onClick={() => onDelete(comment.id)}
             >
               <Trash2 className="h-4 w-4" />

@@ -187,6 +187,12 @@ export default function SavedPostsPage() {
                           variant="ghost"
                           size="sm"
                           className={post.hasLiked ? "text-red-500" : ""}
+                          aria-label={
+                            post.hasLiked
+                              ? `Unlike post "${post.title || post.id}"`
+                              : `Like post "${post.title || post.id}"`
+                          }
+                          aria-pressed={post.hasLiked}
                           onClick={() => handleLike(post.id, post.hasLiked)}
                         >
                           <Heart className={`mr-1 h-4 w-4 ${post.hasLiked ? "fill-current" : ""}`} />
