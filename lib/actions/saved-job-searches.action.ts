@@ -1,14 +1,26 @@
 "use server"
 
 import { z } from "zod"
-import { adminSupabase, createClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
+
+const SavedSearchFrequencySchema = z.enum(["hourly", "daily", "weekly"])
 
 const CreateSavedJobSearchSchema = z
   .object({
     name: z.string().trim().min(1).max(80),
     filters: z.record(z.string(), z.any()),
     isEnabled: z.boolean().optional(),
-    frequency: z.string().trim().min(1).max(20).optional(),
+    frequency: SavedSearchFrequencySchema.optional(),
+    notifyOnMatch: z.boolean().optional(),
+  })
+  .strict()
+
+const UpdateSavedJobSearchSchema = z
+  .object({
+    name: z.string().trim().min(1).max(80).optional(),
+    filters: z.record(z.string(), z.any()).optional(),
+    isEnabled: z.boolean().optional(),
+    frequency: SavedSearchFrequencySchema.optional(),
     notifyOnMatch: z.boolean().optional(),
   })
   .strict()
@@ -27,10 +39,9 @@ export async function getSavedJobSearches(): Promise<{
       return { data: null, error: "Unauthorized" }
     }
 
-    const { data, error } = await adminSupabase
+    const { data, error } = await supabase
       .from("saved_job_searches")
       .select("*")
-      .eq("userId", user.id)
       .order("createdAt", { ascending: false })
 
     if (error) return { data: null, error: error.message }
@@ -60,9 +71,7 @@ export async function createSavedJobSearch(input: z.infer<typeof CreateSavedJobS
       return { data: null, error: "Invalid input" }
     }
 
-    const now = new Date().toISOString()
-
-    const { data, error } = await adminSupabase
+    const { data, error } = await supabase
       .from("saved_job_searches")
       .insert({
         userId: user.id,
@@ -72,8 +81,6 @@ export async function createSavedJobSearch(input: z.infer<typeof CreateSavedJobS
         frequency: parsed.data.frequency ?? "daily",
         notifyOnMatch: parsed.data.notifyOnMatch ?? true,
         lastSeenJobKeys: [],
-        createdAt: now,
-        updatedAt: now,
       })
       .select("*")
       .single()
@@ -100,11 +107,10 @@ export async function deleteSavedJobSearch(searchId: string): Promise<{
       return { data: false, error: "Unauthorized" }
     }
 
-    const { error } = await adminSupabase
+    const { error } = await supabase
       .from("saved_job_searches")
       .delete()
       .eq("id", searchId)
-      .eq("userId", user.id)
 
     if (error) return { data: false, error: error.message }
     return { data: true, error: null }
@@ -128,14 +134,21 @@ export async function updateSavedJobSearch(searchId: string, patch: Record<strin
       return { data: null, error: "Unauthorized" }
     }
 
-    const { data, error } = await adminSupabase
+    const parsed = UpdateSavedJobSearchSchema.safeParse(patch)
+    if (!parsed.success) {
+      return { data: null, error: "Invalid input" }
+    }
+
+    if (Object.keys(parsed.data).length === 0) {
+      return { data: null, error: "No updates provided" }
+    }
+
+    const { data, error } = await supabase
       .from("saved_job_searches")
       .update({
-        ...patch,
-        updatedAt: new Date().toISOString(),
+        ...parsed.data,
       })
       .eq("id", searchId)
-      .eq("userId", user.id)
       .select("*")
       .single()
 

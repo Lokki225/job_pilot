@@ -391,13 +391,13 @@ async function pruneNotifications(params: {
   let query = adminSupabase
     .from("notifications")
     .select("id")
-    .eq("userId", params.userId)
-    .order("createdAt", { ascending: false })
-    .limit(limit + 1);
+    .eq("userId", params.userId);
 
   if (params.event) {
     query = query.eq("type", params.event);
   }
+
+  query = query.order("createdAt", { ascending: false }).limit(limit + 1);
 
   const { data } = await query;
   const rows = data || [];

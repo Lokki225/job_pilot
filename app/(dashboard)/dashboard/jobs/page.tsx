@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
 import {
   Dialog,
   DialogContent,
@@ -42,11 +43,19 @@ import {
   createSavedJobSearch,
   deleteSavedJobSearch,
   getSavedJobSearches,
+  updateSavedJobSearch,
 } from '@/lib/actions/saved-job-searches.action'
 import type { NormalizedJob, JobSearchParams } from '@/lib/services/job-search'
 import { createJobApplication } from '@/lib/actions/job-application.action'
 import { type ParsedJob } from '@/lib/utils/job-parser'
 import { toast } from '@/components/ui/use-toast'
+
+type SavedSearchFrequency = 'hourly' | 'daily' | 'weekly'
+
+function normalizeSavedSearchFrequency(value: any): SavedSearchFrequency {
+  if (value === 'hourly' || value === 'daily' || value === 'weekly') return value
+  return 'daily'
+}
 
 export default function JobsPage() {
   const router = useRouter()
@@ -83,6 +92,15 @@ export default function JobsPage() {
   const [selectedSavedSearchId, setSelectedSavedSearchId] = useState<string>('')
   const [isSaveSearchDialogOpen, setIsSaveSearchDialogOpen] = useState(false)
   const [newSavedSearchName, setNewSavedSearchName] = useState('')
+  const [newSavedSearchIsEnabled, setNewSavedSearchIsEnabled] = useState(true)
+  const [newSavedSearchNotifyOnMatch, setNewSavedSearchNotifyOnMatch] = useState(true)
+  const [newSavedSearchFrequency, setNewSavedSearchFrequency] = useState<SavedSearchFrequency>('daily')
+
+  const [isEditSavedSearchDialogOpen, setIsEditSavedSearchDialogOpen] = useState(false)
+  const [editSavedSearchName, setEditSavedSearchName] = useState('')
+  const [editSavedSearchIsEnabled, setEditSavedSearchIsEnabled] = useState(true)
+  const [editSavedSearchNotifyOnMatch, setEditSavedSearchNotifyOnMatch] = useState(true)
+  const [editSavedSearchFrequency, setEditSavedSearchFrequency] = useState<SavedSearchFrequency>('daily')
 
   const getJobKey = useCallback((job: NormalizedJob) => {
     return `${job.source || 'unknown'}:${job.id}`
@@ -194,8 +212,24 @@ export default function JobsPage() {
     const defaultName =
       (lastSearch.query || 'Search') + (lastSearch.location ? ` • ${lastSearch.location}` : '')
     setNewSavedSearchName(defaultName)
+    setNewSavedSearchIsEnabled(true)
+    setNewSavedSearchNotifyOnMatch(true)
+    setNewSavedSearchFrequency('daily')
     setIsSaveSearchDialogOpen(true)
   }, [lastSearch])
+
+  const handleOpenEditSavedSearchDialog = useCallback(() => {
+    if (!selectedSavedSearchId) return
+
+    const found = savedSearches.find((s) => s.id === selectedSavedSearchId)
+    if (!found) return
+
+    setEditSavedSearchName(found.name || '')
+    setEditSavedSearchIsEnabled(Boolean(found.isEnabled))
+    setEditSavedSearchNotifyOnMatch(Boolean(found.notifyOnMatch))
+    setEditSavedSearchFrequency(normalizeSavedSearchFrequency(found.frequency))
+    setIsEditSavedSearchDialogOpen(true)
+  }, [savedSearches, selectedSavedSearchId])
 
   const handleSaveSearch = useCallback(async () => {
     if (!lastSearch) return
@@ -213,9 +247,9 @@ export default function JobsPage() {
       const result = await createSavedJobSearch({
         name,
         filters: lastSearch as any,
-        isEnabled: true,
-        frequency: 'daily',
-        notifyOnMatch: true,
+        isEnabled: newSavedSearchIsEnabled,
+        frequency: newSavedSearchFrequency,
+        notifyOnMatch: newSavedSearchNotifyOnMatch,
       })
 
       if (result.data) {
@@ -241,7 +275,64 @@ export default function JobsPage() {
         variant: 'destructive',
       })
     }
-  }, [lastSearch, newSavedSearchName])
+  }, [
+    lastSearch,
+    newSavedSearchFrequency,
+    newSavedSearchIsEnabled,
+    newSavedSearchName,
+    newSavedSearchNotifyOnMatch,
+  ])
+
+  const handleUpdateSelectedSavedSearch = useCallback(async () => {
+    if (!selectedSavedSearchId) return
+
+    const name = editSavedSearchName.trim()
+    if (!name) {
+      toast({
+        title: 'Name required',
+        description: 'Please enter a name for this saved search.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    try {
+      const result = await updateSavedJobSearch(selectedSavedSearchId, {
+        name,
+        isEnabled: editSavedSearchIsEnabled,
+        notifyOnMatch: editSavedSearchNotifyOnMatch,
+        frequency: editSavedSearchFrequency,
+      })
+
+      if (result.data) {
+        setSavedSearches((prev) => prev.map((s) => (s.id === result.data.id ? result.data : s)))
+        setIsEditSavedSearchDialogOpen(false)
+        toast({
+          title: 'Updated',
+          description: 'Saved search updated.',
+        })
+      } else {
+        toast({
+          title: 'Error',
+          description: result.error || 'Failed to update saved search',
+          variant: 'destructive',
+        })
+      }
+    } catch (err) {
+      console.error('Failed to update saved search:', err)
+      toast({
+        title: 'Error',
+        description: 'Failed to update saved search',
+        variant: 'destructive',
+      })
+    }
+  }, [
+    editSavedSearchFrequency,
+    editSavedSearchIsEnabled,
+    editSavedSearchName,
+    editSavedSearchNotifyOnMatch,
+    selectedSavedSearchId,
+  ])
 
   const handleDeleteSelectedSavedSearch = useCallback(async () => {
     if (!selectedSavedSearchId) return
@@ -682,6 +773,14 @@ export default function JobsPage() {
               <Button
                 variant="outline"
                 size="sm"
+                onClick={handleOpenEditSavedSearchDialog}
+                disabled={!selectedSavedSearchId}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleDeleteSelectedSavedSearch}
                 disabled={!selectedSavedSearchId}
               >
@@ -706,18 +805,104 @@ export default function JobsPage() {
             <DialogTitle>Save search</DialogTitle>
             <DialogDescription>Save your current filters and get job alerts.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-2">
-            <Input
-              value={newSavedSearchName}
-              onChange={(e) => setNewSavedSearchName(e.target.value)}
-              placeholder="e.g. React Remote"
-            />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                value={newSavedSearchName}
+                onChange={(e) => setNewSavedSearchName(e.target.value)}
+                placeholder="e.g. React Remote"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-sm font-medium text-slate-700 dark:text-slate-300">Frequency</div>
+              <Select value={newSavedSearchFrequency} onValueChange={(value) => setNewSavedSearchFrequency(normalizeSavedSearchFrequency(value))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="hourly">Hourly</SelectItem>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-3">
+              <div>
+                <div className="text-sm font-medium text-slate-900 dark:text-white">Enabled</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Include this search in job alerts</div>
+              </div>
+              <Switch checked={newSavedSearchIsEnabled} onCheckedChange={setNewSavedSearchIsEnabled} />
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-3">
+              <div>
+                <div className="text-sm font-medium text-slate-900 dark:text-white">Notify on match</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Send an in-app notification when new jobs match</div>
+              </div>
+              <Switch checked={newSavedSearchNotifyOnMatch} onCheckedChange={setNewSavedSearchNotifyOnMatch} />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsSaveSearchDialogOpen(false)}>
               Cancel
             </Button>
             <Button onClick={handleSaveSearch}>Save</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isEditSavedSearchDialogOpen} onOpenChange={setIsEditSavedSearchDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit saved search</DialogTitle>
+            <DialogDescription>Update your saved search name and alert settings.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                value={editSavedSearchName}
+                onChange={(e) => setEditSavedSearchName(e.target.value)}
+                placeholder="Saved search name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-sm font-medium text-slate-700 dark:text-slate-300">Frequency</div>
+              <Select value={editSavedSearchFrequency} onValueChange={(value) => setEditSavedSearchFrequency(normalizeSavedSearchFrequency(value))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="hourly">Hourly</SelectItem>
+                  <SelectItem value="daily">Daily</SelectItem>
+                  <SelectItem value="weekly">Weekly</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-3">
+              <div>
+                <div className="text-sm font-medium text-slate-900 dark:text-white">Enabled</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Include this search in job alerts</div>
+              </div>
+              <Switch checked={editSavedSearchIsEnabled} onCheckedChange={setEditSavedSearchIsEnabled} />
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 p-3">
+              <div>
+                <div className="text-sm font-medium text-slate-900 dark:text-white">Notify on match</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Send an in-app notification when new jobs match</div>
+              </div>
+              <Switch checked={editSavedSearchNotifyOnMatch} onCheckedChange={setEditSavedSearchNotifyOnMatch} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditSavedSearchDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateSelectedSavedSearch}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -5,6 +5,22 @@ import type { JobSearchParams } from "@/lib/services/job-search/types"
 import { AppEvent } from "@/lib/types/app-events"
 import { emitEvent } from "@/lib/services/event-dispatcher"
 
+function getFrequencyMs(frequency: unknown): number {
+  const value = typeof frequency === "string" ? frequency.trim().toLowerCase() : "daily"
+  if (value === "hourly") return 60 * 60 * 1000
+  if (value === "daily") return 24 * 60 * 60 * 1000
+  if (value === "weekly") return 7 * 24 * 60 * 60 * 1000
+  return 24 * 60 * 60 * 1000
+}
+
+function isDueRun(frequency: unknown, lastRunAt: unknown, now: Date): boolean {
+  if (!lastRunAt) return true
+  const last = new Date(String(lastRunAt))
+  if (Number.isNaN(last.getTime())) return true
+  const nextAt = last.getTime() + getFrequencyMs(frequency)
+  return now.getTime() >= nextAt
+}
+
 function toJobKey(job: { id: string; source?: string | null }) {
   return `${job.source || "unknown"}:${job.id}`
 }
@@ -24,6 +40,9 @@ function toSearchParams(filters: any): JobSearchParams {
 }
 
 export async function GET(request: NextRequest) {
+  const url = new URL(request.url)
+  const force = url.searchParams.get("force") === "1" || url.searchParams.get("force") === "true"
+
   const authHeader = request.headers.get("authorization")
   const cronSecret = process.env.CRON_SECRET
 
@@ -34,6 +53,7 @@ export async function GET(request: NextRequest) {
   const now = new Date()
   const results = {
     checked: 0,
+    skipped: 0,
     notified: 0,
     totalNewMatches: 0,
     errors: 0,
@@ -53,6 +73,11 @@ export async function GET(request: NextRequest) {
       results.checked++
 
       try {
+        if (!force && !isDueRun(search.frequency, search.lastRunAt, now)) {
+          results.skipped++
+          continue
+        }
+
         if (!search.notifyOnMatch) {
           await adminSupabase
             .from("saved_job_searches")
