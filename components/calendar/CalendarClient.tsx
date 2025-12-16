@@ -13,9 +13,16 @@ import {
   createCalendarEvent,
   createCalendarEventReminder,
   deleteCalendarEvent,
+  deleteCalendarEventOccurrence,
+  deleteCalendarEventSeries,
+  getCalendarEventById,
   getCalendarEvents,
+  upsertCalendarEventOccurrenceOverride,
   updateCalendarEvent,
 } from "@/lib/actions/calendar.action";
+
+import type { RecurrenceRule } from "@/lib/calendar/recurrence";
+import { parseRecurrenceRule } from "@/lib/calendar/recurrence";
 
 import { Button } from "@/components/ui/button";
 
@@ -54,6 +61,7 @@ export function CalendarClient() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [editEventId, setEditEventId] = useState<string | null>(null);
+  const [editEvent, setEditEvent] = useState<CalendarEventData | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editCategory, setEditCategory] = useState<CalendarCategory>("personal");
   const [editDescription, setEditDescription] = useState("");
@@ -61,11 +69,15 @@ export function CalendarClient() {
   const [editMetadataBase, setEditMetadataBase] = useState<Record<string, any>>({});
   const [editStartAt, setEditStartAt] = useState("");
   const [editEndAt, setEditEndAt] = useState("");
+  const [editRecurrence, setEditRecurrence] = useState<RecurrenceRule | null>(null);
+  const [editShowRecurrence, setEditShowRecurrence] = useState(true);
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState<string | null>(null);
+  const [deleteEvent, setDeleteEvent] = useState<CalendarEventData | null>(null);
   const [deleteEventTitle, setDeleteEventTitle] = useState("");
+  const [deleteMode, setDeleteMode] = useState<"single" | "series">("single");
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<CalendarCategory>("personal");
@@ -73,6 +85,7 @@ export function CalendarClient() {
   const [location, setLocation] = useState("");
   const [startAt, setStartAt] = useState("");
   const [endAt, setEndAt] = useState("");
+  const [recurrence, setRecurrence] = useState<RecurrenceRule | null>(null);
 
   const [remind15m, setRemind15m] = useState(false);
   const [remind1h, setRemind1h] = useState(false);
@@ -188,7 +201,7 @@ export function CalendarClient() {
   }, [load]);
 
   async function handleUpdate() {
-    if (!editEventId) return;
+    if (!editEventId && !editEvent) return;
     if (!editTitle.trim() || !editStartAt || !editEndAt) return;
 
     setIsUpdating(true);
@@ -202,14 +215,29 @@ export function CalendarClient() {
         return;
       }
 
-      const res = await updateCalendarEvent(editEventId, {
-        title: editTitle.trim(),
-        startAt: startDate.toISOString(),
-        endAt: endDate.toISOString(),
-        description: editDescription.trim() ? editDescription.trim() : null,
-        location: editLocation.trim() ? editLocation.trim() : null,
-        metadata: { ...editMetadataBase, category: editCategory },
-      });
+      const isOccurrence = Boolean(editEvent?.seriesId && editEvent?.overrideOfStartAt);
+      const res = isOccurrence
+        ? await upsertCalendarEventOccurrenceOverride({
+            seriesEventId: editEvent!.seriesId as string,
+            occurrenceStartAt: editEvent!.overrideOfStartAt as string,
+            patch: {
+              title: editTitle.trim(),
+              startAt: startDate.toISOString(),
+              endAt: endDate.toISOString(),
+              description: editDescription.trim() ? editDescription.trim() : null,
+              location: editLocation.trim() ? editLocation.trim() : null,
+              metadata: { ...editMetadataBase, category: editCategory },
+            },
+          })
+        : await updateCalendarEvent(editEventId as string, {
+            title: editTitle.trim(),
+            startAt: startDate.toISOString(),
+            endAt: endDate.toISOString(),
+            description: editDescription.trim() ? editDescription.trim() : null,
+            location: editLocation.trim() ? editLocation.trim() : null,
+            metadata: { ...editMetadataBase, category: editCategory },
+            ...(editShowRecurrence ? { recurrenceRule: editRecurrence } : {}),
+          });
 
       if (res.error) {
         setError(res.error);
@@ -218,6 +246,7 @@ export function CalendarClient() {
 
       setIsEditOpen(false);
       setEditEventId(null);
+      setEditEvent(null);
       setEditTitle("");
       setEditCategory("personal");
       setEditDescription("");
@@ -225,6 +254,8 @@ export function CalendarClient() {
       setEditMetadataBase({});
       setEditStartAt("");
       setEditEndAt("");
+      setEditRecurrence(null);
+      setEditShowRecurrence(true);
       await load();
     } catch (err) {
       console.error("Error updating calendar event:", err);
@@ -235,13 +266,21 @@ export function CalendarClient() {
   }
 
   async function handleDeleteConfirmed() {
-    if (!deleteEventId) return;
+    if (!deleteEventId && !deleteEvent) return;
 
     setIsDeleting(true);
     setError(null);
 
     try {
-      const res = await deleteCalendarEvent(deleteEventId);
+      const isOccurrence = Boolean(deleteEvent?.seriesId && deleteEvent?.overrideOfStartAt);
+      const res = deleteMode === "series"
+        ? await deleteCalendarEventSeries(deleteEventId as string)
+        : isOccurrence
+          ? await deleteCalendarEventOccurrence({
+              seriesEventId: deleteEvent!.seriesId as string,
+              occurrenceStartAt: deleteEvent!.overrideOfStartAt as string,
+            })
+          : await deleteCalendarEvent(deleteEventId as string);
       if (res.error) {
         setError(res.error);
         return;
@@ -249,7 +288,9 @@ export function CalendarClient() {
 
       setIsDeleteOpen(false);
       setDeleteEventId(null);
+      setDeleteEvent(null);
       setDeleteEventTitle("");
+      setDeleteMode("single");
       await load();
     } catch (err) {
       console.error("Error deleting calendar event:", err);
@@ -271,6 +312,12 @@ export function CalendarClient() {
     setLocation("");
     setStartAt(toLocalDatetimeInputValue(start));
     setEndAt(toLocalDatetimeInputValue(end));
+    setRecurrence(null);
+    setRemind15m(false);
+    setRemind1h(false);
+    setRemind1d(false);
+    setEnableCustomReminder(false);
+    setCustomRemindAt("");
   }
 
   function prefillCreateForRange(start: Date, end: Date) {
@@ -280,6 +327,12 @@ export function CalendarClient() {
     setLocation("");
     setStartAt(toLocalDatetimeInputValue(start));
     setEndAt(toLocalDatetimeInputValue(end));
+    setRecurrence(null);
+    setRemind15m(false);
+    setRemind1h(false);
+    setRemind1d(false);
+    setEnableCustomReminder(false);
+    setCustomRemindAt("");
   }
 
   function applyDurationToCreate(minutes: number) {
@@ -314,6 +367,7 @@ export function CalendarClient() {
     setIsCreateOpen(false);
     setIsDeleteOpen(false);
     setEditEventId(ev.id);
+    setEditEvent(ev);
     setEditTitle(ev.title || "");
 
     setEditCategory(getEventCategory(ev));
@@ -326,14 +380,47 @@ export function CalendarClient() {
     setEditStartAt(!Number.isNaN(start.getTime()) ? toLocalDatetimeInputValue(start) : "");
     setEditEndAt(!Number.isNaN(end.getTime()) ? toLocalDatetimeInputValue(end) : "");
 
+    const isOccurrence = Boolean(ev.seriesId && ev.overrideOfStartAt);
+    setEditShowRecurrence(!isOccurrence);
+    setEditRecurrence(!isOccurrence ? parseRecurrenceRule(ev.recurrenceRule) : null);
+
     setIsEditOpen(true);
+  }
+
+  async function openEditSeries(ev: CalendarEventData) {
+    const rootId = ev.seriesId || ev.id;
+    try {
+      setError(null);
+      const res = await getCalendarEventById(rootId);
+      if (res.error || !res.data) {
+        setError(res.error || "Failed to load series");
+        return;
+      }
+      openEdit(res.data);
+    } catch (err) {
+      console.error("Error loading series:", err);
+      setError("Failed to load series");
+    }
   }
 
   function openDelete(ev: CalendarEventData) {
     setIsCreateOpen(false);
     setIsEditOpen(false);
     setDeleteEventId(ev.id);
+    setDeleteEvent(ev);
     setDeleteEventTitle(ev.title || "this event");
+    setDeleteMode("single");
+    setIsDeleteOpen(true);
+  }
+
+  function openDeleteSeries(ev: CalendarEventData) {
+    setIsCreateOpen(false);
+    setIsEditOpen(false);
+    const rootId = ev.seriesId || ev.id;
+    setDeleteEventId(rootId);
+    setDeleteEvent(ev);
+    setDeleteEventTitle(ev.title || "this event");
+    setDeleteMode("series");
     setIsDeleteOpen(true);
   }
 
@@ -363,6 +450,7 @@ export function CalendarClient() {
         type: "EVENT",
         description: description.trim() ? description.trim() : undefined,
         location: location.trim() ? location.trim() : undefined,
+        recurrenceRule: recurrence || undefined,
         metadata: { category },
       });
 
@@ -393,6 +481,7 @@ export function CalendarClient() {
             const reminderRes = await createCalendarEventReminder({
               eventId: created.id,
               remindAt,
+              occurrenceStartAt: recurrence ? created.startAt : null,
               channel: "in_app",
             });
 
@@ -410,6 +499,7 @@ export function CalendarClient() {
       setLocation("");
       setStartAt("");
       setEndAt("");
+      setRecurrence(null);
       setRemind15m(false);
       setRemind1h(false);
       setRemind1d(false);
@@ -507,6 +597,8 @@ export function CalendarClient() {
           endAt={endAt}
           setEndAt={setEndAt}
           timezone={timezone}
+          recurrence={recurrence}
+          setRecurrence={setRecurrence}
           applyDurationToCreate={applyDurationToCreate}
           remind15m={remind15m}
           setRemind15m={setRemind15m}
@@ -532,6 +624,7 @@ export function CalendarClient() {
             }
             if (!open) {
               setEditEventId(null);
+              setEditEvent(null);
               setEditTitle("");
               setEditCategory("personal");
               setEditDescription("");
@@ -539,6 +632,8 @@ export function CalendarClient() {
               setEditMetadataBase({});
               setEditStartAt("");
               setEditEndAt("");
+              setEditRecurrence(null);
+              setEditShowRecurrence(true);
             }
           }}
           editTitle={editTitle}
@@ -554,6 +649,9 @@ export function CalendarClient() {
           editEndAt={editEndAt}
           setEditEndAt={setEditEndAt}
           timezone={timezone}
+          showRecurrence={editShowRecurrence}
+          recurrence={editRecurrence}
+          setRecurrence={setEditRecurrence}
           applyDurationToEdit={applyDurationToEdit}
           isUpdating={isUpdating}
           onSave={handleUpdate}
@@ -569,10 +667,13 @@ export function CalendarClient() {
             }
             if (!open) {
               setDeleteEventId(null);
+              setDeleteEvent(null);
               setDeleteEventTitle("");
+              setDeleteMode("single");
             }
           }}
           deleteEventTitle={deleteEventTitle}
+          deleteMode={deleteMode}
           isDeleting={isDeleting}
           onConfirm={handleDeleteConfirmed}
         />
@@ -612,7 +713,9 @@ export function CalendarClient() {
               eventsByDayKey={eventsByDayKey}
               onDayClick={handleDayClick}
               onEditEvent={openEdit}
+              onEditSeries={openEditSeries}
               onDeleteEvent={openDelete}
+              onDeleteSeries={openDeleteSeries}
             />
           </CalendarMonthCard>
         ) : (
@@ -643,7 +746,9 @@ export function CalendarClient() {
                 onDayClick={handleDayClick}
                 onCreateRange={handleCreateRange}
                 onEditEvent={openEdit}
+                onEditSeries={openEditSeries}
                 onDeleteEvent={openDelete}
+                onDeleteSeries={openDeleteSeries}
               />
             ) : (
               <CalendarDayView
@@ -653,7 +758,9 @@ export function CalendarClient() {
                 onDayClick={handleDayClick}
                 onCreateRange={handleCreateRange}
                 onEditEvent={openEdit}
+                onEditSeries={openEditSeries}
                 onDeleteEvent={openDelete}
+                onDeleteSeries={openDeleteSeries}
               />
             )}
           </CalendarRangeCard>

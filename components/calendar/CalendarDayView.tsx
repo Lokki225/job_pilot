@@ -11,9 +11,11 @@ export function CalendarDayView(props: {
   onDayClick: (day: Date) => void;
   onCreateRange: (start: Date, end: Date) => void;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
 }) {
-  const { isLoading, day, eventsByDayKey, onDayClick, onCreateRange, onEditEvent, onDeleteEvent } = props;
+  const { isLoading, day, eventsByDayKey, onDayClick, onCreateRange, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries } = props;
 
   if (isLoading) {
     return (
@@ -29,7 +31,9 @@ export function CalendarDayView(props: {
       eventsByDayKey={eventsByDayKey}
       onCreateRange={onCreateRange}
       onEditEvent={onEditEvent}
+      onEditSeries={onEditSeries}
       onDeleteEvent={onDeleteEvent}
+      onDeleteSeries={onDeleteSeries}
       dayHeader={(d) => {
         const label = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "short", day: "numeric" }).format(d);
 

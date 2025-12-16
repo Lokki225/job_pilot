@@ -31,6 +31,13 @@ function minuteKey(value: string | Date) {
   return Math.floor(t / 60000);
 }
 
+function isUuid(v: unknown): v is string {
+  if (typeof v !== "string") return false;
+  const s = v.trim();
+  if (!s) return false;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s);
+}
+
 export function CalendarEventReminders(props: {
   ev: CalendarEventData;
   open: boolean;
@@ -62,11 +69,17 @@ export function CalendarEventReminders(props: {
   }, [open, isStartValid, start]);
 
   const refresh = useCallback(async () => {
+    if (!isUuid(ev.id)) {
+      setError("Invalid event");
+      setReminders([]);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const res = await getCalendarEventReminders(ev.id);
+      const res = await getCalendarEventReminders({ eventId: ev.id, occurrenceStartAt: ev.overrideOfStartAt ?? null });
       if (res.error) {
         setError(res.error);
         setReminders([]);
@@ -80,7 +93,7 @@ export function CalendarEventReminders(props: {
     } finally {
       setIsLoading(false);
     }
-  }, [ev.id]);
+  }, [ev.id, ev.overrideOfStartAt]);
 
   useEffect(() => {
     if (!open) return;
@@ -115,6 +128,11 @@ export function CalendarEventReminders(props: {
   async function addReminder(remindAt: Date) {
     if (Number.isNaN(remindAt.getTime())) return;
 
+    if (!isUuid(ev.id)) {
+      setError("Invalid event");
+      return;
+    }
+
     const iso = remindAt.toISOString();
     if (existingIso.has(iso)) return;
     const k = minuteKey(remindAt);
@@ -127,6 +145,7 @@ export function CalendarEventReminders(props: {
       const res = await createCalendarEventReminder({
         eventId: ev.id,
         remindAt: iso,
+        occurrenceStartAt: ev.overrideOfStartAt ?? null,
         channel: "in_app",
       });
 

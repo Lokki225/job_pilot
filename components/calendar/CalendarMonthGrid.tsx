@@ -21,9 +21,11 @@ export function CalendarMonthGrid(props: {
   eventsByDayKey: Map<string, CalendarEventData[]>;
   onDayClick: (day: Date) => void;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
 }) {
-  const { isLoading, calendarDays, viewDate, eventsByDayKey, onDayClick, onEditEvent, onDeleteEvent } = props;
+  const { isLoading, calendarDays, viewDate, eventsByDayKey, onDayClick, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries } = props;
 
   return (
     <>
@@ -84,8 +86,16 @@ export function CalendarMonthGrid(props: {
 
                 <div className="mt-2 space-y-1">
                   {visibleEvents.map((ev) => {
+                    const key = ev.renderKey || ev.id;
                     return (
-                      <CalendarEventChip key={ev.id} ev={ev} onEditEvent={onEditEvent} onDeleteEvent={onDeleteEvent} />
+                      <CalendarEventChip
+                        key={key}
+                        ev={ev}
+                        onEditEvent={onEditEvent}
+                        onEditSeries={onEditSeries}
+                        onDeleteEvent={onDeleteEvent}
+                        onDeleteSeries={onDeleteSeries}
+                      />
                     );
                   })}
 
@@ -105,12 +115,13 @@ export function CalendarMonthGrid(props: {
                           <div className="text-sm font-semibold">Events</div>
                           <div className="space-y-2">
                             {dayEvents.map((ev) => {
+                              const key = ev.renderKey || ev.id;
                               const start = new Date(ev.startAt);
                               const time = !Number.isNaN(start.getTime()) ? formatTime(start, ev.timezone) : "";
                               const cat = getEventCategory(ev);
                               const catMeta = CATEGORY_META[cat];
                               return (
-                                <div key={ev.id} className="rounded-md border p-2">
+                                <div key={key} className="rounded-md border p-2">
                                   <div className="flex items-start justify-between gap-2">
                                     <div className="min-w-0">
                                       <div className="truncate text-sm font-medium">

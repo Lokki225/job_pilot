@@ -37,10 +37,12 @@ export function CalendarTimeGrid(props: {
   eventsByDayKey: Map<string, CalendarEventData[]>;
   onCreateRange: (start: Date, end: Date) => void;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
   dayHeader?: (day: Date) => ReactNode;
 }) {
-  const { days, eventsByDayKey, onCreateRange, onEditEvent, onDeleteEvent, dayHeader } = props;
+  const { days, eventsByDayKey, onCreateRange, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries, dayHeader } = props;
 
   const HOUR_HEIGHT = 60;
   const STEP_MINUTES = 15;
@@ -165,9 +167,17 @@ export function CalendarTimeGrid(props: {
                 const cat = getEventCategory(ev);
                 const catMeta = CATEGORY_META[cat];
                 const time = !Number.isNaN(start.getTime()) ? formatTime(start, ev.timezone) : "";
+                const key = ev.renderKey || ev.id;
 
                 return (
-                  <CalendarEventPopover key={ev.id} ev={ev} onEditEvent={onEditEvent} onDeleteEvent={onDeleteEvent}>
+                  <CalendarEventPopover
+                    key={key}
+                    ev={ev}
+                    onEditEvent={onEditEvent}
+                    onEditSeries={onEditSeries}
+                    onDeleteEvent={onDeleteEvent}
+                    onDeleteSeries={onDeleteSeries}
+                  >
                     <button
                       type="button"
                       className={

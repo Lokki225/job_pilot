@@ -13,9 +13,11 @@ export function CalendarWeekGrid(props: {
   onDayClick: (day: Date) => void;
   onCreateRange: (start: Date, end: Date) => void;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
 }) {
-  const { isLoading, weekDays, viewDate, eventsByDayKey, onDayClick, onCreateRange, onEditEvent, onDeleteEvent } = props;
+  const { isLoading, weekDays, viewDate, eventsByDayKey, onDayClick, onCreateRange, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries } = props;
 
   if (isLoading) {
     return (
@@ -31,7 +33,9 @@ export function CalendarWeekGrid(props: {
       eventsByDayKey={eventsByDayKey}
       onCreateRange={onCreateRange}
       onEditEvent={onEditEvent}
+      onEditSeries={onEditSeries}
       onDeleteEvent={onDeleteEvent}
+      onDeleteSeries={onDeleteSeries}
       dayHeader={(day) => {
         const isToday = toDayKey(day) === toDayKey(new Date());
         const isCurrentMonth = day.getMonth() === viewDate.getMonth();

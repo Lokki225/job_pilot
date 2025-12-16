@@ -37,6 +37,7 @@ export function CalendarSidebar(props: {
             <ScrollArea className="h-[420px] pr-2">
               <div className="space-y-3">
                 {upcomingEvents.map((ev) => {
+                  const key = ev.renderKey || ev.id;
                   const start = new Date(ev.startAt);
                   const end = new Date(ev.endAt);
                   const cat = getEventCategory(ev);
@@ -54,7 +55,7 @@ export function CalendarSidebar(props: {
                       : "";
 
                   return (
-                    <div key={ev.id} className="rounded-lg border p-3">
+                    <div key={key} className="rounded-lg border p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">

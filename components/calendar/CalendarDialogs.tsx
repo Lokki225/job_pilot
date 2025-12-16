@@ -15,6 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { CALENDAR_CATEGORY_OPTIONS, type CalendarCategory } from "@/components/calendar/categories";
+import type { RecurrenceRule } from "@/lib/calendar/recurrence";
+import { RecurrencePicker } from "@/components/calendar/RecurrencePicker";
 
 export function CreateEventDialog(props: {
   open: boolean;
@@ -40,6 +42,9 @@ export function CreateEventDialog(props: {
   setEndAt: (v: string) => void;
 
   timezone: string;
+
+  recurrence: RecurrenceRule | null;
+  setRecurrence: (v: RecurrenceRule | null) => void;
 
   applyDurationToCreate: (minutes: number) => void;
 
@@ -75,6 +80,8 @@ export function CreateEventDialog(props: {
     endAt,
     setEndAt,
     timezone,
+    recurrence,
+    setRecurrence,
     applyDurationToCreate,
     remind15m,
     setRemind15m,
@@ -178,6 +185,8 @@ export function CreateEventDialog(props: {
 
           <div className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">Timezone: {timezone}</div>
 
+          <RecurrencePicker value={recurrence} onChange={setRecurrence} disabled={isCreating} />
+
           <div className="space-y-3 rounded-md border p-3">
             <div className="text-sm font-medium">Reminders</div>
 
@@ -264,6 +273,10 @@ export function EditEventDialog(props: {
 
   timezone: string;
 
+  showRecurrence: boolean;
+  recurrence: RecurrenceRule | null;
+  setRecurrence: (v: RecurrenceRule | null) => void;
+
   applyDurationToEdit: (minutes: number) => void;
 
   isUpdating: boolean;
@@ -285,6 +298,9 @@ export function EditEventDialog(props: {
     editEndAt,
     setEditEndAt,
     timezone,
+    showRecurrence,
+    recurrence,
+    setRecurrence,
     applyDurationToEdit,
     isUpdating,
     onSave,
@@ -372,6 +388,8 @@ export function EditEventDialog(props: {
           </div>
 
           <div className="rounded-md border bg-muted/30 p-3 text-sm text-muted-foreground">Timezone: {timezone}</div>
+
+          {showRecurrence ? <RecurrencePicker value={recurrence} onChange={setRecurrence} disabled={isUpdating} /> : null}
         </div>
 
         <DialogFooter>
@@ -398,10 +416,11 @@ export function DeleteEventDialog(props: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   deleteEventTitle: string;
+  deleteMode?: "single" | "series";
   isDeleting: boolean;
   onConfirm: () => void;
 }) {
-  const { open, onOpenChange, deleteEventTitle, isDeleting, onConfirm } = props;
+  const { open, onOpenChange, deleteEventTitle, deleteMode = "single", isDeleting, onConfirm } = props;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -411,7 +430,15 @@ export function DeleteEventDialog(props: {
         </DialogHeader>
 
         <div className="text-sm text-muted-foreground">
-          This will permanently delete <span className="font-medium text-foreground">{deleteEventTitle}</span>.
+          {deleteMode === "series" ? (
+            <>
+              This will permanently delete the entire series <span className="font-medium text-foreground">{deleteEventTitle}</span>.
+            </>
+          ) : (
+            <>
+              This will permanently delete <span className="font-medium text-foreground">{deleteEventTitle}</span>.
+            </>
+          )}
         </div>
 
         <DialogFooter>

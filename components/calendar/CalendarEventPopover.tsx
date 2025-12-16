@@ -4,6 +4,13 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CATEGORY_META, getEventCategory } from "@/components/calendar/categories";
 import { formatTime } from "@/components/calendar/date-utils";
@@ -13,10 +20,12 @@ import { CalendarEventReminders } from "@/components/calendar/CalendarEventRemin
 export function CalendarEventPopover(props: {
   ev: CalendarEventData;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
   children: ReactNode;
 }) {
-  const { ev, onEditEvent, onDeleteEvent, children } = props;
+  const { ev, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries, children } = props;
   const [open, setOpen] = useState(false);
 
   const start = new Date(ev.startAt);
@@ -26,6 +35,9 @@ export function CalendarEventPopover(props: {
 
   const cat = getEventCategory(ev);
   const catMeta = CATEGORY_META[cat];
+
+  const isOccurrence = Boolean(ev.seriesId && ev.overrideOfStartAt);
+  const canSeriesActions = isOccurrence && (typeof onEditSeries === "function" || typeof onDeleteSeries === "function");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -63,30 +75,102 @@ export function CalendarEventPopover(props: {
           <CalendarEventReminders ev={ev} open={open} />
 
           <div className="flex items-center justify-end gap-2 pt-2">
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpen(false);
-                onEditEvent(ev);
-              }}
-            >
-              Edit
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="destructive"
-              onClick={(e) => {
-                e.stopPropagation();
-                setOpen(false);
-                onDeleteEvent(ev);
-              }}
-            >
-              Delete
-            </Button>
+            {canSeriesActions ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    Actions
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  onPointerDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <DropdownMenuItem
+                    onSelect={(e) => {
+                      e.stopPropagation();
+                      setOpen(false);
+                      onEditEvent(ev);
+                    }}
+                  >
+                    Edit this occurrence
+                  </DropdownMenuItem>
+                  {typeof onEditSeries === "function" ? (
+                    <DropdownMenuItem
+                      onSelect={(e) => {
+                        e.stopPropagation();
+                        setOpen(false);
+                        onEditSeries(ev);
+                      }}
+                    >
+                      Edit series
+                    </DropdownMenuItem>
+                  ) : null}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={(e) => {
+                      e.stopPropagation();
+                      setOpen(false);
+                      onDeleteEvent(ev);
+                    }}
+                  >
+                    Delete this occurrence
+                  </DropdownMenuItem>
+                  {typeof onDeleteSeries === "function" ? (
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={(e) => {
+                        e.stopPropagation();
+                        setOpen(false);
+                        onDeleteSeries(ev);
+                      }}
+                    >
+                      Delete series
+                    </DropdownMenuItem>
+                  ) : null}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(false);
+                    onEditEvent(ev);
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="destructive"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(false);
+                    onDeleteEvent(ev);
+                  }}
+                >
+                  Delete
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </PopoverContent>

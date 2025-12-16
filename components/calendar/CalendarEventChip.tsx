@@ -8,9 +8,11 @@ import { CalendarEventPopover } from "@/components/calendar/CalendarEventPopover
 export function CalendarEventChip(props: {
   ev: CalendarEventData;
   onEditEvent: (ev: CalendarEventData) => void;
+  onEditSeries?: (ev: CalendarEventData) => void;
   onDeleteEvent: (ev: CalendarEventData) => void;
+  onDeleteSeries?: (ev: CalendarEventData) => void;
 }) {
-  const { ev, onEditEvent, onDeleteEvent } = props;
+  const { ev, onEditEvent, onEditSeries, onDeleteEvent, onDeleteSeries } = props;
 
   const start = new Date(ev.startAt);
   const end = new Date(ev.endAt);
@@ -19,7 +21,7 @@ export function CalendarEventChip(props: {
   const catMeta = CATEGORY_META[cat];
 
   return (
-    <CalendarEventPopover ev={ev} onEditEvent={onEditEvent} onDeleteEvent={onDeleteEvent}>
+    <CalendarEventPopover ev={ev} onEditEvent={onEditEvent} onEditSeries={onEditSeries} onDeleteEvent={onDeleteEvent} onDeleteSeries={onDeleteSeries}>
         <button
           type="button"
           onClick={(e) => e.stopPropagation()}
