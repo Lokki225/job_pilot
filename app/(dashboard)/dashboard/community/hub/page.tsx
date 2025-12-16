@@ -44,10 +44,14 @@ import {
   getChatRooms,
   getOrCreateCommunityProfile,
   seedDefaultChatRooms,
+  searchPeople,
+  followUser,
+  unfollowUser,
   type CommunityPostSummary,
   type CommunityPostType,
   type ChatRoomSummary,
   type CommunityProfileData,
+  type CommunityPersonSearchResult,
 } from "@/lib/actions/community.action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -71,6 +75,11 @@ export default function CommunityHubPage() {
   const [sortBy, setSortBy] = useState<"recent" | "popular" | "trending">("recent");
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [peopleQuery, setPeopleQuery] = useState("");
+  const [peopleResults, setPeopleResults] = useState<CommunityPersonSearchResult[]>([]);
+  const [isPeopleLoading, setIsPeopleLoading] = useState(false);
+  const [pendingFollowIds, setPendingFollowIds] = useState<string[]>([]);
+
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
   const [newPostType, setNewPostType] = useState<CommunityPostType>("DISCUSSION");
   const [newPostTitle, setNewPostTitle] = useState("");
@@ -88,6 +97,65 @@ export default function CommunityHubPage() {
     }, 300);
     return () => clearTimeout(t);
   }, [postTypeFilter, sortBy, searchQuery]);
+
+  useEffect(() => {
+    if (activeTab !== "people") return;
+
+    const t = setTimeout(async () => {
+      const q = peopleQuery.trim();
+      if (!q) {
+        setPeopleResults([]);
+        return;
+      }
+
+      setIsPeopleLoading(true);
+      try {
+        const res = await searchPeople(q);
+        if (res.error) {
+          setError(res.error);
+          return;
+        }
+        setPeopleResults(res.data || []);
+      } catch (err) {
+        console.error("Error searching people:", err);
+        setError("Failed to search people");
+      } finally {
+        setIsPeopleLoading(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(t);
+  }, [activeTab, peopleQuery]);
+
+  async function toggleFollow(targetUserId: string, currentlyFollowing: boolean) {
+    if (pendingFollowIds.includes(targetUserId)) return;
+    setPendingFollowIds((prev) => [...prev, targetUserId]);
+
+    setPeopleResults((prev) =>
+      prev.map((p) => (p.id === targetUserId ? { ...p, isFollowing: !currentlyFollowing } : p))
+    );
+
+    try {
+      const res = currentlyFollowing
+        ? await unfollowUser(targetUserId)
+        : await followUser(targetUserId);
+
+      if (res.error) {
+        setPeopleResults((prev) =>
+          prev.map((p) => (p.id === targetUserId ? { ...p, isFollowing: currentlyFollowing } : p))
+        );
+        setError(res.error);
+      }
+    } catch (err) {
+      console.error("Error toggling follow:", err);
+      setPeopleResults((prev) =>
+        prev.map((p) => (p.id === targetUserId ? { ...p, isFollowing: currentlyFollowing } : p))
+      );
+      setError("Failed to update follow");
+    } finally {
+      setPendingFollowIds((prev) => prev.filter((id) => id !== targetUserId));
+    }
+  }
 
   async function loadInitialData() {
     setIsLoading(true);
@@ -346,6 +414,10 @@ export default function CommunityHubPage() {
                 <Users className="h-4 w-4" />
                 Chat Rooms
               </TabsTrigger>
+              <TabsTrigger value="people" className="gap-2">
+                <Users className="h-4 w-4" />
+                People
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="feed" className="space-y-4">
@@ -457,6 +529,65 @@ export default function CommunityHubPage() {
                   </div>
                 </div>
               ))}
+            </TabsContent>
+
+            <TabsContent value="people" className="space-y-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search people by name or headline..."
+                  className="pl-9"
+                  value={peopleQuery}
+                  onChange={(e) => setPeopleQuery(e.target.value)}
+                />
+              </div>
+
+              {isPeopleLoading ? (
+                <div className="flex items-center justify-center py-10">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                </div>
+              ) : peopleQuery.trim() && peopleResults.length === 0 ? (
+                <Card>
+                  <CardContent className="py-10 text-center">
+                    <p className="text-muted-foreground">No people found.</p>
+                  </CardContent>
+                </Card>
+              ) : peopleResults.length === 0 ? (
+                <Card>
+                  <CardContent className="py-10 text-center">
+                    <p className="text-muted-foreground">Search for people to connect with.</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="space-y-3">
+                  {peopleResults.map((person) => (
+                    <Card key={person.id}>
+                      <CardContent className="flex items-center gap-3 p-4">
+                        <Link href={`/dashboard/community/hub/profile/${person.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={person.avatarUrl || undefined} />
+                            <AvatarFallback>{person.name[0] || "U"}</AvatarFallback>
+                          </Avatar>
+                          <div className="min-w-0">
+                            <p className="truncate font-medium">{person.name}</p>
+                            {person.headline && (
+                              <p className="truncate text-sm text-muted-foreground">{person.headline}</p>
+                            )}
+                          </div>
+                        </Link>
+                        <Button
+                          variant={person.isFollowing ? "outline" : "default"}
+                          size="sm"
+                          disabled={pendingFollowIds.includes(person.id)}
+                          onClick={() => toggleFollow(person.id, person.isFollowing)}
+                        >
+                          {person.isFollowing ? "Following" : "Follow"}
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>

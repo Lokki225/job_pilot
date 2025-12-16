@@ -115,6 +115,45 @@ export interface ChatMessageData {
   replyTo: { id: string; content: string; authorName: string } | null;
 }
 
+export type InterviewRequestsFrom = "MUTUAL_FOLLOWS" | "FOLLOWERS" | "ANYONE" | "NOBODY";
+
+export interface CommunityProfileSettingsData {
+  userId: string;
+  discoverableInSearch: boolean;
+  allowInterviewRequestsFrom: InterviewRequestsFrom;
+  showPostsToCommunity: boolean;
+  showStoriesToCommunity: boolean;
+}
+
+export interface CommunityPersonSearchResult {
+  id: string;
+  name: string;
+  headline: string | null;
+  avatarUrl: string | null;
+  isFollowing: boolean;
+}
+
+export interface PublicCommunityProfileData {
+  userId: string;
+  name: string;
+  headline: string | null;
+  avatarUrl: string | null;
+  isMe: boolean;
+  isFollowing: boolean;
+  isFollowedBy: boolean;
+  isMutualFollowing: boolean;
+  followersCount: number;
+  followingCount: number;
+  communityProfile: CommunityProfileData;
+  settings: CommunityProfileSettingsData;
+  posts: CommunityPostSummary[];
+  stories: any[];
+}
+
+function buildInFilter(values: string[]): string {
+  return `(${values.map((v) => `"${v}"`).join(",")})`;
+}
+
 // ===========================================================
 // COMMUNITY PROFILE
 // ===========================================================
@@ -1534,6 +1573,275 @@ export async function getFollowing(userId: string): Promise<{
   } catch (err) {
     console.error("Error getting following:", err);
     return { data: null, error: "Failed to get following" };
+  }
+}
+
+export async function isFollowing(followerId: string, followingId: string): Promise<boolean> {
+  if (!followerId || !followingId) return false;
+  const { data } = await adminSupabase
+    .from("user_follows")
+    .select("id")
+    .eq("followerId", followerId)
+    .eq("followingId", followingId)
+    .maybeSingle();
+  return !!data;
+}
+
+export async function searchPeople(query: string): Promise<{
+  data: CommunityPersonSearchResult[] | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const q = (query || "").trim();
+    if (!q) return { data: [], error: null };
+
+    const { data: hiddenSettings } = await adminSupabase
+      .from("community_profile_settings")
+      .select("userId")
+      .eq("discoverableInSearch", false);
+    const hiddenIds = (hiddenSettings || []).map((s: any) => s.userId).filter(Boolean);
+
+    let profilesQuery = adminSupabase
+      .from("profiles")
+      .select("userId, firstName, lastName, headline, avatarUrl")
+      .neq("userId", user.id);
+
+    if (hiddenIds.length > 0) {
+      profilesQuery = profilesQuery.not("userId", "in", buildInFilter(hiddenIds));
+    }
+
+    profilesQuery = profilesQuery.or(
+      `firstName.ilike.%${q}%,lastName.ilike.%${q}%,headline.ilike.%${q}%`
+    );
+
+    profilesQuery = profilesQuery.limit(20);
+
+    const { data: profiles, error } = await profilesQuery;
+    if (error) return { data: null, error: error.message };
+    if (!profiles || profiles.length === 0) return { data: [], error: null };
+
+    const userIds = profiles.map((p: any) => p.userId);
+
+    const { data: communityProfiles } = await adminSupabase
+      .from("community_profiles")
+      .select("userId, isBanned")
+      .in("userId", userIds);
+    const bannedIds = new Set(
+      (communityProfiles || []).filter((cp: any) => cp.isBanned).map((cp: any) => cp.userId)
+    );
+
+    const visibleProfiles = profiles.filter((p: any) => !bannedIds.has(p.userId));
+    if (visibleProfiles.length === 0) return { data: [], error: null };
+
+    const visibleIds = visibleProfiles.map((p: any) => p.userId);
+    const { data: follows } = await adminSupabase
+      .from("user_follows")
+      .select("followingId")
+      .eq("followerId", user.id)
+      .in("followingId", visibleIds);
+    const followingSet = new Set((follows || []).map((f: any) => f.followingId));
+
+    const result: CommunityPersonSearchResult[] = visibleProfiles.map((p: any) => ({
+      id: p.userId,
+      name: `${p.firstName || ""} ${p.lastName || ""}`.trim() || "Anonymous",
+      headline: p.headline || null,
+      avatarUrl: p.avatarUrl || null,
+      isFollowing: followingSet.has(p.userId),
+    }));
+
+    return { data: result, error: null };
+  } catch (err) {
+    console.error("Error searching people:", err);
+    return { data: null, error: "Failed to search people" };
+  }
+}
+
+export async function getPublicCommunityProfile(userId: string): Promise<{
+  data: PublicCommunityProfileData | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const targetUserId = (userId || "").trim();
+    if (!targetUserId) return { data: null, error: "User not found" };
+
+    const isMe = user.id === targetUserId;
+
+    const { data: baseProfile } = await adminSupabase
+      .from("profiles")
+      .select("userId, firstName, lastName, avatarUrl, headline")
+      .eq("userId", targetUserId)
+      .maybeSingle();
+
+    if (!baseProfile) return { data: null, error: "Profile not found" };
+
+    let { data: communityProfile } = await adminSupabase
+      .from("community_profiles")
+      .select("*, badges:community_badges(*)")
+      .eq("userId", targetUserId)
+      .maybeSingle();
+
+    if (!communityProfile) {
+      const { data: created } = await adminSupabase
+        .from("community_profiles")
+        .insert({ userId: targetUserId })
+        .select("*, badges:community_badges(*)")
+        .single();
+      communityProfile = created;
+    }
+
+    if (communityProfile?.isBanned) return { data: null, error: "Profile not found" };
+
+    const { data: settingsRow } = await adminSupabase
+      .from("community_profile_settings")
+      .select("userId, discoverableInSearch, allowInterviewRequestsFrom, showPostsToCommunity, showStoriesToCommunity")
+      .eq("userId", targetUserId)
+      .maybeSingle();
+
+    const settings: CommunityProfileSettingsData = {
+      userId: targetUserId,
+      discoverableInSearch: settingsRow?.discoverableInSearch ?? true,
+      allowInterviewRequestsFrom: (settingsRow?.allowInterviewRequestsFrom ?? "MUTUAL_FOLLOWS") as InterviewRequestsFrom,
+      showPostsToCommunity: settingsRow?.showPostsToCommunity ?? true,
+      showStoriesToCommunity: settingsRow?.showStoriesToCommunity ?? true,
+    };
+
+    const [isFollowingTarget, isFollowedByTarget] = await Promise.all([
+      isFollowing(user.id, targetUserId),
+      isFollowing(targetUserId, user.id),
+    ]);
+
+    const { count: followersCount } = await adminSupabase
+      .from("user_follows")
+      .select("id", { count: "exact", head: true })
+      .eq("followingId", targetUserId);
+
+    const { count: followingCount } = await adminSupabase
+      .from("user_follows")
+      .select("id", { count: "exact", head: true })
+      .eq("followerId", targetUserId);
+
+    let posts: CommunityPostSummary[] = [];
+    if (settings.showPostsToCommunity) {
+      const { data: rawPosts } = await adminSupabase
+        .from("community_posts")
+        .select("id, userId, type, title, content, tags, likesCount, commentsCount, viewsCount, isPinned, isFeatured, createdAt")
+        .eq("userId", targetUserId)
+        .eq("moderationStatus", "APPROVED")
+        .order("createdAt", { ascending: false })
+        .limit(10);
+
+      const postIds = (rawPosts || []).map((p: any) => p.id);
+
+      let viewerLikes: Set<string> = new Set();
+      let viewerBookmarks: Set<string> = new Set();
+      if (postIds.length > 0) {
+        const [likesRes, bookmarksRes] = await Promise.all([
+          adminSupabase
+            .from("community_post_likes")
+            .select("postId")
+            .eq("userId", user.id)
+            .in("postId", postIds),
+          adminSupabase
+            .from("community_post_bookmarks")
+            .select("postId")
+            .eq("userId", user.id)
+            .in("postId", postIds),
+        ]);
+        viewerLikes = new Set((likesRes.data || []).map((l: any) => l.postId));
+        viewerBookmarks = new Set((bookmarksRes.data || []).map((b: any) => b.postId));
+      }
+
+      const authorName = `${baseProfile.firstName || ""} ${baseProfile.lastName || ""}`.trim() || "Anonymous";
+
+      posts = (rawPosts || []).map((p: any) => ({
+        id: p.id,
+        userId: p.userId,
+        type: p.type,
+        title: p.title,
+        content: p.content,
+        tags: Array.isArray(p.tags) ? p.tags : [],
+        likesCount: p.likesCount,
+        commentsCount: p.commentsCount,
+        viewsCount: p.viewsCount,
+        isPinned: p.isPinned,
+        isFeatured: p.isFeatured,
+        createdAt: p.createdAt,
+        authorName,
+        authorAvatar: baseProfile.avatarUrl || null,
+        hasLiked: viewerLikes.has(p.id),
+        hasBookmarked: viewerBookmarks.has(p.id),
+      }));
+    }
+
+    let stories: any[] = [];
+    if (settings.showStoriesToCommunity) {
+      const { data: rawStories } = await adminSupabase
+        .from("success_stories")
+        .select("id, userId, jobTitle, companyName, industry, location, title, story, tags, coverImageUrl, isAnonymous, displayName, isFeatured, viewCount, likeCount, createdAt")
+        .eq("isPublished", true)
+        .eq("userId", targetUserId)
+        .order("createdAt", { ascending: false })
+        .limit(6);
+      stories = rawStories || [];
+    }
+
+    const authorName = `${baseProfile.firstName || ""} ${baseProfile.lastName || ""}`.trim() || "Anonymous";
+
+    const communityProfileData: CommunityProfileData = {
+      id: communityProfile.id,
+      userId: communityProfile.userId,
+      reputationPoints: communityProfile.reputationPoints,
+      level: communityProfile.level,
+      postsCount: communityProfile.postsCount,
+      commentsCount: communityProfile.commentsCount,
+      helpfulVotes: communityProfile.helpfulVotes,
+      successStoriesShared: communityProfile.successStoriesShared,
+      isModerator: communityProfile.isModerator,
+      isExpert: communityProfile.isExpert,
+      isMentor: communityProfile.isMentor,
+      badges: (communityProfile.badges || []).map((b: any) => ({
+        badgeType: b.badgeType,
+        earnedAt: b.earnedAt,
+      })),
+      bio: communityProfile.bio,
+      favoriteTopics: Array.isArray(communityProfile.favoriteTopics) ? communityProfile.favoriteTopics : [],
+      user: {
+        firstName: baseProfile.firstName || null,
+        lastName: baseProfile.lastName || null,
+        avatarUrl: baseProfile.avatarUrl || null,
+      },
+    };
+
+    return {
+      data: {
+        userId: targetUserId,
+        name: authorName,
+        headline: baseProfile.headline || null,
+        avatarUrl: baseProfile.avatarUrl || null,
+        isMe,
+        isFollowing: isFollowingTarget,
+        isFollowedBy: isFollowedByTarget,
+        isMutualFollowing: isFollowingTarget && isFollowedByTarget,
+        followersCount: followersCount || 0,
+        followingCount: followingCount || 0,
+        communityProfile: communityProfileData,
+        settings,
+        posts,
+        stories,
+      },
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error getting public community profile:", err);
+    return { data: null, error: "Failed to load profile" };
   }
 }
 
