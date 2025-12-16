@@ -70,6 +70,15 @@ export async function GET(request: NextRequest) {
       return new NextResponse("Failed to load applications", { status: 500 })
     }
 
+    const { data: calendarEvents, error: calendarError } = await adminSupabase
+      .from("calendar_events")
+      .select("id,title,description,location,type,startAt,endAt")
+      .eq("userId", user.id)
+
+    if (calendarError) {
+      return new NextResponse("Failed to load calendar events", { status: 500 })
+    }
+
     const now = new Date()
     const origin = request.nextUrl.origin
 
@@ -111,6 +120,31 @@ export async function GET(request: NextRequest) {
           )
         }
       }
+    }
+
+    for (const ev of calendarEvents || []) {
+      if (!ev.startAt || !ev.endAt) continue
+      const start = new Date(ev.startAt)
+      const end = new Date(ev.endAt)
+      if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) continue
+
+      const url = `${origin}/dashboard/calendar`
+      const summaryPrefix = ev.type === "REMINDER" ? "Reminder" : ev.type === "INTERVIEW_SESSION" ? "Interview" : "Event"
+      const summary = ev.title ? `${summaryPrefix}: ${ev.title}` : summaryPrefix
+      const descriptionParts = [ev.description, ev.location].filter(Boolean)
+      const description = descriptionParts.length > 0 ? descriptionParts.join("\n") : summary
+
+      events.push(
+        ...toEventLines({
+          uid: `jobpilot-calendar-${ev.id}@jobpilot`,
+          dtstamp: now,
+          dtstart: start,
+          dtend: end,
+          summary,
+          description,
+          url,
+        })
+      )
     }
 
     const ics = [

@@ -92,6 +92,7 @@ export enum AppEvent {
   // ─────────────────────────────────────────────────────────────────────────
   // SYSTEM / ACCOUNT
   // ─────────────────────────────────────────────────────────────────────────
+  CALENDAR_REMINDER_DUE = "calendar_reminder_due",
   WELCOME = "welcome",
   PROFILE_INCOMPLETE = "profile_incomplete",
   PROFILE_COMPLETED = "profile_completed",
@@ -811,6 +812,16 @@ export const EVENT_META: Record<AppEvent, EventMeta> = {
     priority: "medium",
     defaultChannels: ["in_app", "email"],
     description: "Your subscription was renewed successfully",
+  },
+  [AppEvent.CALENDAR_REMINDER_DUE]: {
+    icon: "📅",
+    defaultTitle: "Calendar Reminder",
+    category: "system",
+    priority: "high",
+    defaultChannels: ["in_app"],
+    description: "A calendar reminder is due",
+    actionLabel: "Open Calendar",
+    actionUrl: "/dashboard/calendar",
   },
 };
 

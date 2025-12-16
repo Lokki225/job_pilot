@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { LanguageSelector } from "@/components/ui/language-selector"
@@ -22,6 +22,7 @@ const navigationItems = [
   { key: "nav.coverLetters", href: "/dashboard/letters", icon: FileText },
   { key: "nav.studyRoom", href: "/dashboard/study", icon: BookOpen },
   { key: "nav.trainingRoom", href: "/dashboard/training", icon: Mic },
+  { key: "nav.calendar", href: "/dashboard/calendar", icon: Calendar },
   { key: "nav.community", href: "/dashboard/community/hub", icon: Trophy },
   { key: "nav.notifications", href: "/dashboard/notifications", icon: Bell },
   { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles },
