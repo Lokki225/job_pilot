@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { User, Bell, Shield, CreditCard, Briefcase, MapPin, DollarSign, FileText, Sparkles, Check, Upload, Trash2, Eye, LogOut, Save, Loader2 } from 'lucide-react';
@@ -14,6 +14,7 @@ import { createResume, deleteResume, listResumes } from '@/lib/actions/resume.ac
 import { NotificationSettings } from '@/components/notifications';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageSelector } from '@/components/ui/language-selector';
+import { BrowserPermissionsPanel } from '@/components/settings/BrowserPermissionsPanel';
 
 export default function JobSettingsPage() {
   const router = useRouter();
@@ -1293,6 +1294,8 @@ export default function JobSettingsPage() {
                       <LanguageSelector variant="compact" />
                     </div>
                   </div>
+
+                  <BrowserPermissionsPanel />
 
                   {/* Session */}
                   <div className="pt-6 border-t border-slate-200 dark:border-slate-700">

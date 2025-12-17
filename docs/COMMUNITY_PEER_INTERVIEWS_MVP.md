@@ -161,7 +161,12 @@ Chat fallback reuses existing chat tables:
 - Implement kits editor (block-based) + snapshotting.
 - Marketplace browse/search + publish flow (mentor-only).
 - Rating gated by completed sessions using the kit.
-- Persona KYC Level 1 integration + webhook + admin approval panel.
+- KYC Level 1 integration + webhook + admin approval panel.
+
+### Phase 5 — Trainning Room
+- we'll create 3 to 5 AI Personas (Human type profile, eg: Paul Lead Tech at "an fictive Company", etc...) to be used in trainning room as interviewers. they'll config the questions for each trainning session.
+- So the users could choose their Persona when creating a trainning room or Company prep pack.
+- each personna need to be as unique as possible
 
 ## Open items to decide later
 - Final eligibility thresholds for applying to mentor.

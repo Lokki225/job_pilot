@@ -23,6 +23,7 @@ import {
   unfollowUser,
   type PublicCommunityProfileData,
 } from "@/lib/actions/community.action";
+import { RequestInterviewDialog } from "@/components/interviews/RequestInterviewDialog";
 
 export default function PublicCommunityProfilePage() {
   const [data, setData] = useState<PublicCommunityProfileData | null>(null);
@@ -198,20 +199,23 @@ export default function PublicCommunityProfilePage() {
                 </div>
 
                 {!data.isMe && (
-                  <Button
-                    onClick={handleToggleFollow}
-                    disabled={isTogglingFollow}
-                    variant={data.isFollowing ? "outline" : "default"}
-                  >
-                    {isTogglingFollow ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : data.isFollowing ? (
-                      <UserCheck className="mr-2 h-4 w-4" />
-                    ) : (
-                      <UserPlus className="mr-2 h-4 w-4" />
-                    )}
-                    {data.isFollowing ? "Following" : "Follow"}
-                  </Button>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <RequestInterviewDialog targetUserId={userId} />
+                    <Button
+                      onClick={handleToggleFollow}
+                      disabled={isTogglingFollow}
+                      variant={data.isFollowing ? "outline" : "default"}
+                    >
+                      {isTogglingFollow ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : data.isFollowing ? (
+                        <UserCheck className="mr-2 h-4 w-4" />
+                      ) : (
+                        <UserPlus className="mr-2 h-4 w-4" />
+                      )}
+                      {data.isFollowing ? "Following" : "Follow"}
+                    </Button>
+                  </div>
                 )}
               </div>
 
