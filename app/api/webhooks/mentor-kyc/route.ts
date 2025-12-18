@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createHmac, timingSafeEqual } from "crypto";
 import { z } from "zod";
 import { adminSupabase } from "@/lib/supabase/server";
 
@@ -17,13 +18,32 @@ const WebhookBodySchema = z
 export async function POST(request: Request) {
   try {
     const authHeader = request.headers.get("authorization");
+    const signatureHeader = request.headers.get("x-mentor-kyc-signature");
     const secret = process.env.MENTOR_KYC_WEBHOOK_SECRET;
 
-    if (secret && authHeader !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const rawBody = await request.text().catch(() => "");
+
+    if (secret) {
+      const bearerOk = authHeader === `Bearer ${secret}`;
+
+      let signatureOk = false;
+      if (signatureHeader) {
+        const expected = createHmac("sha256", secret).update(rawBody).digest("hex");
+        try {
+          const a = Buffer.from(signatureHeader);
+          const b = Buffer.from(expected);
+          signatureOk = a.length === b.length && timingSafeEqual(a, b);
+        } catch {
+          signatureOk = false;
+        }
+      }
+
+      if (!bearerOk && !signatureOk) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
-    const body = await request.json().catch(() => null);
+    const body = rawBody ? JSON.parse(rawBody) : null;
     const parsed = WebhookBodySchema.safeParse(body);
 
     if (!parsed.success) {
@@ -48,7 +68,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unable to resolve user" }, { status: 404 });
     }
 
-    const nextStatus = parsed.data.status || (parsed.data.providerStatus ? "SUBMITTED" : "STARTED");
+    const requestedStatus = parsed.data.status;
+    const nextStatus =
+      requestedStatus === "STARTED" || requestedStatus === "SUBMITTED"
+        ? requestedStatus
+        : parsed.data.providerStatus
+          ? "SUBMITTED"
+          : "STARTED";
 
     const update: any = {
       userId,

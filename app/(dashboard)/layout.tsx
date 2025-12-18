@@ -149,7 +149,7 @@ export default function DashboardLayout({
                 >
                   <item.icon
                     className={cn(
-                      "h-5 w-5 flex-shrink-0",
+                      "h-5 w-5 shrink-0",
                       isActive
                         ? "text-blue-600 dark:text-blue-400"
                         : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400"
@@ -204,7 +204,7 @@ export default function DashboardLayout({
         )}
       >
         {/* Top navigation */}
-        <header className="flex h-16 flex-shrink-0 items-center border-b bg-white px-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:px-6">
+        <header className="flex h-16 shrink-0 items-center border-b bg-white px-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:px-6">
           <button
             type="button"
             className="mr-4 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-slate-700 lg:hidden"

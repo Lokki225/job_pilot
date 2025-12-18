@@ -234,6 +234,8 @@ export async function approveMentorKyc(userId: string): Promise<{ data: { ok: tr
 
     await adminSupabase.from("community_profiles").update({ isMentor: true }).eq("userId", parsed.data);
 
+    await adminSupabase.from("mentor_profiles").update({ isActive: true }).eq("userId", parsed.data);
+
     const { data: cp } = await adminSupabase
       .from("community_profiles")
       .select("id")
@@ -287,6 +289,24 @@ export async function rejectMentorKyc(input: {
       );
 
     if (error) return { data: null, error: error.message };
+
+    await adminSupabase.from("mentor_profiles").update({ isActive: false }).eq("userId", parsed.data.userId);
+    await adminSupabase.from("community_profiles").update({ isMentor: false }).eq("userId", parsed.data.userId);
+
+    const { data: cp } = await adminSupabase
+      .from("community_profiles")
+      .select("id")
+      .eq("userId", parsed.data.userId)
+      .maybeSingle();
+
+    if (cp?.id) {
+      await adminSupabase
+        .from("community_badges")
+        .delete()
+        .eq("communityProfileId", cp.id)
+        .eq("badgeType", "MENTOR");
+    }
+
     return { data: { ok: true }, error: null };
   } catch (err) {
     console.error("Error rejecting mentor KYC:", err);
