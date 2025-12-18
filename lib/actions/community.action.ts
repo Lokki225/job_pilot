@@ -2459,6 +2459,14 @@ export async function becomeMentor(input: {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { data: null, error: "Unauthorized" };
 
+    const { data: kyc } = await adminSupabase
+      .from("mentor_kyc_verifications")
+      .select("status")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    const isKycApproved = kyc?.status === "APPROVED";
+
     const { data: existing } = await adminSupabase
       .from("mentor_profiles")
       .select("id")
@@ -2473,31 +2481,11 @@ export async function becomeMentor(input: {
           expertise: input.expertise,
           availability: input.availability ? { schedule: input.availability } : null,
           maxMentees: input.maxMentees || 3,
-          isActive: true,
+          isActive: isKycApproved,
         })
         .eq("id", existing.id);
 
       if (error) return { data: null, error: error.message };
-
-      await adminSupabase
-        .from("community_profiles")
-        .update({ isMentor: true })
-        .eq("userId", user.id);
-
-      const { data: communityProfile } = await adminSupabase
-        .from("community_profiles")
-        .select("id")
-        .eq("userId", user.id)
-        .maybeSingle();
-
-      if (communityProfile) {
-        await adminSupabase
-          .from("community_badges")
-          .upsert(
-            { communityProfileId: communityProfile.id, badgeType: "MENTOR" },
-            { onConflict: "communityProfileId,badgeType" }
-          );
-      }
 
       return { data: { id: existing.id }, error: null };
     }
@@ -2510,31 +2498,12 @@ export async function becomeMentor(input: {
         expertise: input.expertise,
         availability: input.availability ? { schedule: input.availability } : null,
         maxMentees: input.maxMentees || 3,
+        isActive: isKycApproved,
       })
       .select("id")
       .single();
 
     if (error) return { data: null, error: error.message };
-
-    await adminSupabase
-      .from("community_profiles")
-      .update({ isMentor: true })
-      .eq("userId", user.id);
-
-    const { data: communityProfile } = await adminSupabase
-      .from("community_profiles")
-      .select("id")
-      .eq("userId", user.id)
-      .maybeSingle();
-
-    if (communityProfile) {
-      await adminSupabase
-        .from("community_badges")
-        .upsert(
-          { communityProfileId: communityProfile.id, badgeType: "MENTOR" },
-          { onConflict: "communityProfileId,badgeType" }
-        );
-    }
 
     return { data: { id: mentor.id }, error: null };
   } catch (err) {

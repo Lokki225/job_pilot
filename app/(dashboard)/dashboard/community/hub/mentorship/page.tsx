@@ -33,10 +33,17 @@ import {
   type MentorData,
   type MentorshipData,
 } from "@/lib/actions/community.action";
+import {
+  getMyMentorKycVerification,
+  submitMentorKycInquiryId,
+  type MentorKycVerificationData,
+} from "@/lib/actions/mentor-kyc.action";
 
 export default function MentorshipPage() {
   const [mentors, setMentors] = useState<MentorData[]>([]);
   const [myMentorProfile, setMyMentorProfile] = useState<MentorData | null>(null);
+  const [myKyc, setMyKyc] = useState<MentorKycVerificationData | null>(null);
+  const [kycInquiryId, setKycInquiryId] = useState("");
   const [mentorships, setMentorships] = useState<{ asMentor: MentorshipData[]; asMentee: MentorshipData[] }>({
     asMentor: [],
     asMentee: [],
@@ -50,6 +57,7 @@ export default function MentorshipPage() {
   const [mentorAvailability, setMentorAvailability] = useState("");
   const [mentorMaxMentees, setMentorMaxMentees] = useState("3");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingKyc, setIsSubmittingKyc] = useState(false);
 
   const [requestMentorId, setRequestMentorId] = useState<string | null>(null);
   const [requestMessage, setRequestMessage] = useState("");
@@ -61,10 +69,11 @@ export default function MentorshipPage() {
   async function loadData() {
     setIsLoading(true);
     try {
-      const [mentorsRes, profileRes, mentorshipsRes] = await Promise.all([
+      const [mentorsRes, profileRes, mentorshipsRes, kycRes] = await Promise.all([
         getMentors(),
         getMyMentorProfile(),
         getMyMentorships(),
+        getMyMentorKycVerification(),
       ]);
 
       if (mentorsRes.data) setMentors(mentorsRes.data);
@@ -76,6 +85,14 @@ export default function MentorshipPage() {
         setMentorMaxMentees(String(profileRes.data.maxMentees));
       }
       if (mentorshipsRes.data) setMentorships(mentorshipsRes.data);
+
+      if (kycRes.data) {
+        setMyKyc(kycRes.data);
+        setKycInquiryId(kycRes.data.providerInquiryId || "");
+      } else {
+        setMyKyc(null);
+        setKycInquiryId("");
+      }
     } catch (err) {
       console.error("Error loading mentorship data:", err);
       setError("Failed to load data");
@@ -146,6 +163,26 @@ export default function MentorshipPage() {
       }
     } catch (err) {
       console.error("Error responding to request:", err);
+    }
+  }
+
+  async function handleSubmitKycInquiryId() {
+    const id = kycInquiryId.trim();
+    if (!id) return;
+
+    setIsSubmittingKyc(true);
+    try {
+      const res = await submitMentorKycInquiryId(id);
+      if (res.error) {
+        setError(res.error);
+      } else {
+        loadData();
+      }
+    } catch (err) {
+      console.error("Error submitting mentor KYC inquiry id:", err);
+      setError("Failed to submit inquiry ID");
+    } finally {
+      setIsSubmittingKyc(false);
     }
   }
 
@@ -256,6 +293,70 @@ export default function MentorshipPage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-primary" />
+            Mentor verification (KYC)
+          </CardTitle>
+          <CardDescription>
+            Submit your KYC inquiry ID. An admin will review and approve your mentor status.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-muted-foreground">Status:</span>
+            <Badge
+              variant={
+                myKyc?.status === "APPROVED"
+                  ? "default"
+                  : myKyc?.status === "REJECTED"
+                    ? "destructive"
+                    : myKyc?.status === "SUBMITTED"
+                      ? "secondary"
+                      : "outline"
+              }
+            >
+              {myKyc?.status || "NOT_STARTED"}
+            </Badge>
+          </div>
+
+          {myMentorProfile && !myMentorProfile.isActive && myKyc?.status !== "APPROVED" ? (
+            <div className="text-sm text-muted-foreground">
+              Your mentor profile is saved, but it will not be visible until KYC is approved.
+            </div>
+          ) : null}
+
+          {myKyc?.status === "REJECTED" ? (
+            <div className="text-sm text-muted-foreground">
+              Your verification was rejected. You can submit a new inquiry ID after restarting verification.
+            </div>
+          ) : null}
+
+          <div className="flex flex-col gap-2 md:flex-row md:items-center">
+            <Input
+              placeholder="Provider inquiry ID"
+              value={kycInquiryId}
+              onChange={(e) => setKycInquiryId(e.target.value)}
+            />
+            <Button
+              onClick={handleSubmitKycInquiryId}
+              disabled={isSubmittingKyc || !kycInquiryId.trim()}
+              className="md:w-[220px]"
+            >
+              {isSubmittingKyc ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                "Submit inquiry ID"
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">

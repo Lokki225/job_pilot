@@ -26,6 +26,7 @@ const navigationItems = [
   { key: "nav.community", href: "/dashboard/community/hub", icon: Trophy },
   { key: "nav.notifications", href: "/dashboard/notifications", icon: Bell },
   { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles },
+  { key: "nav.mentorKyc", href: "/dashboard/admin/mentor-kyc", icon: Sparkles },
   { key: "nav.settings", href: "/dashboard/settings", icon: Settings },
 ]
 

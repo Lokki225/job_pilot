@@ -182,10 +182,17 @@ model User {
   following                 UserFollow[] @relation("Followers")
   mentorProfile             MentorProfile?
   mentorships               Mentorship[]
+  mentorKycVerification      MentorKycVerification?
+  mentorKycApprovals         MentorKycVerification[] @relation("MentorKycApprover")
+  mentorKycRejections        MentorKycVerification[] @relation("MentorKycRejecter")
   coverLetterTemplates      CoverLetterTemplate[]
   customStudyPlans          CustomStudyPlan[]
   customStudyPlanLikes      CustomStudyPlanLike[]
   customStudyPlanComments   CustomStudyPlanComment[]
+  interviewKits             InterviewKit[]
+  interviewKitSnapshots     InterviewKitSnapshot[]
+  interviewKitRecommendations InterviewKitRecommendation[]
+  interviewKitRatings       InterviewKitRating[]
 
   // Notification System Relations
   notificationPreference    NotificationPreference?
@@ -1329,6 +1336,90 @@ model InterviewPrepPack {
   @@map("interview_prep_packs")
 }
 
+model InterviewKit {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId       String   @db.Uuid
+
+  title         String   @db.VarChar(255)
+  description   String?  @db.Text
+  visibility    String   @default("PRIVATE") @db.VarChar(20)
+  blocksJson    Json     @default(dbgenerated("'[]'::jsonb"))
+  prepBlocksJson Json    @default(dbgenerated("'[]'::jsonb"))
+  isArchived    Boolean  @default(false)
+  recommendCount Int     @default(0)
+
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  snapshots     InterviewKitSnapshot[]
+  recommendations InterviewKitRecommendation[]
+  ratings       InterviewKitRating[]
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([ownerId])
+  @@index([visibility])
+  @@map("interview_kits")
+}
+
+model InterviewKitSnapshot {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kitId         String   @db.Uuid
+  createdById   String   @db.Uuid
+
+  label         String?  @db.VarChar(120)
+  note          String?  @db.Text
+  blocksJson    Json     @default(dbgenerated("'[]'::jsonb"))
+  prepBlocksJson Json    @default(dbgenerated("'[]'::jsonb"))
+
+  kit           InterviewKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  createdBy     User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([kitId])
+  @@index([createdById])
+  @@index([createdAt])
+  @@map("interview_kit_snapshots")
+}
+
+model InterviewKitRecommendation {
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kitId     String       @db.Uuid
+  userId    String       @db.Uuid
+
+  kit       InterviewKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime     @default(now()) @db.Timestamptz(6)
+
+  @@unique([kitId, userId])
+  @@index([kitId])
+  @@index([userId])
+  @@map("interview_kit_recommendations")
+}
+
+model InterviewKitRating {
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  kitId     String       @db.Uuid
+  sessionId String       @db.Uuid
+  raterId   String       @db.Uuid
+
+  rating    Int
+  review    String?      @db.Text
+
+  kit       InterviewKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
+  rater     User         @relation(fields: [raterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime     @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([kitId, sessionId, raterId])
+  @@index([kitId])
+  @@index([sessionId])
+  @@index([raterId])
+  @@map("interview_kit_ratings")
+}
+
 // ===========================================================
 // GAMIFICATION - XP TRANSACTIONS
 // ===========================================================
@@ -1762,6 +1853,34 @@ model Mentorship {
   @@index([menteeId])
   @@index([status])
   @@map("mentorships")
+}
+
+model MentorKycVerification {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @unique @db.Uuid
+
+  status            String   @default("NOT_STARTED") @db.VarChar(20)
+  provider          String   @default("PERSONA") @db.VarChar(30)
+  providerInquiryId String?  @db.Text
+  providerStatus    String?  @db.Text
+  payload           Json?
+
+  submittedAt       DateTime? @db.Timestamptz(6)
+  approvedAt        DateTime? @db.Timestamptz(6)
+  approvedBy        String?   @db.Uuid
+  rejectedAt        DateTime? @db.Timestamptz(6)
+  rejectedBy        String?   @db.Uuid
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approver          User?     @relation("MentorKycApprover", fields: [approvedBy], references: [id], onDelete: SetNull)
+  rejecter          User?     @relation("MentorKycRejecter", fields: [rejectedBy], references: [id], onDelete: SetNull)
+
+  createdAt         DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([status])
+  @@index([userId])
+  @@map("mentor_kyc_verifications")
 }
 
 // ===========================================================

@@ -62,6 +62,7 @@ export const ModelName = {
   JobApplication: 'JobApplication',
   JobSearchPreference: 'JobSearchPreference',
   CachedJobRecommendation: 'CachedJobRecommendation',
+  SavedJobSearch: 'SavedJobSearch',
   AIGeneratedContent: 'AIGeneratedContent',
   CoverLetter: 'CoverLetter',
   EmailApplication: 'EmailApplication',
@@ -90,6 +91,8 @@ export const ModelName = {
   UserAchievement: 'UserAchievement',
   UserXP: 'UserXP',
   InterviewPrepPack: 'InterviewPrepPack',
+  InterviewKit: 'InterviewKit',
+  InterviewKitSnapshot: 'InterviewKitSnapshot',
   XPTransaction: 'XPTransaction',
   CommunityProfile: 'CommunityProfile',
   CommunityBadge: 'CommunityBadge',
@@ -343,6 +346,23 @@ export const CachedJobRecommendationScalarFieldEnum = {
 } as const
 
 export type CachedJobRecommendationScalarFieldEnum = (typeof CachedJobRecommendationScalarFieldEnum)[keyof typeof CachedJobRecommendationScalarFieldEnum]
+
+
+export const SavedJobSearchScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  filters: 'filters',
+  isEnabled: 'isEnabled',
+  frequency: 'frequency',
+  notifyOnMatch: 'notifyOnMatch',
+  lastRunAt: 'lastRunAt',
+  lastSeenJobKeys: 'lastSeenJobKeys',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SavedJobSearchScalarFieldEnum = (typeof SavedJobSearchScalarFieldEnum)[keyof typeof SavedJobSearchScalarFieldEnum]
 
 
 export const AIGeneratedContentScalarFieldEnum = {
@@ -858,6 +878,36 @@ export const InterviewPrepPackScalarFieldEnum = {
 } as const
 
 export type InterviewPrepPackScalarFieldEnum = (typeof InterviewPrepPackScalarFieldEnum)[keyof typeof InterviewPrepPackScalarFieldEnum]
+
+
+export const InterviewKitScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  title: 'title',
+  description: 'description',
+  visibility: 'visibility',
+  blocksJson: 'blocksJson',
+  prepBlocksJson: 'prepBlocksJson',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewKitScalarFieldEnum = (typeof InterviewKitScalarFieldEnum)[keyof typeof InterviewKitScalarFieldEnum]
+
+
+export const InterviewKitSnapshotScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  createdById: 'createdById',
+  label: 'label',
+  note: 'note',
+  blocksJson: 'blocksJson',
+  prepBlocksJson: 'prepBlocksJson',
+  createdAt: 'createdAt'
+} as const
+
+export type InterviewKitSnapshotScalarFieldEnum = (typeof InterviewKitSnapshotScalarFieldEnum)[keyof typeof InterviewKitSnapshotScalarFieldEnum]
 
 
 export const XPTransactionScalarFieldEnum = {

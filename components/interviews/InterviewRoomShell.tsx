@@ -12,6 +12,7 @@ import { useInterviewAudioCall } from "@/hooks/useInterviewAudioCall";
 import { AudioPreflight } from "@/components/interviews/AudioPreflight";
 import { InterviewChatFallback } from "@/components/interviews/InterviewChatFallback";
 import { InterviewNotesPanel } from "@/components/interviews/InterviewNotesPanel";
+import { InterviewKitRatingPanel } from "@/components/interviews/InterviewKitRatingPanel";
 
 function formatWhen(iso: string) {
   const d = new Date(iso);
@@ -288,6 +289,13 @@ export function InterviewRoomShell(props: { sessionId: string }) {
               <div className="break-all text-sm">{session.id}</div>
             </CardContent>
           </Card>
+
+          <InterviewKitRatingPanel
+            session={session}
+            onSessionUpdated={(next) => {
+              setSession(next);
+            }}
+          />
 
           <Card>
             <CardHeader>

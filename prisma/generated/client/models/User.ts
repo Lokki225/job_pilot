@@ -278,10 +278,13 @@ export type UserWhereInput = {
   customStudyPlans?: Prisma.CustomStudyPlanListRelationFilter
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeListRelationFilter
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentListRelationFilter
+  interviewKits?: Prisma.InterviewKitListRelationFilter
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotListRelationFilter
   notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
   notificationQueue?: Prisma.NotificationQueueListRelationFilter
   emailQueue?: Prisma.EmailQueueListRelationFilter
   eventLogs?: Prisma.EventLogListRelationFilter
+  savedJobSearches?: Prisma.SavedJobSearchListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -338,10 +341,13 @@ export type UserOrderByWithRelationInput = {
   customStudyPlans?: Prisma.CustomStudyPlanOrderByRelationAggregateInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeOrderByRelationAggregateInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentOrderByRelationAggregateInput
+  interviewKits?: Prisma.InterviewKitOrderByRelationAggregateInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotOrderByRelationAggregateInput
   notificationPreference?: Prisma.NotificationPreferenceOrderByWithRelationInput
   notificationQueue?: Prisma.NotificationQueueOrderByRelationAggregateInput
   emailQueue?: Prisma.EmailQueueOrderByRelationAggregateInput
   eventLogs?: Prisma.EventLogOrderByRelationAggregateInput
+  savedJobSearches?: Prisma.SavedJobSearchOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -401,10 +407,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   customStudyPlans?: Prisma.CustomStudyPlanListRelationFilter
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeListRelationFilter
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentListRelationFilter
+  interviewKits?: Prisma.InterviewKitListRelationFilter
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotListRelationFilter
   notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
   notificationQueue?: Prisma.NotificationQueueListRelationFilter
   emailQueue?: Prisma.EmailQueueListRelationFilter
   eventLogs?: Prisma.EventLogListRelationFilter
+  savedJobSearches?: Prisma.SavedJobSearchListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -489,10 +498,13 @@ export type UserCreateInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -549,10 +561,13 @@ export type UserUncheckedCreateInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -609,10 +624,13 @@ export type UserUpdateInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -669,10 +687,13 @@ export type UserUncheckedUpdateInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -831,6 +852,20 @@ export type UserUpdateOneRequiredWithoutPreferencesNestedInput = {
   upsert?: Prisma.UserUpsertWithoutPreferencesInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPreferencesInput, Prisma.UserUpdateWithoutPreferencesInput>, Prisma.UserUncheckedUpdateWithoutPreferencesInput>
+}
+
+export type UserCreateNestedOneWithoutSavedJobSearchesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedJobSearchesInput, Prisma.UserUncheckedCreateWithoutSavedJobSearchesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedJobSearchesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedJobSearchesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedJobSearchesInput, Prisma.UserUncheckedCreateWithoutSavedJobSearchesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedJobSearchesInput
+  upsert?: Prisma.UserUpsertWithoutSavedJobSearchesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedJobSearchesInput, Prisma.UserUpdateWithoutSavedJobSearchesInput>, Prisma.UserUncheckedUpdateWithoutSavedJobSearchesInput>
 }
 
 export type UserCreateNestedOneWithoutAiContentsInput = {
@@ -1153,6 +1188,34 @@ export type UserUpdateOneRequiredWithoutInterviewPrepPacksNestedInput = {
   upsert?: Prisma.UserUpsertWithoutInterviewPrepPacksInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewPrepPacksInput, Prisma.UserUpdateWithoutInterviewPrepPacksInput>, Prisma.UserUncheckedUpdateWithoutInterviewPrepPacksInput>
+}
+
+export type UserCreateNestedOneWithoutInterviewKitsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitsInput, Prisma.UserUncheckedCreateWithoutInterviewKitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInterviewKitsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitsInput, Prisma.UserUncheckedCreateWithoutInterviewKitsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitsInput
+  upsert?: Prisma.UserUpsertWithoutInterviewKitsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewKitsInput, Prisma.UserUpdateWithoutInterviewKitsInput>, Prisma.UserUncheckedUpdateWithoutInterviewKitsInput>
+}
+
+export type UserCreateNestedOneWithoutInterviewKitSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedCreateWithoutInterviewKitSnapshotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitSnapshotsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInterviewKitSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedCreateWithoutInterviewKitSnapshotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitSnapshotsInput
+  upsert?: Prisma.UserUpsertWithoutInterviewKitSnapshotsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewKitSnapshotsInput, Prisma.UserUpdateWithoutInterviewKitSnapshotsInput>, Prisma.UserUncheckedUpdateWithoutInterviewKitSnapshotsInput>
 }
 
 export type UserCreateNestedOneWithoutXpTransactionsInput = {
@@ -1534,10 +1597,13 @@ export type UserCreateWithoutProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfileInput = {
@@ -1593,10 +1659,13 @@ export type UserUncheckedCreateWithoutProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfileInput = {
@@ -1668,10 +1737,13 @@ export type UserUpdateWithoutProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfileInput = {
@@ -1727,10 +1799,13 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutResumesInput = {
@@ -1786,10 +1861,13 @@ export type UserCreateWithoutResumesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutResumesInput = {
@@ -1845,10 +1923,13 @@ export type UserUncheckedCreateWithoutResumesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutResumesInput = {
@@ -1920,10 +2001,13 @@ export type UserUpdateWithoutResumesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutResumesInput = {
@@ -1979,10 +2063,13 @@ export type UserUncheckedUpdateWithoutResumesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutJobApplicationsInput = {
@@ -2038,10 +2125,13 @@ export type UserCreateWithoutJobApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutJobApplicationsInput = {
@@ -2097,10 +2187,13 @@ export type UserUncheckedCreateWithoutJobApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutJobApplicationsInput = {
@@ -2172,10 +2265,13 @@ export type UserUpdateWithoutJobApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutJobApplicationsInput = {
@@ -2231,10 +2327,13 @@ export type UserUncheckedUpdateWithoutJobApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPreferencesInput = {
@@ -2290,10 +2389,13 @@ export type UserCreateWithoutPreferencesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreferencesInput = {
@@ -2349,10 +2451,13 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreferencesInput = {
@@ -2424,10 +2529,13 @@ export type UserUpdateWithoutPreferencesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferencesInput = {
@@ -2483,6 +2591,273 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSavedJobSearchesInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedJobSearchesInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedJobSearchesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedJobSearchesInput, Prisma.UserUncheckedCreateWithoutSavedJobSearchesInput>
+}
+
+export type UserUpsertWithoutSavedJobSearchesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedJobSearchesInput, Prisma.UserUncheckedUpdateWithoutSavedJobSearchesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedJobSearchesInput, Prisma.UserUncheckedCreateWithoutSavedJobSearchesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedJobSearchesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedJobSearchesInput, Prisma.UserUncheckedUpdateWithoutSavedJobSearchesInput>
+}
+
+export type UserUpdateWithoutSavedJobSearchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedJobSearchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -2542,10 +2917,13 @@ export type UserCreateWithoutAiContentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiContentsInput = {
@@ -2601,10 +2979,13 @@ export type UserUncheckedCreateWithoutAiContentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiContentsInput = {
@@ -2676,10 +3057,13 @@ export type UserUpdateWithoutAiContentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiContentsInput = {
@@ -2735,10 +3119,13 @@ export type UserUncheckedUpdateWithoutAiContentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCoverLettersInput = {
@@ -2794,10 +3181,13 @@ export type UserCreateWithoutCoverLettersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCoverLettersInput = {
@@ -2853,10 +3243,13 @@ export type UserUncheckedCreateWithoutCoverLettersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCoverLettersInput = {
@@ -2928,10 +3321,13 @@ export type UserUpdateWithoutCoverLettersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoverLettersInput = {
@@ -2987,10 +3383,13 @@ export type UserUncheckedUpdateWithoutCoverLettersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEmailApplicationsInput = {
@@ -3046,10 +3445,13 @@ export type UserCreateWithoutEmailApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEmailApplicationsInput = {
@@ -3105,10 +3507,13 @@ export type UserUncheckedCreateWithoutEmailApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEmailApplicationsInput = {
@@ -3180,10 +3585,13 @@ export type UserUpdateWithoutEmailApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmailApplicationsInput = {
@@ -3239,10 +3647,13 @@ export type UserUncheckedUpdateWithoutEmailApplicationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -3298,10 +3709,13 @@ export type UserCreateWithoutNotificationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -3357,10 +3771,13 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -3432,10 +3849,13 @@ export type UserUpdateWithoutNotificationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -3491,10 +3911,13 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStudyProgressInput = {
@@ -3550,10 +3973,13 @@ export type UserCreateWithoutStudyProgressInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStudyProgressInput = {
@@ -3609,10 +4035,13 @@ export type UserUncheckedCreateWithoutStudyProgressInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStudyProgressInput = {
@@ -3684,10 +4113,13 @@ export type UserUpdateWithoutStudyProgressInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStudyProgressInput = {
@@ -3743,10 +4175,13 @@ export type UserUncheckedUpdateWithoutStudyProgressInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTrainingSessionsInput = {
@@ -3802,10 +4237,13 @@ export type UserCreateWithoutTrainingSessionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTrainingSessionsInput = {
@@ -3861,10 +4299,13 @@ export type UserUncheckedCreateWithoutTrainingSessionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTrainingSessionsInput = {
@@ -3936,10 +4377,13 @@ export type UserUpdateWithoutTrainingSessionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTrainingSessionsInput = {
@@ -3995,10 +4439,13 @@ export type UserUncheckedUpdateWithoutTrainingSessionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutInterviewStatsInput = {
@@ -4054,10 +4501,13 @@ export type UserCreateWithoutInterviewStatsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInterviewStatsInput = {
@@ -4113,10 +4563,13 @@ export type UserUncheckedCreateWithoutInterviewStatsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInterviewStatsInput = {
@@ -4188,10 +4641,13 @@ export type UserUpdateWithoutInterviewStatsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInterviewStatsInput = {
@@ -4247,10 +4703,13 @@ export type UserUncheckedUpdateWithoutInterviewStatsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCompanyResearchInput = {
@@ -4306,10 +4765,13 @@ export type UserCreateWithoutCompanyResearchInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompanyResearchInput = {
@@ -4365,10 +4827,13 @@ export type UserUncheckedCreateWithoutCompanyResearchInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompanyResearchInput = {
@@ -4440,10 +4905,13 @@ export type UserUpdateWithoutCompanyResearchInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompanyResearchInput = {
@@ -4499,10 +4967,13 @@ export type UserUncheckedUpdateWithoutCompanyResearchInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPeerPracticeProfileInput = {
@@ -4558,10 +5029,13 @@ export type UserCreateWithoutPeerPracticeProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPeerPracticeProfileInput = {
@@ -4617,10 +5091,13 @@ export type UserUncheckedCreateWithoutPeerPracticeProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPeerPracticeProfileInput = {
@@ -4692,10 +5169,13 @@ export type UserUpdateWithoutPeerPracticeProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPeerPracticeProfileInput = {
@@ -4751,10 +5231,13 @@ export type UserUncheckedUpdateWithoutPeerPracticeProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPeerSessionsRequestedInput = {
@@ -4810,10 +5293,13 @@ export type UserCreateWithoutPeerSessionsRequestedInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPeerSessionsRequestedInput = {
@@ -4869,10 +5355,13 @@ export type UserUncheckedCreateWithoutPeerSessionsRequestedInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPeerSessionsRequestedInput = {
@@ -4933,10 +5422,13 @@ export type UserCreateWithoutPeerSessionsPartnerInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPeerSessionsPartnerInput = {
@@ -4992,10 +5484,13 @@ export type UserUncheckedCreateWithoutPeerSessionsPartnerInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPeerSessionsPartnerInput = {
@@ -5067,10 +5562,13 @@ export type UserUpdateWithoutPeerSessionsRequestedInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPeerSessionsRequestedInput = {
@@ -5126,10 +5624,13 @@ export type UserUncheckedUpdateWithoutPeerSessionsRequestedInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutPeerSessionsPartnerInput = {
@@ -5196,10 +5697,13 @@ export type UserUpdateWithoutPeerSessionsPartnerInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPeerSessionsPartnerInput = {
@@ -5255,10 +5759,13 @@ export type UserUncheckedUpdateWithoutPeerSessionsPartnerInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCalendarConnectionsInput = {
@@ -5314,10 +5821,13 @@ export type UserCreateWithoutCalendarConnectionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCalendarConnectionsInput = {
@@ -5373,10 +5883,13 @@ export type UserUncheckedCreateWithoutCalendarConnectionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCalendarConnectionsInput = {
@@ -5448,10 +5961,13 @@ export type UserUpdateWithoutCalendarConnectionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCalendarConnectionsInput = {
@@ -5507,10 +6023,13 @@ export type UserUncheckedUpdateWithoutCalendarConnectionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutDetectedInterviewsInput = {
@@ -5566,10 +6085,13 @@ export type UserCreateWithoutDetectedInterviewsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDetectedInterviewsInput = {
@@ -5625,10 +6147,13 @@ export type UserUncheckedCreateWithoutDetectedInterviewsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDetectedInterviewsInput = {
@@ -5700,10 +6225,13 @@ export type UserUpdateWithoutDetectedInterviewsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDetectedInterviewsInput = {
@@ -5759,10 +6287,13 @@ export type UserUncheckedUpdateWithoutDetectedInterviewsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSuccessStoriesInput = {
@@ -5818,10 +6349,13 @@ export type UserCreateWithoutSuccessStoriesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSuccessStoriesInput = {
@@ -5877,10 +6411,13 @@ export type UserUncheckedCreateWithoutSuccessStoriesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSuccessStoriesInput = {
@@ -5952,10 +6489,13 @@ export type UserUpdateWithoutSuccessStoriesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSuccessStoriesInput = {
@@ -6011,10 +6551,13 @@ export type UserUncheckedUpdateWithoutSuccessStoriesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryLikesInput = {
@@ -6070,10 +6613,13 @@ export type UserCreateWithoutStoryLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryLikesInput = {
@@ -6129,10 +6675,13 @@ export type UserUncheckedCreateWithoutStoryLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryLikesInput = {
@@ -6204,10 +6753,13 @@ export type UserUpdateWithoutStoryLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryLikesInput = {
@@ -6263,10 +6815,13 @@ export type UserUncheckedUpdateWithoutStoryLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryBookmarksInput = {
@@ -6322,10 +6877,13 @@ export type UserCreateWithoutStoryBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryBookmarksInput = {
@@ -6381,10 +6939,13 @@ export type UserUncheckedCreateWithoutStoryBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryBookmarksInput = {
@@ -6456,10 +7017,13 @@ export type UserUpdateWithoutStoryBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryBookmarksInput = {
@@ -6515,10 +7079,13 @@ export type UserUncheckedUpdateWithoutStoryBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryHidesInput = {
@@ -6574,10 +7141,13 @@ export type UserCreateWithoutStoryHidesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryHidesInput = {
@@ -6633,10 +7203,13 @@ export type UserUncheckedCreateWithoutStoryHidesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryHidesInput = {
@@ -6708,10 +7281,13 @@ export type UserUpdateWithoutStoryHidesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryHidesInput = {
@@ -6767,10 +7343,13 @@ export type UserUncheckedUpdateWithoutStoryHidesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryReportsInput = {
@@ -6826,10 +7405,13 @@ export type UserCreateWithoutStoryReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryReportsInput = {
@@ -6885,10 +7467,13 @@ export type UserUncheckedCreateWithoutStoryReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryReportsInput = {
@@ -6960,10 +7545,13 @@ export type UserUpdateWithoutStoryReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryReportsInput = {
@@ -7019,10 +7607,13 @@ export type UserUncheckedUpdateWithoutStoryReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryCommentsInput = {
@@ -7078,10 +7669,13 @@ export type UserCreateWithoutStoryCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryCommentsInput = {
@@ -7137,10 +7731,13 @@ export type UserUncheckedCreateWithoutStoryCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryCommentsInput = {
@@ -7212,10 +7809,13 @@ export type UserUpdateWithoutStoryCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryCommentsInput = {
@@ -7271,10 +7871,13 @@ export type UserUncheckedUpdateWithoutStoryCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutStoryCommentLikesInput = {
@@ -7330,10 +7933,13 @@ export type UserCreateWithoutStoryCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutStoryCommentLikesInput = {
@@ -7389,10 +7995,13 @@ export type UserUncheckedCreateWithoutStoryCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutStoryCommentLikesInput = {
@@ -7464,10 +8073,13 @@ export type UserUpdateWithoutStoryCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutStoryCommentLikesInput = {
@@ -7523,10 +8135,13 @@ export type UserUncheckedUpdateWithoutStoryCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAchievementsInput = {
@@ -7582,10 +8197,13 @@ export type UserCreateWithoutAchievementsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAchievementsInput = {
@@ -7641,10 +8259,13 @@ export type UserUncheckedCreateWithoutAchievementsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAchievementsInput = {
@@ -7716,10 +8337,13 @@ export type UserUpdateWithoutAchievementsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAchievementsInput = {
@@ -7775,10 +8399,13 @@ export type UserUncheckedUpdateWithoutAchievementsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutXpInput = {
@@ -7834,10 +8461,13 @@ export type UserCreateWithoutXpInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutXpInput = {
@@ -7893,10 +8523,13 @@ export type UserUncheckedCreateWithoutXpInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutXpInput = {
@@ -7968,10 +8601,13 @@ export type UserUpdateWithoutXpInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutXpInput = {
@@ -8027,10 +8663,13 @@ export type UserUncheckedUpdateWithoutXpInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutInterviewPrepPacksInput = {
@@ -8086,10 +8725,13 @@ export type UserCreateWithoutInterviewPrepPacksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutInterviewPrepPacksInput = {
@@ -8145,10 +8787,13 @@ export type UserUncheckedCreateWithoutInterviewPrepPacksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutInterviewPrepPacksInput = {
@@ -8220,10 +8865,13 @@ export type UserUpdateWithoutInterviewPrepPacksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutInterviewPrepPacksInput = {
@@ -8279,10 +8927,541 @@ export type UserUncheckedUpdateWithoutInterviewPrepPacksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInterviewKitsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInterviewKitsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInterviewKitsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitsInput, Prisma.UserUncheckedCreateWithoutInterviewKitsInput>
+}
+
+export type UserUpsertWithoutInterviewKitsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitsInput, Prisma.UserUncheckedCreateWithoutInterviewKitsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInterviewKitsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitsInput>
+}
+
+export type UserUpdateWithoutInterviewKitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInterviewKitsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInterviewKitSnapshotsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInterviewKitSnapshotsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInterviewKitSnapshotsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedCreateWithoutInterviewKitSnapshotsInput>
+}
+
+export type UserUpsertWithoutInterviewKitSnapshotsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitSnapshotsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedCreateWithoutInterviewKitSnapshotsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInterviewKitSnapshotsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitSnapshotsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitSnapshotsInput>
+}
+
+export type UserUpdateWithoutInterviewKitSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInterviewKitSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutXpTransactionsInput = {
@@ -8338,10 +9517,13 @@ export type UserCreateWithoutXpTransactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutXpTransactionsInput = {
@@ -8397,10 +9579,13 @@ export type UserUncheckedCreateWithoutXpTransactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutXpTransactionsInput = {
@@ -8472,10 +9657,13 @@ export type UserUpdateWithoutXpTransactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutXpTransactionsInput = {
@@ -8531,10 +9719,13 @@ export type UserUncheckedUpdateWithoutXpTransactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityProfileInput = {
@@ -8590,10 +9781,13 @@ export type UserCreateWithoutCommunityProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityProfileInput = {
@@ -8649,10 +9843,13 @@ export type UserUncheckedCreateWithoutCommunityProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityProfileInput = {
@@ -8724,10 +9921,13 @@ export type UserUpdateWithoutCommunityProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityProfileInput = {
@@ -8783,10 +9983,13 @@ export type UserUncheckedUpdateWithoutCommunityProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostsInput = {
@@ -8842,10 +10045,13 @@ export type UserCreateWithoutCommunityPostsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostsInput = {
@@ -8901,10 +10107,13 @@ export type UserUncheckedCreateWithoutCommunityPostsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostsInput = {
@@ -8976,10 +10185,13 @@ export type UserUpdateWithoutCommunityPostsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostsInput = {
@@ -9035,10 +10247,13 @@ export type UserUncheckedUpdateWithoutCommunityPostsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostLikesInput = {
@@ -9094,10 +10309,13 @@ export type UserCreateWithoutCommunityPostLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostLikesInput = {
@@ -9153,10 +10371,13 @@ export type UserUncheckedCreateWithoutCommunityPostLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostLikesInput = {
@@ -9228,10 +10449,13 @@ export type UserUpdateWithoutCommunityPostLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostLikesInput = {
@@ -9287,10 +10511,13 @@ export type UserUncheckedUpdateWithoutCommunityPostLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostCommentsInput = {
@@ -9346,10 +10573,13 @@ export type UserCreateWithoutCommunityPostCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostCommentsInput = {
@@ -9405,10 +10635,13 @@ export type UserUncheckedCreateWithoutCommunityPostCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostCommentsInput = {
@@ -9480,10 +10713,13 @@ export type UserUpdateWithoutCommunityPostCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostCommentsInput = {
@@ -9539,10 +10775,13 @@ export type UserUncheckedUpdateWithoutCommunityPostCommentsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostCommentLikesInput = {
@@ -9598,10 +10837,13 @@ export type UserCreateWithoutCommunityPostCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostCommentLikesInput = {
@@ -9657,10 +10899,13 @@ export type UserUncheckedCreateWithoutCommunityPostCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostCommentLikesInput = {
@@ -9732,10 +10977,13 @@ export type UserUpdateWithoutCommunityPostCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostCommentLikesInput = {
@@ -9791,10 +11039,13 @@ export type UserUncheckedUpdateWithoutCommunityPostCommentLikesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostBookmarksInput = {
@@ -9850,10 +11101,13 @@ export type UserCreateWithoutCommunityPostBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostBookmarksInput = {
@@ -9909,10 +11163,13 @@ export type UserUncheckedCreateWithoutCommunityPostBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostBookmarksInput = {
@@ -9984,10 +11241,13 @@ export type UserUpdateWithoutCommunityPostBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostBookmarksInput = {
@@ -10043,10 +11303,13 @@ export type UserUncheckedUpdateWithoutCommunityPostBookmarksInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommunityPostReportsInput = {
@@ -10102,10 +11365,13 @@ export type UserCreateWithoutCommunityPostReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommunityPostReportsInput = {
@@ -10161,10 +11427,13 @@ export type UserUncheckedCreateWithoutCommunityPostReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommunityPostReportsInput = {
@@ -10236,10 +11505,13 @@ export type UserUpdateWithoutCommunityPostReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommunityPostReportsInput = {
@@ -10295,10 +11567,13 @@ export type UserUncheckedUpdateWithoutCommunityPostReportsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChatRoomMembershipsInput = {
@@ -10354,10 +11629,13 @@ export type UserCreateWithoutChatRoomMembershipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChatRoomMembershipsInput = {
@@ -10413,10 +11691,13 @@ export type UserUncheckedCreateWithoutChatRoomMembershipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChatRoomMembershipsInput = {
@@ -10488,10 +11769,13 @@ export type UserUpdateWithoutChatRoomMembershipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatRoomMembershipsInput = {
@@ -10547,10 +11831,13 @@ export type UserUncheckedUpdateWithoutChatRoomMembershipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChatMessagesInput = {
@@ -10606,10 +11893,13 @@ export type UserCreateWithoutChatMessagesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChatMessagesInput = {
@@ -10665,10 +11955,13 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChatMessagesInput = {
@@ -10740,10 +12033,13 @@ export type UserUpdateWithoutChatMessagesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatMessagesInput = {
@@ -10799,10 +12095,13 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChatMessageReactionsInput = {
@@ -10858,10 +12157,13 @@ export type UserCreateWithoutChatMessageReactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChatMessageReactionsInput = {
@@ -10917,10 +12219,13 @@ export type UserUncheckedCreateWithoutChatMessageReactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChatMessageReactionsInput = {
@@ -10992,10 +12297,13 @@ export type UserUpdateWithoutChatMessageReactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChatMessageReactionsInput = {
@@ -11051,10 +12359,13 @@ export type UserUncheckedUpdateWithoutChatMessageReactionsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -11110,10 +12421,13 @@ export type UserCreateWithoutFollowingInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -11169,10 +12483,13 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -11233,10 +12550,13 @@ export type UserCreateWithoutFollowersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -11292,10 +12612,13 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -11367,10 +12690,13 @@ export type UserUpdateWithoutFollowingInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -11426,10 +12752,13 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -11496,10 +12825,13 @@ export type UserUpdateWithoutFollowersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -11555,10 +12887,13 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMentorProfileInput = {
@@ -11614,10 +12949,13 @@ export type UserCreateWithoutMentorProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMentorProfileInput = {
@@ -11673,10 +13011,13 @@ export type UserUncheckedCreateWithoutMentorProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMentorProfileInput = {
@@ -11748,10 +13089,13 @@ export type UserUpdateWithoutMentorProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorProfileInput = {
@@ -11807,10 +13151,13 @@ export type UserUncheckedUpdateWithoutMentorProfileInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutMentorshipsInput = {
@@ -11866,10 +13213,13 @@ export type UserCreateWithoutMentorshipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMentorshipsInput = {
@@ -11925,10 +13275,13 @@ export type UserUncheckedCreateWithoutMentorshipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMentorshipsInput = {
@@ -12000,10 +13353,13 @@ export type UserUpdateWithoutMentorshipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMentorshipsInput = {
@@ -12059,10 +13415,13 @@ export type UserUncheckedUpdateWithoutMentorshipsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCustomStudyPlansInput = {
@@ -12118,10 +13477,13 @@ export type UserCreateWithoutCustomStudyPlansInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCustomStudyPlansInput = {
@@ -12177,10 +13539,13 @@ export type UserUncheckedCreateWithoutCustomStudyPlansInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCustomStudyPlansInput = {
@@ -12252,10 +13617,13 @@ export type UserUpdateWithoutCustomStudyPlansInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomStudyPlansInput = {
@@ -12311,10 +13679,13 @@ export type UserUncheckedUpdateWithoutCustomStudyPlansInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCustomStudyPlanLikesInput = {
@@ -12370,10 +13741,13 @@ export type UserCreateWithoutCustomStudyPlanLikesInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCustomStudyPlanLikesInput = {
@@ -12429,10 +13803,13 @@ export type UserUncheckedCreateWithoutCustomStudyPlanLikesInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCustomStudyPlanLikesInput = {
@@ -12504,10 +13881,13 @@ export type UserUpdateWithoutCustomStudyPlanLikesInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomStudyPlanLikesInput = {
@@ -12563,10 +13943,13 @@ export type UserUncheckedUpdateWithoutCustomStudyPlanLikesInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCustomStudyPlanCommentsInput = {
@@ -12622,10 +14005,13 @@ export type UserCreateWithoutCustomStudyPlanCommentsInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCustomStudyPlanCommentsInput = {
@@ -12681,10 +14067,13 @@ export type UserUncheckedCreateWithoutCustomStudyPlanCommentsInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCustomStudyPlanCommentsInput = {
@@ -12756,10 +14145,13 @@ export type UserUpdateWithoutCustomStudyPlanCommentsInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCustomStudyPlanCommentsInput = {
@@ -12815,10 +14207,13 @@ export type UserUncheckedUpdateWithoutCustomStudyPlanCommentsInput = {
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCoverLetterTemplatesInput = {
@@ -12874,10 +14269,13 @@ export type UserCreateWithoutCoverLetterTemplatesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCoverLetterTemplatesInput = {
@@ -12933,10 +14331,13 @@ export type UserUncheckedCreateWithoutCoverLetterTemplatesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCoverLetterTemplatesInput = {
@@ -13008,10 +14409,13 @@ export type UserUpdateWithoutCoverLetterTemplatesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCoverLetterTemplatesInput = {
@@ -13067,10 +14471,13 @@ export type UserUncheckedUpdateWithoutCoverLetterTemplatesInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationPreferenceInput = {
@@ -13127,9 +14534,12 @@ export type UserCreateWithoutNotificationPreferenceInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
@@ -13186,9 +14596,12 @@ export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationPreferenceInput = {
@@ -13261,9 +14674,12 @@ export type UserUpdateWithoutNotificationPreferenceInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
@@ -13320,9 +14736,12 @@ export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutNotificationQueueInput = {
@@ -13379,9 +14798,12 @@ export type UserCreateWithoutNotificationQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationQueueInput = {
@@ -13438,9 +14860,12 @@ export type UserUncheckedCreateWithoutNotificationQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationQueueInput = {
@@ -13513,9 +14938,12 @@ export type UserUpdateWithoutNotificationQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationQueueInput = {
@@ -13572,9 +15000,12 @@ export type UserUncheckedUpdateWithoutNotificationQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEmailQueueInput = {
@@ -13631,9 +15062,12 @@ export type UserCreateWithoutEmailQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEmailQueueInput = {
@@ -13690,9 +15124,12 @@ export type UserUncheckedCreateWithoutEmailQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEmailQueueInput = {
@@ -13765,9 +15202,12 @@ export type UserUpdateWithoutEmailQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEmailQueueInput = {
@@ -13824,9 +15264,12 @@ export type UserUncheckedUpdateWithoutEmailQueueInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEventLogsInput = {
@@ -13883,9 +15326,12 @@ export type UserCreateWithoutEventLogsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventLogsInput = {
@@ -13942,9 +15388,12 @@ export type UserUncheckedCreateWithoutEventLogsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventLogsInput = {
@@ -14017,9 +15466,12 @@ export type UserUpdateWithoutEventLogsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventLogsInput = {
@@ -14076,9 +15528,12 @@ export type UserUncheckedUpdateWithoutEventLogsInput = {
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -14126,9 +15581,12 @@ export type UserCountOutputType = {
   customStudyPlans: number
   customStudyPlanLikes: number
   customStudyPlanComments: number
+  interviewKits: number
+  interviewKitSnapshots: number
   notificationQueue: number
   emailQueue: number
   eventLogs: number
+  savedJobSearches: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -14171,9 +15629,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   customStudyPlans?: boolean | UserCountOutputTypeCountCustomStudyPlansArgs
   customStudyPlanLikes?: boolean | UserCountOutputTypeCountCustomStudyPlanLikesArgs
   customStudyPlanComments?: boolean | UserCountOutputTypeCountCustomStudyPlanCommentsArgs
+  interviewKits?: boolean | UserCountOutputTypeCountInterviewKitsArgs
+  interviewKitSnapshots?: boolean | UserCountOutputTypeCountInterviewKitSnapshotsArgs
   notificationQueue?: boolean | UserCountOutputTypeCountNotificationQueueArgs
   emailQueue?: boolean | UserCountOutputTypeCountEmailQueueArgs
   eventLogs?: boolean | UserCountOutputTypeCountEventLogsArgs
+  savedJobSearches?: boolean | UserCountOutputTypeCountSavedJobSearchesArgs
 }
 
 /**
@@ -14462,6 +15923,20 @@ export type UserCountOutputTypeCountCustomStudyPlanCommentsArgs<ExtArgs extends 
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountInterviewKitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInterviewKitSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitSnapshotWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountNotificationQueueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationQueueWhereInput
 }
@@ -14478,6 +15953,13 @@ export type UserCountOutputTypeCountEmailQueueArgs<ExtArgs extends runtime.Types
  */
 export type UserCountOutputTypeCountEventLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedJobSearchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedJobSearchWhereInput
 }
 
 
@@ -14535,10 +16017,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   customStudyPlans?: boolean | Prisma.User$customStudyPlansArgs<ExtArgs>
   customStudyPlanLikes?: boolean | Prisma.User$customStudyPlanLikesArgs<ExtArgs>
   customStudyPlanComments?: boolean | Prisma.User$customStudyPlanCommentsArgs<ExtArgs>
+  interviewKits?: boolean | Prisma.User$interviewKitsArgs<ExtArgs>
+  interviewKitSnapshots?: boolean | Prisma.User$interviewKitSnapshotsArgs<ExtArgs>
   notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
   notificationQueue?: boolean | Prisma.User$notificationQueueArgs<ExtArgs>
   emailQueue?: boolean | Prisma.User$emailQueueArgs<ExtArgs>
   eventLogs?: boolean | Prisma.User$eventLogsArgs<ExtArgs>
+  savedJobSearches?: boolean | Prisma.User$savedJobSearchesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -14620,10 +16105,13 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   customStudyPlans?: boolean | Prisma.User$customStudyPlansArgs<ExtArgs>
   customStudyPlanLikes?: boolean | Prisma.User$customStudyPlanLikesArgs<ExtArgs>
   customStudyPlanComments?: boolean | Prisma.User$customStudyPlanCommentsArgs<ExtArgs>
+  interviewKits?: boolean | Prisma.User$interviewKitsArgs<ExtArgs>
+  interviewKitSnapshots?: boolean | Prisma.User$interviewKitSnapshotsArgs<ExtArgs>
   notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
   notificationQueue?: boolean | Prisma.User$notificationQueueArgs<ExtArgs>
   emailQueue?: boolean | Prisma.User$emailQueueArgs<ExtArgs>
   eventLogs?: boolean | Prisma.User$eventLogsArgs<ExtArgs>
+  savedJobSearches?: boolean | Prisma.User$savedJobSearchesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -14678,10 +16166,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     customStudyPlans: Prisma.$CustomStudyPlanPayload<ExtArgs>[]
     customStudyPlanLikes: Prisma.$CustomStudyPlanLikePayload<ExtArgs>[]
     customStudyPlanComments: Prisma.$CustomStudyPlanCommentPayload<ExtArgs>[]
+    interviewKits: Prisma.$InterviewKitPayload<ExtArgs>[]
+    interviewKitSnapshots: Prisma.$InterviewKitSnapshotPayload<ExtArgs>[]
     notificationPreference: Prisma.$NotificationPreferencePayload<ExtArgs> | null
     notificationQueue: Prisma.$NotificationQueuePayload<ExtArgs>[]
     emailQueue: Prisma.$EmailQueuePayload<ExtArgs>[]
     eventLogs: Prisma.$EventLogPayload<ExtArgs>[]
+    savedJobSearches: Prisma.$SavedJobSearchPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -15131,10 +16622,13 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   customStudyPlans<T extends Prisma.User$customStudyPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customStudyPlanLikes<T extends Prisma.User$customStudyPlanLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlanLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customStudyPlanComments<T extends Prisma.User$customStudyPlanCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlanCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  interviewKits<T extends Prisma.User$interviewKitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  interviewKitSnapshots<T extends Prisma.User$interviewKitSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationPreference<T extends Prisma.User$notificationPreferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationPreferenceArgs<ExtArgs>>): Prisma.Prisma__NotificationPreferenceClient<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   notificationQueue<T extends Prisma.User$notificationQueueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationQueueArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailQueue<T extends Prisma.User$emailQueueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailQueueArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   eventLogs<T extends Prisma.User$eventLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedJobSearches<T extends Prisma.User$savedJobSearchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedJobSearchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedJobSearchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16628,6 +18122,54 @@ export type User$customStudyPlanCommentsArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
+ * User.interviewKits
+ */
+export type User$interviewKitsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKit
+   */
+  select?: Prisma.InterviewKitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKit
+   */
+  omit?: Prisma.InterviewKitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitWhereInput
+  orderBy?: Prisma.InterviewKitOrderByWithRelationInput | Prisma.InterviewKitOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitScalarFieldEnum | Prisma.InterviewKitScalarFieldEnum[]
+}
+
+/**
+ * User.interviewKitSnapshots
+ */
+export type User$interviewKitSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKitSnapshot
+   */
+  select?: Prisma.InterviewKitSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKitSnapshot
+   */
+  omit?: Prisma.InterviewKitSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitSnapshotInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitSnapshotWhereInput
+  orderBy?: Prisma.InterviewKitSnapshotOrderByWithRelationInput | Prisma.InterviewKitSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitSnapshotScalarFieldEnum | Prisma.InterviewKitSnapshotScalarFieldEnum[]
+}
+
+/**
  * User.notificationPreference
  */
 export type User$notificationPreferenceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -16716,6 +18258,30 @@ export type User$eventLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.EventLogScalarFieldEnum | Prisma.EventLogScalarFieldEnum[]
+}
+
+/**
+ * User.savedJobSearches
+ */
+export type User$savedJobSearchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedJobSearch
+   */
+  select?: Prisma.SavedJobSearchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedJobSearch
+   */
+  omit?: Prisma.SavedJobSearchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedJobSearchInclude<ExtArgs> | null
+  where?: Prisma.SavedJobSearchWhereInput
+  orderBy?: Prisma.SavedJobSearchOrderByWithRelationInput | Prisma.SavedJobSearchOrderByWithRelationInput[]
+  cursor?: Prisma.SavedJobSearchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedJobSearchScalarFieldEnum | Prisma.SavedJobSearchScalarFieldEnum[]
 }
 
 /**

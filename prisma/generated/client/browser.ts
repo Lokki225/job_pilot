@@ -73,6 +73,11 @@ export type JobSearchPreference = Prisma.JobSearchPreferenceModel
  */
 export type CachedJobRecommendation = Prisma.CachedJobRecommendationModel
 /**
+ * Model SavedJobSearch
+ * 
+ */
+export type SavedJobSearch = Prisma.SavedJobSearchModel
+/**
  * Model AIGeneratedContent
  * 
  */
@@ -212,6 +217,16 @@ export type UserXP = Prisma.UserXPModel
  * 
  */
 export type InterviewPrepPack = Prisma.InterviewPrepPackModel
+/**
+ * Model InterviewKit
+ * 
+ */
+export type InterviewKit = Prisma.InterviewKitModel
+/**
+ * Model InterviewKitSnapshot
+ * 
+ */
+export type InterviewKitSnapshot = Prisma.InterviewKitSnapshotModel
 /**
  * Model XPTransaction
  * 

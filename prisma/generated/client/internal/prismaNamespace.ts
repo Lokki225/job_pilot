@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.0.1
- * Query Engine version: f09f2815f091dbba658cdcd2264306d88bb5bda6
+ * Prisma Client JS version: 7.1.0
+ * Query Engine version: ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.0.1",
-  engine: "f09f2815f091dbba658cdcd2264306d88bb5bda6"
+  client: "7.1.0",
+  engine: "ab635e6b9d606fa5c8fb8b1a7f909c3c3c1c98ba"
 }
 
 /**
@@ -395,6 +395,7 @@ export const ModelName = {
   JobApplication: 'JobApplication',
   JobSearchPreference: 'JobSearchPreference',
   CachedJobRecommendation: 'CachedJobRecommendation',
+  SavedJobSearch: 'SavedJobSearch',
   AIGeneratedContent: 'AIGeneratedContent',
   CoverLetter: 'CoverLetter',
   EmailApplication: 'EmailApplication',
@@ -423,6 +424,8 @@ export const ModelName = {
   UserAchievement: 'UserAchievement',
   UserXP: 'UserXP',
   InterviewPrepPack: 'InterviewPrepPack',
+  InterviewKit: 'InterviewKit',
+  InterviewKitSnapshot: 'InterviewKitSnapshot',
   XPTransaction: 'XPTransaction',
   CommunityProfile: 'CommunityProfile',
   CommunityBadge: 'CommunityBadge',
@@ -465,7 +468,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "resume" | "skill" | "experience" | "education" | "certification" | "project" | "jobApplication" | "jobSearchPreference" | "cachedJobRecommendation" | "aIGeneratedContent" | "coverLetter" | "emailApplication" | "notification" | "studyChapter" | "studyLesson" | "studyQuiz" | "studyResource" | "userStudyProgress" | "trainingSession" | "trainingQuestion" | "userInterviewStats" | "companyResearch" | "peerPracticeProfile" | "peerPracticeSession" | "userCalendarConnection" | "detectedInterview" | "successStory" | "successStoryLike" | "successStoryBookmark" | "successStoryHide" | "successStoryReport" | "successStoryComment" | "successStoryCommentLike" | "achievement" | "userAchievement" | "userXP" | "interviewPrepPack" | "xPTransaction" | "communityProfile" | "communityBadge" | "communityPost" | "communityPostLike" | "communityPostComment" | "communityPostCommentLike" | "communityPostBookmark" | "communityPostReport" | "chatRoom" | "chatRoomMember" | "chatMessage" | "chatMessageReaction" | "userFollow" | "mentorProfile" | "mentorship" | "customStudyPlan" | "customStudyPlanLike" | "customStudyPlanComment" | "customStudyChapter" | "customStudyLesson" | "customStudyQuiz" | "coverLetterTemplate" | "notificationPreference" | "notificationQueue" | "emailQueue" | "eventLog"
+    modelProps: "user" | "profile" | "resume" | "skill" | "experience" | "education" | "certification" | "project" | "jobApplication" | "jobSearchPreference" | "cachedJobRecommendation" | "savedJobSearch" | "aIGeneratedContent" | "coverLetter" | "emailApplication" | "notification" | "studyChapter" | "studyLesson" | "studyQuiz" | "studyResource" | "userStudyProgress" | "trainingSession" | "trainingQuestion" | "userInterviewStats" | "companyResearch" | "peerPracticeProfile" | "peerPracticeSession" | "userCalendarConnection" | "detectedInterview" | "successStory" | "successStoryLike" | "successStoryBookmark" | "successStoryHide" | "successStoryReport" | "successStoryComment" | "successStoryCommentLike" | "achievement" | "userAchievement" | "userXP" | "interviewPrepPack" | "interviewKit" | "interviewKitSnapshot" | "xPTransaction" | "communityProfile" | "communityBadge" | "communityPost" | "communityPostLike" | "communityPostComment" | "communityPostCommentLike" | "communityPostBookmark" | "communityPostReport" | "chatRoom" | "chatRoomMember" | "chatMessage" | "chatMessageReaction" | "userFollow" | "mentorProfile" | "mentorship" | "customStudyPlan" | "customStudyPlanLike" | "customStudyPlanComment" | "customStudyChapter" | "customStudyLesson" | "customStudyQuiz" | "coverLetterTemplate" | "notificationPreference" | "notificationQueue" | "emailQueue" | "eventLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1280,6 +1283,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CachedJobRecommendationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CachedJobRecommendationCountAggregateOutputType> | number
+        }
+      }
+    }
+    SavedJobSearch: {
+      payload: Prisma.$SavedJobSearchPayload<ExtArgs>
+      fields: Prisma.SavedJobSearchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SavedJobSearchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SavedJobSearchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        findFirst: {
+          args: Prisma.SavedJobSearchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SavedJobSearchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        findMany: {
+          args: Prisma.SavedJobSearchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>[]
+        }
+        create: {
+          args: Prisma.SavedJobSearchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        createMany: {
+          args: Prisma.SavedJobSearchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SavedJobSearchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>[]
+        }
+        delete: {
+          args: Prisma.SavedJobSearchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        update: {
+          args: Prisma.SavedJobSearchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        deleteMany: {
+          args: Prisma.SavedJobSearchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SavedJobSearchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SavedJobSearchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>[]
+        }
+        upsert: {
+          args: Prisma.SavedJobSearchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedJobSearchPayload>
+        }
+        aggregate: {
+          args: Prisma.SavedJobSearchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSavedJobSearch>
+        }
+        groupBy: {
+          args: Prisma.SavedJobSearchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedJobSearchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SavedJobSearchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedJobSearchCountAggregateOutputType> | number
         }
       }
     }
@@ -3352,6 +3429,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.InterviewPrepPackCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.InterviewPrepPackCountAggregateOutputType> | number
+        }
+      }
+    }
+    InterviewKit: {
+      payload: Prisma.$InterviewKitPayload<ExtArgs>
+      fields: Prisma.InterviewKitFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InterviewKitFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InterviewKitFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        findFirst: {
+          args: Prisma.InterviewKitFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InterviewKitFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        findMany: {
+          args: Prisma.InterviewKitFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>[]
+        }
+        create: {
+          args: Prisma.InterviewKitCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        createMany: {
+          args: Prisma.InterviewKitCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InterviewKitCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>[]
+        }
+        delete: {
+          args: Prisma.InterviewKitDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        update: {
+          args: Prisma.InterviewKitUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        deleteMany: {
+          args: Prisma.InterviewKitDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InterviewKitUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InterviewKitUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>[]
+        }
+        upsert: {
+          args: Prisma.InterviewKitUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitPayload>
+        }
+        aggregate: {
+          args: Prisma.InterviewKitAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInterviewKit>
+        }
+        groupBy: {
+          args: Prisma.InterviewKitGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InterviewKitCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitCountAggregateOutputType> | number
+        }
+      }
+    }
+    InterviewKitSnapshot: {
+      payload: Prisma.$InterviewKitSnapshotPayload<ExtArgs>
+      fields: Prisma.InterviewKitSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InterviewKitSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InterviewKitSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.InterviewKitSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InterviewKitSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.InterviewKitSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.InterviewKitSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.InterviewKitSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InterviewKitSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.InterviewKitSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        update: {
+          args: Prisma.InterviewKitSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.InterviewKitSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InterviewKitSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InterviewKitSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.InterviewKitSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.InterviewKitSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInterviewKitSnapshot>
+        }
+        groupBy: {
+          args: Prisma.InterviewKitSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InterviewKitSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitSnapshotCountAggregateOutputType> | number
         }
       }
     }
@@ -5602,6 +5827,23 @@ export const CachedJobRecommendationScalarFieldEnum = {
 export type CachedJobRecommendationScalarFieldEnum = (typeof CachedJobRecommendationScalarFieldEnum)[keyof typeof CachedJobRecommendationScalarFieldEnum]
 
 
+export const SavedJobSearchScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  filters: 'filters',
+  isEnabled: 'isEnabled',
+  frequency: 'frequency',
+  notifyOnMatch: 'notifyOnMatch',
+  lastRunAt: 'lastRunAt',
+  lastSeenJobKeys: 'lastSeenJobKeys',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SavedJobSearchScalarFieldEnum = (typeof SavedJobSearchScalarFieldEnum)[keyof typeof SavedJobSearchScalarFieldEnum]
+
+
 export const AIGeneratedContentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -6115,6 +6357,36 @@ export const InterviewPrepPackScalarFieldEnum = {
 } as const
 
 export type InterviewPrepPackScalarFieldEnum = (typeof InterviewPrepPackScalarFieldEnum)[keyof typeof InterviewPrepPackScalarFieldEnum]
+
+
+export const InterviewKitScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  title: 'title',
+  description: 'description',
+  visibility: 'visibility',
+  blocksJson: 'blocksJson',
+  prepBlocksJson: 'prepBlocksJson',
+  isArchived: 'isArchived',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewKitScalarFieldEnum = (typeof InterviewKitScalarFieldEnum)[keyof typeof InterviewKitScalarFieldEnum]
+
+
+export const InterviewKitSnapshotScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  createdById: 'createdById',
+  label: 'label',
+  note: 'note',
+  blocksJson: 'blocksJson',
+  prepBlocksJson: 'prepBlocksJson',
+  createdAt: 'createdAt'
+} as const
+
+export type InterviewKitSnapshotScalarFieldEnum = (typeof InterviewKitSnapshotScalarFieldEnum)[keyof typeof InterviewKitSnapshotScalarFieldEnum]
 
 
 export const XPTransactionScalarFieldEnum = {
@@ -6987,7 +7259,7 @@ export type PrismaClientOptions = ({
    *  { emit: 'stdout', level: 'error' }
    * 
    * ```
-   * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
+   * Read more in our [docs](https://pris.ly/d/logging).
    */
   log?: (LogLevel | LogDefinition)[]
   /**
@@ -7015,6 +7287,22 @@ export type PrismaClientOptions = ({
    * ```
    */
   omit?: GlobalOmitConfig
+  /**
+   * SQL commenter plugins that add metadata to SQL queries as comments.
+   * Comments follow the sqlcommenter format: https://google.github.io/sqlcommenter/
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   comments: [
+   *     traceContext(),
+   *     queryInsights(),
+   *   ],
+   * })
+   * ```
+   */
+  comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
@@ -7028,6 +7316,7 @@ export type GlobalOmitConfig = {
   jobApplication?: Prisma.JobApplicationOmit
   jobSearchPreference?: Prisma.JobSearchPreferenceOmit
   cachedJobRecommendation?: Prisma.CachedJobRecommendationOmit
+  savedJobSearch?: Prisma.SavedJobSearchOmit
   aIGeneratedContent?: Prisma.AIGeneratedContentOmit
   coverLetter?: Prisma.CoverLetterOmit
   emailApplication?: Prisma.EmailApplicationOmit
@@ -7056,6 +7345,8 @@ export type GlobalOmitConfig = {
   userAchievement?: Prisma.UserAchievementOmit
   userXP?: Prisma.UserXPOmit
   interviewPrepPack?: Prisma.InterviewPrepPackOmit
+  interviewKit?: Prisma.InterviewKitOmit
+  interviewKitSnapshot?: Prisma.InterviewKitSnapshotOmit
   xPTransaction?: Prisma.XPTransactionOmit
   communityProfile?: Prisma.CommunityProfileOmit
   communityBadge?: Prisma.CommunityBadgeOmit

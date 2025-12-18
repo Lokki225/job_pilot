@@ -308,6 +308,12 @@ export default function CommunityHubPage() {
           <Link href="/dashboard/community">
             <Button variant="outline">Success Stories</Button>
           </Link>
+          <Link href="/dashboard/community/kits">
+            <Button variant="outline">Kits</Button>
+          </Link>
+          <Link href="/dashboard/community/kits/marketplace">
+            <Button variant="outline">Marketplace</Button>
+          </Link>
           <Dialog open={isCreatePostOpen} onOpenChange={setIsCreatePostOpen}>
             <DialogTrigger asChild>
               <Button>

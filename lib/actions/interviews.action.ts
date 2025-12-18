@@ -584,3 +584,158 @@ export async function getInterviewSessionById(sessionId: string): Promise<{
     return { data: null, error: "Failed to load interview session" };
   }
 }
+
+const SetInterviewSessionKitSchema = z
+  .object({
+    kitId: z.string().uuid().nullable(),
+  })
+  .strict();
+
+export async function setInterviewSessionKit(sessionId: string, input: z.infer<typeof SetInterviewSessionKitSchema>): Promise<{
+  data: { session: InterviewSessionData } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const parsed = SetInterviewSessionKitSchema.safeParse(input);
+    if (!parsed.success) return { data: null, error: "Invalid input" };
+
+    const { data: session, error: sessionError } = await supabase
+      .from("interview_sessions")
+      .select("*")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (sessionError) return { data: null, error: sessionError.message };
+    if (!session) return { data: null, error: "Session not found" };
+
+    const isParticipant = user.id === (session as any).interviewerId || user.id === (session as any).candidateId;
+    if (!isParticipant) return { data: null, error: "Forbidden" };
+
+    if (parsed.data.kitId) {
+      const { data: kit, error: kitError } = await supabase
+        .from("interview_kits")
+        .select("id")
+        .eq("id", parsed.data.kitId)
+        .eq("isArchived", false)
+        .maybeSingle();
+
+      if (kitError) return { data: null, error: kitError.message };
+      if (!kit) return { data: null, error: "Kit not found or not accessible" };
+    }
+
+    const existing = (session as any).metadata && typeof (session as any).metadata === "object" ? (session as any).metadata : {};
+    const nextMetadata = (() => {
+      if (parsed.data.kitId === null) {
+        const { kitId: _omit, ...rest } = existing as any;
+        return rest;
+      }
+      return { ...existing, kitId: parsed.data.kitId };
+    })();
+
+    const { data: updated, error: updateError } = await supabase
+      .from("interview_sessions")
+      .update({ metadata: nextMetadata })
+      .eq("id", sessionId)
+      .select("*")
+      .single();
+
+    if (updateError || !updated) return { data: null, error: updateError?.message || "Failed to update session" };
+    return { data: { session: updated as InterviewSessionData }, error: null };
+  } catch (err) {
+    console.error("Error setting session kit:", err);
+    return { data: null, error: "Failed to set kit" };
+  }
+}
+
+export async function markInterviewSessionInProgress(sessionId: string): Promise<{
+  data: { session: InterviewSessionData } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: session, error: sessionError } = await supabase
+      .from("interview_sessions")
+      .select("id,interviewerId,candidateId,status,startedAt")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (sessionError) return { data: null, error: sessionError.message };
+    if (!session) return { data: null, error: "Session not found" };
+
+    const isParticipant = user.id === (session as any).interviewerId || user.id === (session as any).candidateId;
+    if (!isParticipant) return { data: null, error: "Forbidden" };
+
+    const patch: any = { status: "IN_PROGRESS" };
+    if (!(session as any).startedAt) {
+      patch.startedAt = new Date().toISOString();
+    }
+
+    const { data: updated, error: updateError } = await supabase
+      .from("interview_sessions")
+      .update(patch)
+      .eq("id", sessionId)
+      .select("*")
+      .single();
+
+    if (updateError || !updated) return { data: null, error: updateError?.message || "Failed to update session" };
+    return { data: { session: updated as InterviewSessionData }, error: null };
+  } catch (err) {
+    console.error("Error marking session in progress:", err);
+    return { data: null, error: "Failed to mark session" };
+  }
+}
+
+export async function markInterviewSessionCompleted(sessionId: string): Promise<{
+  data: { session: InterviewSessionData } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: session, error: sessionError } = await supabase
+      .from("interview_sessions")
+      .select("id,interviewerId,candidateId,status")
+      .eq("id", sessionId)
+      .maybeSingle();
+
+    if (sessionError) return { data: null, error: sessionError.message };
+    if (!session) return { data: null, error: "Session not found" };
+
+    const isParticipant = user.id === (session as any).interviewerId || user.id === (session as any).candidateId;
+    if (!isParticipant) return { data: null, error: "Forbidden" };
+
+    const { data: updated, error: updateError } = await supabase
+      .from("interview_sessions")
+      .update({
+        status: "COMPLETED",
+        endedAt: new Date().toISOString(),
+      })
+      .eq("id", sessionId)
+      .select("*")
+      .single();
+
+    if (updateError || !updated) return { data: null, error: updateError?.message || "Failed to update session" };
+    return { data: { session: updated as InterviewSessionData }, error: null };
+  } catch (err) {
+    console.error("Error marking session completed:", err);
+    return { data: null, error: "Failed to mark session" };
+  }
+}
