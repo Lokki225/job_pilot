@@ -426,6 +426,8 @@ export const ModelName = {
   InterviewPrepPack: 'InterviewPrepPack',
   InterviewKit: 'InterviewKit',
   InterviewKitSnapshot: 'InterviewKitSnapshot',
+  InterviewKitRecommendation: 'InterviewKitRecommendation',
+  InterviewKitRating: 'InterviewKitRating',
   XPTransaction: 'XPTransaction',
   CommunityProfile: 'CommunityProfile',
   CommunityBadge: 'CommunityBadge',
@@ -442,6 +444,10 @@ export const ModelName = {
   UserFollow: 'UserFollow',
   MentorProfile: 'MentorProfile',
   Mentorship: 'Mentorship',
+  MentorKycVerification: 'MentorKycVerification',
+  CommunityRoleApplication: 'CommunityRoleApplication',
+  CommunityRoleRequirement: 'CommunityRoleRequirement',
+  CommunityGradeThreshold: 'CommunityGradeThreshold',
   CustomStudyPlan: 'CustomStudyPlan',
   CustomStudyPlanLike: 'CustomStudyPlanLike',
   CustomStudyPlanComment: 'CustomStudyPlanComment',
@@ -468,7 +474,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profile" | "resume" | "skill" | "experience" | "education" | "certification" | "project" | "jobApplication" | "jobSearchPreference" | "cachedJobRecommendation" | "savedJobSearch" | "aIGeneratedContent" | "coverLetter" | "emailApplication" | "notification" | "studyChapter" | "studyLesson" | "studyQuiz" | "studyResource" | "userStudyProgress" | "trainingSession" | "trainingQuestion" | "userInterviewStats" | "companyResearch" | "peerPracticeProfile" | "peerPracticeSession" | "userCalendarConnection" | "detectedInterview" | "successStory" | "successStoryLike" | "successStoryBookmark" | "successStoryHide" | "successStoryReport" | "successStoryComment" | "successStoryCommentLike" | "achievement" | "userAchievement" | "userXP" | "interviewPrepPack" | "interviewKit" | "interviewKitSnapshot" | "xPTransaction" | "communityProfile" | "communityBadge" | "communityPost" | "communityPostLike" | "communityPostComment" | "communityPostCommentLike" | "communityPostBookmark" | "communityPostReport" | "chatRoom" | "chatRoomMember" | "chatMessage" | "chatMessageReaction" | "userFollow" | "mentorProfile" | "mentorship" | "customStudyPlan" | "customStudyPlanLike" | "customStudyPlanComment" | "customStudyChapter" | "customStudyLesson" | "customStudyQuiz" | "coverLetterTemplate" | "notificationPreference" | "notificationQueue" | "emailQueue" | "eventLog"
+    modelProps: "user" | "profile" | "resume" | "skill" | "experience" | "education" | "certification" | "project" | "jobApplication" | "jobSearchPreference" | "cachedJobRecommendation" | "savedJobSearch" | "aIGeneratedContent" | "coverLetter" | "emailApplication" | "notification" | "studyChapter" | "studyLesson" | "studyQuiz" | "studyResource" | "userStudyProgress" | "trainingSession" | "trainingQuestion" | "userInterviewStats" | "companyResearch" | "peerPracticeProfile" | "peerPracticeSession" | "userCalendarConnection" | "detectedInterview" | "successStory" | "successStoryLike" | "successStoryBookmark" | "successStoryHide" | "successStoryReport" | "successStoryComment" | "successStoryCommentLike" | "achievement" | "userAchievement" | "userXP" | "interviewPrepPack" | "interviewKit" | "interviewKitSnapshot" | "interviewKitRecommendation" | "interviewKitRating" | "xPTransaction" | "communityProfile" | "communityBadge" | "communityPost" | "communityPostLike" | "communityPostComment" | "communityPostCommentLike" | "communityPostBookmark" | "communityPostReport" | "chatRoom" | "chatRoomMember" | "chatMessage" | "chatMessageReaction" | "userFollow" | "mentorProfile" | "mentorship" | "mentorKycVerification" | "communityRoleApplication" | "communityRoleRequirement" | "communityGradeThreshold" | "customStudyPlan" | "customStudyPlanLike" | "customStudyPlanComment" | "customStudyChapter" | "customStudyLesson" | "customStudyQuiz" | "coverLetterTemplate" | "notificationPreference" | "notificationQueue" | "emailQueue" | "eventLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3580,6 +3586,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InterviewKitRecommendation: {
+      payload: Prisma.$InterviewKitRecommendationPayload<ExtArgs>
+      fields: Prisma.InterviewKitRecommendationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InterviewKitRecommendationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InterviewKitRecommendationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        findFirst: {
+          args: Prisma.InterviewKitRecommendationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InterviewKitRecommendationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        findMany: {
+          args: Prisma.InterviewKitRecommendationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>[]
+        }
+        create: {
+          args: Prisma.InterviewKitRecommendationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        createMany: {
+          args: Prisma.InterviewKitRecommendationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InterviewKitRecommendationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>[]
+        }
+        delete: {
+          args: Prisma.InterviewKitRecommendationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        update: {
+          args: Prisma.InterviewKitRecommendationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        deleteMany: {
+          args: Prisma.InterviewKitRecommendationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InterviewKitRecommendationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InterviewKitRecommendationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>[]
+        }
+        upsert: {
+          args: Prisma.InterviewKitRecommendationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRecommendationPayload>
+        }
+        aggregate: {
+          args: Prisma.InterviewKitRecommendationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInterviewKitRecommendation>
+        }
+        groupBy: {
+          args: Prisma.InterviewKitRecommendationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitRecommendationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InterviewKitRecommendationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitRecommendationCountAggregateOutputType> | number
+        }
+      }
+    }
+    InterviewKitRating: {
+      payload: Prisma.$InterviewKitRatingPayload<ExtArgs>
+      fields: Prisma.InterviewKitRatingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InterviewKitRatingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InterviewKitRatingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        findFirst: {
+          args: Prisma.InterviewKitRatingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InterviewKitRatingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        findMany: {
+          args: Prisma.InterviewKitRatingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>[]
+        }
+        create: {
+          args: Prisma.InterviewKitRatingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        createMany: {
+          args: Prisma.InterviewKitRatingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InterviewKitRatingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>[]
+        }
+        delete: {
+          args: Prisma.InterviewKitRatingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        update: {
+          args: Prisma.InterviewKitRatingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        deleteMany: {
+          args: Prisma.InterviewKitRatingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InterviewKitRatingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InterviewKitRatingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>[]
+        }
+        upsert: {
+          args: Prisma.InterviewKitRatingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InterviewKitRatingPayload>
+        }
+        aggregate: {
+          args: Prisma.InterviewKitRatingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInterviewKitRating>
+        }
+        groupBy: {
+          args: Prisma.InterviewKitRatingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitRatingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InterviewKitRatingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InterviewKitRatingCountAggregateOutputType> | number
+        }
+      }
+    }
     XPTransaction: {
       payload: Prisma.$XPTransactionPayload<ExtArgs>
       fields: Prisma.XPTransactionFieldRefs
@@ -4761,6 +4915,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MentorshipCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MentorshipCountAggregateOutputType> | number
+        }
+      }
+    }
+    MentorKycVerification: {
+      payload: Prisma.$MentorKycVerificationPayload<ExtArgs>
+      fields: Prisma.MentorKycVerificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MentorKycVerificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MentorKycVerificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        findFirst: {
+          args: Prisma.MentorKycVerificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MentorKycVerificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        findMany: {
+          args: Prisma.MentorKycVerificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>[]
+        }
+        create: {
+          args: Prisma.MentorKycVerificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        createMany: {
+          args: Prisma.MentorKycVerificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MentorKycVerificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>[]
+        }
+        delete: {
+          args: Prisma.MentorKycVerificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        update: {
+          args: Prisma.MentorKycVerificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.MentorKycVerificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MentorKycVerificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MentorKycVerificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.MentorKycVerificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MentorKycVerificationPayload>
+        }
+        aggregate: {
+          args: Prisma.MentorKycVerificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMentorKycVerification>
+        }
+        groupBy: {
+          args: Prisma.MentorKycVerificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MentorKycVerificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MentorKycVerificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MentorKycVerificationCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommunityRoleApplication: {
+      payload: Prisma.$CommunityRoleApplicationPayload<ExtArgs>
+      fields: Prisma.CommunityRoleApplicationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunityRoleApplicationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunityRoleApplicationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        findFirst: {
+          args: Prisma.CommunityRoleApplicationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunityRoleApplicationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        findMany: {
+          args: Prisma.CommunityRoleApplicationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>[]
+        }
+        create: {
+          args: Prisma.CommunityRoleApplicationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        createMany: {
+          args: Prisma.CommunityRoleApplicationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunityRoleApplicationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>[]
+        }
+        delete: {
+          args: Prisma.CommunityRoleApplicationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        update: {
+          args: Prisma.CommunityRoleApplicationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunityRoleApplicationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunityRoleApplicationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunityRoleApplicationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunityRoleApplicationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleApplicationPayload>
+        }
+        aggregate: {
+          args: Prisma.CommunityRoleApplicationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunityRoleApplication>
+        }
+        groupBy: {
+          args: Prisma.CommunityRoleApplicationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityRoleApplicationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunityRoleApplicationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityRoleApplicationCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommunityRoleRequirement: {
+      payload: Prisma.$CommunityRoleRequirementPayload<ExtArgs>
+      fields: Prisma.CommunityRoleRequirementFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunityRoleRequirementFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunityRoleRequirementFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        findFirst: {
+          args: Prisma.CommunityRoleRequirementFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunityRoleRequirementFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        findMany: {
+          args: Prisma.CommunityRoleRequirementFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>[]
+        }
+        create: {
+          args: Prisma.CommunityRoleRequirementCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        createMany: {
+          args: Prisma.CommunityRoleRequirementCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunityRoleRequirementCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>[]
+        }
+        delete: {
+          args: Prisma.CommunityRoleRequirementDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        update: {
+          args: Prisma.CommunityRoleRequirementUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunityRoleRequirementDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunityRoleRequirementUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunityRoleRequirementUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunityRoleRequirementUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityRoleRequirementPayload>
+        }
+        aggregate: {
+          args: Prisma.CommunityRoleRequirementAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunityRoleRequirement>
+        }
+        groupBy: {
+          args: Prisma.CommunityRoleRequirementGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityRoleRequirementGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunityRoleRequirementCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityRoleRequirementCountAggregateOutputType> | number
+        }
+      }
+    }
+    CommunityGradeThreshold: {
+      payload: Prisma.$CommunityGradeThresholdPayload<ExtArgs>
+      fields: Prisma.CommunityGradeThresholdFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommunityGradeThresholdFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommunityGradeThresholdFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        findFirst: {
+          args: Prisma.CommunityGradeThresholdFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommunityGradeThresholdFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        findMany: {
+          args: Prisma.CommunityGradeThresholdFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>[]
+        }
+        create: {
+          args: Prisma.CommunityGradeThresholdCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        createMany: {
+          args: Prisma.CommunityGradeThresholdCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommunityGradeThresholdCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>[]
+        }
+        delete: {
+          args: Prisma.CommunityGradeThresholdDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        update: {
+          args: Prisma.CommunityGradeThresholdUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommunityGradeThresholdDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommunityGradeThresholdUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommunityGradeThresholdUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommunityGradeThresholdUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommunityGradeThresholdPayload>
+        }
+        aggregate: {
+          args: Prisma.CommunityGradeThresholdAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommunityGradeThreshold>
+        }
+        groupBy: {
+          args: Prisma.CommunityGradeThresholdGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityGradeThresholdGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommunityGradeThresholdCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommunityGradeThresholdCountAggregateOutputType> | number
         }
       }
     }
@@ -6368,6 +6818,7 @@ export const InterviewKitScalarFieldEnum = {
   blocksJson: 'blocksJson',
   prepBlocksJson: 'prepBlocksJson',
   isArchived: 'isArchived',
+  recommendCount: 'recommendCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -6387,6 +6838,30 @@ export const InterviewKitSnapshotScalarFieldEnum = {
 } as const
 
 export type InterviewKitSnapshotScalarFieldEnum = (typeof InterviewKitSnapshotScalarFieldEnum)[keyof typeof InterviewKitSnapshotScalarFieldEnum]
+
+
+export const InterviewKitRecommendationScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type InterviewKitRecommendationScalarFieldEnum = (typeof InterviewKitRecommendationScalarFieldEnum)[keyof typeof InterviewKitRecommendationScalarFieldEnum]
+
+
+export const InterviewKitRatingScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  sessionId: 'sessionId',
+  raterId: 'raterId',
+  rating: 'rating',
+  review: 'review',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewKitRatingScalarFieldEnum = (typeof InterviewKitRatingScalarFieldEnum)[keyof typeof InterviewKitRatingScalarFieldEnum]
 
 
 export const XPTransactionScalarFieldEnum = {
@@ -6618,6 +7093,69 @@ export const MentorshipScalarFieldEnum = {
 } as const
 
 export type MentorshipScalarFieldEnum = (typeof MentorshipScalarFieldEnum)[keyof typeof MentorshipScalarFieldEnum]
+
+
+export const MentorKycVerificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  provider: 'provider',
+  providerInquiryId: 'providerInquiryId',
+  providerStatus: 'providerStatus',
+  payload: 'payload',
+  submittedAt: 'submittedAt',
+  approvedAt: 'approvedAt',
+  approvedBy: 'approvedBy',
+  rejectedAt: 'rejectedAt',
+  rejectedBy: 'rejectedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MentorKycVerificationScalarFieldEnum = (typeof MentorKycVerificationScalarFieldEnum)[keyof typeof MentorKycVerificationScalarFieldEnum]
+
+
+export const CommunityRoleApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roleType: 'roleType',
+  status: 'status',
+  grade: 'grade',
+  submittedAt: 'submittedAt',
+  approvedAt: 'approvedAt',
+  approvedBy: 'approvedBy',
+  rejectedAt: 'rejectedAt',
+  rejectedBy: 'rejectedBy',
+  reviewNote: 'reviewNote',
+  payload: 'payload',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityRoleApplicationScalarFieldEnum = (typeof CommunityRoleApplicationScalarFieldEnum)[keyof typeof CommunityRoleApplicationScalarFieldEnum]
+
+
+export const CommunityRoleRequirementScalarFieldEnum = {
+  roleType: 'roleType',
+  minReputationPoints: 'minReputationPoints',
+  minHelpfulVotes: 'minHelpfulVotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityRoleRequirementScalarFieldEnum = (typeof CommunityRoleRequirementScalarFieldEnum)[keyof typeof CommunityRoleRequirementScalarFieldEnum]
+
+
+export const CommunityGradeThresholdScalarFieldEnum = {
+  id: 'id',
+  trackType: 'trackType',
+  grade: 'grade',
+  criteria: 'criteria',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityGradeThresholdScalarFieldEnum = (typeof CommunityGradeThresholdScalarFieldEnum)[keyof typeof CommunityGradeThresholdScalarFieldEnum]
 
 
 export const CustomStudyPlanScalarFieldEnum = {
@@ -7347,6 +7885,8 @@ export type GlobalOmitConfig = {
   interviewPrepPack?: Prisma.InterviewPrepPackOmit
   interviewKit?: Prisma.InterviewKitOmit
   interviewKitSnapshot?: Prisma.InterviewKitSnapshotOmit
+  interviewKitRecommendation?: Prisma.InterviewKitRecommendationOmit
+  interviewKitRating?: Prisma.InterviewKitRatingOmit
   xPTransaction?: Prisma.XPTransactionOmit
   communityProfile?: Prisma.CommunityProfileOmit
   communityBadge?: Prisma.CommunityBadgeOmit
@@ -7363,6 +7903,10 @@ export type GlobalOmitConfig = {
   userFollow?: Prisma.UserFollowOmit
   mentorProfile?: Prisma.MentorProfileOmit
   mentorship?: Prisma.MentorshipOmit
+  mentorKycVerification?: Prisma.MentorKycVerificationOmit
+  communityRoleApplication?: Prisma.CommunityRoleApplicationOmit
+  communityRoleRequirement?: Prisma.CommunityRoleRequirementOmit
+  communityGradeThreshold?: Prisma.CommunityGradeThresholdOmit
   customStudyPlan?: Prisma.CustomStudyPlanOmit
   customStudyPlanLike?: Prisma.CustomStudyPlanLikeOmit
   customStudyPlanComment?: Prisma.CustomStudyPlanCommentOmit

@@ -27,6 +27,57 @@ export interface AdminMentorKycRow extends MentorKycVerificationData {
   avatarUrl: string | null;
 }
 
+async function syncMentorRoleApplication(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  input: {
+    userId: string;
+    status: MentorKycStatus;
+    providerInquiryId?: string | null;
+    submittedAt?: string | null;
+  }
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const status = input.status;
+  const roleStatus = status === "APPROVED" || status === "REJECTED" ? status : status === "SUBMITTED" ? "SUBMITTED" : "STARTED";
+
+  const { data: existing, error: existingError } = await supabase
+    .from("community_role_applications")
+    .select("id")
+    .eq("userId", input.userId)
+    .eq("roleType", "MENTOR")
+    .maybeSingle();
+
+  if (existingError) return { ok: false, error: existingError.message };
+
+  const submittedAt = roleStatus === "SUBMITTED" ? input.submittedAt || new Date().toISOString() : null;
+  const payload = input.providerInquiryId ? { providerInquiryId: input.providerInquiryId } : null;
+
+  if (!existing) {
+    const { error } = await supabase.from("community_role_applications").insert({
+      userId: input.userId,
+      roleType: "MENTOR",
+      status: roleStatus,
+      submittedAt,
+      payload,
+    });
+
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }
+
+  const { error } = await supabase
+    .from("community_role_applications")
+    .update({
+      status: roleStatus,
+      submittedAt,
+      payload,
+    })
+    .eq("userId", input.userId)
+    .eq("roleType", "MENTOR");
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true };
+}
+
 function isAdminEmail(email: string | undefined): boolean {
   if (!email) return false;
   const adminEmails = process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim().toLowerCase()) || [];
@@ -79,6 +130,159 @@ export async function getMyMentorKycVerification(): Promise<{
   }
 }
 
+const PersonaInquiryCreateResponseSchema = z.object({
+  data: z.object({
+    id: z.string().trim().min(1),
+  }),
+});
+
+const PersonaInquiryResumeResponseSchema = z.object({
+  meta: z
+    .object({
+      "session-token": z.string().trim().min(1),
+    })
+    .passthrough(),
+  data: z
+    .object({
+      id: z.string().trim().min(1),
+    })
+    .passthrough(),
+});
+
+async function personaFetch(path: string, init: RequestInit) {
+  const apiKey = process.env.PERSONA_API_KEY;
+  if (!apiKey) {
+    return { ok: false as const, error: "Missing PERSONA_API_KEY" };
+  }
+
+  const res = await fetch(`https://api.withpersona.com${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      ...(init.headers || {}),
+    },
+  });
+
+  const json = await res.json().catch(() => null);
+  if (!res.ok) {
+    return {
+      ok: false as const,
+      error: `Persona API error (${res.status}): ${JSON.stringify(json)}`,
+    };
+  }
+  return { ok: true as const, data: json };
+}
+
+export async function getMentorKycPersonaHostedUrl(): Promise<{
+  data: { url: string } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const templateId = process.env.PERSONA_INQUIRY_TEMPLATE_ID;
+    if (!templateId) return { data: null, error: "Missing PERSONA_INQUIRY_TEMPLATE_ID" };
+
+    const hostedBase = process.env.PERSONA_HOSTED_FLOW_BASE_URL || "https://inquiry.withpersona.com/verify";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    if (!siteUrl) return { data: null, error: "Missing NEXT_PUBLIC_SITE_URL" };
+
+    const { data: existing } = await adminSupabase
+      .from("mentor_kyc_verifications")
+      .select("status,providerInquiryId")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    if (existing?.status === "APPROVED") {
+      return { data: null, error: "You are already verified." };
+    }
+
+    if (existing?.status === "SUBMITTED") {
+      return { data: null, error: "Your verification is already submitted and awaiting review." };
+    }
+
+    let inquiryId = existing?.providerInquiryId || null;
+
+    if (!inquiryId || existing?.status === "REJECTED" || existing?.status === "NOT_STARTED") {
+      const createRes = await personaFetch("/api/v1/inquiries", {
+        method: "POST",
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              "inquiry-template-id": templateId,
+              "reference-id": user.id,
+            },
+          },
+        }),
+      });
+
+      if (!createRes.ok) return { data: null, error: createRes.error };
+
+      const parsed = PersonaInquiryCreateResponseSchema.safeParse(createRes.data);
+      if (!parsed.success) return { data: null, error: "Unexpected Persona create inquiry response" };
+
+      inquiryId = parsed.data.data.id;
+    }
+
+    const resumeRes = await personaFetch(`/api/v1/inquiries/${encodeURIComponent(inquiryId)}/resume`, {
+      method: "POST",
+    });
+
+    if (!resumeRes.ok) return { data: null, error: resumeRes.error };
+
+    const resumeParsed = PersonaInquiryResumeResponseSchema.safeParse(resumeRes.data);
+    if (!resumeParsed.success) return { data: null, error: "Unexpected Persona resume inquiry response" };
+
+    const sessionToken = resumeParsed.data.meta["session-token"];
+
+    const redirectUri = `${siteUrl}/dashboard/community/hub/mentorship?persona=1`;
+
+    const url =
+      `${hostedBase}?` +
+      `inquiry-id=${encodeURIComponent(inquiryId)}` +
+      `&session-token=${encodeURIComponent(sessionToken)}` +
+      `&redirect-uri=${encodeURIComponent(redirectUri)}`;
+
+    const { error } = await supabase
+      .from("mentor_kyc_verifications")
+      .upsert(
+        {
+          userId: user.id,
+          status: "STARTED",
+          provider: "PERSONA",
+          providerInquiryId: inquiryId,
+          submittedAt: null,
+          approvedAt: null,
+          approvedBy: null,
+          rejectedAt: null,
+          rejectedBy: null,
+        },
+        { onConflict: "userId" }
+      );
+
+    if (error) return { data: null, error: error.message };
+
+    const syncRes = await syncMentorRoleApplication(supabase, {
+      userId: user.id,
+      status: "STARTED",
+      providerInquiryId: inquiryId,
+      submittedAt: null,
+    });
+    if (!syncRes.ok) return { data: null, error: syncRes.error };
+
+    return { data: { url }, error: null };
+  } catch (err) {
+    console.error("Error generating Persona hosted URL:", err);
+    return { data: null, error: "Failed to start verification" };
+  }
+}
+
 export async function startMentorKycVerification(input?: {
   providerInquiryId?: string;
 }): Promise<{ data: { ok: true } | null; error: string | null }> {
@@ -105,6 +309,15 @@ export async function startMentorKycVerification(input?: {
       );
 
     if (error) return { data: null, error: error.message };
+
+    const syncRes = await syncMentorRoleApplication(supabase, {
+      userId: user.id,
+      status: "STARTED",
+      providerInquiryId,
+      submittedAt: null,
+    });
+    if (!syncRes.ok) return { data: null, error: syncRes.error };
+
     return { data: { ok: true }, error: null };
   } catch (err) {
     console.error("Error starting mentor KYC verification:", err);
@@ -142,6 +355,15 @@ export async function submitMentorKycInquiryId(
       );
 
     if (error) return { data: null, error: error.message };
+
+    const syncRes = await syncMentorRoleApplication(supabase, {
+      userId: user.id,
+      status: "SUBMITTED",
+      providerInquiryId: parsed.data,
+      submittedAt: now,
+    });
+    if (!syncRes.ok) return { data: null, error: syncRes.error };
+
     return { data: { ok: true }, error: null };
   } catch (err) {
     console.error("Error submitting mentor KYC inquiry ID:", err);
@@ -248,6 +470,22 @@ export async function approveMentorKyc(userId: string): Promise<{ data: { ok: tr
         .upsert({ communityProfileId: cp.id, badgeType: "MENTOR" }, { onConflict: "communityProfileId,badgeType" });
     }
 
+    await adminSupabase
+      .from("community_role_applications")
+      .upsert(
+        {
+          userId: parsed.data,
+          roleType: "MENTOR",
+          status: "APPROVED",
+          grade: "BRONZE",
+          approvedAt: now,
+          approvedBy: user.id,
+          rejectedAt: null,
+          rejectedBy: null,
+        },
+        { onConflict: "userId,roleType" }
+      );
+
     return { data: { ok: true }, error: null };
   } catch (err) {
     console.error("Error approving mentor KYC:", err);
@@ -292,6 +530,23 @@ export async function rejectMentorKyc(input: {
 
     await adminSupabase.from("mentor_profiles").update({ isActive: false }).eq("userId", parsed.data.userId);
     await adminSupabase.from("community_profiles").update({ isMentor: false }).eq("userId", parsed.data.userId);
+
+    await adminSupabase
+      .from("community_role_applications")
+      .upsert(
+        {
+          userId: parsed.data.userId,
+          roleType: "MENTOR",
+          status: "REJECTED",
+          grade: null,
+          rejectedAt: now,
+          rejectedBy: user.id,
+          reviewNote: parsed.data.reason,
+          approvedAt: null,
+          approvedBy: null,
+        },
+        { onConflict: "userId,roleType" }
+      );
 
     const { data: cp } = await adminSupabase
       .from("community_profiles")

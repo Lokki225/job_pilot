@@ -167,6 +167,24 @@ export async function getOrCreateCommunityProfile(): Promise<{
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { data: null, error: "Unauthorized" };
 
+    const resolveAvatarUrl = (raw: string | null | undefined): string | null => {
+      const value = (raw || "").trim();
+      if (!value) return null;
+      if (value.startsWith("http://") || value.startsWith("https://")) return value;
+
+      const normalized = value.replace(/^\/+/, "");
+      const path = normalized.startsWith("profiles/") ? normalized.slice("profiles/".length) : normalized;
+      const { data: publicData } = adminSupabase.storage.from("profiles").getPublicUrl(path);
+      return publicData?.publicUrl || null;
+    };
+
+    const fallbackAvatarFromAuth = (): string | null => {
+      const meta = (user.user_metadata || {}) as any;
+      const candidates: Array<unknown> = [meta.avatar_url, meta.picture, meta.avatarUrl, meta.photoURL];
+      const first = candidates.find((v) => typeof v === "string" && (v as string).trim().length > 0);
+      return typeof first === "string" ? first : null;
+    };
+
     const { data: existing } = await adminSupabase
       .from("community_profiles")
       .select("*, badges:community_badges(*)")
@@ -198,6 +216,8 @@ export async function getOrCreateCommunityProfile(): Promise<{
         .eq("userId", user.id)
         .single();
 
+      const avatarUrl = resolveAvatarUrl(profile?.avatarUrl) || resolveAvatarUrl(fallbackAvatarFromAuth());
+
       return {
         data: {
           ...existing,
@@ -209,7 +229,7 @@ export async function getOrCreateCommunityProfile(): Promise<{
           user: {
             firstName: profile?.firstName || null,
             lastName: profile?.lastName || null,
-            avatarUrl: profile?.avatarUrl || null,
+            avatarUrl,
           },
         },
         error: null,
@@ -230,6 +250,8 @@ export async function getOrCreateCommunityProfile(): Promise<{
       .eq("userId", user.id)
       .single();
 
+    const avatarUrl = resolveAvatarUrl(profile?.avatarUrl) || resolveAvatarUrl(fallbackAvatarFromAuth());
+
     return {
       data: {
         ...newProfile,
@@ -238,7 +260,7 @@ export async function getOrCreateCommunityProfile(): Promise<{
         user: {
           firstName: profile?.firstName || null,
           lastName: profile?.lastName || null,
-          avatarUrl: profile?.avatarUrl || null,
+          avatarUrl,
         },
       },
       error: null,
@@ -2351,7 +2373,9 @@ export interface MentorshipData {
   status: string;
   message: string | null;
   startedAt: string | null;
+  endedAt: string | null;
   createdAt: string;
+  updatedAt: string;
   mentor: { name: string; avatarUrl: string | null };
   mentee: { name: string; avatarUrl: string | null };
 }
@@ -2714,7 +2738,9 @@ export async function getMyMentorships(): Promise<{
           status: m.status,
           message: m.message,
           startedAt: m.startedAt,
+          endedAt: m.endedAt,
           createdAt: m.createdAt,
+          updatedAt: m.updatedAt,
           mentor: { name: "You", avatarUrl: null },
           mentee: {
             name: mentee
@@ -2762,7 +2788,9 @@ export async function getMyMentorships(): Promise<{
         status: m.status,
         message: m.message,
         startedAt: m.startedAt,
+        endedAt: m.endedAt,
         createdAt: m.createdAt,
+        updatedAt: m.updatedAt,
         mentor: {
           name: mentorProfile
             ? `${mentorProfile.firstName || ""} ${mentorProfile.lastName || ""}`.trim() || "Anonymous"

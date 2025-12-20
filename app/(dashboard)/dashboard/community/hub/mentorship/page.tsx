@@ -35,15 +35,20 @@ import {
 } from "@/lib/actions/community.action";
 import {
   getMyMentorKycVerification,
-  submitMentorKycInquiryId,
+  getMentorKycPersonaHostedUrl,
   type MentorKycVerificationData,
 } from "@/lib/actions/mentor-kyc.action";
+import {
+  getMyRoleApplication,
+  type CommunityRoleApplicationData,
+} from "@/lib/actions/role-applications.action";
+import { refreshMyMentorGrade } from "@/lib/actions/community-grades.action";
 
 export default function MentorshipPage() {
   const [mentors, setMentors] = useState<MentorData[]>([]);
   const [myMentorProfile, setMyMentorProfile] = useState<MentorData | null>(null);
   const [myKyc, setMyKyc] = useState<MentorKycVerificationData | null>(null);
-  const [kycInquiryId, setKycInquiryId] = useState("");
+  const [myMentorRoleApplication, setMyMentorRoleApplication] = useState<CommunityRoleApplicationData | null>(null);
   const [mentorships, setMentorships] = useState<{ asMentor: MentorshipData[]; asMentee: MentorshipData[] }>({
     asMentor: [],
     asMentee: [],
@@ -57,7 +62,8 @@ export default function MentorshipPage() {
   const [mentorAvailability, setMentorAvailability] = useState("");
   const [mentorMaxMentees, setMentorMaxMentees] = useState("3");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmittingKyc, setIsSubmittingKyc] = useState(false);
+  const [isStartingKyc, setIsStartingKyc] = useState(false);
+  const [isRefreshingGrade, setIsRefreshingGrade] = useState(false);
 
   const [requestMentorId, setRequestMentorId] = useState<string | null>(null);
   const [requestMessage, setRequestMessage] = useState("");
@@ -69,11 +75,12 @@ export default function MentorshipPage() {
   async function loadData() {
     setIsLoading(true);
     try {
-      const [mentorsRes, profileRes, mentorshipsRes, kycRes] = await Promise.all([
+      const [mentorsRes, profileRes, mentorshipsRes, kycRes, mentorRoleRes] = await Promise.all([
         getMentors(),
         getMyMentorProfile(),
         getMyMentorships(),
         getMyMentorKycVerification(),
+        getMyRoleApplication("MENTOR"),
       ]);
 
       if (mentorsRes.data) setMentors(mentorsRes.data);
@@ -84,20 +91,42 @@ export default function MentorshipPage() {
         setMentorAvailability(profileRes.data.availability || "");
         setMentorMaxMentees(String(profileRes.data.maxMentees));
       }
+
       if (mentorshipsRes.data) setMentorships(mentorshipsRes.data);
 
       if (kycRes.data) {
         setMyKyc(kycRes.data);
-        setKycInquiryId(kycRes.data.providerInquiryId || "");
       } else {
         setMyKyc(null);
-        setKycInquiryId("");
+      }
+
+      if (mentorRoleRes.data) {
+        setMyMentorRoleApplication(mentorRoleRes.data);
+      } else {
+        setMyMentorRoleApplication(null);
       }
     } catch (err) {
       console.error("Error loading mentorship data:", err);
       setError("Failed to load data");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleRefreshMentorGrade() {
+    setIsRefreshingGrade(true);
+    try {
+      const res = await refreshMyMentorGrade();
+      if (res.error) {
+        setError(res.error);
+        return;
+      }
+      await loadData();
+    } catch (err) {
+      console.error("Error refreshing mentor grade:", err);
+      setError("Failed to refresh mentor grade");
+    } finally {
+      setIsRefreshingGrade(false);
     }
   }
 
@@ -166,23 +195,20 @@ export default function MentorshipPage() {
     }
   }
 
-  async function handleSubmitKycInquiryId() {
-    const id = kycInquiryId.trim();
-    if (!id) return;
-
-    setIsSubmittingKyc(true);
+  async function handleStartKyc() {
+    setIsStartingKyc(true);
     try {
-      const res = await submitMentorKycInquiryId(id);
-      if (res.error) {
-        setError(res.error);
-      } else {
-        loadData();
+      const res = await getMentorKycPersonaHostedUrl();
+      if (res.error || !res.data?.url) {
+        setError(res.error || "Failed to start verification");
+        return;
       }
+      window.location.href = res.data.url;
     } catch (err) {
-      console.error("Error submitting mentor KYC inquiry id:", err);
-      setError("Failed to submit inquiry ID");
+      console.error("Error starting mentor KYC:", err);
+      setError("Failed to start verification");
     } finally {
-      setIsSubmittingKyc(false);
+      setIsStartingKyc(false);
     }
   }
 
@@ -195,6 +221,11 @@ export default function MentorshipPage() {
   }
 
   const pendingRequests = mentorships.asMentor.filter((m) => m.status === "PENDING");
+  const declinedRequestsAsMentee = mentorships.asMentee.filter((m) => m.status === "DECLINED");
+  const completedMentorships = [
+    ...mentorships.asMentor.filter((m) => m.status === "COMPLETED"),
+    ...mentorships.asMentee.filter((m) => m.status === "COMPLETED"),
+  ];
   const activeMentorships = [
     ...mentorships.asMentor.filter((m) => m.status === "ACCEPTED"),
     ...mentorships.asMentee.filter((m) => m.status === "ACCEPTED"),
@@ -301,12 +332,12 @@ export default function MentorshipPage() {
             Mentor verification (KYC)
           </CardTitle>
           <CardDescription>
-            Submit your KYC inquiry ID. An admin will review and approve your mentor status.
+            Verify your identity with an ID document and selfie. An admin will review and approve your mentor status.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm text-muted-foreground">Status:</span>
+            <span className="text-sm text-muted-foreground">KYC:</span>
             <Badge
               variant={
                 myKyc?.status === "APPROVED"
@@ -320,6 +351,57 @@ export default function MentorshipPage() {
             >
               {myKyc?.status || "NOT_STARTED"}
             </Badge>
+            <span className="text-sm text-muted-foreground ml-2">Application:</span>
+            <Badge variant={myMentorRoleApplication?.status === "APPROVED" ? "default" : "outline"}>
+              {myMentorRoleApplication?.status || "NOT_STARTED"}
+            </Badge>
+            {myMentorRoleApplication?.grade ? (
+              <Badge variant="secondary">Grade: {myMentorRoleApplication.grade}</Badge>
+            ) : null}
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-lg border p-3">
+              <div className="flex items-center gap-2">
+                <div
+                  className={`h-2.5 w-2.5 rounded-full ${myMentorProfile ? "bg-green-500" : "bg-muted-foreground"}`}
+                />
+                <p className="text-sm font-medium">1. Create mentor profile</p>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Add your bio, expertise, availability.
+              </p>
+            </div>
+            <div className="rounded-lg border p-3">
+              <div className="flex items-center gap-2">
+                <div
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    myKyc?.status === "STARTED" || myKyc?.status === "SUBMITTED" || myKyc?.status === "APPROVED"
+                      ? "bg-green-500"
+                      : myKyc?.status === "REJECTED"
+                        ? "bg-red-500"
+                        : "bg-muted-foreground"
+                  }`}
+                />
+                <p className="text-sm font-medium">2. Complete identity verification</p>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">ID + selfie verification with Persona.</p>
+            </div>
+            <div className="rounded-lg border p-3">
+              <div className="flex items-center gap-2">
+                <div
+                  className={`h-2.5 w-2.5 rounded-full ${
+                    myKyc?.status === "APPROVED"
+                      ? "bg-green-500"
+                      : myKyc?.status === "REJECTED"
+                        ? "bg-red-500"
+                        : "bg-muted-foreground"
+                  }`}
+                />
+                <p className="text-sm font-medium">3. Admin approval</p>
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">We review and approve your mentor status.</p>
+            </div>
           </div>
 
           {myMentorProfile && !myMentorProfile.isActive && myKyc?.status !== "APPROVED" ? (
@@ -328,32 +410,59 @@ export default function MentorshipPage() {
             </div>
           ) : null}
 
-          {myKyc?.status === "REJECTED" ? (
-            <div className="text-sm text-muted-foreground">
-              Your verification was rejected. You can submit a new inquiry ID after restarting verification.
-            </div>
+          {myKyc?.status === "SUBMITTED" ? (
+            <div className="text-sm text-muted-foreground">Verification submitted. Waiting for admin review.</div>
           ) : null}
 
-          <div className="flex flex-col gap-2 md:flex-row md:items-center">
-            <Input
-              placeholder="Provider inquiry ID"
-              value={kycInquiryId}
-              onChange={(e) => setKycInquiryId(e.target.value)}
-            />
+          {myKyc?.status === "REJECTED" ? (
+            <div className="text-sm text-muted-foreground">Verification was rejected. You can restart verification.</div>
+          ) : null}
+
+          {myKyc?.providerInquiryId ? (
+            <div className="text-xs text-muted-foreground">Inquiry: {myKyc.providerInquiryId}</div>
+          ) : null}
+
+          <div className="flex flex-wrap gap-2">
             <Button
-              onClick={handleSubmitKycInquiryId}
-              disabled={isSubmittingKyc || !kycInquiryId.trim()}
-              className="md:w-[220px]"
+              onClick={handleStartKyc}
+              disabled={
+                isStartingKyc ||
+                myKyc?.status === "APPROVED" ||
+                myKyc?.status === "SUBMITTED"
+              }
             >
-              {isSubmittingKyc ? (
+              {isStartingKyc ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Submitting...
+                  Opening verification...
                 </>
+              ) : myKyc?.status === "STARTED" ? (
+                "Continue verification"
+              ) : myKyc?.status === "REJECTED" ? (
+                "Restart verification"
               ) : (
-                "Submit inquiry ID"
+                "Start verification"
               )}
             </Button>
+            <Button variant="outline" onClick={loadData} disabled={isLoading}>
+              Refresh status
+            </Button>
+            {myMentorRoleApplication?.status === "APPROVED" ? (
+              <Button
+                variant="secondary"
+                onClick={handleRefreshMentorGrade}
+                disabled={isRefreshingGrade}
+              >
+                {isRefreshingGrade ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating grade...
+                  </>
+                ) : (
+                  "Update grade"
+                )}
+              </Button>
+            ) : null}
           </div>
         </CardContent>
       </Card>
@@ -658,6 +767,66 @@ export default function MentorshipPage() {
               )}
             </CardContent>
           </Card>
+
+          {declinedRequestsAsMentee.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <XCircle className="h-4 w-4 text-muted-foreground" />
+                  Declined Requests
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {declinedRequestsAsMentee.map((request) => (
+                  <div key={request.id} className="flex items-center gap-4 rounded-lg border p-4">
+                    <Avatar>
+                      <AvatarImage src={request.mentor.avatarUrl || undefined} />
+                      <AvatarFallback>{request.mentor.name[0] || "M"}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium">{request.mentor.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Updated {new Date(request.updatedAt).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <Badge variant="outline">Declined</Badge>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {completedMentorships.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                  Completed Mentorships
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {completedMentorships.map((mentorship) => {
+                  const isMentor = mentorship.mentor.name === "You";
+                  const otherPerson = isMentor ? mentorship.mentee : mentorship.mentor;
+                  return (
+                    <div key={mentorship.id} className="flex items-center gap-4 rounded-lg border p-4">
+                      <Avatar>
+                        <AvatarImage src={otherPerson.avatarUrl || undefined} />
+                        <AvatarFallback>{otherPerson.name[0] || "U"}</AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium">{otherPerson.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Ended {mentorship.endedAt ? new Date(mentorship.endedAt).toLocaleDateString() : "N/A"}
+                        </p>
+                      </div>
+                      <Badge variant="secondary">Completed</Badge>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
+          )}
 
           {mentorships.asMentee.filter((m) => m.status === "PENDING").length > 0 && (
             <Card>

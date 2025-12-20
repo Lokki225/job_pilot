@@ -20,8 +20,18 @@ export type InterviewKitModel = runtime.Types.Result.DefaultSelection<Prisma.$In
 
 export type AggregateInterviewKit = {
   _count: InterviewKitCountAggregateOutputType | null
+  _avg: InterviewKitAvgAggregateOutputType | null
+  _sum: InterviewKitSumAggregateOutputType | null
   _min: InterviewKitMinAggregateOutputType | null
   _max: InterviewKitMaxAggregateOutputType | null
+}
+
+export type InterviewKitAvgAggregateOutputType = {
+  recommendCount: number | null
+}
+
+export type InterviewKitSumAggregateOutputType = {
+  recommendCount: number | null
 }
 
 export type InterviewKitMinAggregateOutputType = {
@@ -31,6 +41,7 @@ export type InterviewKitMinAggregateOutputType = {
   description: string | null
   visibility: string | null
   isArchived: boolean | null
+  recommendCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +53,7 @@ export type InterviewKitMaxAggregateOutputType = {
   description: string | null
   visibility: string | null
   isArchived: boolean | null
+  recommendCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -55,11 +67,20 @@ export type InterviewKitCountAggregateOutputType = {
   blocksJson: number
   prepBlocksJson: number
   isArchived: number
+  recommendCount: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type InterviewKitAvgAggregateInputType = {
+  recommendCount?: true
+}
+
+export type InterviewKitSumAggregateInputType = {
+  recommendCount?: true
+}
 
 export type InterviewKitMinAggregateInputType = {
   id?: true
@@ -68,6 +89,7 @@ export type InterviewKitMinAggregateInputType = {
   description?: true
   visibility?: true
   isArchived?: true
+  recommendCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -79,6 +101,7 @@ export type InterviewKitMaxAggregateInputType = {
   description?: true
   visibility?: true
   isArchived?: true
+  recommendCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +115,7 @@ export type InterviewKitCountAggregateInputType = {
   blocksJson?: true
   prepBlocksJson?: true
   isArchived?: true
+  recommendCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -135,6 +159,18 @@ export type InterviewKitAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: InterviewKitAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: InterviewKitSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: InterviewKitMinAggregateInputType
@@ -165,6 +201,8 @@ export type InterviewKitGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: InterviewKitCountAggregateInputType | true
+  _avg?: InterviewKitAvgAggregateInputType
+  _sum?: InterviewKitSumAggregateInputType
   _min?: InterviewKitMinAggregateInputType
   _max?: InterviewKitMaxAggregateInputType
 }
@@ -178,9 +216,12 @@ export type InterviewKitGroupByOutputType = {
   blocksJson: runtime.JsonValue
   prepBlocksJson: runtime.JsonValue
   isArchived: boolean
+  recommendCount: number
   createdAt: Date
   updatedAt: Date
   _count: InterviewKitCountAggregateOutputType | null
+  _avg: InterviewKitAvgAggregateOutputType | null
+  _sum: InterviewKitSumAggregateOutputType | null
   _min: InterviewKitMinAggregateOutputType | null
   _max: InterviewKitMaxAggregateOutputType | null
 }
@@ -212,10 +253,13 @@ export type InterviewKitWhereInput = {
   blocksJson?: Prisma.JsonFilter<"InterviewKit">
   prepBlocksJson?: Prisma.JsonFilter<"InterviewKit">
   isArchived?: Prisma.BoolFilter<"InterviewKit"> | boolean
+  recommendCount?: Prisma.IntFilter<"InterviewKit"> | number
   createdAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   snapshots?: Prisma.InterviewKitSnapshotListRelationFilter
+  recommendations?: Prisma.InterviewKitRecommendationListRelationFilter
+  ratings?: Prisma.InterviewKitRatingListRelationFilter
 }
 
 export type InterviewKitOrderByWithRelationInput = {
@@ -227,10 +271,13 @@ export type InterviewKitOrderByWithRelationInput = {
   blocksJson?: Prisma.SortOrder
   prepBlocksJson?: Prisma.SortOrder
   isArchived?: Prisma.SortOrder
+  recommendCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
   snapshots?: Prisma.InterviewKitSnapshotOrderByRelationAggregateInput
+  recommendations?: Prisma.InterviewKitRecommendationOrderByRelationAggregateInput
+  ratings?: Prisma.InterviewKitRatingOrderByRelationAggregateInput
 }
 
 export type InterviewKitWhereUniqueInput = Prisma.AtLeast<{
@@ -245,10 +292,13 @@ export type InterviewKitWhereUniqueInput = Prisma.AtLeast<{
   blocksJson?: Prisma.JsonFilter<"InterviewKit">
   prepBlocksJson?: Prisma.JsonFilter<"InterviewKit">
   isArchived?: Prisma.BoolFilter<"InterviewKit"> | boolean
+  recommendCount?: Prisma.IntFilter<"InterviewKit"> | number
   createdAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   snapshots?: Prisma.InterviewKitSnapshotListRelationFilter
+  recommendations?: Prisma.InterviewKitRecommendationListRelationFilter
+  ratings?: Prisma.InterviewKitRatingListRelationFilter
 }, "id">
 
 export type InterviewKitOrderByWithAggregationInput = {
@@ -260,11 +310,14 @@ export type InterviewKitOrderByWithAggregationInput = {
   blocksJson?: Prisma.SortOrder
   prepBlocksJson?: Prisma.SortOrder
   isArchived?: Prisma.SortOrder
+  recommendCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.InterviewKitCountOrderByAggregateInput
+  _avg?: Prisma.InterviewKitAvgOrderByAggregateInput
   _max?: Prisma.InterviewKitMaxOrderByAggregateInput
   _min?: Prisma.InterviewKitMinOrderByAggregateInput
+  _sum?: Prisma.InterviewKitSumOrderByAggregateInput
 }
 
 export type InterviewKitScalarWhereWithAggregatesInput = {
@@ -279,6 +332,7 @@ export type InterviewKitScalarWhereWithAggregatesInput = {
   blocksJson?: Prisma.JsonWithAggregatesFilter<"InterviewKit">
   prepBlocksJson?: Prisma.JsonWithAggregatesFilter<"InterviewKit">
   isArchived?: Prisma.BoolWithAggregatesFilter<"InterviewKit"> | boolean
+  recommendCount?: Prisma.IntWithAggregatesFilter<"InterviewKit"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InterviewKit"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"InterviewKit"> | Date | string
 }
@@ -291,10 +345,13 @@ export type InterviewKitCreateInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutInterviewKitsInput
   snapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitUncheckedCreateInput = {
@@ -306,9 +363,12 @@ export type InterviewKitUncheckedCreateInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   snapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitUpdateInput = {
@@ -319,10 +379,13 @@ export type InterviewKitUpdateInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutInterviewKitsNestedInput
   snapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitUncheckedUpdateInput = {
@@ -334,9 +397,12 @@ export type InterviewKitUncheckedUpdateInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitCreateManyInput = {
@@ -348,6 +414,7 @@ export type InterviewKitCreateManyInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -360,6 +427,7 @@ export type InterviewKitUpdateManyMutationInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -373,6 +441,7 @@ export type InterviewKitUncheckedUpdateManyInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,8 +465,13 @@ export type InterviewKitCountOrderByAggregateInput = {
   blocksJson?: Prisma.SortOrder
   prepBlocksJson?: Prisma.SortOrder
   isArchived?: Prisma.SortOrder
+  recommendCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type InterviewKitAvgOrderByAggregateInput = {
+  recommendCount?: Prisma.SortOrder
 }
 
 export type InterviewKitMaxOrderByAggregateInput = {
@@ -407,6 +481,7 @@ export type InterviewKitMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   isArchived?: Prisma.SortOrder
+  recommendCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -418,8 +493,13 @@ export type InterviewKitMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   visibility?: Prisma.SortOrder
   isArchived?: Prisma.SortOrder
+  recommendCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type InterviewKitSumOrderByAggregateInput = {
+  recommendCount?: Prisma.SortOrder
 }
 
 export type InterviewKitScalarRelationFilter = {
@@ -483,6 +563,34 @@ export type InterviewKitUpdateOneRequiredWithoutSnapshotsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.InterviewKitUpdateToOneWithWhereWithoutSnapshotsInput, Prisma.InterviewKitUpdateWithoutSnapshotsInput>, Prisma.InterviewKitUncheckedUpdateWithoutSnapshotsInput>
 }
 
+export type InterviewKitCreateNestedOneWithoutRecommendationsInput = {
+  create?: Prisma.XOR<Prisma.InterviewKitCreateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedCreateWithoutRecommendationsInput>
+  connectOrCreate?: Prisma.InterviewKitCreateOrConnectWithoutRecommendationsInput
+  connect?: Prisma.InterviewKitWhereUniqueInput
+}
+
+export type InterviewKitUpdateOneRequiredWithoutRecommendationsNestedInput = {
+  create?: Prisma.XOR<Prisma.InterviewKitCreateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedCreateWithoutRecommendationsInput>
+  connectOrCreate?: Prisma.InterviewKitCreateOrConnectWithoutRecommendationsInput
+  upsert?: Prisma.InterviewKitUpsertWithoutRecommendationsInput
+  connect?: Prisma.InterviewKitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InterviewKitUpdateToOneWithWhereWithoutRecommendationsInput, Prisma.InterviewKitUpdateWithoutRecommendationsInput>, Prisma.InterviewKitUncheckedUpdateWithoutRecommendationsInput>
+}
+
+export type InterviewKitCreateNestedOneWithoutRatingsInput = {
+  create?: Prisma.XOR<Prisma.InterviewKitCreateWithoutRatingsInput, Prisma.InterviewKitUncheckedCreateWithoutRatingsInput>
+  connectOrCreate?: Prisma.InterviewKitCreateOrConnectWithoutRatingsInput
+  connect?: Prisma.InterviewKitWhereUniqueInput
+}
+
+export type InterviewKitUpdateOneRequiredWithoutRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.InterviewKitCreateWithoutRatingsInput, Prisma.InterviewKitUncheckedCreateWithoutRatingsInput>
+  connectOrCreate?: Prisma.InterviewKitCreateOrConnectWithoutRatingsInput
+  upsert?: Prisma.InterviewKitUpsertWithoutRatingsInput
+  connect?: Prisma.InterviewKitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InterviewKitUpdateToOneWithWhereWithoutRatingsInput, Prisma.InterviewKitUpdateWithoutRatingsInput>, Prisma.InterviewKitUncheckedUpdateWithoutRatingsInput>
+}
+
 export type InterviewKitCreateWithoutOwnerInput = {
   id?: string
   title: string
@@ -491,9 +599,12 @@ export type InterviewKitCreateWithoutOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   snapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitUncheckedCreateWithoutOwnerInput = {
@@ -504,9 +615,12 @@ export type InterviewKitUncheckedCreateWithoutOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   snapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitCreateOrConnectWithoutOwnerInput = {
@@ -547,6 +661,7 @@ export type InterviewKitScalarWhereInput = {
   blocksJson?: Prisma.JsonFilter<"InterviewKit">
   prepBlocksJson?: Prisma.JsonFilter<"InterviewKit">
   isArchived?: Prisma.BoolFilter<"InterviewKit"> | boolean
+  recommendCount?: Prisma.IntFilter<"InterviewKit"> | number
   createdAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InterviewKit"> | Date | string
 }
@@ -559,9 +674,12 @@ export type InterviewKitCreateWithoutSnapshotsInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutInterviewKitsInput
+  recommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitUncheckedCreateWithoutSnapshotsInput = {
@@ -573,8 +691,11 @@ export type InterviewKitUncheckedCreateWithoutSnapshotsInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutKitInput
 }
 
 export type InterviewKitCreateOrConnectWithoutSnapshotsInput = {
@@ -601,9 +722,12 @@ export type InterviewKitUpdateWithoutSnapshotsInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutInterviewKitsNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitUncheckedUpdateWithoutSnapshotsInput = {
@@ -615,8 +739,171 @@ export type InterviewKitUncheckedUpdateWithoutSnapshotsInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutKitNestedInput
+}
+
+export type InterviewKitCreateWithoutRecommendationsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  visibility?: string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: boolean
+  recommendCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutInterviewKitsInput
+  snapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingCreateNestedManyWithoutKitInput
+}
+
+export type InterviewKitUncheckedCreateWithoutRecommendationsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  visibility?: string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: boolean
+  recommendCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  snapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutKitInput
+  ratings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutKitInput
+}
+
+export type InterviewKitCreateOrConnectWithoutRecommendationsInput = {
+  where: Prisma.InterviewKitWhereUniqueInput
+  create: Prisma.XOR<Prisma.InterviewKitCreateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedCreateWithoutRecommendationsInput>
+}
+
+export type InterviewKitUpsertWithoutRecommendationsInput = {
+  update: Prisma.XOR<Prisma.InterviewKitUpdateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedUpdateWithoutRecommendationsInput>
+  create: Prisma.XOR<Prisma.InterviewKitCreateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedCreateWithoutRecommendationsInput>
+  where?: Prisma.InterviewKitWhereInput
+}
+
+export type InterviewKitUpdateToOneWithWhereWithoutRecommendationsInput = {
+  where?: Prisma.InterviewKitWhereInput
+  data: Prisma.XOR<Prisma.InterviewKitUpdateWithoutRecommendationsInput, Prisma.InterviewKitUncheckedUpdateWithoutRecommendationsInput>
+}
+
+export type InterviewKitUpdateWithoutRecommendationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutInterviewKitsNestedInput
+  snapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUpdateManyWithoutKitNestedInput
+}
+
+export type InterviewKitUncheckedUpdateWithoutRecommendationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  snapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutKitNestedInput
+}
+
+export type InterviewKitCreateWithoutRatingsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  visibility?: string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: boolean
+  recommendCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutInterviewKitsInput
+  snapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutKitInput
+}
+
+export type InterviewKitUncheckedCreateWithoutRatingsInput = {
+  id?: string
+  ownerId: string
+  title: string
+  description?: string | null
+  visibility?: string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: boolean
+  recommendCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  snapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutKitInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutKitInput
+}
+
+export type InterviewKitCreateOrConnectWithoutRatingsInput = {
+  where: Prisma.InterviewKitWhereUniqueInput
+  create: Prisma.XOR<Prisma.InterviewKitCreateWithoutRatingsInput, Prisma.InterviewKitUncheckedCreateWithoutRatingsInput>
+}
+
+export type InterviewKitUpsertWithoutRatingsInput = {
+  update: Prisma.XOR<Prisma.InterviewKitUpdateWithoutRatingsInput, Prisma.InterviewKitUncheckedUpdateWithoutRatingsInput>
+  create: Prisma.XOR<Prisma.InterviewKitCreateWithoutRatingsInput, Prisma.InterviewKitUncheckedCreateWithoutRatingsInput>
+  where?: Prisma.InterviewKitWhereInput
+}
+
+export type InterviewKitUpdateToOneWithWhereWithoutRatingsInput = {
+  where?: Prisma.InterviewKitWhereInput
+  data: Prisma.XOR<Prisma.InterviewKitUpdateWithoutRatingsInput, Prisma.InterviewKitUncheckedUpdateWithoutRatingsInput>
+}
+
+export type InterviewKitUpdateWithoutRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutInterviewKitsNestedInput
+  snapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutKitNestedInput
+}
+
+export type InterviewKitUncheckedUpdateWithoutRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  snapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitCreateManyOwnerInput = {
@@ -627,6 +914,7 @@ export type InterviewKitCreateManyOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: boolean
+  recommendCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -639,9 +927,12 @@ export type InterviewKitUpdateWithoutOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitUncheckedUpdateWithoutOwnerInput = {
@@ -652,9 +943,12 @@ export type InterviewKitUncheckedUpdateWithoutOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutKitNestedInput
+  recommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutKitNestedInput
+  ratings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutKitNestedInput
 }
 
 export type InterviewKitUncheckedUpdateManyWithoutOwnerInput = {
@@ -665,6 +959,7 @@ export type InterviewKitUncheckedUpdateManyWithoutOwnerInput = {
   blocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   prepBlocksJson?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   isArchived?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  recommendCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -676,10 +971,14 @@ export type InterviewKitUncheckedUpdateManyWithoutOwnerInput = {
 
 export type InterviewKitCountOutputType = {
   snapshots: number
+  recommendations: number
+  ratings: number
 }
 
 export type InterviewKitCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   snapshots?: boolean | InterviewKitCountOutputTypeCountSnapshotsArgs
+  recommendations?: boolean | InterviewKitCountOutputTypeCountRecommendationsArgs
+  ratings?: boolean | InterviewKitCountOutputTypeCountRatingsArgs
 }
 
 /**
@@ -699,6 +998,20 @@ export type InterviewKitCountOutputTypeCountSnapshotsArgs<ExtArgs extends runtim
   where?: Prisma.InterviewKitSnapshotWhereInput
 }
 
+/**
+ * InterviewKitCountOutputType without action
+ */
+export type InterviewKitCountOutputTypeCountRecommendationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitRecommendationWhereInput
+}
+
+/**
+ * InterviewKitCountOutputType without action
+ */
+export type InterviewKitCountOutputTypeCountRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitRatingWhereInput
+}
+
 
 export type InterviewKitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -709,10 +1022,13 @@ export type InterviewKitSelect<ExtArgs extends runtime.Types.Extensions.Internal
   blocksJson?: boolean
   prepBlocksJson?: boolean
   isArchived?: boolean
+  recommendCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   snapshots?: boolean | Prisma.InterviewKit$snapshotsArgs<ExtArgs>
+  recommendations?: boolean | Prisma.InterviewKit$recommendationsArgs<ExtArgs>
+  ratings?: boolean | Prisma.InterviewKit$ratingsArgs<ExtArgs>
   _count?: boolean | Prisma.InterviewKitCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["interviewKit"]>
 
@@ -725,6 +1041,7 @@ export type InterviewKitSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   blocksJson?: boolean
   prepBlocksJson?: boolean
   isArchived?: boolean
+  recommendCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -739,6 +1056,7 @@ export type InterviewKitSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   blocksJson?: boolean
   prepBlocksJson?: boolean
   isArchived?: boolean
+  recommendCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -753,14 +1071,17 @@ export type InterviewKitSelectScalar = {
   blocksJson?: boolean
   prepBlocksJson?: boolean
   isArchived?: boolean
+  recommendCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type InterviewKitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "title" | "description" | "visibility" | "blocksJson" | "prepBlocksJson" | "isArchived" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewKit"]>
+export type InterviewKitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "title" | "description" | "visibility" | "blocksJson" | "prepBlocksJson" | "isArchived" | "recommendCount" | "createdAt" | "updatedAt", ExtArgs["result"]["interviewKit"]>
 export type InterviewKitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   snapshots?: boolean | Prisma.InterviewKit$snapshotsArgs<ExtArgs>
+  recommendations?: boolean | Prisma.InterviewKit$recommendationsArgs<ExtArgs>
+  ratings?: boolean | Prisma.InterviewKit$ratingsArgs<ExtArgs>
   _count?: boolean | Prisma.InterviewKitCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InterviewKitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -775,6 +1096,8 @@ export type $InterviewKitPayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     owner: Prisma.$UserPayload<ExtArgs>
     snapshots: Prisma.$InterviewKitSnapshotPayload<ExtArgs>[]
+    recommendations: Prisma.$InterviewKitRecommendationPayload<ExtArgs>[]
+    ratings: Prisma.$InterviewKitRatingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -785,6 +1108,7 @@ export type $InterviewKitPayload<ExtArgs extends runtime.Types.Extensions.Intern
     blocksJson: runtime.JsonValue
     prepBlocksJson: runtime.JsonValue
     isArchived: boolean
+    recommendCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["interviewKit"]>
@@ -1183,6 +1507,8 @@ export interface Prisma__InterviewKitClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   snapshots<T extends Prisma.InterviewKit$snapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InterviewKit$snapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recommendations<T extends Prisma.InterviewKit$recommendationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InterviewKit$recommendationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ratings<T extends Prisma.InterviewKit$ratingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InterviewKit$ratingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1220,6 +1546,7 @@ export interface InterviewKitFieldRefs {
   readonly blocksJson: Prisma.FieldRef<"InterviewKit", 'Json'>
   readonly prepBlocksJson: Prisma.FieldRef<"InterviewKit", 'Json'>
   readonly isArchived: Prisma.FieldRef<"InterviewKit", 'Boolean'>
+  readonly recommendCount: Prisma.FieldRef<"InterviewKit", 'Int'>
   readonly createdAt: Prisma.FieldRef<"InterviewKit", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"InterviewKit", 'DateTime'>
 }
@@ -1639,6 +1966,54 @@ export type InterviewKit$snapshotsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.InterviewKitSnapshotScalarFieldEnum | Prisma.InterviewKitSnapshotScalarFieldEnum[]
+}
+
+/**
+ * InterviewKit.recommendations
+ */
+export type InterviewKit$recommendationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKitRecommendation
+   */
+  select?: Prisma.InterviewKitRecommendationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKitRecommendation
+   */
+  omit?: Prisma.InterviewKitRecommendationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitRecommendationInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitRecommendationWhereInput
+  orderBy?: Prisma.InterviewKitRecommendationOrderByWithRelationInput | Prisma.InterviewKitRecommendationOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitRecommendationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitRecommendationScalarFieldEnum | Prisma.InterviewKitRecommendationScalarFieldEnum[]
+}
+
+/**
+ * InterviewKit.ratings
+ */
+export type InterviewKit$ratingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKitRating
+   */
+  select?: Prisma.InterviewKitRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKitRating
+   */
+  omit?: Prisma.InterviewKitRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitRatingInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitRatingWhereInput
+  orderBy?: Prisma.InterviewKitRatingOrderByWithRelationInput | Prisma.InterviewKitRatingOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitRatingScalarFieldEnum | Prisma.InterviewKitRatingScalarFieldEnum[]
 }
 
 /**

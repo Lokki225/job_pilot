@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
+  CheckCircle2,
   Loader2,
+  Lock,
   MessageSquare,
   Heart,
   Award,
@@ -12,6 +14,7 @@ import {
   Users,
   Star,
   Shield,
+  ShieldCheck,
   Sparkles,
   BookOpen,
   Trophy,
@@ -38,8 +41,12 @@ import {
   getFollowing,
   type CommunityProfileData,
 } from "@/lib/actions/community.action";
+import {
+  getMyRoleApplication,
+  type CommunityRoleApplicationData,
+} from "@/lib/actions/role-applications.action";
 
-const BADGE_CONFIG: Record<string, { icon: React.ReactNode; label: string; description: string; color: string }> = {
+const BADGE_CONFIG: Record<string, { icon: ReactNode; label: string; description: string; color: string }> = {
   FIRST_POST: { icon: <MessageSquare className="h-4 w-4" />, label: "First Post", description: "Created your first community post", color: "bg-blue-100 text-blue-800" },
   CONVERSATIONALIST: { icon: <Users className="h-4 w-4" />, label: "Conversationalist", description: "Participated in 50+ discussions", color: "bg-purple-100 text-purple-800" },
   COMMUNITY_FAVORITE: { icon: <Heart className="h-4 w-4" />, label: "Community Favorite", description: "Received 100+ likes on your posts", color: "bg-red-100 text-red-800" },
@@ -74,6 +81,9 @@ export default function CommunityProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [mentorApplication, setMentorApplication] = useState<CommunityRoleApplicationData | null>(null);
+  const [moderatorApplication, setModeratorApplication] = useState<CommunityRoleApplicationData | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
   const [editBio, setEditBio] = useState("");
   const [editTopics, setEditTopics] = useState("");
@@ -86,11 +96,7 @@ export default function CommunityProfilePage() {
   async function loadProfile() {
     setIsLoading(true);
     try {
-      const [profileRes, followersRes, followingRes] = await Promise.all([
-        getOrCreateCommunityProfile(),
-        Promise.resolve({ data: [], error: null }),
-        Promise.resolve({ data: [], error: null }),
-      ]);
+      const profileRes = await getOrCreateCommunityProfile();
 
       if (profileRes.error) {
         setError(profileRes.error);
@@ -106,6 +112,14 @@ export default function CommunityProfilePage() {
 
         if (fRes.data) setFollowers(fRes.data);
         if (fgRes.data) setFollowing(fgRes.data);
+
+        const [mentorRes, moderatorRes] = await Promise.all([
+          getMyRoleApplication("MENTOR"),
+          getMyRoleApplication("MODERATOR"),
+        ]);
+
+        setMentorApplication(mentorRes.data);
+        setModeratorApplication(moderatorRes.data);
       }
     } catch (err) {
       console.error("Error loading profile:", err);
@@ -170,6 +184,21 @@ export default function CommunityProfilePage() {
 
   const levelProgress = getLevelProgress(profile.reputationPoints, profile.level);
   const pointsToNext = getPointsToNextLevel(profile.reputationPoints, profile.level);
+  const earnedTypes = new Set(profile.badges.map((b) => b.badgeType));
+  const totalBadges = Object.keys(BADGE_CONFIG).length;
+  const badgeProgress = totalBadges > 0 ? (profile.badges.length / totalBadges) * 100 : 0;
+  const earnedBadgesSorted = [...profile.badges].sort(
+    (a, b) => new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime()
+  );
+
+  const allBadgesSorted = Object.entries(BADGE_CONFIG).sort(([aType, a], [bType, b]) => {
+    const aEarned = earnedTypes.has(aType);
+    const bEarned = earnedTypes.has(bType);
+    if (aEarned !== bEarned) return aEarned ? -1 : 1;
+    return a.label.localeCompare(b.label);
+  });
+
+  const isVerified = Boolean(profile.isMentor || mentorApplication?.status === "APPROVED");
 
   return (
     <div className="container mx-auto max-w-4xl space-y-6 p-4 md:p-6">
@@ -181,6 +210,91 @@ export default function CommunityProfilePage() {
           </Button>
         </Link>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Community Status</CardTitle>
+          <CardDescription>
+            {profile.badges.length}/{totalBadges} badges earned
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-start justify-between gap-3 rounded-lg border p-3">
+            <div className="min-w-0">
+              <p className="font-medium">Verification</p>
+              <p className="text-xs text-muted-foreground">
+                Verified members have completed identity verification for mentorship.
+              </p>
+            </div>
+            {isVerified ? (
+              <Badge variant="secondary" className="gap-1 text-xs">
+                <ShieldCheck className="h-3 w-3" />
+                Verified
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="gap-1 text-xs">
+                <Lock className="h-3 w-3" />
+                Not verified
+              </Badge>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Badge progress</span>
+              <span className="text-xs text-muted-foreground">
+                {profile.badges.length}/{totalBadges}
+              </span>
+            </div>
+            <Progress value={badgeProgress} className="h-2" />
+            <p className="text-sm text-muted-foreground">
+              Earn badges by posting, helping others, and staying active.
+            </p>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 rounded-lg border p-3">
+            <div className="min-w-0">
+              <p className="font-medium">Reputation points</p>
+              <p className="text-xs text-muted-foreground">
+                Reputation increases your level, helps unlock badges, and affects eligibility for community roles.
+              </p>
+            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <HelpCircle className="h-4 w-4" />
+                  How it works
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="max-w-sm">
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-sm font-medium">How you earn points</p>
+                    <div className="mt-2 space-y-1 text-sm text-muted-foreground">
+                      <p>Creating a post: +5</p>
+                      <p>Receiving a like: +2</p>
+                      <p>Receiving a comment: +1</p>
+                      <p>Helpful answer: +10</p>
+                      <p>Sharing a success story: +25</p>
+                      <p>First post bonus: +10</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium">Why it’s useful</p>
+                    <div className="mt-2 space-y-1 text-sm text-muted-foreground">
+                      <p>Levels up your profile (shown next to your name).</p>
+                      <p>Unlocks some badges automatically when you level up.</p>
+                      <p>Ranks you on the community leaderboard.</p>
+                      <p>Helps meet eligibility requirements for roles like Moderator.</p>
+                    </div>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="p-6">
@@ -203,6 +317,12 @@ export default function CommunityProfilePage() {
                       <TrendingUp className="h-3 w-3" />
                       Level {profile.level}
                     </Badge>
+                    {isVerified && (
+                      <Badge variant="secondary" className="gap-1">
+                        <ShieldCheck className="h-3 w-3" />
+                        Verified
+                      </Badge>
+                    )}
                     {profile.isModerator && (
                       <Badge className="bg-gray-100 text-gray-800 gap-1">
                         <Shield className="h-3 w-3" />
@@ -349,6 +469,10 @@ export default function CommunityProfilePage() {
             <Award className="h-4 w-4" />
             Badges ({profile.badges.length})
           </TabsTrigger>
+          <TabsTrigger value="roles" className="gap-2">
+            <Shield className="h-4 w-4" />
+            Roles
+          </TabsTrigger>
           <TabsTrigger value="followers" className="gap-2">
             <Users className="h-4 w-4" />
             Followers ({followers.length})
@@ -372,7 +496,7 @@ export default function CommunityProfilePage() {
             </Card>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {profile.badges.map((badge) => {
+              {earnedBadgesSorted.map((badge) => {
                 const config = BADGE_CONFIG[badge.badgeType] || {
                   icon: <Award className="h-4 w-4" />,
                   label: badge.badgeType,
@@ -407,15 +531,16 @@ export default function CommunityProfilePage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {Object.entries(BADGE_CONFIG).map(([type, config]) => {
-                  const earned = profile.badges.some((b) => b.badgeType === type);
+                {allBadgesSorted.map(([type, config]) => {
+                  const earned = earnedTypes.has(type);
+                  const earnedBadge = earnedBadgesSorted.find((b) => b.badgeType === type);
                   return (
                     <Popover key={type}>
                       <PopoverTrigger asChild>
                         <button
                           type="button"
                           className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-muted/50 ${
-                            earned ? "" : "opacity-50"
+                            earned ? "" : "opacity-60"
                           }`}
                         >
                           <div className={`flex h-8 w-8 items-center justify-center rounded-full ${config.color}`}>
@@ -426,15 +551,40 @@ export default function CommunityProfilePage() {
                             <p className="truncate text-xs text-muted-foreground">{config.description}</p>
                           </div>
                           {earned && (
-                            <Badge variant="secondary" className="text-xs">
-                              Earned
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="h-4 w-4 text-primary" />
+                              <Badge variant="secondary" className="text-xs">
+                                Earned
+                              </Badge>
+                            </div>
+                          )}
+                          {!earned && (
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                              <Lock className="h-4 w-4" />
+                              <Badge variant="outline" className="text-xs">
+                                Locked
+                              </Badge>
+                            </div>
                           )}
                         </button>
                       </PopoverTrigger>
                       <PopoverContent align="start" className="max-w-sm">
-                        <p className="text-sm font-medium">How to earn: {config.label}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{config.description}</p>
+                        <div className="space-y-2">
+                          <div className="flex items-start justify-between gap-3">
+                            <p className="text-sm font-medium">{config.label}</p>
+                            {earned ? (
+                              <Badge variant="secondary" className="text-xs">
+                                Earned {earnedBadge ? new Date(earnedBadge.earnedAt).toLocaleDateString() : ""}
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-xs">
+                                Locked
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">How to earn</p>
+                          <p className="text-sm text-muted-foreground">{config.description}</p>
+                        </div>
                       </PopoverContent>
                     </Popover>
                   );
@@ -442,6 +592,56 @@ export default function CommunityProfilePage() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="roles" className="mt-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Mentor</CardTitle>
+                <CardDescription>Help others and level up your mentor grade</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Status</span>
+                  <Badge variant="outline" className="text-xs">
+                    {mentorApplication?.status || (profile.isMentor ? "ACTIVE" : "INACTIVE")}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Grade</span>
+                  <Badge variant="secondary" className="text-xs">
+                    {mentorApplication?.grade || "—"}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Moderator</CardTitle>
+                <CardDescription>Keep the community safe and helpful</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Status</span>
+                  <Badge variant="outline" className="text-xs">
+                    {moderatorApplication?.status || (profile.isModerator ? "ACTIVE" : "INACTIVE")}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Role</span>
+                  {profile.isModerator ? (
+                    <Badge className="bg-gray-100 text-gray-800 text-xs">Active</Badge>
+                  ) : (
+                    <Badge variant="outline" className="text-xs">
+                      —
+                    </Badge>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="followers" className="mt-4">

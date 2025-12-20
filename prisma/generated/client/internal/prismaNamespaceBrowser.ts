@@ -93,6 +93,8 @@ export const ModelName = {
   InterviewPrepPack: 'InterviewPrepPack',
   InterviewKit: 'InterviewKit',
   InterviewKitSnapshot: 'InterviewKitSnapshot',
+  InterviewKitRecommendation: 'InterviewKitRecommendation',
+  InterviewKitRating: 'InterviewKitRating',
   XPTransaction: 'XPTransaction',
   CommunityProfile: 'CommunityProfile',
   CommunityBadge: 'CommunityBadge',
@@ -109,6 +111,10 @@ export const ModelName = {
   UserFollow: 'UserFollow',
   MentorProfile: 'MentorProfile',
   Mentorship: 'Mentorship',
+  MentorKycVerification: 'MentorKycVerification',
+  CommunityRoleApplication: 'CommunityRoleApplication',
+  CommunityRoleRequirement: 'CommunityRoleRequirement',
+  CommunityGradeThreshold: 'CommunityGradeThreshold',
   CustomStudyPlan: 'CustomStudyPlan',
   CustomStudyPlanLike: 'CustomStudyPlanLike',
   CustomStudyPlanComment: 'CustomStudyPlanComment',
@@ -889,6 +895,7 @@ export const InterviewKitScalarFieldEnum = {
   blocksJson: 'blocksJson',
   prepBlocksJson: 'prepBlocksJson',
   isArchived: 'isArchived',
+  recommendCount: 'recommendCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -908,6 +915,30 @@ export const InterviewKitSnapshotScalarFieldEnum = {
 } as const
 
 export type InterviewKitSnapshotScalarFieldEnum = (typeof InterviewKitSnapshotScalarFieldEnum)[keyof typeof InterviewKitSnapshotScalarFieldEnum]
+
+
+export const InterviewKitRecommendationScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type InterviewKitRecommendationScalarFieldEnum = (typeof InterviewKitRecommendationScalarFieldEnum)[keyof typeof InterviewKitRecommendationScalarFieldEnum]
+
+
+export const InterviewKitRatingScalarFieldEnum = {
+  id: 'id',
+  kitId: 'kitId',
+  sessionId: 'sessionId',
+  raterId: 'raterId',
+  rating: 'rating',
+  review: 'review',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InterviewKitRatingScalarFieldEnum = (typeof InterviewKitRatingScalarFieldEnum)[keyof typeof InterviewKitRatingScalarFieldEnum]
 
 
 export const XPTransactionScalarFieldEnum = {
@@ -1139,6 +1170,69 @@ export const MentorshipScalarFieldEnum = {
 } as const
 
 export type MentorshipScalarFieldEnum = (typeof MentorshipScalarFieldEnum)[keyof typeof MentorshipScalarFieldEnum]
+
+
+export const MentorKycVerificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  provider: 'provider',
+  providerInquiryId: 'providerInquiryId',
+  providerStatus: 'providerStatus',
+  payload: 'payload',
+  submittedAt: 'submittedAt',
+  approvedAt: 'approvedAt',
+  approvedBy: 'approvedBy',
+  rejectedAt: 'rejectedAt',
+  rejectedBy: 'rejectedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MentorKycVerificationScalarFieldEnum = (typeof MentorKycVerificationScalarFieldEnum)[keyof typeof MentorKycVerificationScalarFieldEnum]
+
+
+export const CommunityRoleApplicationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  roleType: 'roleType',
+  status: 'status',
+  grade: 'grade',
+  submittedAt: 'submittedAt',
+  approvedAt: 'approvedAt',
+  approvedBy: 'approvedBy',
+  rejectedAt: 'rejectedAt',
+  rejectedBy: 'rejectedBy',
+  reviewNote: 'reviewNote',
+  payload: 'payload',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityRoleApplicationScalarFieldEnum = (typeof CommunityRoleApplicationScalarFieldEnum)[keyof typeof CommunityRoleApplicationScalarFieldEnum]
+
+
+export const CommunityRoleRequirementScalarFieldEnum = {
+  roleType: 'roleType',
+  minReputationPoints: 'minReputationPoints',
+  minHelpfulVotes: 'minHelpfulVotes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityRoleRequirementScalarFieldEnum = (typeof CommunityRoleRequirementScalarFieldEnum)[keyof typeof CommunityRoleRequirementScalarFieldEnum]
+
+
+export const CommunityGradeThresholdScalarFieldEnum = {
+  id: 'id',
+  trackType: 'trackType',
+  grade: 'grade',
+  criteria: 'criteria',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CommunityGradeThresholdScalarFieldEnum = (typeof CommunityGradeThresholdScalarFieldEnum)[keyof typeof CommunityGradeThresholdScalarFieldEnum]
 
 
 export const CustomStudyPlanScalarFieldEnum = {

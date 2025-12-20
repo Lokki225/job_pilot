@@ -274,12 +274,20 @@ export type UserWhereInput = {
   following?: Prisma.UserFollowListRelationFilter
   mentorProfile?: Prisma.XOR<Prisma.MentorProfileNullableScalarRelationFilter, Prisma.MentorProfileWhereInput> | null
   mentorships?: Prisma.MentorshipListRelationFilter
+  mentorKycVerification?: Prisma.XOR<Prisma.MentorKycVerificationNullableScalarRelationFilter, Prisma.MentorKycVerificationWhereInput> | null
+  mentorKycApprovals?: Prisma.MentorKycVerificationListRelationFilter
+  mentorKycRejections?: Prisma.MentorKycVerificationListRelationFilter
+  communityRoleApplications?: Prisma.CommunityRoleApplicationListRelationFilter
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationListRelationFilter
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationListRelationFilter
   coverLetterTemplates?: Prisma.CoverLetterTemplateListRelationFilter
   customStudyPlans?: Prisma.CustomStudyPlanListRelationFilter
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeListRelationFilter
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentListRelationFilter
   interviewKits?: Prisma.InterviewKitListRelationFilter
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotListRelationFilter
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationListRelationFilter
+  interviewKitRatings?: Prisma.InterviewKitRatingListRelationFilter
   notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
   notificationQueue?: Prisma.NotificationQueueListRelationFilter
   emailQueue?: Prisma.EmailQueueListRelationFilter
@@ -337,12 +345,20 @@ export type UserOrderByWithRelationInput = {
   following?: Prisma.UserFollowOrderByRelationAggregateInput
   mentorProfile?: Prisma.MentorProfileOrderByWithRelationInput
   mentorships?: Prisma.MentorshipOrderByRelationAggregateInput
+  mentorKycVerification?: Prisma.MentorKycVerificationOrderByWithRelationInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationOrderByRelationAggregateInput
+  mentorKycRejections?: Prisma.MentorKycVerificationOrderByRelationAggregateInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationOrderByRelationAggregateInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationOrderByRelationAggregateInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationOrderByRelationAggregateInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateOrderByRelationAggregateInput
   customStudyPlans?: Prisma.CustomStudyPlanOrderByRelationAggregateInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeOrderByRelationAggregateInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentOrderByRelationAggregateInput
   interviewKits?: Prisma.InterviewKitOrderByRelationAggregateInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotOrderByRelationAggregateInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationOrderByRelationAggregateInput
+  interviewKitRatings?: Prisma.InterviewKitRatingOrderByRelationAggregateInput
   notificationPreference?: Prisma.NotificationPreferenceOrderByWithRelationInput
   notificationQueue?: Prisma.NotificationQueueOrderByRelationAggregateInput
   emailQueue?: Prisma.EmailQueueOrderByRelationAggregateInput
@@ -403,12 +419,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   following?: Prisma.UserFollowListRelationFilter
   mentorProfile?: Prisma.XOR<Prisma.MentorProfileNullableScalarRelationFilter, Prisma.MentorProfileWhereInput> | null
   mentorships?: Prisma.MentorshipListRelationFilter
+  mentorKycVerification?: Prisma.XOR<Prisma.MentorKycVerificationNullableScalarRelationFilter, Prisma.MentorKycVerificationWhereInput> | null
+  mentorKycApprovals?: Prisma.MentorKycVerificationListRelationFilter
+  mentorKycRejections?: Prisma.MentorKycVerificationListRelationFilter
+  communityRoleApplications?: Prisma.CommunityRoleApplicationListRelationFilter
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationListRelationFilter
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationListRelationFilter
   coverLetterTemplates?: Prisma.CoverLetterTemplateListRelationFilter
   customStudyPlans?: Prisma.CustomStudyPlanListRelationFilter
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeListRelationFilter
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentListRelationFilter
   interviewKits?: Prisma.InterviewKitListRelationFilter
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotListRelationFilter
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationListRelationFilter
+  interviewKitRatings?: Prisma.InterviewKitRatingListRelationFilter
   notificationPreference?: Prisma.XOR<Prisma.NotificationPreferenceNullableScalarRelationFilter, Prisma.NotificationPreferenceWhereInput> | null
   notificationQueue?: Prisma.NotificationQueueListRelationFilter
   emailQueue?: Prisma.EmailQueueListRelationFilter
@@ -494,12 +518,20 @@ export type UserCreateInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -557,12 +589,20 @@ export type UserUncheckedCreateInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -620,12 +660,20 @@ export type UserUpdateInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -683,12 +731,20 @@ export type UserUncheckedUpdateInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -1218,6 +1274,34 @@ export type UserUpdateOneRequiredWithoutInterviewKitSnapshotsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewKitSnapshotsInput, Prisma.UserUpdateWithoutInterviewKitSnapshotsInput>, Prisma.UserUncheckedUpdateWithoutInterviewKitSnapshotsInput>
 }
 
+export type UserCreateNestedOneWithoutInterviewKitRecommendationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRecommendationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitRecommendationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInterviewKitRecommendationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRecommendationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitRecommendationsInput
+  upsert?: Prisma.UserUpsertWithoutInterviewKitRecommendationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewKitRecommendationsInput, Prisma.UserUpdateWithoutInterviewKitRecommendationsInput>, Prisma.UserUncheckedUpdateWithoutInterviewKitRecommendationsInput>
+}
+
+export type UserCreateNestedOneWithoutInterviewKitRatingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutInterviewKitRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInterviewKitRatingsInput
+  upsert?: Prisma.UserUpsertWithoutInterviewKitRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInterviewKitRatingsInput, Prisma.UserUpdateWithoutInterviewKitRatingsInput>, Prisma.UserUncheckedUpdateWithoutInterviewKitRatingsInput>
+}
+
 export type UserCreateNestedOneWithoutXpTransactionsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutXpTransactionsInput, Prisma.UserUncheckedCreateWithoutXpTransactionsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutXpTransactionsInput
@@ -1428,6 +1512,98 @@ export type UserUpdateOneRequiredWithoutMentorshipsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentorshipsInput, Prisma.UserUpdateWithoutMentorshipsInput>, Prisma.UserUncheckedUpdateWithoutMentorshipsInput>
 }
 
+export type UserCreateNestedOneWithoutMentorKycVerificationInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycVerificationInput, Prisma.UserUncheckedCreateWithoutMentorKycVerificationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycVerificationInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutMentorKycApprovalsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedCreateWithoutMentorKycApprovalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycApprovalsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutMentorKycRejectionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedCreateWithoutMentorKycRejectionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycRejectionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutMentorKycVerificationNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycVerificationInput, Prisma.UserUncheckedCreateWithoutMentorKycVerificationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycVerificationInput
+  upsert?: Prisma.UserUpsertWithoutMentorKycVerificationInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentorKycVerificationInput, Prisma.UserUpdateWithoutMentorKycVerificationInput>, Prisma.UserUncheckedUpdateWithoutMentorKycVerificationInput>
+}
+
+export type UserUpdateOneWithoutMentorKycApprovalsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedCreateWithoutMentorKycApprovalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycApprovalsInput
+  upsert?: Prisma.UserUpsertWithoutMentorKycApprovalsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentorKycApprovalsInput, Prisma.UserUpdateWithoutMentorKycApprovalsInput>, Prisma.UserUncheckedUpdateWithoutMentorKycApprovalsInput>
+}
+
+export type UserUpdateOneWithoutMentorKycRejectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedCreateWithoutMentorKycRejectionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMentorKycRejectionsInput
+  upsert?: Prisma.UserUpsertWithoutMentorKycRejectionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMentorKycRejectionsInput, Prisma.UserUpdateWithoutMentorKycRejectionsInput>, Prisma.UserUncheckedUpdateWithoutMentorKycRejectionsInput>
+}
+
+export type UserCreateNestedOneWithoutCommunityRoleApplicationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedCreateWithoutCommunityRoleApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommunityRoleApplicationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutRoleApplicationApprovalsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationApprovalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoleApplicationApprovalsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutRoleApplicationRejectionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationRejectionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoleApplicationRejectionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCommunityRoleApplicationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedCreateWithoutCommunityRoleApplicationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommunityRoleApplicationsInput
+  upsert?: Prisma.UserUpsertWithoutCommunityRoleApplicationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommunityRoleApplicationsInput, Prisma.UserUpdateWithoutCommunityRoleApplicationsInput>, Prisma.UserUncheckedUpdateWithoutCommunityRoleApplicationsInput>
+}
+
+export type UserUpdateOneWithoutRoleApplicationApprovalsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationApprovalsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoleApplicationApprovalsInput
+  upsert?: Prisma.UserUpsertWithoutRoleApplicationApprovalsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoleApplicationApprovalsInput, Prisma.UserUpdateWithoutRoleApplicationApprovalsInput>, Prisma.UserUncheckedUpdateWithoutRoleApplicationApprovalsInput>
+}
+
+export type UserUpdateOneWithoutRoleApplicationRejectionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationRejectionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoleApplicationRejectionsInput
+  upsert?: Prisma.UserUpsertWithoutRoleApplicationRejectionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoleApplicationRejectionsInput, Prisma.UserUpdateWithoutRoleApplicationRejectionsInput>, Prisma.UserUncheckedUpdateWithoutRoleApplicationRejectionsInput>
+}
+
 export type UserCreateNestedOneWithoutCustomStudyPlansInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCustomStudyPlansInput, Prisma.UserUncheckedCreateWithoutCustomStudyPlansInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCustomStudyPlansInput
@@ -1593,12 +1769,20 @@ export type UserCreateWithoutProfileInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -1655,12 +1839,20 @@ export type UserUncheckedCreateWithoutProfileInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -1733,12 +1925,20 @@ export type UserUpdateWithoutProfileInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -1795,12 +1995,20 @@ export type UserUncheckedUpdateWithoutProfileInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -1857,12 +2065,20 @@ export type UserCreateWithoutResumesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -1919,12 +2135,20 @@ export type UserUncheckedCreateWithoutResumesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -1997,12 +2221,20 @@ export type UserUpdateWithoutResumesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -2059,12 +2291,20 @@ export type UserUncheckedUpdateWithoutResumesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -2121,12 +2361,20 @@ export type UserCreateWithoutJobApplicationsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -2183,12 +2431,20 @@ export type UserUncheckedCreateWithoutJobApplicationsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -2261,12 +2517,20 @@ export type UserUpdateWithoutJobApplicationsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -2323,12 +2587,20 @@ export type UserUncheckedUpdateWithoutJobApplicationsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -2385,12 +2657,20 @@ export type UserCreateWithoutPreferencesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -2447,12 +2727,20 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -2525,12 +2813,20 @@ export type UserUpdateWithoutPreferencesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -2587,12 +2883,20 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -2650,12 +2954,20 @@ export type UserCreateWithoutSavedJobSearchesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -2712,12 +3024,20 @@ export type UserUncheckedCreateWithoutSavedJobSearchesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -2790,12 +3110,20 @@ export type UserUpdateWithoutSavedJobSearchesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -2852,12 +3180,20 @@ export type UserUncheckedUpdateWithoutSavedJobSearchesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -2913,12 +3249,20 @@ export type UserCreateWithoutAiContentsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -2975,12 +3319,20 @@ export type UserUncheckedCreateWithoutAiContentsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -3053,12 +3405,20 @@ export type UserUpdateWithoutAiContentsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -3115,12 +3475,20 @@ export type UserUncheckedUpdateWithoutAiContentsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -3177,12 +3545,20 @@ export type UserCreateWithoutCoverLettersInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -3239,12 +3615,20 @@ export type UserUncheckedCreateWithoutCoverLettersInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -3317,12 +3701,20 @@ export type UserUpdateWithoutCoverLettersInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -3379,12 +3771,20 @@ export type UserUncheckedUpdateWithoutCoverLettersInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -3441,12 +3841,20 @@ export type UserCreateWithoutEmailApplicationsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -3503,12 +3911,20 @@ export type UserUncheckedCreateWithoutEmailApplicationsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -3581,12 +3997,20 @@ export type UserUpdateWithoutEmailApplicationsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -3643,12 +4067,20 @@ export type UserUncheckedUpdateWithoutEmailApplicationsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -3705,12 +4137,20 @@ export type UserCreateWithoutNotificationsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -3767,12 +4207,20 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -3845,12 +4293,20 @@ export type UserUpdateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -3907,12 +4363,20 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -3969,12 +4433,20 @@ export type UserCreateWithoutStudyProgressInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -4031,12 +4503,20 @@ export type UserUncheckedCreateWithoutStudyProgressInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -4109,12 +4589,20 @@ export type UserUpdateWithoutStudyProgressInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -4171,12 +4659,20 @@ export type UserUncheckedUpdateWithoutStudyProgressInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -4233,12 +4729,20 @@ export type UserCreateWithoutTrainingSessionsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -4295,12 +4799,20 @@ export type UserUncheckedCreateWithoutTrainingSessionsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -4373,12 +4885,20 @@ export type UserUpdateWithoutTrainingSessionsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -4435,12 +4955,20 @@ export type UserUncheckedUpdateWithoutTrainingSessionsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -4497,12 +5025,20 @@ export type UserCreateWithoutInterviewStatsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -4559,12 +5095,20 @@ export type UserUncheckedCreateWithoutInterviewStatsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -4637,12 +5181,20 @@ export type UserUpdateWithoutInterviewStatsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -4699,12 +5251,20 @@ export type UserUncheckedUpdateWithoutInterviewStatsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -4761,12 +5321,20 @@ export type UserCreateWithoutCompanyResearchInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -4823,12 +5391,20 @@ export type UserUncheckedCreateWithoutCompanyResearchInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -4901,12 +5477,20 @@ export type UserUpdateWithoutCompanyResearchInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -4963,12 +5547,20 @@ export type UserUncheckedUpdateWithoutCompanyResearchInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -5025,12 +5617,20 @@ export type UserCreateWithoutPeerPracticeProfileInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -5087,12 +5687,20 @@ export type UserUncheckedCreateWithoutPeerPracticeProfileInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -5165,12 +5773,20 @@ export type UserUpdateWithoutPeerPracticeProfileInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -5227,12 +5843,20 @@ export type UserUncheckedUpdateWithoutPeerPracticeProfileInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -5289,12 +5913,20 @@ export type UserCreateWithoutPeerSessionsRequestedInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -5351,12 +5983,20 @@ export type UserUncheckedCreateWithoutPeerSessionsRequestedInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -5418,12 +6058,20 @@ export type UserCreateWithoutPeerSessionsPartnerInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -5480,12 +6128,20 @@ export type UserUncheckedCreateWithoutPeerSessionsPartnerInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -5558,12 +6214,20 @@ export type UserUpdateWithoutPeerSessionsRequestedInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -5620,12 +6284,20 @@ export type UserUncheckedUpdateWithoutPeerSessionsRequestedInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -5693,12 +6365,20 @@ export type UserUpdateWithoutPeerSessionsPartnerInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -5755,12 +6435,20 @@ export type UserUncheckedUpdateWithoutPeerSessionsPartnerInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -5817,12 +6505,20 @@ export type UserCreateWithoutCalendarConnectionsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -5879,12 +6575,20 @@ export type UserUncheckedCreateWithoutCalendarConnectionsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -5957,12 +6661,20 @@ export type UserUpdateWithoutCalendarConnectionsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -6019,12 +6731,20 @@ export type UserUncheckedUpdateWithoutCalendarConnectionsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -6081,12 +6801,20 @@ export type UserCreateWithoutDetectedInterviewsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -6143,12 +6871,20 @@ export type UserUncheckedCreateWithoutDetectedInterviewsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -6221,12 +6957,20 @@ export type UserUpdateWithoutDetectedInterviewsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -6283,12 +7027,20 @@ export type UserUncheckedUpdateWithoutDetectedInterviewsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -6345,12 +7097,20 @@ export type UserCreateWithoutSuccessStoriesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -6407,12 +7167,20 @@ export type UserUncheckedCreateWithoutSuccessStoriesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -6485,12 +7253,20 @@ export type UserUpdateWithoutSuccessStoriesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -6547,12 +7323,20 @@ export type UserUncheckedUpdateWithoutSuccessStoriesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -6609,12 +7393,20 @@ export type UserCreateWithoutStoryLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -6671,12 +7463,20 @@ export type UserUncheckedCreateWithoutStoryLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -6749,12 +7549,20 @@ export type UserUpdateWithoutStoryLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -6811,12 +7619,20 @@ export type UserUncheckedUpdateWithoutStoryLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -6873,12 +7689,20 @@ export type UserCreateWithoutStoryBookmarksInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -6935,12 +7759,20 @@ export type UserUncheckedCreateWithoutStoryBookmarksInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -7013,12 +7845,20 @@ export type UserUpdateWithoutStoryBookmarksInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -7075,12 +7915,20 @@ export type UserUncheckedUpdateWithoutStoryBookmarksInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -7137,12 +7985,20 @@ export type UserCreateWithoutStoryHidesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -7199,12 +8055,20 @@ export type UserUncheckedCreateWithoutStoryHidesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -7277,12 +8141,20 @@ export type UserUpdateWithoutStoryHidesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -7339,12 +8211,20 @@ export type UserUncheckedUpdateWithoutStoryHidesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -7401,12 +8281,20 @@ export type UserCreateWithoutStoryReportsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -7463,12 +8351,20 @@ export type UserUncheckedCreateWithoutStoryReportsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -7541,12 +8437,20 @@ export type UserUpdateWithoutStoryReportsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -7603,12 +8507,20 @@ export type UserUncheckedUpdateWithoutStoryReportsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -7665,12 +8577,20 @@ export type UserCreateWithoutStoryCommentsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -7727,12 +8647,20 @@ export type UserUncheckedCreateWithoutStoryCommentsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -7805,12 +8733,20 @@ export type UserUpdateWithoutStoryCommentsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -7867,12 +8803,20 @@ export type UserUncheckedUpdateWithoutStoryCommentsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -7929,12 +8873,20 @@ export type UserCreateWithoutStoryCommentLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -7991,12 +8943,20 @@ export type UserUncheckedCreateWithoutStoryCommentLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -8069,12 +9029,20 @@ export type UserUpdateWithoutStoryCommentLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -8131,12 +9099,20 @@ export type UserUncheckedUpdateWithoutStoryCommentLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -8193,12 +9169,20 @@ export type UserCreateWithoutAchievementsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -8255,12 +9239,20 @@ export type UserUncheckedCreateWithoutAchievementsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -8333,12 +9325,20 @@ export type UserUpdateWithoutAchievementsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -8395,12 +9395,20 @@ export type UserUncheckedUpdateWithoutAchievementsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -8457,12 +9465,20 @@ export type UserCreateWithoutXpInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -8519,12 +9535,20 @@ export type UserUncheckedCreateWithoutXpInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -8597,12 +9621,20 @@ export type UserUpdateWithoutXpInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -8659,12 +9691,20 @@ export type UserUncheckedUpdateWithoutXpInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -8721,12 +9761,20 @@ export type UserCreateWithoutInterviewPrepPacksInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -8783,12 +9831,20 @@ export type UserUncheckedCreateWithoutInterviewPrepPacksInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -8861,12 +9917,20 @@ export type UserUpdateWithoutInterviewPrepPacksInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -8923,12 +9987,20 @@ export type UserUncheckedUpdateWithoutInterviewPrepPacksInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -8986,11 +10058,19 @@ export type UserCreateWithoutInterviewKitsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -9048,11 +10128,19 @@ export type UserUncheckedCreateWithoutInterviewKitsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -9126,11 +10214,19 @@ export type UserUpdateWithoutInterviewKitsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -9188,11 +10284,19 @@ export type UserUncheckedUpdateWithoutInterviewKitsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -9250,11 +10354,19 @@ export type UserCreateWithoutInterviewKitSnapshotsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -9312,11 +10424,19 @@ export type UserUncheckedCreateWithoutInterviewKitSnapshotsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -9390,11 +10510,19 @@ export type UserUpdateWithoutInterviewKitSnapshotsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -9452,11 +10580,611 @@ export type UserUncheckedUpdateWithoutInterviewKitSnapshotsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInterviewKitRecommendationsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInterviewKitRecommendationsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInterviewKitRecommendationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRecommendationsInput>
+}
+
+export type UserUpsertWithoutInterviewKitRecommendationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitRecommendationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRecommendationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInterviewKitRecommendationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitRecommendationsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitRecommendationsInput>
+}
+
+export type UserUpdateWithoutInterviewKitRecommendationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInterviewKitRecommendationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInterviewKitRatingsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInterviewKitRatingsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInterviewKitRatingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRatingsInput>
+}
+
+export type UserUpsertWithoutInterviewKitRatingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitRatingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedCreateWithoutInterviewKitRatingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInterviewKitRatingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInterviewKitRatingsInput, Prisma.UserUncheckedUpdateWithoutInterviewKitRatingsInput>
+}
+
+export type UserUpdateWithoutInterviewKitRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInterviewKitRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -9513,12 +11241,20 @@ export type UserCreateWithoutXpTransactionsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -9575,12 +11311,20 @@ export type UserUncheckedCreateWithoutXpTransactionsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -9653,12 +11397,20 @@ export type UserUpdateWithoutXpTransactionsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -9715,12 +11467,20 @@ export type UserUncheckedUpdateWithoutXpTransactionsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -9777,12 +11537,20 @@ export type UserCreateWithoutCommunityProfileInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -9839,12 +11607,20 @@ export type UserUncheckedCreateWithoutCommunityProfileInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -9917,12 +11693,20 @@ export type UserUpdateWithoutCommunityProfileInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -9979,12 +11763,20 @@ export type UserUncheckedUpdateWithoutCommunityProfileInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -10041,12 +11833,20 @@ export type UserCreateWithoutCommunityPostsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -10103,12 +11903,20 @@ export type UserUncheckedCreateWithoutCommunityPostsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -10181,12 +11989,20 @@ export type UserUpdateWithoutCommunityPostsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -10243,12 +12059,20 @@ export type UserUncheckedUpdateWithoutCommunityPostsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -10305,12 +12129,20 @@ export type UserCreateWithoutCommunityPostLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -10367,12 +12199,20 @@ export type UserUncheckedCreateWithoutCommunityPostLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -10445,12 +12285,20 @@ export type UserUpdateWithoutCommunityPostLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -10507,12 +12355,20 @@ export type UserUncheckedUpdateWithoutCommunityPostLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -10569,12 +12425,20 @@ export type UserCreateWithoutCommunityPostCommentsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -10631,12 +12495,20 @@ export type UserUncheckedCreateWithoutCommunityPostCommentsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -10709,12 +12581,20 @@ export type UserUpdateWithoutCommunityPostCommentsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -10771,12 +12651,20 @@ export type UserUncheckedUpdateWithoutCommunityPostCommentsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -10833,12 +12721,20 @@ export type UserCreateWithoutCommunityPostCommentLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -10895,12 +12791,20 @@ export type UserUncheckedCreateWithoutCommunityPostCommentLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -10973,12 +12877,20 @@ export type UserUpdateWithoutCommunityPostCommentLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -11035,12 +12947,20 @@ export type UserUncheckedUpdateWithoutCommunityPostCommentLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -11097,12 +13017,20 @@ export type UserCreateWithoutCommunityPostBookmarksInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -11159,12 +13087,20 @@ export type UserUncheckedCreateWithoutCommunityPostBookmarksInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -11237,12 +13173,20 @@ export type UserUpdateWithoutCommunityPostBookmarksInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -11299,12 +13243,20 @@ export type UserUncheckedUpdateWithoutCommunityPostBookmarksInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -11361,12 +13313,20 @@ export type UserCreateWithoutCommunityPostReportsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -11423,12 +13383,20 @@ export type UserUncheckedCreateWithoutCommunityPostReportsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -11501,12 +13469,20 @@ export type UserUpdateWithoutCommunityPostReportsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -11563,12 +13539,20 @@ export type UserUncheckedUpdateWithoutCommunityPostReportsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -11625,12 +13609,20 @@ export type UserCreateWithoutChatRoomMembershipsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -11687,12 +13679,20 @@ export type UserUncheckedCreateWithoutChatRoomMembershipsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -11765,12 +13765,20 @@ export type UserUpdateWithoutChatRoomMembershipsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -11827,12 +13835,20 @@ export type UserUncheckedUpdateWithoutChatRoomMembershipsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -11889,12 +13905,20 @@ export type UserCreateWithoutChatMessagesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -11951,12 +13975,20 @@ export type UserUncheckedCreateWithoutChatMessagesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -12029,12 +14061,20 @@ export type UserUpdateWithoutChatMessagesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -12091,12 +14131,20 @@ export type UserUncheckedUpdateWithoutChatMessagesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -12153,12 +14201,20 @@ export type UserCreateWithoutChatMessageReactionsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -12215,12 +14271,20 @@ export type UserUncheckedCreateWithoutChatMessageReactionsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -12293,12 +14357,20 @@ export type UserUpdateWithoutChatMessageReactionsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -12355,12 +14427,20 @@ export type UserUncheckedUpdateWithoutChatMessageReactionsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -12417,12 +14497,20 @@ export type UserCreateWithoutFollowingInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -12479,12 +14567,20 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -12546,12 +14642,20 @@ export type UserCreateWithoutFollowersInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -12608,12 +14712,20 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -12686,12 +14798,20 @@ export type UserUpdateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -12748,12 +14868,20 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -12821,12 +14949,20 @@ export type UserUpdateWithoutFollowersInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -12883,12 +15019,20 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -12945,12 +15089,20 @@ export type UserCreateWithoutMentorProfileInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -13007,12 +15159,20 @@ export type UserUncheckedCreateWithoutMentorProfileInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -13085,12 +15245,20 @@ export type UserUpdateWithoutMentorProfileInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -13147,12 +15315,20 @@ export type UserUncheckedUpdateWithoutMentorProfileInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -13209,12 +15385,20 @@ export type UserCreateWithoutMentorshipsInput = {
   followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -13271,12 +15455,20 @@ export type UserUncheckedCreateWithoutMentorshipsInput = {
   followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -13349,12 +15541,20 @@ export type UserUpdateWithoutMentorshipsInput = {
   followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -13411,12 +15611,1796 @@ export type UserUncheckedUpdateWithoutMentorshipsInput = {
   followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMentorKycVerificationInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMentorKycVerificationInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMentorKycVerificationInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycVerificationInput, Prisma.UserUncheckedCreateWithoutMentorKycVerificationInput>
+}
+
+export type UserCreateWithoutMentorKycApprovalsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMentorKycApprovalsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMentorKycApprovalsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedCreateWithoutMentorKycApprovalsInput>
+}
+
+export type UserCreateWithoutMentorKycRejectionsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMentorKycRejectionsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMentorKycRejectionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedCreateWithoutMentorKycRejectionsInput>
+}
+
+export type UserUpsertWithoutMentorKycVerificationInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycVerificationInput, Prisma.UserUncheckedUpdateWithoutMentorKycVerificationInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycVerificationInput, Prisma.UserUncheckedCreateWithoutMentorKycVerificationInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMentorKycVerificationInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycVerificationInput, Prisma.UserUncheckedUpdateWithoutMentorKycVerificationInput>
+}
+
+export type UserUpdateWithoutMentorKycVerificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMentorKycVerificationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutMentorKycApprovalsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedUpdateWithoutMentorKycApprovalsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedCreateWithoutMentorKycApprovalsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMentorKycApprovalsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycApprovalsInput, Prisma.UserUncheckedUpdateWithoutMentorKycApprovalsInput>
+}
+
+export type UserUpdateWithoutMentorKycApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMentorKycApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutMentorKycRejectionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedUpdateWithoutMentorKycRejectionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedCreateWithoutMentorKycRejectionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMentorKycRejectionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMentorKycRejectionsInput, Prisma.UserUncheckedUpdateWithoutMentorKycRejectionsInput>
+}
+
+export type UserUpdateWithoutMentorKycRejectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMentorKycRejectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCommunityRoleApplicationsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCommunityRoleApplicationsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCommunityRoleApplicationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedCreateWithoutCommunityRoleApplicationsInput>
+}
+
+export type UserCreateWithoutRoleApplicationApprovalsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRoleApplicationApprovalsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRoleApplicationApprovalsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationApprovalsInput>
+}
+
+export type UserCreateWithoutRoleApplicationRejectionsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRoleApplicationRejectionsInput = {
+  id?: string
+  email: string
+  role?: $Enums.UserRole
+  onboardingStep?: number
+  isOnboarded?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profile?: Prisma.ProfileUncheckedCreateNestedOneWithoutUserInput
+  resumes?: Prisma.ResumeUncheckedCreateNestedManyWithoutUserInput
+  jobApplications?: Prisma.JobApplicationUncheckedCreateNestedManyWithoutUserInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedCreateNestedManyWithoutUserInput
+  coverLetters?: Prisma.CoverLetterUncheckedCreateNestedManyWithoutUserInput
+  emailApplications?: Prisma.EmailApplicationUncheckedCreateNestedManyWithoutUserInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedCreateNestedManyWithoutUserInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedCreateNestedManyWithoutUserInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedCreateNestedOneWithoutUserInput
+  companyResearch?: Prisma.CompanyResearchUncheckedCreateNestedManyWithoutUserInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedCreateNestedManyWithoutUserInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedCreateNestedOneWithoutUserInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutRequesterInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedCreateNestedManyWithoutPartnerInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedCreateNestedManyWithoutUserInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedCreateNestedManyWithoutUserInput
+  successStories?: Prisma.SuccessStoryUncheckedCreateNestedManyWithoutUserInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedCreateNestedManyWithoutUserInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedCreateNestedManyWithoutUserInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedCreateNestedManyWithoutUserInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedCreateNestedManyWithoutReporterInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedCreateNestedManyWithoutUserInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  xp?: Prisma.UserXPUncheckedCreateNestedOneWithoutUserInput
+  xpTransactions?: Prisma.XPTransactionUncheckedCreateNestedManyWithoutUserInput
+  communityProfile?: Prisma.CommunityProfileUncheckedCreateNestedOneWithoutUserInput
+  communityPosts?: Prisma.CommunityPostUncheckedCreateNestedManyWithoutUserInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedCreateNestedManyWithoutUserInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedCreateNestedManyWithoutUserInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedCreateNestedManyWithoutUserInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedCreateNestedManyWithoutReporterInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedCreateNestedManyWithoutUserInput
+  chatMessages?: Prisma.ChatMessageUncheckedCreateNestedManyWithoutUserInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
+  mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
+  mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
+  interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
+  emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
+  eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRoleApplicationRejectionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationRejectionsInput>
+}
+
+export type UserUpsertWithoutCommunityRoleApplicationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedUpdateWithoutCommunityRoleApplicationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedCreateWithoutCommunityRoleApplicationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCommunityRoleApplicationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCommunityRoleApplicationsInput, Prisma.UserUncheckedUpdateWithoutCommunityRoleApplicationsInput>
+}
+
+export type UserUpdateWithoutCommunityRoleApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCommunityRoleApplicationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutRoleApplicationApprovalsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedUpdateWithoutRoleApplicationApprovalsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationApprovalsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoleApplicationApprovalsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoleApplicationApprovalsInput, Prisma.UserUncheckedUpdateWithoutRoleApplicationApprovalsInput>
+}
+
+export type UserUpdateWithoutRoleApplicationApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoleApplicationApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutRoleApplicationRejectionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedUpdateWithoutRoleApplicationRejectionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedCreateWithoutRoleApplicationRejectionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoleApplicationRejectionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoleApplicationRejectionsInput, Prisma.UserUncheckedUpdateWithoutRoleApplicationRejectionsInput>
+}
+
+export type UserUpdateWithoutRoleApplicationRejectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
+  notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
+  notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
+  emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
+  eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
+  savedJobSearches?: Prisma.SavedJobSearchUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoleApplicationRejectionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  onboardingStep?: Prisma.IntFieldUpdateOperationsInput | number
+  isOnboarded?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profile?: Prisma.ProfileUncheckedUpdateOneWithoutUserNestedInput
+  resumes?: Prisma.ResumeUncheckedUpdateManyWithoutUserNestedInput
+  jobApplications?: Prisma.JobApplicationUncheckedUpdateManyWithoutUserNestedInput
+  preferences?: Prisma.JobSearchPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  aiContents?: Prisma.AIGeneratedContentUncheckedUpdateManyWithoutUserNestedInput
+  coverLetters?: Prisma.CoverLetterUncheckedUpdateManyWithoutUserNestedInput
+  emailApplications?: Prisma.EmailApplicationUncheckedUpdateManyWithoutUserNestedInput
+  studyProgress?: Prisma.UserStudyProgressUncheckedUpdateManyWithoutUserNestedInput
+  trainingSessions?: Prisma.TrainingSessionUncheckedUpdateManyWithoutUserNestedInput
+  interviewStats?: Prisma.UserInterviewStatsUncheckedUpdateOneWithoutUserNestedInput
+  companyResearch?: Prisma.CompanyResearchUncheckedUpdateManyWithoutUserNestedInput
+  interviewPrepPacks?: Prisma.InterviewPrepPackUncheckedUpdateManyWithoutUserNestedInput
+  peerPracticeProfile?: Prisma.PeerPracticeProfileUncheckedUpdateOneWithoutUserNestedInput
+  peerSessionsRequested?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutRequesterNestedInput
+  peerSessionsPartner?: Prisma.PeerPracticeSessionUncheckedUpdateManyWithoutPartnerNestedInput
+  calendarConnections?: Prisma.UserCalendarConnectionUncheckedUpdateManyWithoutUserNestedInput
+  detectedInterviews?: Prisma.DetectedInterviewUncheckedUpdateManyWithoutUserNestedInput
+  successStories?: Prisma.SuccessStoryUncheckedUpdateManyWithoutUserNestedInput
+  storyLikes?: Prisma.SuccessStoryLikeUncheckedUpdateManyWithoutUserNestedInput
+  storyBookmarks?: Prisma.SuccessStoryBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  storyHides?: Prisma.SuccessStoryHideUncheckedUpdateManyWithoutUserNestedInput
+  storyReports?: Prisma.SuccessStoryReportUncheckedUpdateManyWithoutReporterNestedInput
+  storyComments?: Prisma.SuccessStoryCommentUncheckedUpdateManyWithoutUserNestedInput
+  storyCommentLikes?: Prisma.SuccessStoryCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  xp?: Prisma.UserXPUncheckedUpdateOneWithoutUserNestedInput
+  xpTransactions?: Prisma.XPTransactionUncheckedUpdateManyWithoutUserNestedInput
+  communityProfile?: Prisma.CommunityProfileUncheckedUpdateOneWithoutUserNestedInput
+  communityPosts?: Prisma.CommunityPostUncheckedUpdateManyWithoutUserNestedInput
+  communityPostLikes?: Prisma.CommunityPostLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostComments?: Prisma.CommunityPostCommentUncheckedUpdateManyWithoutUserNestedInput
+  communityPostCommentLikes?: Prisma.CommunityPostCommentLikeUncheckedUpdateManyWithoutUserNestedInput
+  communityPostBookmarks?: Prisma.CommunityPostBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  communityPostReports?: Prisma.CommunityPostReportUncheckedUpdateManyWithoutReporterNestedInput
+  chatRoomMemberships?: Prisma.ChatRoomMemberUncheckedUpdateManyWithoutUserNestedInput
+  chatMessages?: Prisma.ChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  chatMessageReactions?: Prisma.ChatMessageReactionUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
+  mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
+  mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
+  customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
+  interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
+  interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -13474,11 +17458,19 @@ export type UserCreateWithoutCustomStudyPlansInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -13536,11 +17528,19 @@ export type UserUncheckedCreateWithoutCustomStudyPlansInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -13614,11 +17614,19 @@ export type UserUpdateWithoutCustomStudyPlansInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -13676,11 +17684,19 @@ export type UserUncheckedUpdateWithoutCustomStudyPlansInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -13738,11 +17754,19 @@ export type UserCreateWithoutCustomStudyPlanLikesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -13800,11 +17824,19 @@ export type UserUncheckedCreateWithoutCustomStudyPlanLikesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -13878,11 +17910,19 @@ export type UserUpdateWithoutCustomStudyPlanLikesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -13940,11 +17980,19 @@ export type UserUncheckedUpdateWithoutCustomStudyPlanLikesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -14002,11 +18050,19 @@ export type UserCreateWithoutCustomStudyPlanCommentsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -14064,11 +18120,19 @@ export type UserUncheckedCreateWithoutCustomStudyPlanCommentsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -14142,11 +18206,19 @@ export type UserUpdateWithoutCustomStudyPlanCommentsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -14204,11 +18276,19 @@ export type UserUncheckedUpdateWithoutCustomStudyPlanCommentsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -14266,11 +18346,19 @@ export type UserCreateWithoutCoverLetterTemplatesInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -14328,11 +18416,19 @@ export type UserUncheckedCreateWithoutCoverLetterTemplatesInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -14406,11 +18502,19 @@ export type UserUpdateWithoutCoverLetterTemplatesInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -14468,11 +18572,19 @@ export type UserUncheckedUpdateWithoutCoverLetterTemplatesInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -14530,12 +18642,20 @@ export type UserCreateWithoutNotificationPreferenceInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
@@ -14592,12 +18712,20 @@ export type UserUncheckedCreateWithoutNotificationPreferenceInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
@@ -14670,12 +18798,20 @@ export type UserUpdateWithoutNotificationPreferenceInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
@@ -14732,12 +18868,20 @@ export type UserUncheckedUpdateWithoutNotificationPreferenceInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
@@ -14794,12 +18938,20 @@ export type UserCreateWithoutNotificationQueueInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
@@ -14856,12 +19008,20 @@ export type UserUncheckedCreateWithoutNotificationQueueInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
@@ -14934,12 +19094,20 @@ export type UserUpdateWithoutNotificationQueueInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
@@ -14996,12 +19164,20 @@ export type UserUncheckedUpdateWithoutNotificationQueueInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
@@ -15058,12 +19234,20 @@ export type UserCreateWithoutEmailQueueInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogCreateNestedManyWithoutUserInput
@@ -15120,12 +19304,20 @@ export type UserUncheckedCreateWithoutEmailQueueInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   eventLogs?: Prisma.EventLogUncheckedCreateNestedManyWithoutUserInput
@@ -15198,12 +19390,20 @@ export type UserUpdateWithoutEmailQueueInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUpdateManyWithoutUserNestedInput
@@ -15260,12 +19460,20 @@ export type UserUncheckedUpdateWithoutEmailQueueInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   eventLogs?: Prisma.EventLogUncheckedUpdateManyWithoutUserNestedInput
@@ -15322,12 +19530,20 @@ export type UserCreateWithoutEventLogsInput = {
   following?: Prisma.UserFollowCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueCreateNestedManyWithoutUserInput
@@ -15384,12 +19600,20 @@ export type UserUncheckedCreateWithoutEventLogsInput = {
   following?: Prisma.UserFollowUncheckedCreateNestedManyWithoutFollowerInput
   mentorProfile?: Prisma.MentorProfileUncheckedCreateNestedOneWithoutUserInput
   mentorships?: Prisma.MentorshipUncheckedCreateNestedManyWithoutMenteeInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedCreateNestedOneWithoutUserInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutApproverInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedCreateNestedManyWithoutRejecterInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutUserInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutApproverInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedCreateNestedManyWithoutRejecterInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedCreateNestedManyWithoutUserInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedCreateNestedManyWithoutUserInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedCreateNestedManyWithoutUserInput
   interviewKits?: Prisma.InterviewKitUncheckedCreateNestedManyWithoutOwnerInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedCreateNestedManyWithoutCreatedByInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedCreateNestedManyWithoutUserInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedCreateNestedManyWithoutRaterInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedCreateNestedOneWithoutUserInput
   notificationQueue?: Prisma.NotificationQueueUncheckedCreateNestedManyWithoutUserInput
   emailQueue?: Prisma.EmailQueueUncheckedCreateNestedManyWithoutUserInput
@@ -15462,12 +19686,20 @@ export type UserUpdateWithoutEventLogsInput = {
   following?: Prisma.UserFollowUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUpdateManyWithoutUserNestedInput
@@ -15524,12 +19756,20 @@ export type UserUncheckedUpdateWithoutEventLogsInput = {
   following?: Prisma.UserFollowUncheckedUpdateManyWithoutFollowerNestedInput
   mentorProfile?: Prisma.MentorProfileUncheckedUpdateOneWithoutUserNestedInput
   mentorships?: Prisma.MentorshipUncheckedUpdateManyWithoutMenteeNestedInput
+  mentorKycVerification?: Prisma.MentorKycVerificationUncheckedUpdateOneWithoutUserNestedInput
+  mentorKycApprovals?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutApproverNestedInput
+  mentorKycRejections?: Prisma.MentorKycVerificationUncheckedUpdateManyWithoutRejecterNestedInput
+  communityRoleApplications?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutUserNestedInput
+  roleApplicationApprovals?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutApproverNestedInput
+  roleApplicationRejections?: Prisma.CommunityRoleApplicationUncheckedUpdateManyWithoutRejecterNestedInput
   coverLetterTemplates?: Prisma.CoverLetterTemplateUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlans?: Prisma.CustomStudyPlanUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanLikes?: Prisma.CustomStudyPlanLikeUncheckedUpdateManyWithoutUserNestedInput
   customStudyPlanComments?: Prisma.CustomStudyPlanCommentUncheckedUpdateManyWithoutUserNestedInput
   interviewKits?: Prisma.InterviewKitUncheckedUpdateManyWithoutOwnerNestedInput
   interviewKitSnapshots?: Prisma.InterviewKitSnapshotUncheckedUpdateManyWithoutCreatedByNestedInput
+  interviewKitRecommendations?: Prisma.InterviewKitRecommendationUncheckedUpdateManyWithoutUserNestedInput
+  interviewKitRatings?: Prisma.InterviewKitRatingUncheckedUpdateManyWithoutRaterNestedInput
   notificationPreference?: Prisma.NotificationPreferenceUncheckedUpdateOneWithoutUserNestedInput
   notificationQueue?: Prisma.NotificationQueueUncheckedUpdateManyWithoutUserNestedInput
   emailQueue?: Prisma.EmailQueueUncheckedUpdateManyWithoutUserNestedInput
@@ -15577,12 +19817,19 @@ export type UserCountOutputType = {
   followers: number
   following: number
   mentorships: number
+  mentorKycApprovals: number
+  mentorKycRejections: number
+  communityRoleApplications: number
+  roleApplicationApprovals: number
+  roleApplicationRejections: number
   coverLetterTemplates: number
   customStudyPlans: number
   customStudyPlanLikes: number
   customStudyPlanComments: number
   interviewKits: number
   interviewKitSnapshots: number
+  interviewKitRecommendations: number
+  interviewKitRatings: number
   notificationQueue: number
   emailQueue: number
   eventLogs: number
@@ -15625,12 +19872,19 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   followers?: boolean | UserCountOutputTypeCountFollowersArgs
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   mentorships?: boolean | UserCountOutputTypeCountMentorshipsArgs
+  mentorKycApprovals?: boolean | UserCountOutputTypeCountMentorKycApprovalsArgs
+  mentorKycRejections?: boolean | UserCountOutputTypeCountMentorKycRejectionsArgs
+  communityRoleApplications?: boolean | UserCountOutputTypeCountCommunityRoleApplicationsArgs
+  roleApplicationApprovals?: boolean | UserCountOutputTypeCountRoleApplicationApprovalsArgs
+  roleApplicationRejections?: boolean | UserCountOutputTypeCountRoleApplicationRejectionsArgs
   coverLetterTemplates?: boolean | UserCountOutputTypeCountCoverLetterTemplatesArgs
   customStudyPlans?: boolean | UserCountOutputTypeCountCustomStudyPlansArgs
   customStudyPlanLikes?: boolean | UserCountOutputTypeCountCustomStudyPlanLikesArgs
   customStudyPlanComments?: boolean | UserCountOutputTypeCountCustomStudyPlanCommentsArgs
   interviewKits?: boolean | UserCountOutputTypeCountInterviewKitsArgs
   interviewKitSnapshots?: boolean | UserCountOutputTypeCountInterviewKitSnapshotsArgs
+  interviewKitRecommendations?: boolean | UserCountOutputTypeCountInterviewKitRecommendationsArgs
+  interviewKitRatings?: boolean | UserCountOutputTypeCountInterviewKitRatingsArgs
   notificationQueue?: boolean | UserCountOutputTypeCountNotificationQueueArgs
   emailQueue?: boolean | UserCountOutputTypeCountEmailQueueArgs
   eventLogs?: boolean | UserCountOutputTypeCountEventLogsArgs
@@ -15895,6 +20149,41 @@ export type UserCountOutputTypeCountMentorshipsArgs<ExtArgs extends runtime.Type
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountMentorKycApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MentorKycVerificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountMentorKycRejectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MentorKycVerificationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCommunityRoleApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityRoleApplicationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRoleApplicationApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityRoleApplicationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRoleApplicationRejectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CommunityRoleApplicationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountCoverLetterTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CoverLetterTemplateWhereInput
 }
@@ -15932,6 +20221,20 @@ export type UserCountOutputTypeCountInterviewKitsArgs<ExtArgs extends runtime.Ty
  */
 export type UserCountOutputTypeCountInterviewKitSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InterviewKitSnapshotWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInterviewKitRecommendationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitRecommendationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInterviewKitRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InterviewKitRatingWhereInput
 }
 
 /**
@@ -16013,12 +20316,20 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   mentorProfile?: boolean | Prisma.User$mentorProfileArgs<ExtArgs>
   mentorships?: boolean | Prisma.User$mentorshipsArgs<ExtArgs>
+  mentorKycVerification?: boolean | Prisma.User$mentorKycVerificationArgs<ExtArgs>
+  mentorKycApprovals?: boolean | Prisma.User$mentorKycApprovalsArgs<ExtArgs>
+  mentorKycRejections?: boolean | Prisma.User$mentorKycRejectionsArgs<ExtArgs>
+  communityRoleApplications?: boolean | Prisma.User$communityRoleApplicationsArgs<ExtArgs>
+  roleApplicationApprovals?: boolean | Prisma.User$roleApplicationApprovalsArgs<ExtArgs>
+  roleApplicationRejections?: boolean | Prisma.User$roleApplicationRejectionsArgs<ExtArgs>
   coverLetterTemplates?: boolean | Prisma.User$coverLetterTemplatesArgs<ExtArgs>
   customStudyPlans?: boolean | Prisma.User$customStudyPlansArgs<ExtArgs>
   customStudyPlanLikes?: boolean | Prisma.User$customStudyPlanLikesArgs<ExtArgs>
   customStudyPlanComments?: boolean | Prisma.User$customStudyPlanCommentsArgs<ExtArgs>
   interviewKits?: boolean | Prisma.User$interviewKitsArgs<ExtArgs>
   interviewKitSnapshots?: boolean | Prisma.User$interviewKitSnapshotsArgs<ExtArgs>
+  interviewKitRecommendations?: boolean | Prisma.User$interviewKitRecommendationsArgs<ExtArgs>
+  interviewKitRatings?: boolean | Prisma.User$interviewKitRatingsArgs<ExtArgs>
   notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
   notificationQueue?: boolean | Prisma.User$notificationQueueArgs<ExtArgs>
   emailQueue?: boolean | Prisma.User$emailQueueArgs<ExtArgs>
@@ -16101,12 +20412,20 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   mentorProfile?: boolean | Prisma.User$mentorProfileArgs<ExtArgs>
   mentorships?: boolean | Prisma.User$mentorshipsArgs<ExtArgs>
+  mentorKycVerification?: boolean | Prisma.User$mentorKycVerificationArgs<ExtArgs>
+  mentorKycApprovals?: boolean | Prisma.User$mentorKycApprovalsArgs<ExtArgs>
+  mentorKycRejections?: boolean | Prisma.User$mentorKycRejectionsArgs<ExtArgs>
+  communityRoleApplications?: boolean | Prisma.User$communityRoleApplicationsArgs<ExtArgs>
+  roleApplicationApprovals?: boolean | Prisma.User$roleApplicationApprovalsArgs<ExtArgs>
+  roleApplicationRejections?: boolean | Prisma.User$roleApplicationRejectionsArgs<ExtArgs>
   coverLetterTemplates?: boolean | Prisma.User$coverLetterTemplatesArgs<ExtArgs>
   customStudyPlans?: boolean | Prisma.User$customStudyPlansArgs<ExtArgs>
   customStudyPlanLikes?: boolean | Prisma.User$customStudyPlanLikesArgs<ExtArgs>
   customStudyPlanComments?: boolean | Prisma.User$customStudyPlanCommentsArgs<ExtArgs>
   interviewKits?: boolean | Prisma.User$interviewKitsArgs<ExtArgs>
   interviewKitSnapshots?: boolean | Prisma.User$interviewKitSnapshotsArgs<ExtArgs>
+  interviewKitRecommendations?: boolean | Prisma.User$interviewKitRecommendationsArgs<ExtArgs>
+  interviewKitRatings?: boolean | Prisma.User$interviewKitRatingsArgs<ExtArgs>
   notificationPreference?: boolean | Prisma.User$notificationPreferenceArgs<ExtArgs>
   notificationQueue?: boolean | Prisma.User$notificationQueueArgs<ExtArgs>
   emailQueue?: boolean | Prisma.User$emailQueueArgs<ExtArgs>
@@ -16162,12 +20481,20 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     following: Prisma.$UserFollowPayload<ExtArgs>[]
     mentorProfile: Prisma.$MentorProfilePayload<ExtArgs> | null
     mentorships: Prisma.$MentorshipPayload<ExtArgs>[]
+    mentorKycVerification: Prisma.$MentorKycVerificationPayload<ExtArgs> | null
+    mentorKycApprovals: Prisma.$MentorKycVerificationPayload<ExtArgs>[]
+    mentorKycRejections: Prisma.$MentorKycVerificationPayload<ExtArgs>[]
+    communityRoleApplications: Prisma.$CommunityRoleApplicationPayload<ExtArgs>[]
+    roleApplicationApprovals: Prisma.$CommunityRoleApplicationPayload<ExtArgs>[]
+    roleApplicationRejections: Prisma.$CommunityRoleApplicationPayload<ExtArgs>[]
     coverLetterTemplates: Prisma.$CoverLetterTemplatePayload<ExtArgs>[]
     customStudyPlans: Prisma.$CustomStudyPlanPayload<ExtArgs>[]
     customStudyPlanLikes: Prisma.$CustomStudyPlanLikePayload<ExtArgs>[]
     customStudyPlanComments: Prisma.$CustomStudyPlanCommentPayload<ExtArgs>[]
     interviewKits: Prisma.$InterviewKitPayload<ExtArgs>[]
     interviewKitSnapshots: Prisma.$InterviewKitSnapshotPayload<ExtArgs>[]
+    interviewKitRecommendations: Prisma.$InterviewKitRecommendationPayload<ExtArgs>[]
+    interviewKitRatings: Prisma.$InterviewKitRatingPayload<ExtArgs>[]
     notificationPreference: Prisma.$NotificationPreferencePayload<ExtArgs> | null
     notificationQueue: Prisma.$NotificationQueuePayload<ExtArgs>[]
     emailQueue: Prisma.$EmailQueuePayload<ExtArgs>[]
@@ -16618,12 +20945,20 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserFollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mentorProfile<T extends Prisma.User$mentorProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorProfileArgs<ExtArgs>>): Prisma.Prisma__MentorProfileClient<runtime.Types.Result.GetResult<Prisma.$MentorProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   mentorships<T extends Prisma.User$mentorshipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorshipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentorshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mentorKycVerification<T extends Prisma.User$mentorKycVerificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorKycVerificationArgs<ExtArgs>>): Prisma.Prisma__MentorKycVerificationClient<runtime.Types.Result.GetResult<Prisma.$MentorKycVerificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  mentorKycApprovals<T extends Prisma.User$mentorKycApprovalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorKycApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentorKycVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mentorKycRejections<T extends Prisma.User$mentorKycRejectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mentorKycRejectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentorKycVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  communityRoleApplications<T extends Prisma.User$communityRoleApplicationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$communityRoleApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityRoleApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roleApplicationApprovals<T extends Prisma.User$roleApplicationApprovalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roleApplicationApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityRoleApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roleApplicationRejections<T extends Prisma.User$roleApplicationRejectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roleApplicationRejectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommunityRoleApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   coverLetterTemplates<T extends Prisma.User$coverLetterTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$coverLetterTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CoverLetterTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customStudyPlans<T extends Prisma.User$customStudyPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customStudyPlanLikes<T extends Prisma.User$customStudyPlanLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlanLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customStudyPlanComments<T extends Prisma.User$customStudyPlanCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customStudyPlanCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomStudyPlanCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   interviewKits<T extends Prisma.User$interviewKitsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   interviewKitSnapshots<T extends Prisma.User$interviewKitSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  interviewKitRecommendations<T extends Prisma.User$interviewKitRecommendationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitRecommendationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitRecommendationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  interviewKitRatings<T extends Prisma.User$interviewKitRatingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interviewKitRatingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterviewKitRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notificationPreference<T extends Prisma.User$notificationPreferenceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationPreferenceArgs<ExtArgs>>): Prisma.Prisma__NotificationPreferenceClient<runtime.Types.Result.GetResult<Prisma.$NotificationPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   notificationQueue<T extends Prisma.User$notificationQueueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationQueueArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailQueue<T extends Prisma.User$emailQueueArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailQueueArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailQueuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18026,6 +22361,145 @@ export type User$mentorshipsArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * User.mentorKycVerification
+ */
+export type User$mentorKycVerificationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MentorKycVerification
+   */
+  select?: Prisma.MentorKycVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MentorKycVerification
+   */
+  omit?: Prisma.MentorKycVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MentorKycVerificationInclude<ExtArgs> | null
+  where?: Prisma.MentorKycVerificationWhereInput
+}
+
+/**
+ * User.mentorKycApprovals
+ */
+export type User$mentorKycApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MentorKycVerification
+   */
+  select?: Prisma.MentorKycVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MentorKycVerification
+   */
+  omit?: Prisma.MentorKycVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MentorKycVerificationInclude<ExtArgs> | null
+  where?: Prisma.MentorKycVerificationWhereInput
+  orderBy?: Prisma.MentorKycVerificationOrderByWithRelationInput | Prisma.MentorKycVerificationOrderByWithRelationInput[]
+  cursor?: Prisma.MentorKycVerificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MentorKycVerificationScalarFieldEnum | Prisma.MentorKycVerificationScalarFieldEnum[]
+}
+
+/**
+ * User.mentorKycRejections
+ */
+export type User$mentorKycRejectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MentorKycVerification
+   */
+  select?: Prisma.MentorKycVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MentorKycVerification
+   */
+  omit?: Prisma.MentorKycVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MentorKycVerificationInclude<ExtArgs> | null
+  where?: Prisma.MentorKycVerificationWhereInput
+  orderBy?: Prisma.MentorKycVerificationOrderByWithRelationInput | Prisma.MentorKycVerificationOrderByWithRelationInput[]
+  cursor?: Prisma.MentorKycVerificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MentorKycVerificationScalarFieldEnum | Prisma.MentorKycVerificationScalarFieldEnum[]
+}
+
+/**
+ * User.communityRoleApplications
+ */
+export type User$communityRoleApplicationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityRoleApplication
+   */
+  select?: Prisma.CommunityRoleApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityRoleApplication
+   */
+  omit?: Prisma.CommunityRoleApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityRoleApplicationInclude<ExtArgs> | null
+  where?: Prisma.CommunityRoleApplicationWhereInput
+  orderBy?: Prisma.CommunityRoleApplicationOrderByWithRelationInput | Prisma.CommunityRoleApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityRoleApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityRoleApplicationScalarFieldEnum | Prisma.CommunityRoleApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.roleApplicationApprovals
+ */
+export type User$roleApplicationApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityRoleApplication
+   */
+  select?: Prisma.CommunityRoleApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityRoleApplication
+   */
+  omit?: Prisma.CommunityRoleApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityRoleApplicationInclude<ExtArgs> | null
+  where?: Prisma.CommunityRoleApplicationWhereInput
+  orderBy?: Prisma.CommunityRoleApplicationOrderByWithRelationInput | Prisma.CommunityRoleApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityRoleApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityRoleApplicationScalarFieldEnum | Prisma.CommunityRoleApplicationScalarFieldEnum[]
+}
+
+/**
+ * User.roleApplicationRejections
+ */
+export type User$roleApplicationRejectionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommunityRoleApplication
+   */
+  select?: Prisma.CommunityRoleApplicationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CommunityRoleApplication
+   */
+  omit?: Prisma.CommunityRoleApplicationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommunityRoleApplicationInclude<ExtArgs> | null
+  where?: Prisma.CommunityRoleApplicationWhereInput
+  orderBy?: Prisma.CommunityRoleApplicationOrderByWithRelationInput | Prisma.CommunityRoleApplicationOrderByWithRelationInput[]
+  cursor?: Prisma.CommunityRoleApplicationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CommunityRoleApplicationScalarFieldEnum | Prisma.CommunityRoleApplicationScalarFieldEnum[]
+}
+
+/**
  * User.coverLetterTemplates
  */
 export type User$coverLetterTemplatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -18167,6 +22641,54 @@ export type User$interviewKitSnapshotsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.InterviewKitSnapshotScalarFieldEnum | Prisma.InterviewKitSnapshotScalarFieldEnum[]
+}
+
+/**
+ * User.interviewKitRecommendations
+ */
+export type User$interviewKitRecommendationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKitRecommendation
+   */
+  select?: Prisma.InterviewKitRecommendationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKitRecommendation
+   */
+  omit?: Prisma.InterviewKitRecommendationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitRecommendationInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitRecommendationWhereInput
+  orderBy?: Prisma.InterviewKitRecommendationOrderByWithRelationInput | Prisma.InterviewKitRecommendationOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitRecommendationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitRecommendationScalarFieldEnum | Prisma.InterviewKitRecommendationScalarFieldEnum[]
+}
+
+/**
+ * User.interviewKitRatings
+ */
+export type User$interviewKitRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InterviewKitRating
+   */
+  select?: Prisma.InterviewKitRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InterviewKitRating
+   */
+  omit?: Prisma.InterviewKitRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InterviewKitRatingInclude<ExtArgs> | null
+  where?: Prisma.InterviewKitRatingWhereInput
+  orderBy?: Prisma.InterviewKitRatingOrderByWithRelationInput | Prisma.InterviewKitRatingOrderByWithRelationInput[]
+  cursor?: Prisma.InterviewKitRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InterviewKitRatingScalarFieldEnum | Prisma.InterviewKitRatingScalarFieldEnum[]
 }
 
 /**

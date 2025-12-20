@@ -250,6 +250,16 @@ export type InterviewKit = Prisma.InterviewKitModel
  */
 export type InterviewKitSnapshot = Prisma.InterviewKitSnapshotModel
 /**
+ * Model InterviewKitRecommendation
+ * 
+ */
+export type InterviewKitRecommendation = Prisma.InterviewKitRecommendationModel
+/**
+ * Model InterviewKitRating
+ * 
+ */
+export type InterviewKitRating = Prisma.InterviewKitRatingModel
+/**
  * Model XPTransaction
  * 
  */
@@ -329,6 +339,26 @@ export type MentorProfile = Prisma.MentorProfileModel
  * 
  */
 export type Mentorship = Prisma.MentorshipModel
+/**
+ * Model MentorKycVerification
+ * 
+ */
+export type MentorKycVerification = Prisma.MentorKycVerificationModel
+/**
+ * Model CommunityRoleApplication
+ * 
+ */
+export type CommunityRoleApplication = Prisma.CommunityRoleApplicationModel
+/**
+ * Model CommunityRoleRequirement
+ * 
+ */
+export type CommunityRoleRequirement = Prisma.CommunityRoleRequirementModel
+/**
+ * Model CommunityGradeThreshold
+ * 
+ */
+export type CommunityGradeThreshold = Prisma.CommunityGradeThresholdModel
 /**
  * Model CustomStudyPlan
  * 
