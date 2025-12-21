@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createClient, adminSupabase } from "@/lib/supabase/server";
+import { requireUserAtLeastRole } from "@/lib/auth/rbac";
 
 export type CommunityRoleType = "MENTOR" | "MODERATOR";
 export type CommunityRoleApplicationStatus = "NOT_STARTED" | "STARTED" | "SUBMITTED" | "APPROVED" | "REJECTED";
@@ -21,12 +22,6 @@ export interface CommunityRoleApplicationData {
   payload: any | null;
   createdAt: string;
   updatedAt: string;
-}
-
-function isAdminEmail(email: string | undefined): boolean {
-  if (!email) return false;
-  const adminEmails = process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim().toLowerCase()) || [];
-  return adminEmails.includes(email.toLowerCase());
 }
 
 function mapRow(row: any): CommunityRoleApplicationData {
@@ -248,7 +243,12 @@ export async function updateModeratorEligibilityRequirements(input: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const { error } = await adminSupabase
       .from("community_role_requirements")
@@ -279,7 +279,12 @@ export async function listRoleApplications(params?: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     let q = adminSupabase
       .from("community_role_applications")
@@ -322,7 +327,12 @@ export async function approveRoleApplication(input: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const now = new Date().toISOString();
 
@@ -389,7 +399,12 @@ export async function rejectRoleApplication(input: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const now = new Date().toISOString();
 

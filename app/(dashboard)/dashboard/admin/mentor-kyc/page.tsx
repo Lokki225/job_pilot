@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { checkIsAdmin } from "@/lib/actions/cover-letter.action";
+import { getMyAccess } from "@/lib/actions/rbac.action";
 import {
   approveMentorKyc,
   listMentorKycVerifications,
@@ -35,10 +35,11 @@ export default function MentorKycAdminPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const adminRes = await checkIsAdmin();
-      setIsAdmin(adminRes.isAdmin);
+      const accessRes = await getMyAccess();
+      const ok = Boolean(accessRes.data?.isAdmin);
+      setIsAdmin(ok);
 
-      if (!adminRes.isAdmin) {
+      if (!ok) {
         setRows([]);
         return;
       }

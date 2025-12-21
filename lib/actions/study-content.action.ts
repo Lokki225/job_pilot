@@ -7,6 +7,7 @@
 
 import { studyContentService, CareerTrackId, ValidatedLesson, ValidatedQuiz, ValidatedChapterBlueprint } from '@/lib/services/study-content'
 import { getCurrentUser } from '@/lib/auth'
+import { requireUserAtLeastRole } from '@/lib/auth/rbac'
 
 // ===========================================================
 // TYPES
@@ -25,11 +26,13 @@ interface ActionResult<T> {
 async function isAdmin(): Promise<boolean> {
   const { user } = await getCurrentUser()
   if (!user) return false
-  
-  // TODO: Implement proper admin check via user roles in DB
-  // For now, check against admin email list
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',') || []
-  return adminEmails.includes(user.email || '')
+
+  try {
+    await requireUserAtLeastRole(user.id, 'ADMIN')
+    return true
+  } catch {
+    return false
+  }
 }
 
 // ===========================================================

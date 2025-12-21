@@ -1,7 +1,7 @@
 // app/(dashboard)/layout.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, type ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell, Calendar } from "lucide-react"
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 import { logout } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase/client"
+import { getMyAccess } from "@/lib/actions/rbac.action"
 
 const navigationItems = [
   { key: "nav.dashboard", href: "/dashboard", icon: Home },
@@ -25,26 +26,30 @@ const navigationItems = [
   { key: "nav.calendar", href: "/dashboard/calendar", icon: Calendar },
   { key: "nav.community", href: "/dashboard/community/hub", icon: Trophy },
   { key: "nav.notifications", href: "/dashboard/notifications", icon: Bell },
-  { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles },
-  { key: "nav.mentorKyc", href: "/dashboard/admin/mentor-kyc", icon: Sparkles },
+  { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles, requiresAdmin: true },
+  { key: "nav.mentorKyc", href: "/dashboard/admin/mentor-kyc", icon: Sparkles, requiresAdmin: true },
   { key: "nav.settings", href: "/dashboard/settings", icon: Settings },
 ]
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const pathname = usePathname()
   const router = useRouter();
   const [session, setSession] = useState<any>()
+  const [isAdmin, setIsAdmin] = useState(false)
   const { t } = useLanguage()
 
   const fetchSession = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     setSession(session)
+
+    const accessRes = await getMyAccess()
+    setIsAdmin(Boolean(accessRes.data?.isAdmin))
   }
   
   // Close mobile sidebar when route changes
@@ -55,11 +60,16 @@ export default function DashboardLayout({
   }, [pathname])
 
   const getPageTitle = (path: string): string => {
+    if (path === "/dashboard/admin") {
+      return "Admin Dashboard";
+    }
     if (path.startsWith("/dashboard/community")) {
       return t("nav.community");
     }
-    // First try to find a matching navigation item
-    const navItem = navigationItems.find(item => path.startsWith(item.href));
+    // First try to find a matching navigation item (prefer most specific)
+    const navItem = navigationItems
+      .filter((item) => path.startsWith(item.href))
+      .sort((a, b) => b.href.length - a.href.length)[0];
     if (navItem) return t(navItem.key);
 
     // If no match, try to derive from URL
@@ -74,6 +84,45 @@ export default function DashboardLayout({
     // Fallback
     return "Dashboard";
   };
+
+  const renderNavItem = (item: any) => {
+    const resolvedHref = item.key === "nav.dashboard" && isAdmin ? "/dashboard/admin" : item.href;
+
+    const isActive =
+      item.key === "nav.community"
+        ? pathname.startsWith("/dashboard/community")
+        : item.key === "nav.dashboard"
+          ? pathname === "/dashboard" || pathname === "/dashboard/admin"
+          : pathname === item.href ||
+            (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
+
+    return (
+      <Link
+        key={item.key}
+        href={resolvedHref}
+        className={cn(
+          "group flex items-center rounded-md p-2 text-sm font-medium",
+          isActive
+            ? "bg-blue-50 text-blue-600 dark:bg-slate-700 dark:text-blue-400"
+            : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-white",
+          isCollapsed ? "justify-center" : "px-3"
+        )}
+        title={isCollapsed ? t(item.key) : undefined}
+      >
+        <item.icon
+          className={cn(
+            "h-5 w-5 shrink-0",
+            isActive
+              ? "text-blue-600 dark:text-blue-400"
+              : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400"
+          )}
+        />
+        {!isCollapsed && (
+          <span className="ml-3">{t(item.key)}</span>
+        )}
+      </Link>
+    )
+  }
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
@@ -98,7 +147,7 @@ export default function DashboardLayout({
           {/* Logo and Toggle */}
           <div className="flex h-16 items-center justify-between border-b px-4 dark:border-slate-700">
             {!isCollapsed && (
-              <Link href="/dashboard" className="flex items-center space-x-2">
+              <Link href={isAdmin ? "/dashboard/admin" : "/dashboard"} className="flex items-center space-x-2">
                 <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                   JobPilot AI
                 </span>
@@ -128,39 +177,29 @@ export default function DashboardLayout({
 
           {/* Navigation */}
           <nav className="flex-1 space-y-1 overflow-y-auto p-2">
-            {navigationItems.map((item) => {
-              const isActive =
-                item.key === "nav.community"
-                  ? pathname.startsWith("/dashboard/community")
-                  : pathname === item.href ||
-                    (item.href !== '/dashboard' && pathname.startsWith(`${item.href}/`));
-              return (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className={cn(
-                    "group flex items-center rounded-md p-2 text-sm font-medium",
-                    isActive
-                      ? "bg-blue-50 text-blue-600 dark:bg-slate-700 dark:text-blue-400"
-                      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-white",
-                    isCollapsed ? "justify-center" : "px-3"
-                  )}
-                  title={isCollapsed ? t(item.key) : undefined}
-                >
-                  <item.icon
-                    className={cn(
-                      "h-5 w-5 shrink-0",
-                      isActive
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400"
-                    )}
-                  />
-                  {!isCollapsed && (
-                    <span className="ml-3">{t(item.key)}</span>
-                  )}
-                </Link>
-              )
-            })}
+            {navigationItems
+              .filter((item: any) => !item.requiresAdmin)
+              .map(renderNavItem)}
+
+            {isAdmin && navigationItems.some((item: any) => item.requiresAdmin) ? (
+              <div className={cn(isCollapsed ? "px-0" : "px-3")}
+                aria-hidden
+              >
+                {isCollapsed ? (
+                  <div className="my-2 h-px bg-gray-200 dark:bg-slate-700" />
+                ) : (
+                  <div className="my-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                    Admin Actions
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {isAdmin
+              ? navigationItems
+                .filter((item: any) => item.requiresAdmin)
+                .map(renderNavItem)
+              : null}
           </nav>
 
           {/* User Profile */}

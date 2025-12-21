@@ -2,18 +2,13 @@
 
 import { z } from "zod";
 import { createClient, adminSupabase } from "@/lib/supabase/server";
+import { requireUserAtLeastRole } from "@/lib/auth/rbac";
 import {
   computeMentorGrade,
   computeResourceSharerGrade,
   pickHigherGrade,
   type CommunityGrade,
 } from "@/lib/services/community-grades.service";
-
-function isAdminEmail(email: string | undefined): boolean {
-  if (!email) return false;
-  const adminEmails = process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim().toLowerCase()) || [];
-  return adminEmails.includes(email.toLowerCase());
-}
 
 export async function getMyMentorGradePreview(): Promise<{
   data:
@@ -148,7 +143,12 @@ export async function adminRefreshMentorGrade(input: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const { data: roleApp, error: roleErr } = await adminSupabase
       .from("community_role_applications")

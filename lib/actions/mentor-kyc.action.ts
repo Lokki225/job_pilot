@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { createClient, adminSupabase } from "@/lib/supabase/server";
+import { requireUserAtLeastRole } from "@/lib/auth/rbac";
 
 export type MentorKycStatus = "NOT_STARTED" | "STARTED" | "SUBMITTED" | "APPROVED" | "REJECTED";
 
@@ -76,12 +77,6 @@ async function syncMentorRoleApplication(
 
   if (error) return { ok: false, error: error.message };
   return { ok: true };
-}
-
-function isAdminEmail(email: string | undefined): boolean {
-  if (!email) return false;
-  const adminEmails = process.env.ADMIN_EMAILS?.split(",").map((e) => e.trim().toLowerCase()) || [];
-  return adminEmails.includes(email.toLowerCase());
 }
 
 function mapRow(row: any): MentorKycVerificationData {
@@ -380,7 +375,12 @@ export async function listMentorKycVerifications(params?: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     let q = adminSupabase
       .from("mentor_kyc_verifications")
@@ -436,7 +436,12 @@ export async function approveMentorKyc(userId: string): Promise<{ data: { ok: tr
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const now = new Date().toISOString();
 
@@ -509,7 +514,12 @@ export async function rejectMentorKyc(input: {
       data: { user },
     } = await supabase.auth.getUser();
 
-    if (!user || !isAdminEmail(user.email)) return { data: null, error: "Unauthorized" };
+    if (!user) return { data: null, error: "Unauthorized" };
+    try {
+      await requireUserAtLeastRole(user.id, "ADMIN");
+    } catch {
+      return { data: null, error: "Unauthorized" };
+    }
 
     const now = new Date().toISOString();
 

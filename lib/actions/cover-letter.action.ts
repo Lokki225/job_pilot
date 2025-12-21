@@ -7,6 +7,7 @@ import { aiService } from '@/lib/services/ai'
 import { checkRateLimit } from '@/lib/utils/rate-limit'
 import { emitEvent } from '@/lib/services/event-dispatcher'
 import { AppEvent } from '@/lib/types/app-events'
+import { getCurrentUserRole, hasAtLeastRole, requireUserAtLeastRole } from '@/lib/auth/rbac'
 
 // ===========================================================
 // SCHEMAS
@@ -504,12 +505,6 @@ export interface CoverLetterTemplateData {
   createdAt: string;
 }
 
-function isAdmin(email: string | undefined): boolean {
-  if (!email) return false;
-  const adminEmails = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim().toLowerCase()) || [];
-  return adminEmails.includes(email.toLowerCase());
-}
-
 // Predefined system templates
 const PREDEFINED_TEMPLATES = [
   {
@@ -703,8 +698,12 @@ export async function createCoverLetterTemplate(input: {
     }
 
     // Only admins can create system templates
-    if (input.isSystem && !isAdmin(user.email)) {
-      return { data: null, error: "Only admins can create system templates" };
+    if (input.isSystem) {
+      try {
+        await requireUserAtLeastRole(user.id, 'ADMIN')
+      } catch {
+        return { data: null, error: "Only admins can create system templates" };
+      }
     }
 
     const { data: template, error } = await adminSupabase
@@ -763,8 +762,12 @@ export async function updateCoverLetterTemplate(
     }
 
     // System templates can only be edited by admins
-    if (existing.isSystem && !isAdmin(user.email)) {
-      return { data: null, error: "Only admins can edit system templates" };
+    if (existing.isSystem) {
+      try {
+        await requireUserAtLeastRole(user.id, 'ADMIN')
+      } catch {
+        return { data: null, error: "Only admins can edit system templates" };
+      }
     }
 
     // User templates can only be edited by their owner
@@ -821,8 +824,12 @@ export async function deleteCoverLetterTemplate(id: string): Promise<{
     }
 
     // System templates can only be deleted by admins
-    if (existing.isSystem && !isAdmin(user.email)) {
-      return { data: null, error: "Only admins can delete system templates" };
+    if (existing.isSystem) {
+      try {
+        await requireUserAtLeastRole(user.id, 'ADMIN')
+      } catch {
+        return { data: null, error: "Only admins can delete system templates" };
+      }
     }
 
     // User templates can only be deleted by their owner
@@ -873,7 +880,13 @@ export async function seedSystemTemplates(): Promise<{
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
-    if (!user || !isAdmin(user.email)) {
+    if (!user) {
+      return { data: null, error: "Only admins can seed system templates" };
+    }
+
+    try {
+      await requireUserAtLeastRole(user.id, 'ADMIN')
+    } catch {
       return { data: null, error: "Only admins can seed system templates" };
     }
 
@@ -909,9 +922,9 @@ export async function seedSystemTemplates(): Promise<{
 
 export async function checkIsAdmin(): Promise<{ isAdmin: boolean }> {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    return { isAdmin: isAdmin(user?.email) };
+    const current = await getCurrentUserRole()
+    if (!current) return { isAdmin: false }
+    return { isAdmin: hasAtLeastRole(current.role, 'ADMIN') }
   } catch {
     return { isAdmin: false };
   }

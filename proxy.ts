@@ -36,7 +36,33 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  const { response } = await updateSession(request)
+  const { response, user } = await updateSession(request)
+
+  const pathname = request.nextUrl.pathname
+  const isDashboardRoute = pathname.startsWith('/dashboard')
+  const isAuthRoute = pathname === '/login' || pathname === '/signup'
+
+  if (isDashboardRoute && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    url.searchParams.set('redirectedFrom', pathname)
+
+    const redirect = NextResponse.redirect(url)
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie))
+    redirect.headers.set('x-request-id', requestId)
+    return redirect
+  }
+
+  if (isAuthRoute && user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+
+    const redirect = NextResponse.redirect(url)
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie))
+    redirect.headers.set('x-request-id', requestId)
+    return redirect
+  }
+
   response.headers.set('x-request-id', requestId)
   return response
 }

@@ -55,6 +55,7 @@ import {
 import { getDashboardAnalytics } from "@/lib/actions/dashboard-analytics.action";
 import { getProfile } from "@/lib/actions/profile.action";
 import { getCurrentUser } from "@/lib/auth";
+import { getMyAccess } from "@/lib/actions/rbac.action";
 
 const STATUS_COLORS: Record<string, string> = {
   WISHLIST: "#94a3b8",
@@ -82,6 +83,12 @@ export default function DashboardPage() {
       const { user } = await getCurrentUser();
       if (!user) {
         router.push("/login");
+        return;
+      }
+
+      const accessRes = await getMyAccess();
+      if (accessRes.data?.isAdmin) {
+        router.replace("/dashboard/admin");
         return;
       }
 
