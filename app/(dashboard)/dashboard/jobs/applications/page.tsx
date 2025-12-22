@@ -16,6 +16,14 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { ApplicationKanban, type JobApplication, type ApplicationStatus } from '@/components/jobs/ApplicationKanban'
 import { OfferCongratulationsModal } from '@/components/jobs/OfferCongratulationsModal'
 import { 
@@ -34,6 +42,8 @@ export default function ApplicationsPage() {
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban')
   const [showOfferCongratsModal, setShowOfferCongratsModal] = useState(false)
   const [offeredJob, setOfferedJob] = useState<{ jobTitle: string; company: string } | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
   useEffect(() => {
     loadApplications()
@@ -112,7 +122,16 @@ export default function ApplicationsPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this application?')) return
+    setPendingDeleteId(id)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return
+
+    const id = pendingDeleteId
+    setDeleteDialogOpen(false)
+    setPendingDeleteId(null)
 
     // Optimistic update
     setApplications(prev => prev.filter(app => app.id !== id))
@@ -385,14 +404,36 @@ export default function ApplicationsPage() {
       {offeredJob && (
         <OfferCongratulationsModal
           isOpen={showOfferCongratsModal}
-          onClose={() => {
-            setShowOfferCongratsModal(false)
-            setOfferedJob(null)
-          }}
-          jobTitle={offeredJob.jobTitle}
-          company={offeredJob.company}
+          onClose={() => setShowOfferCongratsModal(false)}
+          jobTitle={offeredJob?.jobTitle || ''}
+          company={offeredJob?.company || ''}
         />
       )}
+
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open)
+          if (!open) setPendingDeleteId(null)
+        }}
+      >
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete application?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

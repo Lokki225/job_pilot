@@ -30,6 +30,15 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Select,
   SelectContent,
@@ -71,6 +80,7 @@ interface JobApplication {
   isFavorite: boolean
   appliedDate: string | null
   interviewDate: string | null
+  addInterviewToCalendar?: boolean
   notes: string | null
   createdAt: string
   updatedAt: string
@@ -106,6 +116,7 @@ export default function JobDetailsPage() {
   const [showCoverLetterModal, setShowCoverLetterModal] = useState(false)
   const [showAutoApplyModal, setShowAutoApplyModal] = useState(false)
   const [showOfferCongratsModal, setShowOfferCongratsModal] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [generatedCoverLetter, setGeneratedCoverLetter] = useState<{
     id: string
     content: string
@@ -133,6 +144,7 @@ export default function JobDetailsPage() {
     status: 'WISHLIST' as ApplicationStatus,
     appliedDate: '',
     interviewDate: '',
+    addInterviewToCalendar: false,
   })
 
   useEffect(() => {
@@ -198,6 +210,7 @@ export default function JobDetailsPage() {
           status: result.data.status as ApplicationStatus,
           appliedDate: result.data.appliedDate ? result.data.appliedDate.split('T')[0] : '',
           interviewDate: result.data.interviewDate ? result.data.interviewDate.split('T')[0] : '',
+          addInterviewToCalendar: Boolean((result.data as any).addInterviewToCalendar),
         })
       } else {
         setError(result.error || 'Job not found')
@@ -299,6 +312,14 @@ export default function JobDetailsPage() {
   const handleSave = async () => {
     setIsSaving(true)
     try {
+      const interviewTimezone = (() => {
+        try {
+          return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
+        } catch {
+          return 'UTC'
+        }
+      })()
+
       const result = await updateJobApplication(jobId, {
         jobTitle: editForm.jobTitle,
         company: editForm.company,
@@ -312,6 +333,8 @@ export default function JobDetailsPage() {
         status: editForm.status,
         appliedDate: editForm.appliedDate || null,
         interviewDate: editForm.interviewDate || null,
+        addInterviewToCalendar: editForm.addInterviewToCalendar,
+        interviewTimezone,
       })
 
       if (result.data) {
@@ -353,7 +376,11 @@ export default function JobDetailsPage() {
   }
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this application?')) return
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = async () => {
+    setDeleteDialogOpen(false)
 
     try {
       const result = await deleteJobApplication(jobId)
@@ -519,6 +546,25 @@ export default function JobDetailsPage() {
           </Button>
         </div>
       </div>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete application?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -728,6 +774,17 @@ export default function JobDetailsPage() {
                     type="date"
                     value={editForm.interviewDate}
                     onChange={(e) => setEditForm({ ...editForm, interviewDate: e.target.value })}
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-3 rounded-lg border dark:border-slate-700 px-3 py-2">
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-slate-700 dark:text-slate-200">Add to calendar</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 truncate">Show this interview in your calendar</div>
+                  </div>
+                  <Switch
+                    checked={editForm.addInterviewToCalendar}
+                    disabled={!editForm.interviewDate}
+                    onCheckedChange={(checked) => setEditForm({ ...editForm, addInterviewToCalendar: checked })}
                   />
                 </div>
               </div>

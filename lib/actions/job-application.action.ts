@@ -45,7 +45,10 @@ const JobApplicationSchema = z.object({
   reminderDate: z.string().optional().nullable(),
 })
 
-const JobApplicationUpdateSchema = JobApplicationSchema.partial()
+const JobApplicationUpdateSchema = JobApplicationSchema.partial().extend({
+  addInterviewToCalendar: z.boolean().optional(),
+  interviewTimezone: z.string().trim().min(1).max(100).optional(),
+})
 
 const JobApplicationFilterSchema = z.object({
   status: z.nativeEnum(ApplicationStatus).optional(),
@@ -217,7 +220,25 @@ export async function getJobApplication(id: string) {
       return { data: null, error: error.message }
     }
 
-    return { data, error: null }
+    let addInterviewToCalendar = false
+    try {
+      const { data: candidateEvents, error: candidateEventsError } = await adminSupabase
+        .from("calendar_events")
+        .select("id,metadata,type")
+        .eq("userId", user.id)
+        .eq("type", "INTERVIEW_SESSION")
+
+      if (!candidateEventsError) {
+        addInterviewToCalendar = (candidateEvents || []).some((ev: any) => {
+          const meta = ev?.metadata as any
+          return meta?.jobApplicationId === id
+        })
+      }
+    } catch (err) {
+      console.error("Failed to resolve addInterviewToCalendar:", err)
+    }
+
+    return { data: { ...(data as any), addInterviewToCalendar }, error: null }
   } catch (err) {
     console.error("Unexpected error getting job application:", err)
     return { data: null, error: "Failed to get job application" }
@@ -256,8 +277,26 @@ export async function updateJobApplication(
       .eq("id", id)
       .single()
 
+    const hasAddInterviewToCalendarUpdate = Object.prototype.hasOwnProperty.call(parsed.data, "addInterviewToCalendar")
+    const addInterviewToCalendar = parsed.data.addInterviewToCalendar
+
+    const hasInterviewTimezoneUpdate = Object.prototype.hasOwnProperty.call(parsed.data, "interviewTimezone")
+    const interviewTimezone = parsed.data.interviewTimezone
+
+    const hasInterviewDateUpdate = Object.prototype.hasOwnProperty.call(parsed.data, "interviewDate")
+    const oldInterviewDateIso = existing?.interviewDate ? new Date(existing.interviewDate).toISOString() : null
+    const newInterviewDateIso = hasInterviewDateUpdate
+      ? (parsed.data.interviewDate ? new Date(parsed.data.interviewDate).toISOString() : null)
+      : oldInterviewDateIso
+    const interviewDateChanged = hasInterviewDateUpdate && oldInterviewDateIso !== newInterviewDateIso
+
     // Convert date strings to Date objects
-    const dataToUpdate: any = { ...parsed.data }
+    const {
+      addInterviewToCalendar: _addInterviewToCalendar,
+      interviewTimezone: _interviewTimezone,
+      ...jobFields
+    } = parsed.data
+    const dataToUpdate: any = { ...jobFields }
 
     if (parsed.data.appliedDate) {
       dataToUpdate.appliedDate = new Date(parsed.data.appliedDate)
@@ -289,10 +328,194 @@ export async function updateJobApplication(
       return { data: null, error: error.message }
     }
 
+    if (interviewDateChanged) {
+      const interviewReminderTypes = [
+        AppEvent.INTERVIEW_REMINDER_24H,
+        AppEvent.INTERVIEW_REMINDER_1H,
+        "interview_reminder",
+        "interview_reminder_24h",
+        "interview_reminder_1h",
+      ]
+
+      const linkPattern = `%${id}%`
+
+      try {
+        await adminSupabase
+          .from("notifications")
+          .delete()
+          .eq("userId", user.id)
+          .in("type", interviewReminderTypes)
+          .ilike("link", linkPattern)
+      } catch (err) {
+        console.error("Failed to clear old interview reminder notifications:", err)
+      }
+
+      try {
+        await adminSupabase
+          .from("notification_queue")
+          .delete()
+          .eq("userId", user.id)
+          .in("event", interviewReminderTypes)
+          .in("status", ["pending", "processing"])
+          .ilike("link", linkPattern)
+      } catch (err) {
+        console.error("Failed to clear old interview reminder queue entries:", err)
+      }
+
+      try {
+        await adminSupabase
+          .from("email_queue")
+          .delete()
+          .eq("userId", user.id)
+          .in("event", interviewReminderTypes)
+          .in("status", ["pending", "queued_for_digest"])
+          .ilike("link", linkPattern)
+      } catch (err) {
+        console.error("Failed to clear old interview reminder email queue entries:", err)
+      }
+    }
+
+    try {
+      const { data: candidateEvents, error: candidateEventsError } = await adminSupabase
+        .from("calendar_events")
+        .select("id,metadata,type,timezone")
+        .eq("userId", user.id)
+        .eq("type", "INTERVIEW_SESSION")
+
+      if (!candidateEventsError) {
+        const existingInterviewEvent = (candidateEvents || []).find((ev: any) => {
+          const meta = ev?.metadata as any
+          return meta?.jobApplicationId === id
+        })
+
+        const shouldHaveInterviewEvent = Boolean(data?.interviewDate) && (hasAddInterviewToCalendarUpdate
+          ? Boolean(addInterviewToCalendar)
+          : Boolean(existingInterviewEvent))
+
+        if (!shouldHaveInterviewEvent) {
+          if (existingInterviewEvent?.id) {
+            await adminSupabase
+              .from("calendar_events")
+              .delete()
+              .eq("id", existingInterviewEvent.id)
+              .eq("userId", user.id)
+          }
+        } else if (data?.interviewDate) {
+          const toUtcIsoForLocalTime = (params: {
+            baseDateIso: string
+            timeZone: string
+            hour: number
+            minute: number
+          }): string | null => {
+            const base = new Date(params.baseDateIso)
+            if (Number.isNaN(base.getTime())) return null
+
+            const year = base.getUTCFullYear()
+            const month = base.getUTCMonth()
+            const day = base.getUTCDate()
+
+            const utcGuess = new Date(Date.UTC(year, month, day, params.hour, params.minute, 0))
+            const dtf = new Intl.DateTimeFormat("en-US", {
+              timeZone: params.timeZone,
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hourCycle: "h23",
+            })
+            const parts = dtf.formatToParts(utcGuess)
+            const map: Record<string, string> = {}
+            for (const p of parts) {
+              if (p.type === "literal") continue
+              map[p.type] = p.value
+            }
+            const asUtc = Date.UTC(
+              Number(map.year),
+              Number(map.month) - 1,
+              Number(map.day),
+              Number(map.hour),
+              Number(map.minute),
+              Number(map.second)
+            )
+            const offsetMs = asUtc - utcGuess.getTime()
+
+            const utcInstant = new Date(Date.UTC(year, month, day, params.hour, params.minute, 0) - offsetMs)
+            if (Number.isNaN(utcInstant.getTime())) return null
+            return utcInstant.toISOString()
+          }
+
+          const timezoneToUse =
+            (hasInterviewTimezoneUpdate ? interviewTimezone : undefined) ||
+            (existingInterviewEvent as any)?.timezone ||
+            "UTC"
+
+          let startIso: string | null = null
+          try {
+            startIso = toUtcIsoForLocalTime({
+              baseDateIso: String(data.interviewDate),
+              timeZone: timezoneToUse,
+              hour: 9,
+              minute: 0,
+            })
+          } catch {
+            startIso = null
+          }
+
+          const start = startIso ? new Date(startIso) : new Date(data.interviewDate)
+          if (!Number.isNaN(start.getTime())) {
+            const end = new Date(start.getTime() + 60 * 60 * 1000)
+            const title = `${data.jobTitle} @ ${data.company}`
+
+            const existingMeta = (existingInterviewEvent?.metadata as any) || {}
+            const metadata = {
+              ...existingMeta,
+              category: "interview",
+              jobApplicationId: id,
+              jobTitle: data.jobTitle,
+              company: data.company,
+            }
+
+            if (existingInterviewEvent?.id) {
+              await adminSupabase
+                .from("calendar_events")
+                .update({
+                  title,
+                  startAt: start.toISOString(),
+                  endAt: end.toISOString(),
+                  timezone: timezoneToUse,
+                  metadata,
+                })
+                .eq("id", existingInterviewEvent.id)
+                .eq("userId", user.id)
+            } else {
+              await adminSupabase
+                .from("calendar_events")
+                .insert({
+                  userId: user.id,
+                  type: "INTERVIEW_SESSION",
+                  title,
+                  description: null,
+                  location: null,
+                  startAt: start.toISOString(),
+                  endAt: end.toISOString(),
+                  timezone: timezoneToUse,
+                  recurrenceRule: null,
+                  metadata,
+                })
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Failed to sync interview to calendar:", err)
+    }
+
     // Send notification for interview date changes
     if (existing && parsed.data.interviewDate) {
-      const oldInterviewDate = existing.interviewDate ? new Date(existing.interviewDate).toISOString() : null
-      const newInterviewDate = new Date(parsed.data.interviewDate).toISOString()
+      const oldInterviewDate = oldInterviewDateIso
+      const newInterviewDate = newInterviewDateIso
       
       if (oldInterviewDate !== newInterviewDate) {
         const event = oldInterviewDate ? AppEvent.INTERVIEW_UPDATED : AppEvent.INTERVIEW_SCHEDULED

@@ -156,15 +156,15 @@ export async function hasRecentReminder(
 ): Promise<boolean> {
   try {
     const cutoff = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours ago
-    const titlePattern = reminderWindow === "1h" ? "%1 hour%" : "%tomorrow%";
+    const eventType =
+      reminderWindow === "1h" ? AppEvent.INTERVIEW_REMINDER_1H : AppEvent.INTERVIEW_REMINDER_24H;
 
     const { data } = await adminSupabase
       .from("notifications")
       .select("id")
       .eq("userId", userId)
-      .eq("type", "interview_reminder")
-      .ilike("link", `%${applicationId}%`)
-      .ilike("title", titlePattern)
+      .eq("type", eventType)
+      .ilike("link", `%jobId=${applicationId}%`)
       .gte("createdAt", cutoff.toISOString())
       .limit(1);
 
