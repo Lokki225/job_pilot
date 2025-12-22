@@ -1386,6 +1386,9 @@ model InterviewMaster {
   systemPrompt  String   @map("systemPrompt") @db.Text
   abilitiesJson Json     @map("abilitiesJson") @default(dbgenerated("'{}'::jsonb"))
   defaultKitId  String?  @map("defaultKitId") @db.Uuid
+  voiceProvider String?  @default("BROWSER")
+  voiceModel    String?  @db.Text
+  voiceSettingsJson Json? @default(dbgenerated("'{}'::jsonb"))
   isActive      Boolean  @map("isActive") @default(true)
   isPublic      Boolean  @map("isPublic") @default(true)
 

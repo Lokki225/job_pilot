@@ -13,6 +13,9 @@ export interface AdminInterviewMaster {
   systemPrompt: string
   abilitiesJson: Record<string, any>
   defaultKitId: string | null
+  voiceProvider: string | null
+  voiceModel: string | null
+  voiceSettingsJson: Record<string, any> | null
   isActive: boolean
   isPublic: boolean
   updatedAt: string
@@ -38,7 +41,9 @@ export async function listInterviewMastersForAdmin(): Promise<{ data: AdminInter
     await requireAtLeastRole("ADMIN")
     const { data, error } = await adminSupabase
       .from("interview_masters")
-      .select("id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, isActive, isPublic, updatedAt")
+      .select(
+        "id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, voiceProvider, voiceModel, voiceSettingsJson, isActive, isPublic, updatedAt"
+      )
       .order("updatedAt", { ascending: false })
 
     if (error) {
@@ -81,6 +86,13 @@ export interface SaveInterviewMasterInput {
   systemPrompt: string
   abilitiesJson?: string | Record<string, any>
   defaultKitId?: string | null
+  voiceProvider?: string | null
+  voiceModel?: string | null
+  voiceSettings?: {
+    rate?: number
+    pitch?: number
+    volume?: number
+  }
   isActive?: boolean
   isPublic?: boolean
 }
@@ -111,6 +123,13 @@ export async function saveInterviewMaster(input: SaveInterviewMasterInput): Prom
       systemPrompt: input.systemPrompt.trim(),
       abilitiesJson: abilities,
       defaultKitId: input.defaultKitId || null,
+      voiceProvider: input.voiceProvider?.trim() || "BROWSER",
+      voiceModel: input.voiceModel?.trim() || null,
+      voiceSettingsJson: {
+        rate: clampNumber(input.voiceSettings?.rate, 0.5, 1.5, 1),
+        pitch: clampNumber(input.voiceSettings?.pitch, 0.5, 1.5, 1),
+        volume: clampNumber(input.voiceSettings?.volume, 0, 1, 1),
+      },
       isActive: input.isActive ?? true,
       isPublic: input.isPublic ?? true,
     }
@@ -120,7 +139,9 @@ export async function saveInterviewMaster(input: SaveInterviewMasterInput): Prom
       : adminSupabase.from("interview_masters").insert(payload)
 
     const { data, error } = await query
-      .select("id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, isActive, isPublic, updatedAt")
+      .select(
+        "id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, voiceProvider, voiceModel, voiceSettingsJson, isActive, isPublic, updatedAt"
+      )
       .single()
 
     if (error) {
@@ -165,4 +186,9 @@ function parseAbilitiesJson(raw: string): Record<string, any> {
     console.error("Invalid abilities JSON:", err)
   }
   return {}
+}
+
+function clampNumber(value: number | undefined, min: number, max: number, fallback: number): number {
+  if (typeof value !== "number" || Number.isNaN(value)) return fallback
+  return Math.min(max, Math.max(min, value))
 }

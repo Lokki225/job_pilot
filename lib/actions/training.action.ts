@@ -3,12 +3,43 @@
 import { adminSupabase } from '@/lib/supabase/server'
 import { getCurrentUser } from '@/lib/auth'
 import { generateInterviewQuestion, analyzeAnswer, type InterviewQuestion, type AnswerFeedback } from '@/lib/services/training/interview-ai.service'
+import type { InterviewKitBlock } from '@/lib/actions/interview-kits.action'
 import { awardXP } from '@/lib/services/gamification.service'
 import { triggerAchievementCheck } from '@/lib/services/achievements.service'
 
 // ===========================================================
 // TYPES
 // ===========================================================
+
+const MASTER_COLUMNS =
+  'id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, voiceProvider, voiceModel, voiceSettingsJson, isActive, isPublic, updatedAt'
+const DEFAULT_MASTER_SLUG = 'job-pilot-coach-base'
+
+interface BuildAutoKitInput {
+  jobTitle?: string | null
+  companyName?: string | null
+  sessionType: StartSessionParams['sessionType']
+  focusAreas?: string[]
+  totalQuestions: number
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD'
+  masterSnapshot: any | null
+  prepContext?: PrepContext | null
+}
+
+interface PrepContext {
+  prepPackId: string
+  companyName?: string | null
+  jobTitle?: string | null
+  focusAreas: string[]
+  summary: string | null
+}
+
+interface AutoKitSnapshot {
+  title: string
+  description: string | null
+  blocksJson: InterviewKitBlock[]
+  prepBlocksJson: InterviewKitBlock[]
+}
 
 export interface ActionResult<T = any> {
   success: boolean
@@ -25,7 +56,7 @@ export interface InterviewMasterOption {
   defaultKitId: string | null
 }
 
-interface StartSessionParams {
+export interface StartSessionParams {
   sessionType: 'QUICK' | 'FULL_MOCK' | 'TARGETED' | 'COMPANY_PREP'
   companyId?: string
   companyName?: string
@@ -38,6 +69,7 @@ interface StartSessionParams {
   focusAreas?: string[]
   difficulty?: 'EASY' | 'MEDIUM' | 'HARD'
   language?: string
+  kitMode?: 'AUTO' | 'MANUAL'
 }
 
 interface SubmitAnswerParams {
@@ -117,10 +149,12 @@ export async function startTrainingSession(
 
     const totalQuestions = questionCounts[params.sessionType]
 
+    const kitMode = params.kitMode === 'MANUAL' ? 'MANUAL' : 'AUTO'
+
     const masterAndKit = await resolveMasterAndKitForSession({
       userId: user.id,
       masterId: params.masterId,
-      kitId: params.kitId,
+      kitId: kitMode === 'MANUAL' ? params.kitId : undefined,
     })
 
     if (masterAndKit.error) {
@@ -128,6 +162,39 @@ export async function startTrainingSession(
     }
 
     // Create training session
+    let kitSnapshot = masterAndKit.data?.kitSnapshot || null
+    let kitIdForSession = kitMode === 'MANUAL' ? masterAndKit.data?.kit?.id || null : null
+
+    if (kitMode === 'AUTO') {
+      const autoKit = await buildAutoKitSnapshot({
+        jobTitle: params.jobTitle,
+        companyName: params.companyName,
+        sessionType: params.sessionType,
+        focusAreas: params.focusAreas,
+        totalQuestions,
+        difficulty: params.difficulty || 'MEDIUM',
+        masterSnapshot: masterAndKit.data?.masterSnapshot || null,
+        prepContext: params.prepPackId
+          ? {
+              prepPackId: params.prepPackId,
+              companyName: params.companyName,
+              jobTitle: params.jobTitle,
+              focusAreas: params.focusAreas || [],
+              summary: null,
+            }
+          : undefined,
+      })
+
+      if (autoKit.error || !autoKit.data) {
+        return { success: false, error: autoKit.error || 'Failed to generate kit for session' }
+      }
+
+      kitSnapshot = autoKit.data
+      kitIdForSession = null
+    } else if (kitMode === 'MANUAL' && !kitSnapshot) {
+      return { success: false, error: 'Interview kit not found or inaccessible' }
+    }
+
     const { data: session, error: sessionError } = await adminSupabase
       .from('training_sessions')
       .insert({
@@ -139,9 +206,9 @@ export async function startTrainingSession(
         jobApplicationId: params.jobApplicationId || null,
         prepPackId: params.prepPackId || null,
         prepStepId: params.prepStepId || null,
-        kitId: masterAndKit.data?.kit?.id || null,
+        kitId: kitIdForSession,
         masterId: masterAndKit.data?.master?.id || null,
-        kitSnapshotJson: masterAndKit.data?.kitSnapshot || null,
+        kitSnapshotJson: kitSnapshot,
         masterSnapshotJson: masterAndKit.data?.masterSnapshot || null,
         focusAreas: params.focusAreas || null,
         difficulty: params.difficulty || 'MEDIUM',
@@ -157,7 +224,7 @@ export async function startTrainingSession(
     }
 
     const masterContext = masterAndKit.data?.masterSnapshot
-    const kitContext = masterAndKit.data?.kitSnapshot
+    const kitContext = kitSnapshot
     const kitQuestionBlocks = extractKitQuestionsFromSnapshot(kitContext)
 
     // Generate first question
@@ -266,6 +333,127 @@ function kitContextToPromptString(kitSnapshot: any): string | undefined {
   return lines.length ? lines.join('\n') : undefined
 }
 
+const FOCUS_PROMPTS: Record<string, string> = {
+  BEHAVIORAL: 'Tell me about a time you influenced a team when the direction seemed unclear',
+  TECHNICAL: 'Walk me through how you would design or debug a critical system for this role',
+  SITUATIONAL: 'Imagine the interviewer pushes back on your approach during an onsite loop—how do you respond',
+  GENERAL: 'Why are you the best candidate for this opportunity',
+}
+
+const RUBRIC_NOTES: Record<string, string> = {
+  BEHAVIORAL:
+    'Score for structure (STAR), ownership, measurable impact, and reflection on what you learned or would change.',
+  TECHNICAL:
+    'Score for clarity of reasoning, tradeoff awareness, and ability to communicate technical depth without rambling.',
+  SITUATIONAL:
+    'Score for empathy, prioritization under ambiguity, and how decisions ladder up to business outcomes.',
+  GENERAL: 'Score for confidence, role alignment, and authentic motivation connected to the company mission.',
+}
+
+function difficultyCue(level: 'EASY' | 'MEDIUM' | 'HARD' | undefined) {
+  switch (level) {
+    case 'EASY':
+      return 'Keep it concise and friendly; focus on fundamentals.'
+    case 'HARD':
+      return 'Expect deeper follow-ups—layer metrics, risks, and advanced tradeoffs.'
+    default:
+      return 'Provide clear structure with tangible examples and metrics.'
+  }
+}
+
+function makeBlockId() {
+  return `block_${Math.random().toString(36).slice(2, 9)}`
+}
+
+function createBlock(type: string, content: string, meta?: Record<string, any>): InterviewKitBlock {
+  return {
+    id: makeBlockId(),
+    type,
+    content,
+    meta,
+  }
+}
+
+function buildFocusQuestion(area: string, index: number, input: BuildAutoKitInput) {
+  const template = FOCUS_PROMPTS[area as keyof typeof FOCUS_PROMPTS] || FOCUS_PROMPTS.GENERAL
+  const role = input.jobTitle ? ` for the ${input.jobTitle}` : ''
+  const company = input.companyName ? ` at ${input.companyName}` : ''
+  return `${index + 1}. ${template}${role}${company}? ${difficultyCue(input.difficulty)}`
+}
+
+async function buildAutoKitSnapshot(input: BuildAutoKitInput): Promise<ActionResult<AutoKitSnapshot>> {
+  try {
+    const focusAreas = (input.focusAreas?.length ? input.focusAreas : ['BEHAVIORAL']).slice(0, 4)
+    const blocks: InterviewKitBlock[] = []
+    const prepBlocks: InterviewKitBlock[] = []
+
+    focusAreas.forEach((area, index) => {
+      blocks.push(createBlock('question', buildFocusQuestion(area, index, input), { questionType: area }))
+      const rubric = RUBRIC_NOTES[area as keyof typeof RUBRIC_NOTES] || RUBRIC_NOTES.GENERAL
+      blocks.push(createBlock('rubric', `${rubric}\n\n${difficultyCue(input.difficulty)}`))
+    })
+
+    if (input.prepContext) {
+      prepBlocks.push(
+        createBlock(
+          'notes',
+          `Prep Pack • ${input.prepContext.companyName || 'Target Company'}\nRole: ${
+            input.prepContext.jobTitle || input.jobTitle || 'Interview Focus'
+          }\nFocus areas: ${input.prepContext.focusAreas.join(', ') || focusAreas.join(', ')}`
+        )
+      )
+      prepBlocks.push(
+        createBlock(
+          'checklist',
+          [
+            '• Study the company values and recent wins from the prep pack.',
+            '• Pick 2-3 STAR stories that map to the listed focus areas.',
+            '• Mirror the communication tone suggested in the prep notes.',
+          ].join('\n')
+        )
+      )
+      if (input.prepContext.summary) {
+        prepBlocks.push(createBlock('notes', `Prep insights:\n${input.prepContext.summary}`))
+      }
+    } else {
+      prepBlocks.push(
+        createBlock(
+          'notes',
+          'Tip: Anchor every answer with the problem, specific actions you took, and the measurable result.'
+        )
+      )
+    }
+
+    const titleParts = [
+      input.companyName ? `${input.companyName}` : null,
+      input.jobTitle ? `${input.jobTitle}` : null,
+    ].filter(Boolean)
+
+    const title = titleParts.length
+      ? `${titleParts.join(' – ')} Practice Kit`
+      : `${input.sessionType === 'COMPANY_PREP' ? 'Company Prep' : 'Adaptive'} Practice Kit`
+
+    const description = input.masterSnapshot?.displayName
+      ? `Auto-generated kit guided by ${input.masterSnapshot.displayName} for ${
+          focusAreas.join(', ') || 'core'
+        } focus areas.`
+      : 'Auto-generated kit tuned to your selected focus areas.'
+
+    return {
+      success: true,
+      data: {
+        title,
+        description,
+        blocksJson: blocks,
+        prepBlocksJson: prepBlocks,
+      },
+    }
+  } catch (err) {
+    console.error('Error building auto kit snapshot:', err)
+    return { success: false, error: 'Failed to craft auto kit snapshot' }
+  }
+}
+
 async function resolveMasterAndKitForSession(params: {
   userId: string
   masterId?: string
@@ -281,7 +469,7 @@ async function resolveMasterAndKitForSession(params: {
     if (params.masterId) {
       const { data, error } = await adminSupabase
         .from('interview_masters')
-        .select('id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, isActive, isPublic, updatedAt')
+        .select(MASTER_COLUMNS)
         .eq('id', params.masterId)
         .single()
 
@@ -309,19 +497,7 @@ async function resolveMasterAndKitForSession(params: {
       kit = data
     }
 
-    const masterSnapshot = master
-      ? {
-          id: master.id,
-          slug: master.slug,
-          displayName: master.displayName,
-          tagline: master.tagline,
-          avatarUrl: master.avatarUrl,
-          systemPrompt: master.systemPrompt,
-          abilitiesJson: master.abilitiesJson,
-          defaultKitId: master.defaultKitId,
-          updatedAt: master.updatedAt,
-        }
-      : null
+    const masterSnapshot = master ? makeMasterSnapshot(master) : null
 
     const kitSnapshot = kit
       ? {
@@ -331,6 +507,7 @@ async function resolveMasterAndKitForSession(params: {
           blocksJson: kit.blocksJson,
           visibility: kit.visibility,
           updatedAt: kit.updatedAt,
+          prepBlocksJson: kit.prepBlocksJson,
         }
       : null
 
@@ -338,6 +515,22 @@ async function resolveMasterAndKitForSession(params: {
   } catch (err) {
     console.error('Error resolving master/kit for session:', err)
     return { data: null, error: 'Failed to resolve master/kit' }
+  }
+}
+function makeMasterSnapshot(master: any) {
+  return {
+    id: master.id,
+    slug: master.slug,
+    displayName: master.displayName,
+    tagline: master.tagline,
+    avatarUrl: master.avatarUrl,
+    systemPrompt: master.systemPrompt,
+    abilitiesJson: master.abilitiesJson,
+    defaultKitId: master.defaultKitId,
+    voiceProvider: master.voiceProvider,
+    voiceModel: master.voiceModel,
+    voiceSettingsJson: master.voiceSettingsJson,
+    updatedAt: master.updatedAt,
   }
 }
 

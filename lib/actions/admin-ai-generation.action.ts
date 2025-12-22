@@ -4,6 +4,9 @@ import { requireAtLeastRole } from "@/lib/auth/rbac"
 import { aiService } from "@/lib/services/ai"
 import type { InterviewKitBlock } from "@/lib/actions/interview-kits.action"
 
+const LIVE_ALLOWED_BLOCK_TYPES = ["heading", "agenda", "question", "rubric", "checklist", "notes", "custom"]
+const PREP_ALLOWED_BLOCK_TYPES = ["heading", "agenda", "checklist", "notes", "custom"]
+
 interface GenerateMasterPersonaInput {
   personaSummary: string
   tone?: string
@@ -31,11 +34,18 @@ interface GeneratedKitBlocksResult {
   blocks: InterviewKitBlock[]
 }
 
-function sanitizeBlocks(rawBlocks: any[]): InterviewKitBlock[] {
+function normalizeBlockType(rawType: unknown): string {
+  if (typeof rawType !== "string" || !rawType.trim()) return "custom"
+  return rawType.trim().toLowerCase()
+}
+
+function sanitizeBlocks(rawBlocks: any[], allowedTypes: string[]): InterviewKitBlock[] {
   if (!Array.isArray(rawBlocks)) return []
   return rawBlocks.reduce<InterviewKitBlock[]>((acc, block) => {
     if (!block || typeof block !== "object") return acc
-    const type = typeof block.type === "string" && block.type.trim().length ? block.type.trim().slice(0, 40) : "custom"
+    const normalized = normalizeBlockType(block.type)
+    if (!allowedTypes.includes(normalized)) return acc
+    const type = normalized
     const content = typeof block.content === "string" ? block.content.trim() : ""
     if (!content) return acc
     const meta = block.meta && typeof block.meta === "object" ? block.meta : undefined
@@ -72,12 +82,20 @@ export async function generateKitBlocksDraft(
       .join("\n")
 
     const systemMessage = `You are JobPilot's AI kit architect. You help admins build structured interview kits made of modular content blocks.`
-    const userPrompt = `Design ${input.target === "LIVE" ? "LIVE SESSION" : "PREP"} blocks for the following kit.
+    const stageLabel = input.target === "LIVE" ? "LIVE SESSION" : "PREP"
+    const stageGuidance =
+      input.target === "LIVE"
+        ? `Always include at least ${questionCount} QUESTION blocks. Keep all questions private to the interviewer until they are asked. Each question should be followed by at least one supporting block (rubric, checklist, or notes) that helps the interviewer evaluate the answer.`
+        : `Do NOT include any question or rubric blocks. Focus on prep resources the candidate can see before the session (agendas, checklists, reference notes, mindset guidance).`
+    const allowedTypes = input.target === "LIVE" ? LIVE_ALLOWED_BLOCK_TYPES : PREP_ALLOWED_BLOCK_TYPES
+    const allowedTypeText = allowedTypes.join(" | ")
+
+    const userPrompt = `Design ${stageLabel} blocks for the following kit.
 
       Kit Title: ${title}
       Kit Description: ${input.kitDescription || "N/A"}
       Focus Areas: ${focusList.length ? focusList.join(", ") : "General leadership, execution, and behavioral depth"}
-      Question Count: ${questionCount}
+      Question Count Target: ${questionCount}
 
       Admin Instructions:
       ${instructions}
@@ -89,13 +107,14 @@ export async function generateKitBlocksDraft(
       {
         "summary": "Short description of recommended structure",
         "blocks": [
-          { "type": "heading|agenda|question|rubric|notes|checklist|custom", "content": "text body", "meta": { "questionType": "BEHAVIORAL" } }
+          { "type": "${allowedTypeText}", "content": "text body", "meta": { "questionType": "BEHAVIORAL" } }
         ]
       }
 
-      Always include at least ${questionCount} QUESTION blocks. Place each question immediately after any heading/agenda context, and follow each question with at least one supporting block (rubric, checklist, or notes) that explains how to evaluate responses. Keep content concise but specific.`
+      ${stageGuidance}
+      Keep content concise but specific.`
 
-      const response = await aiService.chat({
+    const response = await aiService.chat({
       messages: [
         { role: "system", content: systemMessage },
         { role: "user", content: userPrompt },
@@ -110,7 +129,7 @@ export async function generateKitBlocksDraft(
       return { data: null, error: "AI response missing blocks. Please try again." }
     }
 
-    const blocks = sanitizeBlocks(payload.blocks)
+    const blocks = sanitizeBlocks(payload.blocks, allowedTypes)
     if (blocks.length === 0) {
       return { data: null, error: "AI returned no valid blocks. Try adjusting instructions." }
     }

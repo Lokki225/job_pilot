@@ -14,6 +14,8 @@ import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
 import { getMyAccess } from "@/lib/actions/rbac.action"
 import {
+  createInterviewKitAdmin,
+  deleteInterviewKitAdmin,
   getInterviewKitDetailForAdmin,
   listInterviewKitsForAdmin,
   updateInterviewKitAdmin,
@@ -52,6 +54,25 @@ function BlocksEditor({
   onDuplicate: (block: InterviewKitBlock) => void
   readOnly: boolean
 }) {
+  const [collapsed, setCollapsed] = useState(false)
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+
+  useEffect(() => {
+    setExpanded((prev) => {
+      const next = { ...prev }
+      blocks.forEach((block) => {
+        if (next[block.id] === undefined) {
+          next[block.id] = true
+        }
+      })
+      return next
+    })
+  }, [blocks])
+
+  const toggle = (id: string) => {
+    setExpanded((prev) => ({ ...prev, [id]: !(prev[id] ?? true) }))
+  }
+
   return (
     <Card>
       <CardHeader className="flex flex-col gap-1">
@@ -60,79 +81,101 @@ function BlocksEditor({
             <CardTitle className="text-base">{title}</CardTitle>
             <p className="text-xs text-muted-foreground">{description}</p>
           </div>
-          {!readOnly && (
-            <Button size="sm" onClick={onAdd}>
-              <Plus className="mr-2 h-4 w-4" />
-              Add block
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => setCollapsed((prev) => !prev)}>
+              {collapsed ? "Expand" : "Collapse"}
             </Button>
-          )}
+            {!readOnly && (
+              <Button size="sm" onClick={onAdd}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add block
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {blocks.length === 0 ? (
+        {collapsed ? (
+          <p className="text-sm text-muted-foreground">Collapsed — expand to edit blocks.</p>
+        ) : blocks.length === 0 ? (
           <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
             No blocks yet. Use the AI builder or add manually.
           </div>
         ) : (
           <div className="space-y-3">
             {blocks.map((block, idx) => (
-              <div key={block.id} className="rounded-lg border p-3">
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div className="grid flex-1 gap-3 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label>Type</Label>
-                      <Select value={block.type} onValueChange={(v) => onUpdate(block.id, { type: v })} disabled={readOnly}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {BLOCK_TYPES.map((type) => (
-                            <SelectItem key={type.value} value={type.value}>
-                              {type.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Content</Label>
-                      <Textarea
-                        value={block.content}
-                        onChange={(e) => onUpdate(block.id, { content: e.target.value })}
-                        rows={4}
-                        disabled={readOnly}
-                      />
-                    </div>
+              <div key={block.id} className="rounded-lg border">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between gap-3 border-b px-3 py-2 text-left text-sm font-medium"
+                  onClick={() => toggle(block.id)}
+                >
+                  <div className="flex flex-col">
+                    <span className="uppercase text-xs text-muted-foreground">{block.type}</span>
+                    <span className="line-clamp-1 text-sm">
+                      {block.content ? block.content : "Empty content"}
+                    </span>
                   </div>
-                  {!readOnly && (
-                    <div className="flex shrink-0 gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => onMove(idx, Math.max(0, idx - 1))}
-                        disabled={idx === 0}
-                        title="Move up"
-                      >
-                        <ArrowUp className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => onMove(idx, Math.min(blocks.length - 1, idx + 1))}
-                        disabled={idx === blocks.length - 1}
-                        title="Move down"
-                      >
-                        <ArrowDown className="h-4 w-4" />
-                      </Button>
-                      <Button variant="outline" size="icon" onClick={() => onDuplicate(block)} title="Duplicate">
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                      <Button variant="destructive" size="icon" onClick={() => onDelete(block.id)} title="Delete">
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                  <span className="text-xs text-muted-foreground">{expanded[block.id] === false ? "Show" : "Hide"}</span>
+                </button>
+                {expanded[block.id] !== false && (
+                  <div className="flex flex-col gap-4 p-3 md:flex-row md:items-start md:justify-between">
+                    <div className="grid flex-1 gap-3 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label>Type</Label>
+                        <Select value={block.type} onValueChange={(v) => onUpdate(block.id, { type: v })} disabled={readOnly}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {BLOCK_TYPES.map((type) => (
+                              <SelectItem key={type.value} value={type.value}>
+                                {type.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Content</Label>
+                        <Textarea
+                          value={block.content}
+                          onChange={(e) => onUpdate(block.id, { content: e.target.value })}
+                          rows={4}
+                          disabled={readOnly}
+                        />
+                      </div>
                     </div>
-                  )}
-                </div>
+                    {!readOnly && (
+                      <div className="flex shrink-0 gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => onMove(idx, Math.max(0, idx - 1))}
+                          disabled={idx === 0}
+                          title="Move up"
+                        >
+                          <ArrowUp className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => onMove(idx, Math.min(blocks.length - 1, idx + 1))}
+                          disabled={idx === blocks.length - 1}
+                          title="Move down"
+                        >
+                          <ArrowDown className="h-4 w-4" />
+                        </Button>
+                        <Button variant="outline" size="icon" onClick={() => onDuplicate(block)} title="Duplicate">
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                        <Button variant="destructive" size="icon" onClick={() => onDelete(block.id)} title="Delete">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -188,9 +231,18 @@ export default function AdminInterviewKitsPage() {
   const [aiNotes, setAiNotes] = useState("")
   const [aiQuestionCount, setAiQuestionCount] = useState(3)
   const [aiGenerating, setAiGenerating] = useState<"LIVE" | "PREP" | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   const hasUnsavedChanges = useMemo(() => {
-    if (!detail || !form.id) return false
+    if (!form.id) {
+      return Boolean(
+        form.title.trim() ||
+          form.description.trim() ||
+          liveBlocks.length > 0 ||
+          prepBlocks.length > 0
+      )
+    }
+    if (!detail) return false
     return (
       form.title.trim() !== detail.title ||
       (form.description || "").trim() !== (detail.description || "") ||
@@ -260,36 +312,75 @@ export default function AdminInterviewKitsPage() {
     loadDetail(kit.id)
   }
 
+  function resetFormForNew() {
+    setSelectedId("")
+    setForm(emptyForm())
+    setDetail(null)
+    setLiveBlocks([])
+    setPrepBlocks([])
+    setAiFocusAreas("")
+    setAiNotes("")
+    setAiQuestionCount(3)
+  }
+
   async function handleSave() {
-    if (!form.id) return
     if (!form.title.trim()) {
       toast({ title: "Title required", variant: "destructive" })
       return
     }
     setSaving(true)
     try {
-      const res = await updateInterviewKitAdmin(form.id, {
+      const payload = {
         title: form.title.trim(),
         description: form.description.trim(),
         visibility: form.visibility,
         isArchived: form.isArchived,
         blocksJson: liveBlocks,
         prepBlocksJson: prepBlocks,
-      })
+      }
+      const res = form.id
+        ? await updateInterviewKitAdmin(form.id, payload)
+        : await createInterviewKitAdmin(payload)
       if (res.error || !res.data) {
         toast({ title: "Error", description: res.error || "Failed to save kit", variant: "destructive" })
         return
       }
-      toast({ title: "Saved", description: `${res.data.title} updated` })
+      toast({ title: form.id ? "Saved" : "Kit created", description: `${res.data.title} ${form.id ? "updated" : "created"}` })
       setDetail(res.data)
       setLiveBlocks(res.data.blocksJson || [])
       setPrepBlocks(res.data.prepBlocksJson || [])
       await load()
       if (res.data.id) {
         setSelectedId(res.data.id)
+        setForm({
+          id: res.data.id,
+          title: res.data.title,
+          description: res.data.description || "",
+          visibility: res.data.visibility,
+          isArchived: res.data.isArchived,
+        })
       }
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleDelete() {
+    if (!form.id) return
+    if (!confirm("Delete this kit? This cannot be undone.")) return
+    setDeleting(true)
+    try {
+      setSelectedId("")
+      resetFormForNew()
+      const res = await deleteInterviewKitAdmin(form.id)
+      if (res.error) {
+        toast({ title: "Error", description: res.error, variant: "destructive" })
+        return
+      }
+      toast({ title: "Deleted", description: "Interview kit removed" })
+      await load()
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -407,8 +498,15 @@ export default function AdminInterviewKitsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1.2fr,1fr]">
         <Card className="border-0 shadow-lg">
-          <CardHeader>
-            <CardTitle>All Kits</CardTitle>
+          <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <CardTitle>All Kits</CardTitle>
+              <p className="text-sm text-muted-foreground">Pick an existing kit or start a new one.</p>
+            </div>
+            <Button size="sm" onClick={resetFormForNew}>
+              <Plus className="mr-2 h-4 w-4" />
+              New Kit
+            </Button>
           </CardHeader>
           <CardContent className="space-y-2">
             {kits.length === 0 ? (
@@ -578,7 +676,22 @@ export default function AdminInterviewKitsPage() {
                     readOnly={detailLoading}
                   />
                 </div>
-                <div className="flex justify-end">
+                <div className="flex flex-wrap justify-end gap-2">
+                  {form.id && (
+                    <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
+                      {deleting ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </>
+                      )}
+                    </Button>
+                  )}
                   <Button onClick={handleSave} disabled={saving || detailLoading || !hasUnsavedChanges}>
                     {saving ? (
                       <>
@@ -588,14 +701,20 @@ export default function AdminInterviewKitsPage() {
                     ) : (
                       <>
                         <Save className="mr-2 h-4 w-4" />
-                        Save Changes
+                        {form.id ? "Save Changes" : "Create Kit"}
                       </>
                     )}
                   </Button>
                 </div>
               </>
             ) : (
-              <p className="text-sm text-muted-foreground">Select a kit from the list to edit its details.</p>
+              <div className="space-y-4 text-sm text-muted-foreground">
+                <p>Select a kit from the left, or click “New Kit” to start drafting one.</p>
+                <Button onClick={resetFormForNew}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create First Kit
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>

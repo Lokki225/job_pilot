@@ -15,11 +15,9 @@ import { useToast } from "@/components/ui/use-toast"
 import { getMyAccess } from "@/lib/actions/rbac.action"
 import {
   deleteInterviewMaster,
-  listInterviewKitOptionsForAdmin,
   listInterviewMastersForAdmin,
   saveInterviewMaster,
   type AdminInterviewMaster,
-  type AdminInterviewKitOption,
 } from "@/lib/actions/admin-interview-masters.action"
 import { generateMasterPersonaConfig } from "@/lib/actions/admin-ai-generation.action"
 
@@ -61,6 +59,11 @@ function multilineToArray(value: string): string[] {
     .filter((line) => line.length > 0)
 }
 
+function numberToInput(value: unknown, fallback: number): string {
+  if (typeof value === "number" && Number.isFinite(value)) return value.toString()
+  return fallback.toString()
+}
+
 function normalizeAbilities(raw: any): PersonaAbilities {
   if (!raw || typeof raw !== "object") return { ...defaultAbilities }
   return {
@@ -90,6 +93,12 @@ function buildAbilitiesObject(form: MasterFormState): PersonaAbilities {
   }
 }
 
+function parseNumberInput(value: string, fallback: number, min: number, max: number): number {
+  const num = Number(value)
+  if (!Number.isFinite(num)) return fallback
+  return Math.min(max, Math.max(min, num))
+}
+
 interface MasterFormState {
   id?: string
   displayName: string
@@ -107,7 +116,11 @@ interface MasterFormState {
   extraNotes: string
   abilitiesText: string
   kitContextHint: string
-  defaultKitId: string | null
+  voiceProvider: string
+  voiceModel: string
+  voiceRate: string
+  voicePitch: string
+  voiceVolume: string
   isActive: boolean
   isPublic: boolean
 }
@@ -129,7 +142,11 @@ const emptyForm = (): MasterFormState => ({
   extraNotes: "",
   abilitiesText: "{\n  \"personaSummary\": \"\",\n  \"tone\": \"balanced\",\n  \"expertise\": [],\n  \"focusTopics\": [],\n  \"dos\": [],\n  \"donts\": [],\n  \"signatureQuestions\": [],\n  \"extraNotes\": null\n}",
   kitContextHint: "",
-  defaultKitId: null,
+  voiceProvider: "BROWSER",
+  voiceModel: "",
+  voiceRate: "1",
+  voicePitch: "1",
+  voiceVolume: "1",
   isActive: true,
   isPublic: true,
 })
@@ -139,7 +156,6 @@ export default function AdminInterviewMastersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
   const [masters, setMasters] = useState<AdminInterviewMaster[]>([])
-  const [kits, setKits] = useState<AdminInterviewKitOption[]>([])
   const [form, setForm] = useState<MasterFormState>(emptyForm)
   const [saving, setSaving] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -150,17 +166,12 @@ export default function AdminInterviewMastersPage() {
   async function loadAll() {
     setIsLoading(true)
     try {
-      const [accessRes, mastersRes, kitsRes] = await Promise.all([
-        getMyAccess(),
-        listInterviewMastersForAdmin(),
-        listInterviewKitOptionsForAdmin(),
-      ])
+      const [accessRes, mastersRes] = await Promise.all([getMyAccess(), listInterviewMastersForAdmin()])
 
       const admin = Boolean(accessRes.data?.isAdmin)
       setIsAdmin(admin)
       if (!admin) {
         setMasters([])
-        setKits([])
         return
       }
 
@@ -170,11 +181,6 @@ export default function AdminInterviewMastersPage() {
         setMasters(mastersRes.data)
       }
 
-      if (kitsRes.error) {
-        toast({ title: "Error", description: kitsRes.error, variant: "destructive" })
-      } else if (kitsRes.data) {
-        setKits(kitsRes.data)
-      }
     } finally {
       setIsLoading(false)
     }
@@ -191,6 +197,7 @@ export default function AdminInterviewMastersPage() {
     }
 
     const abilities = normalizeAbilities(master.abilitiesJson)
+    const voiceSettings = (master.voiceSettingsJson || {}) as Record<string, unknown>
     setForm({
       id: master.id,
       displayName: master.displayName,
@@ -208,7 +215,11 @@ export default function AdminInterviewMastersPage() {
       extraNotes: abilities.extraNotes || "",
       abilitiesText: JSON.stringify(master.abilitiesJson ?? abilities, null, 2),
       kitContextHint: "",
-      defaultKitId: master.defaultKitId,
+      voiceProvider: master.voiceProvider || "BROWSER",
+      voiceModel: master.voiceModel || "",
+      voiceRate: numberToInput(voiceSettings.rate, 1),
+      voicePitch: numberToInput(voiceSettings.pitch, 1),
+      voiceVolume: numberToInput(voiceSettings.volume, 1),
       isActive: master.isActive,
       isPublic: master.isPublic,
     })
@@ -234,7 +245,13 @@ export default function AdminInterviewMastersPage() {
         avatarUrl: form.avatarUrl.trim() || null,
         systemPrompt: form.systemPrompt,
         abilitiesJson: abilitiesPayload,
-        defaultKitId: form.defaultKitId || null,
+        voiceProvider: form.voiceProvider || "BROWSER",
+        voiceModel: form.voiceModel.trim() || null,
+        voiceSettings: {
+          rate: parseNumberInput(form.voiceRate, 1, 0.5, 1.5),
+          pitch: parseNumberInput(form.voicePitch, 1, 0.5, 1.5),
+          volume: parseNumberInput(form.voiceVolume, 1, 0, 1),
+        },
         isActive: form.isActive,
         isPublic: form.isPublic,
       })
@@ -246,6 +263,11 @@ export default function AdminInterviewMastersPage() {
       setForm((prev) => ({
         ...prev,
         abilitiesText: JSON.stringify(abilitiesPayload, null, 2),
+        voiceProvider: res.data?.voiceProvider || prev.voiceProvider,
+        voiceModel: res.data?.voiceModel || prev.voiceModel,
+        voiceRate: numberToInput(res.data?.voiceSettingsJson?.rate, 1),
+        voicePitch: numberToInput(res.data?.voiceSettingsJson?.pitch, 1),
+        voiceVolume: numberToInput(res.data?.voiceSettingsJson?.volume, 1),
       }))
       await loadAll()
       handleEdit()
@@ -425,11 +447,6 @@ export default function AdminInterviewMastersPage() {
                       {!master.isPublic && <Badge variant="outline">Private</Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-2">{master.tagline || "—"}</p>
-                    {master.defaultKitId && (
-                      <p className="text-xs text-muted-foreground">
-                        Default Kit: {kits.find((k) => k.id === master.defaultKitId)?.title || master.defaultKitId}
-                      </p>
-                    )}
                   </div>
                   <div className="flex items-center gap-2">
                     <Button variant="outline" size="sm" onClick={() => handleEdit(master)}>
@@ -481,26 +498,73 @@ export default function AdminInterviewMastersPage() {
               <Input value={form.avatarUrl} onChange={(e) => setForm((s) => ({ ...s, avatarUrl: e.target.value }))} placeholder="https://..." />
             </div>
 
-            <div className="space-y-2">
-              <Label>Default Interview Kit</Label>
-              <Select
-                value={form.defaultKitId || "none"}
-                onValueChange={(value) =>
-                  setForm((s) => ({ ...s, defaultKitId: value === "none" ? null : value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="None" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No default</SelectItem>
-                  {kits.map((kit) => (
-                    <SelectItem key={kit.id} value={kit.id}>
-                      {kit.title} {kit.isArchived ? "(Archived)" : ""}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="rounded-lg border p-4 space-y-3">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <Label className="text-base font-semibold">Voice & Speech</Label>
+                  <p className="text-xs text-muted-foreground">Choose the text-to-speech provider and fine-tune the delivery.</p>
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>Voice Provider</Label>
+                  <Select value={form.voiceProvider} onValueChange={(value) => setForm((s) => ({ ...s, voiceProvider: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select provider" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="BROWSER">Browser Default</SelectItem>
+                      <SelectItem value="ELEVENLABS">ElevenLabs</SelectItem>
+                      <SelectItem value="AZURE">Azure Neural</SelectItem>
+                      <SelectItem value="GOOGLE">Google WaveNet</SelectItem>
+                      <SelectItem value="CUSTOM">Custom</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Voice Model / ID</Label>
+                  <Input
+                    value={form.voiceModel}
+                    onChange={(e) => setForm((s) => ({ ...s, voiceModel: e.target.value }))}
+                    placeholder="e.g. Rachel v2"
+                  />
+                </div>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label>Rate (0.5 - 1.5)</Label>
+                  <Input
+                    type="number"
+                    min={0.5}
+                    max={1.5}
+                    step={0.05}
+                    value={form.voiceRate}
+                    onChange={(e) => setForm((s) => ({ ...s, voiceRate: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Pitch (0.5 - 1.5)</Label>
+                  <Input
+                    type="number"
+                    min={0.5}
+                    max={1.5}
+                    step={0.05}
+                    value={form.voicePitch}
+                    onChange={(e) => setForm((s) => ({ ...s, voicePitch: e.target.value }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Volume (0 - 1)</Label>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={1}
+                    step={0.05}
+                    value={form.voiceVolume}
+                    onChange={(e) => setForm((s) => ({ ...s, voiceVolume: e.target.value }))}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="rounded-lg border p-4 space-y-4">
@@ -536,26 +600,6 @@ export default function AdminInterviewMastersPage() {
                   rows={3}
                   placeholder="Ex: Principal FAANG PM known for crisp prioritization and behavioral rigor."
                 />
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Tone</Label>
-                  <Input
-                    value={form.tone}
-                    onChange={(e) => setForm((s) => ({ ...s, tone: e.target.value }))}
-                    placeholder="supportive yet exacting"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Kit Context Hint</Label>
-                  <Textarea
-                    value={form.kitContextHint}
-                    onChange={(e) => setForm((s) => ({ ...s, kitContextHint: e.target.value }))}
-                    rows={2}
-                    placeholder="Optional context passed to AI (ex: target Senior Product Manager kit)."
-                  />
-                </div>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">

@@ -33,6 +33,23 @@ function mapKitRow(row: any): AdminInterviewKitRecord {
   }
 }
 
+export async function deleteInterviewKitAdmin(kitId: string): Promise<{ error: string | null }> {
+  try {
+    await requireAtLeastRole("ADMIN")
+    if (!kitId) return { error: "Kit id is required" }
+
+    const { error } = await adminSupabase.from("interview_kits").delete().eq("id", kitId)
+    if (error) {
+      console.error("Error deleting interview kit (admin):", error)
+      return { error: error.message }
+    }
+    return { error: null }
+  } catch (err) {
+    console.error("Unexpected error deleting kit (admin):", err)
+    return { error: "Failed to delete interview kit" }
+  }
+}
+
 export async function listInterviewKitsForAdmin(): Promise<{ data: AdminInterviewKitRecord[] | null; error: string | null }> {
   try {
     await requireAtLeastRole("ADMIN")
@@ -96,6 +113,61 @@ export interface UpdateInterviewKitAdminInput {
   isArchived?: boolean
   blocksJson?: InterviewKitBlock[]
   prepBlocksJson?: InterviewKitBlock[]
+}
+
+export interface CreateInterviewKitAdminInput {
+  title: string
+  description?: string | null
+  visibility?: InterviewKitVisibility
+  blocksJson?: InterviewKitBlock[]
+  prepBlocksJson?: InterviewKitBlock[]
+}
+
+export async function createInterviewKitAdmin(
+  input: CreateInterviewKitAdminInput
+): Promise<{ data: AdminInterviewKitDetail | null; error: string | null }> {
+  try {
+    const { userId } = await requireAtLeastRole("ADMIN")
+    const title = input.title?.trim()
+    if (!title) return { data: null, error: "Title is required" }
+
+    const description = input.description?.trim() || null
+    const visibility: InterviewKitVisibility = input.visibility || "PRIVATE"
+    const blocks = Array.isArray(input.blocksJson) ? input.blocksJson : []
+    const prepBlocks = Array.isArray(input.prepBlocksJson) ? input.prepBlocksJson : []
+
+    const { data, error } = await adminSupabase
+      .from("interview_kits")
+      .insert({
+        ownerId: userId,
+        title,
+        description,
+        visibility,
+        isArchived: false,
+        blocksJson: blocks,
+        prepBlocksJson: prepBlocks,
+      })
+      .select("id, title, description, visibility, isArchived, recommendCount, updatedAt, ownerId, blocksJson, prepBlocksJson")
+      .single()
+
+    if (error) {
+      console.error("Error creating interview kit (admin):", error)
+      return { data: null, error: error.message }
+    }
+
+    const base = mapKitRow(data)
+    return {
+      data: {
+        ...base,
+        blocksJson: (data.blocksJson as InterviewKitBlock[]) || [],
+        prepBlocksJson: (data.prepBlocksJson as InterviewKitBlock[]) || [],
+      },
+      error: null,
+    }
+  } catch (err) {
+    console.error("Unexpected error creating kit (admin):", err)
+    return { data: null, error: "Failed to create interview kit" }
+  }
 }
 
 export async function updateInterviewKitAdmin(
