@@ -11,6 +11,7 @@ import {
   Star,
   UserPlus,
   UserCheck,
+  Trophy,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -275,6 +276,45 @@ export default function PublicCommunityProfilePage() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
+          {(data.kitMastery || []).length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Trophy className="h-4 w-4" />
+                  Kit Mastery
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {data.kitMastery.slice(0, 6).map((m) => (
+                    <div key={m.kitId} className="rounded-lg border p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <p className="truncate font-medium">{m.kitTitle}</p>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {m.sessionsCount} session{m.sessionsCount === 1 ? "" : "s"}
+                            {m.lastPracticedAt ? ` • Last: ${new Date(m.lastPracticedAt).toLocaleDateString()}` : ""}
+                          </p>
+                        </div>
+                        <Badge variant="secondary" className="shrink-0">
+                          Best {m.bestScore}/100
+                        </Badge>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          Avg {m.avgScore}/100
+                        </Badge>
+                        <Badge variant="outline" className="text-xs">
+                          Completion {m.avgCompletionRate}%
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Favorite Topics</CardTitle>

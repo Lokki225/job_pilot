@@ -16,6 +16,7 @@ import {
   ArrowRight,
   RotateCcw,
   Home,
+  Share2,
   ChevronDown,
   ChevronUp,
   Star,
@@ -27,6 +28,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { useTranslation } from '@/components/providers/language-provider'
+import { useToast } from '@/components/ui/use-toast'
+import { shareTrainingResultAsCommunityPost } from '@/lib/actions/community.action'
 import confetti from 'canvas-confetti'
 
 interface SessionResult {
@@ -55,8 +58,10 @@ export default function SessionResultsPage() {
 
   const [results, setResults] = useState<SessionResult | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isSharing, setIsSharing] = useState(false)
   const [expandedQuestions, setExpandedQuestions] = useState<Set<number>>(new Set())
   const { t } = useTranslation()
+  const { toast } = useToast()
 
   useEffect(() => {
     loadResults()
@@ -146,6 +151,38 @@ export default function SessionResultsPage() {
     if (score >= 70) return { grade: 'B', message: t('results.goodJob') }
     if (score >= 60) return { grade: 'C', message: t('results.keepPracticing') }
     return { grade: 'D', message: t('results.roomForImprovement') }
+  }
+
+  const handleShareToCommunity = async () => {
+    if (isSharing) return
+    setIsSharing(true)
+    try {
+      const res = await shareTrainingResultAsCommunityPost({ sessionId })
+      if (res.error || !res.data?.id) {
+        toast({
+          title: 'Could not share',
+          description: res.error || 'Failed to share training result',
+          variant: 'destructive',
+        })
+        return
+      }
+
+      toast({
+        title: 'Shared to Community',
+        description: 'Your training results were posted (without your answers).',
+      })
+
+      router.push(`/dashboard/community/hub/post/${res.data.id}`)
+    } catch (err) {
+      console.error('Error sharing training result:', err)
+      toast({
+        title: 'Could not share',
+        description: 'Failed to share training result',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsSharing(false)
+    }
   }
 
   if (isLoading) {
@@ -418,6 +455,16 @@ export default function SessionResultsPage() {
           >
             <Home className="w-4 h-4 mr-2" />
             {t('training.backToTraining')}
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleShareToCommunity}
+            disabled={isSharing}
+            className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            {isSharing ? 'Sharing...' : 'Share to Community'}
           </Button>
           
           <Button

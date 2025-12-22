@@ -14,6 +14,7 @@ import {
   MessageSquare,
   FileText,
   Megaphone,
+  Trophy,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,11 @@ const POST_TYPE_CONFIG: Record<CommunityPostType, { label: string; icon: React.R
   DISCUSSION: { label: "Discussion", icon: <MessageSquare className="h-4 w-4" />, color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" },
   RESOURCE: { label: "Resource", icon: <FileText className="h-4 w-4" />, color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" },
   ANNOUNCEMENT: { label: "Announcement", icon: <Megaphone className="h-4 w-4" />, color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" },
+  TRAINING_RESULT_SHARE: {
+    label: "Training Result",
+    icon: <Trophy className="h-4 w-4" />,
+    color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+  },
 };
 
 export default function SavedPostsPage() {

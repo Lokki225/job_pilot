@@ -11,6 +11,9 @@ export interface GenerateQuestionParams {
   jobTitle?: string;
   companyName?: string;
   language?: string;
+  masterSystemPrompt?: string;
+  masterAbilities?: Record<string, any>;
+  kitContext?: string;
   companyContext?: {
     coreValues?: string[];
     companyCulture?: string;
@@ -37,6 +40,9 @@ export interface AnalyzeAnswerParams {
   jobTitle?: string;
   expectedElements?: string[];
   language?: string;
+  masterSystemPrompt?: string;
+  masterAbilities?: Record<string, any>;
+  kitContext?: string;
 }
 
 function languageNameFromLocale(locale?: string): string | null {
@@ -103,6 +109,18 @@ export async function generateInterviewQuestion(
     ? `Language: ${languageName}. Write ALL values (question, context, hints, expectedElements) in ${languageName}. Do NOT include English unless it is part of a proper noun.`
     : '';
 
+  const masterPromptLine = params.masterSystemPrompt?.trim()
+    ? `\n\nInterviewer Persona (follow strictly):\n${params.masterSystemPrompt.trim()}`
+    : '';
+
+  const abilitiesLine = params.masterAbilities
+    ? `\n\nInterviewer Abilities/Rules (JSON, follow strictly):\n${JSON.stringify(params.masterAbilities)}`
+    : '';
+
+  const kitContextLine = params.kitContext?.trim()
+    ? `\n\nInterview Kit Context (for alignment and rubric):\n${params.kitContext.trim()}`
+    : '';
+
   const systemPrompt = `You are an expert interviewer conducting a ${sessionTypeDescriptions[params.sessionType]}.
 Role: ${params.jobTitle || 'Professional'}
 ${params.companyName ? `Company: ${params.companyName}` : ''}
@@ -117,6 +135,10 @@ ${params.companyContext ? `Company Context:
 - Culture: ${params.companyContext.companyCulture || 'N/A'}
 ${params.companyContext.recentNews?.[0] ? `- Recent News: ${params.companyContext.recentNews[0].summary}` : ''}
 ` : ''}
+
+${masterPromptLine}
+${abilitiesLine}
+${kitContextLine}
 
 Generate ONE realistic interview question that would be asked in this context.
 
@@ -174,9 +196,24 @@ export async function analyzeAnswer(params: AnalyzeAnswerParams): Promise<Answer
     ? `Language: ${languageName}. Write ALL feedback text fields (strengths, weaknesses, improvementTips, revisedAnswer, and feedback strings) in ${languageName}. Do NOT include English unless it is part of a proper noun.`
     : '';
 
+  const masterPromptLine = params.masterSystemPrompt?.trim()
+    ? `\n\nInterviewer Persona (follow strictly):\n${params.masterSystemPrompt.trim()}`
+    : '';
+
+  const abilitiesLine = params.masterAbilities
+    ? `\n\nInterviewer Abilities/Rules (JSON, follow strictly):\n${JSON.stringify(params.masterAbilities)}`
+    : '';
+
+  const kitContextLine = params.kitContext?.trim()
+    ? `\n\nInterview Kit Context (for alignment and rubric):\n${params.kitContext.trim()}`
+    : '';
+
   const systemPrompt = `You are an expert interview coach analyzing a candidate's answer.
 
 ${languageLine}
+${masterPromptLine}
+${abilitiesLine}
+${kitContextLine}
 
 Question: ${params.question}
 Question Type: ${params.questionType}

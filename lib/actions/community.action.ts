@@ -9,7 +9,13 @@ import { AppEvent } from "@/lib/types/app-events";
 // TYPES
 // ===========================================================
 
-export type CommunityPostType = "TIP" | "QUESTION" | "DISCUSSION" | "RESOURCE" | "ANNOUNCEMENT";
+export type CommunityPostType =
+  | "TIP"
+  | "QUESTION"
+  | "DISCUSSION"
+  | "RESOURCE"
+  | "ANNOUNCEMENT"
+  | "TRAINING_RESULT_SHARE";
 
 export interface CommunityPostSummary {
   id: string;
@@ -59,6 +65,7 @@ export interface CreatePostInput {
   content: string;
   tags?: string[];
   attachments?: any[];
+  metadata?: any;
 }
 
 export interface CommunityProfileData {
@@ -133,6 +140,16 @@ export interface CommunityPersonSearchResult {
   isFollowing: boolean;
 }
 
+export interface PublicInterviewKitMasterySummary {
+  kitId: string;
+  kitTitle: string;
+  sessionsCount: number;
+  avgScore: number;
+  bestScore: number;
+  avgCompletionRate: number;
+  lastPracticedAt: string | null;
+}
+
 export interface PublicCommunityProfileData {
   userId: string;
   name: string;
@@ -146,6 +163,7 @@ export interface PublicCommunityProfileData {
   followingCount: number;
   communityProfile: CommunityProfileData;
   settings: CommunityProfileSettingsData;
+  kitMastery: PublicInterviewKitMasterySummary[];
   posts: CommunityPostSummary[];
   stories: any[];
 }
@@ -556,6 +574,7 @@ export async function createPost(input: CreatePostInput): Promise<{
         content: input.content.trim(),
         tags: input.tags || [],
         attachments: input.attachments || [],
+        metadata: input.metadata || {},
       })
       .select("id")
       .single();
@@ -568,6 +587,109 @@ export async function createPost(input: CreatePostInput): Promise<{
   } catch (err) {
     console.error("Error creating post:", err);
     return { data: null, error: "Failed to create post" };
+  }
+}
+
+export async function shareTrainingResultAsCommunityPost(input: {
+  sessionId: string;
+  title?: string;
+  note?: string;
+}): Promise<{ data: { id: string } | null; error: string | null }> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    if (!input.sessionId) return { data: null, error: "Session id is required" };
+
+    const { data: session, error: sessionError } = await adminSupabase
+      .from("training_sessions")
+      .select(
+        "id, userId, status, sessionType, totalQuestions, completedQuestions, overallScore, durationSeconds, feedbackSummary, completedAt, kitId, masterId, kitSnapshotJson, masterSnapshotJson"
+      )
+      .eq("id", input.sessionId)
+      .single();
+
+    if (sessionError || !session) return { data: null, error: "Training session not found" };
+    if (session.userId !== user.id) return { data: null, error: "Forbidden" };
+    if (session.status !== "COMPLETED") return { data: null, error: "Session must be completed before sharing" };
+
+    const summary = (session as any).feedbackSummary || {};
+    const strengths = Array.isArray(summary.strengths) ? summary.strengths.filter((s: any) => typeof s === "string").slice(0, 5) : [];
+    const weaknesses = Array.isArray(summary.weaknesses) ? summary.weaknesses.filter((s: any) => typeof s === "string").slice(0, 5) : [];
+    const improvementAreas = Array.isArray(summary.improvementAreas)
+      ? summary.improvementAreas.filter((s: any) => typeof s === "string").slice(0, 5)
+      : [];
+
+    const kitTitle = typeof (session as any).kitSnapshotJson?.title === "string" ? (session as any).kitSnapshotJson.title : null;
+    const masterName = typeof (session as any).masterSnapshotJson?.displayName === "string" ? (session as any).masterSnapshotJson.displayName : null;
+
+    const overallScore = typeof session.overallScore === "number" ? session.overallScore : null;
+    const totalQuestions = typeof session.totalQuestions === "number" ? session.totalQuestions : null;
+    const completedQuestions = typeof session.completedQuestions === "number" ? session.completedQuestions : null;
+
+    const defaultTitleParts = [
+      "Training results",
+      overallScore !== null ? `${overallScore}/100` : null,
+      kitTitle ? `• ${kitTitle}` : null,
+    ].filter(Boolean);
+    const title = input.title?.trim() || defaultTitleParts.join(" ");
+
+    const lines: string[] = [];
+    if (overallScore !== null) lines.push(`Score: ${overallScore}/100`);
+    if (completedQuestions !== null && totalQuestions !== null) lines.push(`Questions: ${completedQuestions}/${totalQuestions}`);
+    if (kitTitle) lines.push(`Kit: ${kitTitle}`);
+    if (masterName) lines.push(`Master: ${masterName}`);
+    if (input.note?.trim()) lines.push(`\n${input.note.trim()}`);
+    if (strengths.length) lines.push(`\nStrengths:\n- ${strengths.join("\n- ")}`);
+    if (weaknesses.length) lines.push(`\nWeaknesses:\n- ${weaknesses.join("\n- ")}`);
+    if (improvementAreas.length) lines.push(`\nNext steps:\n- ${improvementAreas.join("\n- ")}`);
+
+    const content = lines.join("\n").trim() || "Shared my training session results.";
+
+    const tags = [
+      "training",
+      typeof session.sessionType === "string" ? String(session.sessionType).toLowerCase() : null,
+      kitTitle ? "kit" : null,
+    ].filter(Boolean) as string[];
+
+    const metadata = {
+      trainingSessionId: session.id,
+      kitId: (session as any).kitId || null,
+      masterId: (session as any).masterId || null,
+      overallScore,
+      totalQuestions,
+      completedQuestions,
+      durationSeconds: typeof session.durationSeconds === "number" ? session.durationSeconds : null,
+      strengths,
+      weaknesses,
+      improvementAreas,
+      sharedAt: new Date().toISOString(),
+    };
+
+    const { data: post, error: postError } = await adminSupabase
+      .from("community_posts")
+      .insert({
+        userId: user.id,
+        type: "TRAINING_RESULT_SHARE",
+        title: title || null,
+        content,
+        tags,
+        attachments: [],
+        metadata,
+      })
+      .select("id")
+      .single();
+
+    if (postError || !post) return { data: null, error: postError?.message || "Failed to share training result" };
+
+    await adminSupabase.rpc("increment_profile_posts", { user_id: user.id });
+    await awardReputationPoints(user.id, "CREATE_POST", 1);
+
+    return { data: { id: post.id }, error: null };
+  } catch (err) {
+    console.error("Error sharing training result:", err);
+    return { data: null, error: "Failed to share training result" };
   }
 }
 
@@ -1815,6 +1937,47 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
       stories = rawStories || [];
     }
 
+    let kitMastery: PublicInterviewKitMasterySummary[] = [];
+    {
+      const { data: masteryRows } = await adminSupabase
+        .from("user_interview_kit_mastery")
+        .select('kitId, sessionsCount, avgScore, bestScore, avgCompletionRate, lastPracticedAt')
+        .eq("userId", targetUserId)
+        .order("bestScore", { ascending: false })
+        .limit(12);
+
+      const kitIds = (masteryRows || [])
+        .map((m: any) => m.kitId)
+        .filter((id: any) => typeof id === "string" && id.length > 0);
+
+      if (kitIds.length > 0) {
+        const { data: kits } = await adminSupabase
+          .from("interview_kits")
+          .select('id, title')
+          .in("id", kitIds)
+          .eq("visibility", "PUBLIC")
+          .eq("isArchived", false);
+
+        const kitsById = new Map<string, any>((kits || []).map((k: any) => [k.id, k]));
+
+        kitMastery = (masteryRows || [])
+          .map((m: any) => {
+            const kit = kitsById.get(m.kitId);
+            if (!kit) return null;
+            return {
+              kitId: m.kitId,
+              kitTitle: kit.title,
+              sessionsCount: typeof m.sessionsCount === "number" ? m.sessionsCount : 0,
+              avgScore: typeof m.avgScore === "number" ? m.avgScore : 0,
+              bestScore: typeof m.bestScore === "number" ? m.bestScore : 0,
+              avgCompletionRate: typeof m.avgCompletionRate === "number" ? m.avgCompletionRate : 0,
+              lastPracticedAt: m.lastPracticedAt || null,
+            } satisfies PublicInterviewKitMasterySummary;
+          })
+          .filter(Boolean) as PublicInterviewKitMasterySummary[];
+      }
+    }
+
     const authorName = `${baseProfile.firstName || ""} ${baseProfile.lastName || ""}`.trim() || "Anonymous";
 
     const communityProfileData: CommunityProfileData = {
@@ -1856,6 +2019,7 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
         followingCount: followingCount || 0,
         communityProfile: communityProfileData,
         settings,
+        kitMastery,
         posts,
         stories,
       },

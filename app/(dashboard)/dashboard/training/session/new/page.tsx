@@ -21,16 +21,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
-import { startTrainingSession } from '@/lib/actions/training.action'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { startTrainingSession, getAvailableInterviewMasters, type InterviewMasterOption } from '@/lib/actions/training.action'
 import { getPrepPack } from '@/lib/actions/prep-pack.action'
+import { getMyInterviewKits, getPublicInterviewKits, type InterviewKitData, type PublicInterviewKitSummary } from '@/lib/actions/interview-kits.action'
 import { toast } from '@/components/ui/use-toast'
 
 const FOCUS_AREAS = [
@@ -112,6 +108,12 @@ export default function NewSessionPage() {
   const [selectedFocusAreas, setSelectedFocusAreas] = useState<string[]>(
     prepFocusAreas ? prepFocusAreas.split(',') : ['BEHAVIORAL']
   )
+  const [masters, setMasters] = useState<InterviewMasterOption[]>([])
+  const [selectedMasterId, setSelectedMasterId] = useState<string | undefined>(undefined)
+  const [myKits, setMyKits] = useState<InterviewKitData[]>([])
+  const [publicKits, setPublicKits] = useState<PublicInterviewKitSummary[]>([])
+  const [selectedKitId, setSelectedKitId] = useState<string | undefined>(undefined)
+  const [isLoadingOptions, setIsLoadingOptions] = useState(true)
   const [isStarting, setIsStarting] = useState(false)
   const [prepPackName, setPrepPackName] = useState<string | null>(null)
 
@@ -122,6 +124,17 @@ export default function NewSessionPage() {
     }
   }, [prepPackId])
 
+  useEffect(() => {
+    loadMastersAndKits()
+  }, [])
+
+  useEffect(() => {
+    if (!selectedMasterId) return
+    const master = masters.find((m) => m.id === selectedMasterId)
+    if (!master?.defaultKitId) return
+    setSelectedKitId((prev) => prev || master.defaultKitId || undefined)
+  }, [selectedMasterId, masters])
+
   const loadPrepPackData = async () => {
     if (!prepPackId) return
     const result = await getPrepPack(prepPackId)
@@ -129,6 +142,33 @@ export default function NewSessionPage() {
       setJobTitle(result.data.jobTitle)
       setCompanyName(result.data.companyName)
       setPrepPackName(`${result.data.jobTitle} at ${result.data.companyName}`)
+    }
+  }
+
+  const loadMastersAndKits = async () => {
+    setIsLoadingOptions(true)
+    try {
+      const [mastersRes, myKitsRes, publicKitsRes] = await Promise.all([
+        getAvailableInterviewMasters(),
+        getMyInterviewKits(),
+        getPublicInterviewKits(),
+      ])
+
+      if (mastersRes.success && mastersRes.data) setMasters(mastersRes.data)
+
+      if (myKitsRes.data) setMyKits(myKitsRes.data)
+      if (publicKitsRes.data) setPublicKits(publicKitsRes.data)
+
+      setSelectedKitId((prev) => {
+        if (prev) return prev
+        const firstOwned = myKitsRes.data?.[0]?.id
+        const firstPublic = publicKitsRes.data?.[0]?.id
+        return firstOwned || firstPublic || undefined
+      })
+    } catch (err) {
+      console.error('Error loading masters/kits:', err)
+    } finally {
+      setIsLoadingOptions(false)
     }
   }
 
@@ -162,6 +202,15 @@ export default function NewSessionPage() {
       return
     }
 
+    if (!selectedKitId) {
+      toast({
+        title: 'Select an interview kit',
+        description: 'Please choose an interview kit to practice with',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsStarting(true)
     try {
       const result = await startTrainingSession({
@@ -172,6 +221,8 @@ export default function NewSessionPage() {
         prepStepId: prepStepId || undefined,
         difficulty,
         focusAreas: selectedFocusAreas,
+        kitId: selectedKitId,
+        masterId: selectedMasterId,
       })
 
       if (result.success && result.data) {
@@ -272,6 +323,140 @@ export default function NewSessionPage() {
                   />
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Interview Master & Kit */}
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                <Sparkles className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                Interview Setup
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="space-y-3">
+                <Label className="text-slate-700 dark:text-slate-300">AI Master (Interviewer)</Label>
+                {isLoadingOptions ? (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {[0, 1].map((idx) => (
+                      <div key={idx} className="animate-pulse rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                        <div className="h-4 w-1/3 rounded bg-slate-200 dark:bg-slate-800" />
+                        <div className="mt-4 h-3 w-2/3 rounded bg-slate-100 dark:bg-slate-900" />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedMasterId(undefined)}
+                      className={`flex h-full flex-col rounded-2xl border-2 p-4 text-left transition-all ${
+                        !selectedMasterId
+                          ? 'border-indigo-500 bg-indigo-50 shadow-lg dark:bg-indigo-950/20'
+                          : 'border-slate-200 hover:border-slate-300 dark:border-slate-800 dark:hover:border-slate-700'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 text-white font-semibold">
+                          JP
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-slate-900 dark:text-white">JobPilot Coach</p>
+                          <p className="text-xs text-slate-600 dark:text-slate-400">Balanced, encouraging guidance</p>
+                        </div>
+                      </div>
+                      <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+                        Let the AI adapt dynamically without a fixed persona.
+                      </p>
+                    </button>
+
+                    {masters.length === 0 ? (
+                      <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500 dark:border-slate-800 dark:text-slate-400">
+                        No masters available yet. Admins can add them from the Masters configuration panel.
+                      </div>
+                    ) : (
+                      masters.map((master) => {
+                        const isSelected = selectedMasterId === master.id
+                        const initials = (master.displayName || '')
+                          .split(' ')
+                          .map((part) => part[0])
+                          .slice(0, 2)
+                          .join('')
+                        return (
+                          <button
+                            type="button"
+                            key={master.id}
+                            onClick={() =>
+                              setSelectedMasterId((prev) => (prev === master.id ? undefined : master.id))
+                            }
+                            className={`flex h-full flex-col rounded-2xl border-2 p-4 text-left transition-all ${
+                              isSelected
+                                ? 'border-indigo-500 bg-indigo-50 shadow-lg dark:bg-indigo-950/20'
+                                : 'border-slate-200 hover:border-slate-300 dark:border-slate-800 dark:hover:border-slate-700'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-12 w-12 border border-white/50 shadow">
+                                <AvatarImage src={master.avatarUrl || undefined} />
+                                <AvatarFallback>{initials || 'AI'}</AvatarFallback>
+                              </Avatar>
+                              <div className="min-w-0">
+                                <p className="font-semibold text-slate-900 dark:text-white">{master.displayName}</p>
+                                {master.tagline && (
+                                  <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2">{master.tagline}</p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+                              {master.defaultKitId && (
+                                <Badge variant="secondary" className="text-xs">
+                                  Prefers linked kit
+                                </Badge>
+                              )}
+                              <Badge variant={isSelected ? 'default' : 'outline'} className="text-xs">
+                                {isSelected ? 'Selected' : 'Tap to select'}
+                              </Badge>
+                            </div>
+                          </button>
+                        )
+                      })
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <Label className="text-slate-700 dark:text-slate-300">Interview Kit</Label>
+                <Select
+                  value={selectedKitId}
+                  onValueChange={(v) => setSelectedKitId(v)}
+                  disabled={isLoadingOptions}
+                >
+                  <SelectTrigger className="mt-1.5 border-slate-200 dark:border-slate-700">
+                    <SelectValue placeholder="Choose an interview kit" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {myKits.length > 0 && (
+                      <div className="px-2 py-1 text-xs font-semibold text-slate-500">Your kits</div>
+                    )}
+                    {myKits.map((k) => (
+                      <SelectItem key={k.id} value={k.id}>
+                        {k.title}
+                      </SelectItem>
+                    ))}
+
+                    {publicKits.length > 0 && (
+                      <div className="px-2 py-1 text-xs font-semibold text-slate-500">Marketplace kits</div>
+                    )}
+                    {publicKits.map((k) => (
+                      <SelectItem key={k.id} value={k.id}>
+                        {k.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </CardContent>
           </Card>
 

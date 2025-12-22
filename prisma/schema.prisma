@@ -197,6 +197,7 @@ model User {
   interviewKitSnapshots     InterviewKitSnapshot[]
   interviewKitRecommendations InterviewKitRecommendation[]
   interviewKitRatings       InterviewKitRating[]
+  interviewKitMastery       UserInterviewKitMastery[]
 
   // Notification System Relations
   notificationPreference    NotificationPreference?
@@ -789,6 +790,10 @@ model TrainingSession {
   jobApplicationId  String?       @db.Uuid
   prepPackId        String?       @db.Uuid
   prepStepId        String?       @db.VarChar(100)
+  kitId             String?       @db.Uuid
+  masterId          String?       @db.Uuid
+  kitSnapshotJson   Json?
+  masterSnapshotJson Json?
   focusAreas        Json?         // Array of focus areas
   difficulty        Difficulty    @default(MEDIUM)
   totalQuestions    Int           @default(0)
@@ -804,6 +809,8 @@ model TrainingSession {
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   company           CompanyResearch?  @relation(fields: [companyId], references: [id])
   prepPack          InterviewPrepPack? @relation(fields: [prepPackId], references: [id])
+  kit               InterviewKit?     @relation("TrainingSessionKit", fields: [kitId], references: [id], onDelete: SetNull)
+  master            InterviewMaster?  @relation(fields: [masterId], references: [id], onDelete: SetNull)
   questions         TrainingQuestion[]
 
   createdAt         DateTime @default(now()) @db.Timestamptz(6)
@@ -811,6 +818,8 @@ model TrainingSession {
   @@index([userId])
   @@index([status])
   @@index([userId, status])
+  @@index([kitId])
+  @@index([masterId])
   @@map("training_sessions")
 }
 
@@ -1356,6 +1365,9 @@ model InterviewKit {
   snapshots     InterviewKitSnapshot[]
   recommendations InterviewKitRecommendation[]
   ratings       InterviewKitRating[]
+  mastersAsDefault InterviewMaster[] @relation("InterviewMasterDefaultKit")
+  trainingSessions TrainingSession[] @relation("TrainingSessionKit")
+  masteryStats     UserInterviewKitMastery[]
 
   createdAt     DateTime @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime @default(now()) @updatedAt @db.Timestamptz(6)
@@ -1363,6 +1375,52 @@ model InterviewKit {
   @@index([ownerId])
   @@index([visibility])
   @@map("interview_kits")
+}
+
+model InterviewMaster {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug          String   @unique @db.VarChar(80)
+  displayName   String   @map("displayName") @db.VarChar(120)
+  tagline       String?  @db.VarChar(255)
+  avatarUrl     String?  @map("avatarUrl") @db.Text
+  systemPrompt  String   @map("systemPrompt") @db.Text
+  abilitiesJson Json     @map("abilitiesJson") @default(dbgenerated("'{}'::jsonb"))
+  defaultKitId  String?  @map("defaultKitId") @db.Uuid
+  isActive      Boolean  @map("isActive") @default(true)
+  isPublic      Boolean  @map("isPublic") @default(true)
+
+  defaultKit    InterviewKit? @relation("InterviewMasterDefaultKit", fields: [defaultKitId], references: [id], onDelete: SetNull)
+  trainingSessions TrainingSession[]
+
+  createdAt     DateTime @map("createdAt") @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime @map("updatedAt") @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([isActive])
+  @@index([isPublic])
+  @@map("interview_masters")
+}
+
+model UserInterviewKitMastery {
+  id                String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String      @db.Uuid
+  kitId             String      @db.Uuid
+  sessionsCount     Int         @default(0)
+  avgScore          Int         @default(0)
+  bestScore         Int         @default(0)
+  avgCompletionRate Int         @default(0)
+  lastPracticedAt   DateTime?   @db.Timestamptz(6)
+
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kit               InterviewKit @relation(fields: [kitId], references: [id], onDelete: Cascade)
+
+  createdAt         DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime    @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@unique([userId, kitId])
+  @@index([userId])
+  @@index([kitId])
+  @@index([bestScore])
+  @@map("user_interview_kit_mastery")
 }
 
 model InterviewKitSnapshot {
@@ -1453,6 +1511,7 @@ enum CommunityPostType {
   DISCUSSION
   RESOURCE
   ANNOUNCEMENT
+  TRAINING_RESULT_SHARE
 }
 
 enum ChatRoomType {
@@ -1548,6 +1607,7 @@ model CommunityPost {
   content         String            @db.Text
   tags            Json?
   attachments     Json?
+  metadata        Json              @default(dbgenerated("'{}'::jsonb"))
   
   isPinned        Boolean           @default(false)
   isFeatured      Boolean           @default(false)

@@ -4,7 +4,7 @@
 import { useState, useEffect, type ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell, Calendar } from "lucide-react"
+import { Home, Briefcase, FileText, Settings, Menu, X, ChevronLeft, ChevronRight, User, BookOpen, Sparkles, Mic, Trophy, Bell, Calendar, Bot, Boxes } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { LanguageSelector } from "@/components/ui/language-selector"
@@ -28,6 +28,8 @@ const navigationItems = [
   { key: "nav.notifications", href: "/dashboard/notifications", icon: Bell },
   { key: "nav.contentGen", href: "/dashboard/admin/study-content", icon: Sparkles, requiresAdmin: true },
   { key: "nav.mentorKyc", href: "/dashboard/admin/mentor-kyc", icon: Sparkles, requiresAdmin: true },
+  { key: "nav.aiMasters", href: "/dashboard/admin/masters", icon: Bot, requiresAdmin: true, label: "AI Masters" },
+  { key: "nav.aiKits", href: "/dashboard/admin/kits", icon: Boxes, requiresAdmin: true, label: "AI Kits" },
   { key: "nav.settings", href: "/dashboard/settings", icon: Settings },
 ]
 
@@ -96,6 +98,8 @@ export default function DashboardLayout({
           : pathname === item.href ||
             (item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
 
+    const label = item.label ?? t(item.key)
+
     return (
       <Link
         key={item.key}
@@ -118,7 +122,7 @@ export default function DashboardLayout({
           )}
         />
         {!isCollapsed && (
-          <span className="ml-3">{t(item.key)}</span>
+          <span className="ml-3">{label}</span>
         )}
       </Link>
     )

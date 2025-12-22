@@ -16,6 +16,15 @@ export interface ActionResult<T = any> {
   error?: string
 }
 
+export interface InterviewMasterOption {
+  id: string
+  slug: string
+  displayName: string
+  tagline: string | null
+  avatarUrl: string | null
+  defaultKitId: string | null
+}
+
 interface StartSessionParams {
   sessionType: 'QUICK' | 'FULL_MOCK' | 'TARGETED' | 'COMPANY_PREP'
   companyId?: string
@@ -24,6 +33,8 @@ interface StartSessionParams {
   jobApplicationId?: string
   prepPackId?: string
   prepStepId?: string
+  kitId?: string
+  masterId?: string
   focusAreas?: string[]
   difficulty?: 'EASY' | 'MEDIUM' | 'HARD'
   language?: string
@@ -57,6 +68,32 @@ interface SessionResults {
   improvementAreas: string[]
 }
 
+export async function getAvailableInterviewMasters(): Promise<ActionResult<InterviewMasterOption[]>> {
+  try {
+    const { user, error: authError } = await getCurrentUser()
+    if (authError || !user) {
+      return { success: false, error: 'Unauthorized' }
+    }
+
+    const { data, error } = await adminSupabase
+      .from('interview_masters')
+      .select('id, slug, displayName, tagline, avatarUrl, defaultKitId')
+      .eq('isActive', true)
+      .eq('isPublic', true)
+      .order('displayName', { ascending: true })
+
+    if (error) {
+      console.error('Error loading interview masters:', error)
+      return { success: false, error: 'Failed to load interview masters' }
+    }
+
+    return { success: true, data: (data || []) as any }
+  } catch (err) {
+    console.error('Error loading interview masters:', err)
+    return { success: false, error: 'Failed to load interview masters' }
+  }
+}
+
 // ===========================================================
 // START TRAINING SESSION
 // ===========================================================
@@ -80,6 +117,16 @@ export async function startTrainingSession(
 
     const totalQuestions = questionCounts[params.sessionType]
 
+    const masterAndKit = await resolveMasterAndKitForSession({
+      userId: user.id,
+      masterId: params.masterId,
+      kitId: params.kitId,
+    })
+
+    if (masterAndKit.error) {
+      return { success: false, error: masterAndKit.error }
+    }
+
     // Create training session
     const { data: session, error: sessionError } = await adminSupabase
       .from('training_sessions')
@@ -92,6 +139,10 @@ export async function startTrainingSession(
         jobApplicationId: params.jobApplicationId || null,
         prepPackId: params.prepPackId || null,
         prepStepId: params.prepStepId || null,
+        kitId: masterAndKit.data?.kit?.id || null,
+        masterId: masterAndKit.data?.master?.id || null,
+        kitSnapshotJson: masterAndKit.data?.kitSnapshot || null,
+        masterSnapshotJson: masterAndKit.data?.masterSnapshot || null,
         focusAreas: params.focusAreas || null,
         difficulty: params.difficulty || 'MEDIUM',
         totalQuestions,
@@ -105,17 +156,36 @@ export async function startTrainingSession(
       return { success: false, error: 'Failed to create training session' }
     }
 
+    const masterContext = masterAndKit.data?.masterSnapshot
+    const kitContext = masterAndKit.data?.kitSnapshot
+    const kitQuestionBlocks = extractKitQuestionsFromSnapshot(kitContext)
+
     // Generate first question
     try {
-      const firstQuestion = await generateInterviewQuestion({
-        sessionType: params.sessionType,
-        questionType: params.focusAreas?.[0] as any || 'GENERAL',
-        difficulty: params.difficulty || 'MEDIUM',
-        jobTitle: params.jobTitle,
-        companyName: params.companyName,
-        focusAreas: params.focusAreas,
-        language: params.language,
-      })
+      const questionType = (params.focusAreas?.[0] as any) || 'GENERAL'
+
+      const kitQuestion = kitQuestionBlocks[0]
+
+      const firstQuestion: InterviewQuestion = kitQuestion
+        ? {
+            question: kitQuestion.text,
+            questionType: kitQuestion.questionType || questionType,
+            context: '',
+            hints: [],
+            expectedElements: [],
+          }
+        : await generateInterviewQuestion({
+            sessionType: params.sessionType,
+            questionType,
+            difficulty: params.difficulty || 'MEDIUM',
+            jobTitle: params.jobTitle,
+            companyName: params.companyName,
+            focusAreas: params.focusAreas,
+            language: params.language,
+            masterSystemPrompt: (masterContext as any)?.systemPrompt || undefined,
+            masterAbilities: (masterContext as any)?.abilitiesJson || undefined,
+            kitContext: kitContextToPromptString(kitContext),
+          })
 
       // Save first question to database
       const { data: questionData, error: questionError } = await adminSupabase
@@ -155,6 +225,176 @@ export async function startTrainingSession(
   }
 }
 
+function normalizeQuestionType(value: unknown): 'BEHAVIORAL' | 'TECHNICAL' | 'SITUATIONAL' | 'GENERAL' | null {
+  if (typeof value !== 'string') return null
+  const v = value.trim().toUpperCase()
+  if (v === 'BEHAVIORAL' || v === 'TECHNICAL' || v === 'SITUATIONAL' || v === 'GENERAL') return v
+  return null
+}
+
+type KitQuestionBlock = { text: string; questionType: 'BEHAVIORAL' | 'TECHNICAL' | 'SITUATIONAL' | 'GENERAL' | null }
+
+function extractKitQuestionsFromSnapshot(kitSnapshot: any): KitQuestionBlock[] {
+  const blocks = Array.isArray(kitSnapshot?.blocksJson) ? (kitSnapshot.blocksJson as any[]) : []
+  return blocks
+    .filter((b) => b && typeof b === 'object' && b.type === 'question' && typeof b.content === 'string' && b.content.trim())
+    .map((b) => ({
+      text: String(b.content).trim(),
+      questionType: normalizeQuestionType((b as any)?.meta?.questionType),
+    }))
+}
+
+function kitContextToPromptString(kitSnapshot: any): string | undefined {
+  if (!kitSnapshot) return undefined
+  const title = typeof kitSnapshot?.title === 'string' ? kitSnapshot.title : null
+  const description = typeof kitSnapshot?.description === 'string' ? kitSnapshot.description : null
+  const blocks = Array.isArray(kitSnapshot?.blocksJson) ? (kitSnapshot.blocksJson as any[]) : []
+
+  const nonQuestionBlocks = blocks
+    .filter((b) => b && typeof b === 'object' && b.type !== 'question' && typeof b.content === 'string' && b.content.trim())
+    .slice(0, 12)
+    .map((b) => `${String(b.type)}: ${String(b.content).trim()}`)
+
+  const lines: string[] = []
+  if (title) lines.push(`Title: ${title}`)
+  if (description) lines.push(`Description: ${description}`)
+  if (nonQuestionBlocks.length) {
+    lines.push('Supporting blocks:')
+    lines.push(...nonQuestionBlocks)
+  }
+
+  return lines.length ? lines.join('\n') : undefined
+}
+
+async function resolveMasterAndKitForSession(params: {
+  userId: string
+  masterId?: string
+  kitId?: string
+}): Promise<
+  | { data: { master: any | null; kit: any | null; masterSnapshot: any | null; kitSnapshot: any | null } | null; error: null }
+  | { data: null; error: string }
+> {
+  try {
+    let master: any | null = null
+    let kit: any | null = null
+
+    if (params.masterId) {
+      const { data, error } = await adminSupabase
+        .from('interview_masters')
+        .select('id, slug, displayName, tagline, avatarUrl, systemPrompt, abilitiesJson, defaultKitId, isActive, isPublic, updatedAt')
+        .eq('id', params.masterId)
+        .single()
+
+      if (error || !data) return { data: null, error: 'Interview master not found' }
+      if (!(data as any).isActive) return { data: null, error: 'This interview master is not active' }
+      master = data
+    }
+
+    const effectiveKitId = params.kitId || (master as any)?.defaultKitId || null
+
+    if (effectiveKitId) {
+      const { data, error } = await adminSupabase
+        .from('interview_kits')
+        .select('id, ownerId, title, description, blocksJson, prepBlocksJson, visibility, isArchived, updatedAt')
+        .eq('id', effectiveKitId)
+        .single()
+
+      if (error || !data) return { data: null, error: 'Interview kit not found' }
+      if ((data as any).isArchived) return { data: null, error: 'This interview kit is archived' }
+
+      const isOwner = (data as any).ownerId === params.userId
+      const isPublic = (data as any).visibility === 'PUBLIC'
+      if (!isOwner && !isPublic) return { data: null, error: 'You do not have access to this interview kit' }
+
+      kit = data
+    }
+
+    const masterSnapshot = master
+      ? {
+          id: master.id,
+          slug: master.slug,
+          displayName: master.displayName,
+          tagline: master.tagline,
+          avatarUrl: master.avatarUrl,
+          systemPrompt: master.systemPrompt,
+          abilitiesJson: master.abilitiesJson,
+          defaultKitId: master.defaultKitId,
+          updatedAt: master.updatedAt,
+        }
+      : null
+
+    const kitSnapshot = kit
+      ? {
+          id: kit.id,
+          title: kit.title,
+          description: kit.description,
+          blocksJson: kit.blocksJson,
+          visibility: kit.visibility,
+          updatedAt: kit.updatedAt,
+        }
+      : null
+
+    return { data: { master, kit, masterSnapshot, kitSnapshot }, error: null }
+  } catch (err) {
+    console.error('Error resolving master/kit for session:', err)
+    return { data: null, error: 'Failed to resolve master/kit' }
+  }
+}
+
+async function upsertUserInterviewKitMastery(params: {
+  userId: string
+  kitId: string
+  sessionScore: number
+  completionRate: number
+}): Promise<void> {
+  try {
+    const { data: existing, error: existingError } = await adminSupabase
+      .from('user_interview_kit_mastery')
+      .select('id, sessionsCount, avgScore, bestScore, avgCompletionRate')
+      .eq('userId', params.userId)
+      .eq('kitId', params.kitId)
+      .maybeSingle()
+
+    if (existingError) {
+      console.error('Error loading kit mastery:', existingError)
+      return
+    }
+
+    const prevSessions = Number((existing as any)?.sessionsCount || 0)
+    const prevAvgScore = Number((existing as any)?.avgScore || 0)
+    const prevBest = Number((existing as any)?.bestScore || 0)
+    const prevAvgCompletion = Number((existing as any)?.avgCompletionRate || 0)
+
+    const nextSessions = prevSessions + 1
+    const nextAvgScore = Math.round((prevAvgScore * prevSessions + params.sessionScore) / nextSessions)
+    const nextAvgCompletion = Math.round((prevAvgCompletion * prevSessions + params.completionRate) / nextSessions)
+    const nextBest = Math.max(prevBest, params.sessionScore)
+
+    const now = new Date().toISOString()
+
+    const { error: upsertError } = await adminSupabase
+      .from('user_interview_kit_mastery')
+      .upsert(
+        {
+          userId: params.userId,
+          kitId: params.kitId,
+          sessionsCount: nextSessions,
+          avgScore: nextAvgScore,
+          bestScore: nextBest,
+          avgCompletionRate: nextAvgCompletion,
+          lastPracticedAt: now,
+        },
+        { onConflict: 'userId,kitId' }
+      )
+
+    if (upsertError) {
+      console.error('Error upserting kit mastery:', upsertError)
+    }
+  } catch (err) {
+    console.error('Error updating kit mastery:', err)
+  }
+}
+
 // ===========================================================
 // SUBMIT ANSWER & GET FEEDBACK
 // ===========================================================
@@ -182,7 +422,7 @@ export async function submitAnswer(
     // Verify session belongs to user
     const { data: session, error: sessionError } = await adminSupabase
       .from('training_sessions')
-      .select('userId, jobTitle')
+      .select('userId, jobTitle, kitId, masterId, kitSnapshotJson, masterSnapshotJson')
       .eq('id', question.sessionId)
       .single()
 
@@ -192,12 +432,18 @@ export async function submitAnswer(
 
     // Analyze answer with AI
     try {
+      const kitContext = (session as any).kitSnapshotJson || null
+      const masterContext = (session as any).masterSnapshotJson || null
+
       const feedback = await analyzeAnswer({
         question: question.questionText,
         questionType: question.questionType,
         answer: params.answer,
         jobTitle: session.jobTitle || undefined,
         language: params.language,
+        masterSystemPrompt: (masterContext as any)?.systemPrompt || undefined,
+        masterAbilities: (masterContext as any)?.abilitiesJson || undefined,
+        kitContext: kitContextToPromptString(kitContext),
       })
 
       // Update question with answer and feedback
@@ -295,18 +541,36 @@ export async function getNextQuestion(
     const focusAreas = session.focusAreas as string[] || ['GENERAL']
     const nextQuestionType = focusAreas[session.completedQuestions % focusAreas.length]
 
+    const kitContext = (session as any).kitSnapshotJson || null
+    const masterContext = (session as any).masterSnapshotJson || null
+    const kitQuestionBlocks = extractKitQuestionsFromSnapshot(kitContext)
+
     // Generate next question
     try {
-      const nextQuestion = await generateInterviewQuestion({
-        sessionType: session.sessionType,
-        questionType: nextQuestionType as any,
-        difficulty: session.difficulty,
-        jobTitle: session.jobTitle || undefined,
-        companyName: session.companyName || undefined,
-        previousQuestions: previousQuestionTexts,
-        focusAreas: session.focusAreas as string[] || undefined,
-        language,
-      })
+      // session.completedQuestions is already incremented after submitAnswer; orderIndex is 1-based.
+      const kitQuestion = kitQuestionBlocks[session.completedQuestions]
+
+      const nextQuestion: InterviewQuestion = kitQuestion
+        ? {
+            question: kitQuestion.text,
+            questionType: kitQuestion.questionType || (nextQuestionType as any),
+            context: '',
+            hints: [],
+            expectedElements: [],
+          }
+        : await generateInterviewQuestion({
+            sessionType: session.sessionType,
+            questionType: nextQuestionType as any,
+            difficulty: session.difficulty,
+            jobTitle: session.jobTitle || undefined,
+            companyName: session.companyName || undefined,
+            previousQuestions: previousQuestionTexts,
+            focusAreas: (session.focusAreas as string[]) || undefined,
+            language,
+            masterSystemPrompt: (masterContext as any)?.systemPrompt || undefined,
+            masterAbilities: (masterContext as any)?.abilitiesJson || undefined,
+            kitContext: kitContextToPromptString(kitContext),
+          })
 
       // Save question to database
       const { data: questionData, error: questionError } = await adminSupabase
@@ -416,6 +680,20 @@ export async function completeSession(
 
     // Update user interview stats
     await updateUserInterviewStats(user.id, session, overallScore)
+
+    // Update per-kit mastery stats (if session is linked to a kit)
+    if ((session as any).kitId) {
+      const completionRate = session.totalQuestions > 0
+        ? Math.round((answeredQuestions.length / session.totalQuestions) * 100)
+        : 0
+
+      await upsertUserInterviewKitMastery({
+        userId: user.id,
+        kitId: (session as any).kitId,
+        sessionScore: overallScore,
+        completionRate,
+      })
+    }
 
     // If this session is linked to a prep pack step, auto-mark the step complete
     if (session.prepPackId && session.prepStepId) {
