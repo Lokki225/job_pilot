@@ -23,6 +23,9 @@ import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { createBrowserClient } from "@supabase/ssr";
+import { MentionInput } from "@/components/mentions/MentionInput";
+import { MentionText } from "@/components/mentions/MentionText";
+import { extractMentionedUserIds } from "@/lib/utils/mentions";
 import {
   getChatRoomBySlug,
   getChatMessages,
@@ -33,6 +36,8 @@ import {
   removeMessageReaction,
   joinChatRoom,
   leaveChatRoom,
+  searchMentionableUsers,
+  notifyMentionedUsers,
   type ChatRoomSummary,
   type ChatMessageData,
 } from "@/lib/actions/community.action";
@@ -54,9 +59,11 @@ export default function ChatRoomPage() {
   const [replyTo, setReplyTo] = useState<ChatMessageData | null>(null);
   const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [mentionSuggestions, setMentionSuggestions] = useState<Array<{ userId: string; name: string; avatarUrl: string | null }>>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const loadMessagesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -74,6 +81,15 @@ export default function ChatRoomPage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
+    const scheduleLoadMessages = () => {
+      if (loadMessagesTimeoutRef.current) {
+        clearTimeout(loadMessagesTimeoutRef.current);
+      }
+      loadMessagesTimeoutRef.current = setTimeout(() => {
+        loadMessages();
+      }, 300);
+    };
+
     const channel = supabase
       .channel(`chat_room_${room.id}`)
       .on(
@@ -85,6 +101,7 @@ export default function ChatRoomPage() {
           filter: `roomId=eq.${room.id}`,
         },
         (payload) => {
+          // Immediately reload messages when new message arrives
           loadMessages();
         }
       )
@@ -97,6 +114,7 @@ export default function ChatRoomPage() {
           filter: `roomId=eq.${room.id}`,
         },
         (payload) => {
+          // Immediately reload messages when message is updated
           loadMessages();
         }
       )
@@ -108,12 +126,16 @@ export default function ChatRoomPage() {
           table: "chat_message_reactions",
         },
         (payload) => {
-          loadMessages();
+          // Debounce reaction updates since they can be frequent
+          scheduleLoadMessages();
         }
       )
       .subscribe();
 
     return () => {
+      if (loadMessagesTimeoutRef.current) {
+        clearTimeout(loadMessagesTimeoutRef.current);
+      }
       supabase.removeChannel(channel);
     };
   }, [room?.id]);
@@ -192,6 +214,12 @@ export default function ChatRoomPage() {
       if (res.error) {
         setError(res.error);
       } else {
+        // Extract and notify mentioned users
+        const mentionedUserIds = extractMentionedUserIds(newMessage, new Map());
+        if (mentionedUserIds.length > 0 && res.data?.id) {
+          await notifyMentionedUsers(res.data.id, room.id, newMessage.trim(), mentionedUserIds);
+        }
+
         setNewMessage("");
         setReplyTo(null);
         inputRef.current?.focus();
@@ -391,13 +419,16 @@ export default function ChatRoomPage() {
               </div>
             )}
             <div className="flex gap-2">
-              <Input
-                ref={inputRef}
-                placeholder={room.isMember ? "Type a message..." : "Join to send messages"}
+              <MentionInput
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={setNewMessage}
                 onKeyDown={handleKeyDown}
                 disabled={!room.isMember || isSending}
+                placeholder={room.isMember ? "Type a message... (use @ to mention)" : "Join to send messages"}
+                suggestions={mentionSuggestions}
+                onMentionSelect={(suggestion) => {
+                  // Mention is already inserted by MentionInput
+                }}
               />
               <Button
                 onClick={handleSendMessage}
@@ -508,7 +539,16 @@ function MessageBubble({
             </div>
           ) : (
             <>
-              <p className="whitespace-pre-wrap break-all">{message.content}</p>
+              <p className="whitespace-pre-wrap break-all leading-relaxed">
+                <MentionText
+                  content={message.content}
+                  onMentionClick={(userId, name) => {
+                    if (userId) {
+                      window.location.href = `/dashboard/community/hub/profile/${userId}`;
+                    }
+                  }}
+                />
+              </p>
               {message.isEdited && !message.isDeleted && (
                 <span className="text-xs opacity-70">(edited)</span>
               )}

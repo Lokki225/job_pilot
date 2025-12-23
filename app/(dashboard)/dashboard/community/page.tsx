@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MentionText } from "@/components/mentions/MentionText";
 import { getSuccessStories, getStoryIndustries, getStoryTags, likeStory, unlikeStory, bookmarkStory, unbookmarkStory, type SuccessStorySummary } from "@/lib/actions/success-stories.action";
 
 export default function CommunityPage() {
@@ -351,7 +352,16 @@ function StoryCard({
             )}
           </div>
         )}
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{truncatedStory}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <MentionText
+            content={truncatedStory}
+            onMentionClick={(userId, name) => {
+              if (userId) {
+                window.location.href = `/dashboard/community/hub/profile/${userId}`;
+              }
+            }}
+          />
+        </p>
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">

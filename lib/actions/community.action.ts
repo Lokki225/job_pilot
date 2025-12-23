@@ -218,7 +218,35 @@ export async function getOrCreateCommunityProfile(): Promise<{
       .eq("userId", user.id)
       .single();
 
+    const computeActivityCounts = async (targetUserId: string) => {
+      const [{ count: authoredPostsCount }, { count: authoredCommentsCount }, { count: publishedStoriesCount }] = await Promise.all([
+        adminSupabase
+          .from("community_posts")
+          .select("id", { count: "exact", head: true })
+          .eq("userId", targetUserId)
+          .eq("moderationStatus", "APPROVED"),
+        adminSupabase
+          .from("community_post_comments")
+          .select("id", { count: "exact", head: true })
+          .eq("userId", targetUserId)
+          .eq("isDeleted", false),
+        adminSupabase
+          .from("success_stories")
+          .select("id", { count: "exact", head: true })
+          .eq("userId", targetUserId)
+          .eq("isPublished", true),
+      ]);
+
+      return {
+        postsCount: typeof authoredPostsCount === "number" ? authoredPostsCount : 0,
+        commentsCount: typeof authoredCommentsCount === "number" ? authoredCommentsCount : 0,
+        successStoriesShared: typeof publishedStoriesCount === "number" ? publishedStoriesCount : 0,
+      };
+    };
+
     if (existing) {
+      const activityCountsPromise = computeActivityCounts(user.id);
+
       if (existing.isMentor) {
         const hasMentorBadge = (existing.badges || []).some((b: any) => b.badgeType === "MENTOR");
         if (!hasMentorBadge) {
@@ -245,9 +273,14 @@ export async function getOrCreateCommunityProfile(): Promise<{
 
       const avatarUrl = resolveAvatarUrl(profile?.avatarUrl) || resolveAvatarUrl(fallbackAvatarFromAuth());
 
+      const activityCounts = await activityCountsPromise;
+
       return {
         data: {
           ...existing,
+          postsCount: activityCounts.postsCount,
+          commentsCount: activityCounts.commentsCount,
+          successStoriesShared: activityCounts.successStoriesShared,
           favoriteTopics: Array.isArray(existing.favoriteTopics) ? existing.favoriteTopics : [],
           badges: (existing.badges || []).map((b: any) => ({
             badgeType: b.badgeType,
@@ -279,9 +312,14 @@ export async function getOrCreateCommunityProfile(): Promise<{
 
     const avatarUrl = resolveAvatarUrl(profile?.avatarUrl) || resolveAvatarUrl(fallbackAvatarFromAuth());
 
+    const activityCounts = await computeActivityCounts(user.id);
+
     return {
       data: {
         ...newProfile,
+        postsCount: activityCounts.postsCount,
+        commentsCount: activityCounts.commentsCount,
+        successStoriesShared: activityCounts.successStoriesShared,
         favoriteTopics: [],
         badges: [],
         user: {
@@ -1915,15 +1953,37 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
       isFollowing(targetUserId, user.id),
     ]);
 
-    const { count: followersCount } = await adminSupabase
-      .from("user_follows")
-      .select("id", { count: "exact", head: true })
-      .eq("followingId", targetUserId);
-
-    const { count: followingCount } = await adminSupabase
-      .from("user_follows")
-      .select("id", { count: "exact", head: true })
-      .eq("followerId", targetUserId);
+    const [
+      { count: followersCount },
+      { count: followingCount },
+      { count: authoredPostsCount },
+      { count: authoredCommentsCount },
+      { count: publishedStoriesCount },
+    ] = await Promise.all([
+      adminSupabase
+        .from("user_follows")
+        .select("id", { count: "exact", head: true })
+        .eq("followingId", targetUserId),
+      adminSupabase
+        .from("user_follows")
+        .select("id", { count: "exact", head: true })
+        .eq("followerId", targetUserId),
+      adminSupabase
+        .from("community_posts")
+        .select("id", { count: "exact", head: true })
+        .eq("userId", targetUserId)
+        .eq("moderationStatus", "APPROVED"),
+      adminSupabase
+        .from("community_post_comments")
+        .select("id", { count: "exact", head: true })
+        .eq("userId", targetUserId)
+        .eq("isDeleted", false),
+      adminSupabase
+        .from("success_stories")
+        .select("id", { count: "exact", head: true })
+        .eq("userId", targetUserId)
+        .eq("isPublished", true),
+    ]);
 
     let posts: CommunityPostSummary[] = [];
     if (settings.showPostsToCommunity) {
@@ -2038,10 +2098,11 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
       userId: communityProfile.userId,
       reputationPoints: communityProfile.reputationPoints,
       level: communityProfile.level,
-      postsCount: communityProfile.postsCount,
-      commentsCount: communityProfile.commentsCount,
+      postsCount: typeof authoredPostsCount === "number" ? authoredPostsCount : communityProfile.postsCount,
+      commentsCount: typeof authoredCommentsCount === "number" ? authoredCommentsCount : communityProfile.commentsCount,
       helpfulVotes: communityProfile.helpfulVotes,
-      successStoriesShared: communityProfile.successStoriesShared,
+      successStoriesShared:
+        typeof publishedStoriesCount === "number" ? publishedStoriesCount : communityProfile.successStoriesShared,
       isModerator: communityProfile.isModerator,
       isExpert: communityProfile.isExpert,
       isMentor: communityProfile.isMentor,
@@ -3031,5 +3092,106 @@ export async function getMyMentorships(): Promise<{
   } catch (err) {
     console.error("Error getting mentorships:", err);
     return { data: null, error: "Failed to get mentorships" };
+  }
+}
+
+// ===========================================================
+// MENTIONS
+// ===========================================================
+
+export async function searchMentionableUsers(
+  query: string,
+  limit: number = 10
+): Promise<{
+  data: Array<{ userId: string; name: string; avatarUrl: string | null }> | null;
+  error: string | null;
+}> {
+  try {
+    if (!query || query.trim().length === 0) {
+      return { data: [], error: null };
+    }
+
+    const searchQuery = query.toLowerCase().trim();
+
+    const { data: profiles, error } = await adminSupabase
+      .from("profiles")
+      .select("userId, firstName, lastName, avatarUrl")
+      .or(
+        `firstName.ilike.%${searchQuery}%,lastName.ilike.%${searchQuery}%`
+      )
+      .limit(limit);
+
+    if (error) return { data: null, error: error.message };
+
+    const results = (profiles || []).map((p: any) => ({
+      userId: p.userId,
+      name: [p.firstName, p.lastName].filter(Boolean).join(" ") || "Anonymous",
+      avatarUrl: p.avatarUrl || null,
+    }));
+
+    return { data: results, error: null };
+  } catch (err) {
+    console.error("Error searching mentionable users:", err);
+    return { data: null, error: "Failed to search users" };
+  }
+}
+
+export async function notifyMentionedUsers(
+  messageId: string,
+  roomId: string,
+  content: string,
+  mentionedUserIds: string[]
+): Promise<{ data: { success: true } | null; error: string | null }> {
+  try {
+    if (mentionedUserIds.length === 0) {
+      return { data: { success: true }, error: null };
+    }
+
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: room } = await adminSupabase
+      .from("chat_rooms")
+      .select("slug, name")
+      .eq("id", roomId)
+      .maybeSingle();
+
+    const { data: senderProfile } = await adminSupabase
+      .from("profiles")
+      .select("firstName, lastName")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    const senderName = senderProfile
+      ? [senderProfile.firstName, senderProfile.lastName].filter(Boolean).join(" ") || "Someone"
+      : "Someone";
+
+    const roomName = room?.name || "a chat room";
+    const preview = content.length > 100 ? `${content.slice(0, 100)}…` : content;
+    const link = room?.slug ? `/dashboard/community/hub/chat/${room.slug}` : "/dashboard/community/hub";
+
+    // Notify each mentioned user
+    for (const mentionedUserId of mentionedUserIds) {
+      if (mentionedUserId !== user.id) {
+        await emitEvent({
+          event: AppEvent.CHAT_MENTION,
+          userId: mentionedUserId,
+          message: `${senderName} mentioned you in ${roomName}: "${preview}"`,
+          link,
+          metadata: {
+            roomId,
+            roomSlug: room?.slug || null,
+            messageId,
+            mentionerUserId: user.id,
+          },
+        });
+      }
+    }
+
+    return { data: { success: true }, error: null };
+  } catch (err) {
+    console.error("Error notifying mentioned users:", err);
+    return { data: null, error: "Failed to notify users" };
   }
 }

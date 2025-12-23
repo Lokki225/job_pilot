@@ -65,6 +65,7 @@ export function useRealtimeNotifications(
 
     let cancelled = false;
     setIsLoading(true);
+    
     Promise.all([getNotifications({ limit: 50 }), getUnreadCount()])
       .then(([notificationsResult, unreadResult]) => {
         if (cancelled) return;
@@ -93,13 +94,21 @@ export function useRealtimeNotifications(
 
   // Get current user if not provided
   useEffect(() => {
-    if (!options.userId) {
-      supabase.auth.getUser().then(({ data: { user } }) => {
-        if (user) {
-          setUserId(user.id);
-        }
-      });
+    if (options.userId) {
+      setUserId(options.userId);
+      return;
     }
+
+    let mounted = true;
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (mounted && user) {
+        setUserId(user.id);
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, [options.userId, supabase.auth]);
 
   // Handle new notification
@@ -108,22 +117,17 @@ export function useRealtimeNotifications(
       // Add to local state
       setNotifications((prev) => {
         const existing = prev.find((n) => n.id === notification.id);
-        const next = [notification, ...prev.filter((n) => n.id !== notification.id)];
+        
+        // If notification already exists, don't process it again
+        if (existing) {
+          return prev;
+        }
+        
+        const next = [notification, ...prev];
 
         setUnreadCount((countPrev) => {
-          const wasUnread = existing ? !existing.isRead : false;
           const isUnread = !notification.isRead;
-
-          let delta = 0;
-          if (!existing) {
-            delta = isUnread ? 1 : 0;
-          } else if (wasUnread && !isUnread) {
-            delta = -1;
-          } else if (!wasUnread && isUnread) {
-            delta = 1;
-          }
-
-          return Math.max(0, countPrev + delta);
+          return isUnread ? countPrev + 1 : countPrev;
         });
 
         return next.slice(0, 50);
@@ -145,16 +149,27 @@ export function useRealtimeNotifications(
   useEffect(() => {
     if (!userId) return;
 
+    let pollInterval: NodeJS.Timeout | null = null;
+    let lastNotificationId: string | null = null;
+    let lastRealtimeUpdate = Date.now();
+
     const channel = supabase
-      .channel(`notifications_${userId}`)
+      .channel(`notifications_${userId}`, {
+        config: {
+          broadcast: { self: true },
+          presence: { key: userId },
+        },
+      })
       .on(
         "postgres_changes",
         {
           event: "INSERT",
           schema: "public",
           table: "notifications",
+          filter: `userId=eq.${userId}`,
         },
         (payload) => {
+          lastRealtimeUpdate = Date.now();
           if (payload.new.userId !== userId) return;
           const newNotification: RealtimeNotification = {
             id: payload.new.id,
@@ -162,7 +177,7 @@ export function useRealtimeNotifications(
             title: payload.new.title,
             message: payload.new.message,
             link: payload.new.link,
-            isRead: payload.new.isRead,
+            isRead: payload.new.isRead || false,
             createdAt: payload.new.createdAt,
           };
           handleNewNotification(newNotification);
@@ -174,8 +189,10 @@ export function useRealtimeNotifications(
           event: "UPDATE",
           schema: "public",
           table: "notifications",
+          filter: `userId=eq.${userId}`,
         },
         (payload) => {
+          lastRealtimeUpdate = Date.now();
           if (payload.new.userId !== userId) return;
           // Update local state when notification is marked as read
           setNotifications((prev) =>
@@ -201,8 +218,10 @@ export function useRealtimeNotifications(
           event: "DELETE",
           schema: "public",
           table: "notifications",
+          filter: `userId=eq.${userId}`,
         },
         (payload) => {
+          lastRealtimeUpdate = Date.now();
           const deletedId = payload.old?.id;
           if (payload.old?.userId !== userId) return;
           if (!deletedId) return;
@@ -216,10 +235,42 @@ export function useRealtimeNotifications(
         setIsConnected(status === "SUBSCRIBED");
       });
 
+    // Fallback polling mechanism (every 10 seconds) in case realtime fails
+    // Only polls if realtime hasn't received updates recently
+    pollInterval = setInterval(async () => {
+      try {
+        // Only poll if realtime hasn't updated in the last 8 seconds
+        if (Date.now() - lastRealtimeUpdate < 8000) {
+          return;
+        }
+        
+        const result = await getNotifications({ limit: 50 });
+        if (result.data && result.data.length > 0) {
+          const newestNotification = result.data[0];
+          
+          // Check if we have a new notification that wasn't in our local state
+          if (!lastNotificationId || newestNotification.id !== lastNotificationId) {
+            const existingIds = new Set(notifications.map((n) => n.id));
+            
+            result.data.forEach((notif) => {
+              if (!existingIds.has(notif.id)) {
+                handleNewNotification(notif);
+              }
+            });
+            
+            lastNotificationId = newestNotification.id;
+          }
+        }
+      } catch (err) {
+        console.error("Error in notification poll:", err);
+      }
+    }, 10000);
+
     return () => {
+      if (pollInterval) clearInterval(pollInterval);
       supabase.removeChannel(channel);
     };
-  }, [userId, supabase, handleNewNotification]);
+  }, [userId, supabase, handleNewNotification, notifications]);
 
   // Mark notification as read (local state only - actual update via server action)
   const markAsRead = useCallback((id: string) => {

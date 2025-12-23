@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Heart,
@@ -24,6 +24,9 @@ import {
   Hash,
   MoreHorizontal,
   Send,
+  Trash2,
+  Share,
+  ReceiptPoundSterlingIcon,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,6 +38,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MentionText } from "@/components/mentions/MentionText";
 import {
   getCommunityPosts,
   createPost,
@@ -42,6 +46,7 @@ import {
   unlikePost,
   bookmarkPost,
   unbookmarkPost,
+  deletePost,
   getChatRooms,
   getOrCreateCommunityProfile,
   seedDefaultChatRooms,
@@ -94,6 +99,8 @@ export default function CommunityHubPage() {
   const [newPostTags, setNewPostTags] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const realtimePostIdsRef = useRef<string[]>([]);
+  const profileRefreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [pendingDeleteIds, setPendingDeleteIds] = useState<string[]>([]);
 
   useEffect(() => {
     loadInitialData();
@@ -135,6 +142,28 @@ export default function CommunityHubPage() {
     return () => clearTimeout(t);
   }, [activeTab, peopleQuery]);
 
+  async function handleDelete(postId: string) {
+    const confirmDelete = window.confirm("Delete this post? This action cannot be undone.");
+    if (!confirmDelete) return;
+
+    setPendingDeleteIds((prev) => [...prev, postId]);
+
+    try {
+      const res = await deletePost(postId);
+      if (res.error) {
+        setError(res.error);
+      } else {
+        setPosts((prev) => prev.filter((p) => p.id !== postId));
+        await loadPosts();
+      }
+    } catch (err) {
+      console.error("Error deleting post:", err);
+      setError("Failed to delete post");
+    } finally {
+      setPendingDeleteIds((prev) => prev.filter((id) => id !== postId));
+    }
+  }
+
   async function toggleFollow(targetUserId: string, currentlyFollowing: boolean) {
     if (pendingFollowIds.includes(targetUserId)) return;
     setPendingFollowIds((prev) => [...prev, targetUserId]);
@@ -165,13 +194,24 @@ export default function CommunityHubPage() {
     }
   }
 
+  const loadProfile = useCallback(async () => {
+    try {
+      const profileRes = await getOrCreateCommunityProfile();
+      if (profileRes.data) setProfile(profileRes.data);
+      if (profileRes.error) {
+        console.error("Error loading community profile:", profileRes.error);
+      }
+    } catch (err) {
+      console.error("Unexpected error loading community profile:", err);
+    }
+  }, []);
+
   async function loadInitialData() {
     setIsLoading(true);
     try {
-      const [postsRes, roomsRes, profileRes] = await Promise.all([
+      const [postsRes, roomsRes] = await Promise.all([
         getCommunityPosts({ sort: sortBy }),
         getChatRooms(),
-        getOrCreateCommunityProfile(),
       ]);
 
       if (postsRes.data) setPosts(postsRes.data);
@@ -184,7 +224,7 @@ export default function CommunityHubPage() {
           setChatRooms(roomsRes.data);
         }
       }
-      if (profileRes.data) setProfile(profileRes.data);
+      await loadProfile();
     } catch (err) {
       console.error("Error loading community data:", err);
       setError("Failed to load community data");
@@ -247,6 +287,72 @@ export default function CommunityHubPage() {
       supabase.removeChannel(channel);
     };
   }, [posts]);
+
+  const scheduleProfileRefresh = useCallback(() => {
+    if (profileRefreshTimeoutRef.current) {
+      clearTimeout(profileRefreshTimeoutRef.current);
+    }
+    profileRefreshTimeoutRef.current = setTimeout(() => {
+      loadProfile();
+    }, 400);
+  }, [loadProfile]);
+
+  useEffect(() => {
+    const userId = profile?.userId;
+    if (!userId) return;
+
+    const channel = supabase
+      .channel(`community_profile_sidebar_${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "community_profiles",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleProfileRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "community_posts",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleProfileRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "community_post_comments",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleProfileRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "success_stories",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleProfileRefresh
+      )
+      .subscribe();
+
+    return () => {
+      if (profileRefreshTimeoutRef.current) {
+        clearTimeout(profileRefreshTimeoutRef.current);
+        profileRefreshTimeoutRef.current = null;
+      }
+      supabase.removeChannel(channel);
+    };
+  }, [profile?.userId, scheduleProfileRefresh]);
 
   async function handleCreatePost() {
     if (!newPostContent.trim()) return;
@@ -550,6 +656,9 @@ export default function CommunityHubPage() {
                       post={post}
                       onLike={() => handleLike(post.id, post.hasLiked)}
                       onBookmark={() => handleBookmark(post.id, post.hasBookmarked)}
+                      canDelete={profile?.userId === post.userId}
+                      onDelete={() => handleDelete(post.id)}
+                      isDeleting={pendingDeleteIds.includes(post.id)}
                     />
                   ))}
                 </div>
@@ -770,10 +879,16 @@ function PostCard({
   post,
   onLike,
   onBookmark,
+  canDelete,
+  onDelete,
+  isDeleting,
 }: {
   post: CommunityPostSummary;
   onLike: () => void;
   onBookmark: () => void;
+  canDelete?: boolean;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }) {
   const typeConfig = POST_TYPE_CONFIG[post.type];
 
@@ -786,36 +901,45 @@ function PostCard({
             <AvatarFallback>{post.authorName[0] || "U"}</AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Link
-                href={`/dashboard/community/hub/profile/${post.userId}`}
-                className="font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-              >
-                {post.authorName}
-              </Link>
-              <Badge className={`${typeConfig.color} gap-1`}>
-                {typeConfig.icon}
-                {typeConfig.label}
-              </Badge>
-              {post.isPinned && (
-                <Badge variant="outline" className="text-xs">
-                  📌 Pinned
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link
+                  href={`/dashboard/community/hub/profile/${post.userId}`}
+                  className="font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                >
+                  {post.authorName}
+                </Link>
+                <Badge className={`${typeConfig.color} gap-1`}>
+                  {typeConfig.icon}
+                  {typeConfig.label}
                 </Badge>
-              )}
-              {post.isFeatured && (
-                <Badge variant="outline" className="text-xs text-yellow-600">
-                  ⭐ Featured
-                </Badge>
-              )}
-              <span className="text-sm text-muted-foreground">
-                {new Date(post.createdAt).toLocaleDateString()}
-              </span>
+                {post.isPinned && (
+                  <Badge variant="outline" className="text-xs">
+                    📌 Pinned
+                  </Badge>
+                )}
+                {post.isFeatured && (
+                  <Badge variant="outline" className="text-xs text-yellow-600">
+                    ⭐ Featured
+                  </Badge>
+                )}
+                <span className="text-sm text-muted-foreground">
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </span>
+              </div>
             </div>
 
             {post.title && <h3 className="mt-2 font-semibold">{post.title}</h3>}
 
             <p className="mt-2 text-sm text-muted-foreground line-clamp-3 whitespace-pre-wrap">
-              {post.content}
+              <MentionText
+                content={post.content}
+                onMentionClick={(userId, name) => {
+                  if (userId) {
+                    window.location.href = `/dashboard/community/hub/profile/${userId}`;
+                  }
+                }}
+              />
             </p>
 
             {post.tags.length > 0 && (
@@ -874,8 +998,24 @@ function PostCard({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Share</DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-600">Report</DropdownMenuItem>
+                  {canDelete && onDelete && (
+                    <DropdownMenuItem
+                      className="text-light focus:text-red-600"
+                      onClick={onDelete}
+                      disabled={isDeleting}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      {isDeleting ? "Deleting..." : "Delete post"}
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem> 
+                    <Share className="mr-2 h-4 w-4" />
+                    Share
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-light">
+                    <Send className="mr-2 h-4 w-4" />
+                    Report
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

@@ -139,51 +139,6 @@ export function NotificationToastProvider({
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
   const { playNotificationSound } = useNotificationSound();
 
-  // Handle showing a toast
-  const showToast = useCallback(
-    (notification: RealtimeNotification) => {
-      const meta = EVENT_META[notification.type as AppEvent];
-      const priority = meta?.priority || "medium";
-      const priorityConfig = PRIORITY_CONFIG[priority];
-
-      // Play sound for urgent notifications
-      if (priorityConfig.sound) {
-        playNotificationSound();
-      }
-
-      // Create toast with visibility animation
-      const toast: ToastNotification = {
-        ...notification,
-        isVisible: false,
-      };
-
-      setToasts((prev) => {
-        // Limit to 5 toasts max
-        const newToasts = [toast, ...prev].slice(0, 5);
-        return newToasts;
-      });
-
-      // Trigger visibility animation
-      setTimeout(() => {
-        setToasts((prev) =>
-          prev.map((t) => (t.id === notification.id ? { ...t, isVisible: true } : t))
-        );
-      }, 50);
-
-      // Auto-dismiss after delay (longer for urgent)
-      const dismissDelay = priority === "urgent" ? 10000 : priority === "high" ? 7000 : 5000;
-      const timeoutId = setTimeout(() => {
-        dismissToast(notification.id);
-      }, dismissDelay);
-
-      // Store timeout ID for cleanup
-      setToasts((prev) =>
-        prev.map((t) => (t.id === notification.id ? { ...t, timeoutId } : t))
-      );
-    },
-    [playNotificationSound]
-  );
-
   // Handle dismissing a toast
   const dismissToast = useCallback((id: string) => {
     // First hide with animation
@@ -202,6 +157,61 @@ export function NotificationToastProvider({
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 300);
   }, []);
+
+  // Handle showing a toast
+  const showToast = useCallback(
+    (notification: RealtimeNotification) => {
+      setToasts((prev) => {
+        // Check if this notification is already being shown
+        if (prev.some((t) => t.id === notification.id)) {
+          return prev;
+        }
+
+        const meta = EVENT_META[notification.type as AppEvent];
+        const priority = meta?.priority || "medium";
+        const priorityConfig = PRIORITY_CONFIG[priority];
+
+        // Play sound for urgent notifications
+        if (priorityConfig.sound) {
+          playNotificationSound();
+        }
+
+        // Create toast with visibility animation
+        const toast: ToastNotification = {
+          ...notification,
+          isVisible: false,
+        };
+
+        // Limit to 5 toasts max
+        const newToasts = [toast, ...prev].slice(0, 5);
+        return newToasts;
+      });
+
+      // Trigger visibility animation
+      setTimeout(() => {
+        setToasts((prev) =>
+          prev.map((t) => (t.id === notification.id ? { ...t, isVisible: true } : t))
+        );
+      }, 50);
+
+      // Auto-dismiss after delay
+      setToasts((prev) => {
+        const toast = prev.find((t) => t.id === notification.id);
+        if (!toast) return prev;
+
+        const meta = EVENT_META[notification.type as AppEvent];
+        const priority = meta?.priority || "medium";
+        const dismissDelay = priority === "urgent" ? 10000 : priority === "high" ? 7000 : 5000;
+        
+        const timeoutId = setTimeout(() => {
+          dismissToast(notification.id);
+        }, dismissDelay);
+
+        return prev.map((t) => (t.id === notification.id ? { ...t, timeoutId } : t));
+      });
+    },
+    [playNotificationSound, dismissToast]
+  );
 
   // Handle dismissing all toasts
   const dismissAll = useCallback(() => {

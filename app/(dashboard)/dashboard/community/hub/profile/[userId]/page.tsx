@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -33,6 +33,7 @@ import {
 } from "@/lib/actions/community.action";
 import { RequestInterviewDialog } from "@/components/interviews/RequestInterviewDialog";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { supabase } from "@/lib/supabase/client";
 
 export default function PublicCommunityProfilePage() {
   const [data, setData] = useState<PublicCommunityProfileData | null>(null);
@@ -40,6 +41,7 @@ export default function PublicCommunityProfilePage() {
   const [error, setError] = useState<string | null>(null);
   const [isTogglingFollow, setIsTogglingFollow] = useState(false);
   const [isResumePreviewOpen, setIsResumePreviewOpen] = useState(false);
+  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const params = useParams();
   const userId = useMemo(() => {
@@ -48,29 +50,37 @@ export default function PublicCommunityProfilePage() {
     return raw || "";
   }, [params]);
 
+  const load = useCallback(
+    async (options?: { silent?: boolean }) => {
+      if (!userId) return;
+      if (!options?.silent) {
+        setIsLoading(true);
+      }
+      setError(null);
+      try {
+        const res = await getPublicCommunityProfile(userId);
+        if (res.error) {
+          setError(res.error);
+          setData(null);
+          return;
+        }
+        setData(res.data);
+      } catch (err) {
+        console.error("Error loading public profile:", err);
+        setError("Failed to load profile");
+        setData(null);
+      } finally {
+        if (!options?.silent) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [userId]
+  );
+
   useEffect(() => {
     load();
-  }, [userId]);
-
-  async function load() {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await getPublicCommunityProfile(userId);
-      if (res.error) {
-        setError(res.error);
-        setData(null);
-        return;
-      }
-      setData(res.data);
-    } catch (err) {
-      console.error("Error loading public profile:", err);
-      setError("Failed to load profile");
-      setData(null);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  }, [load]);
 
   const badgeLabels = useMemo(() => {
     const badges = data?.communityProfile?.badges || [];
@@ -134,6 +144,69 @@ export default function PublicCommunityProfilePage() {
     }
   }
 
+  const scheduleRefresh = useCallback(() => {
+    if (refreshTimeoutRef.current) clearTimeout(refreshTimeoutRef.current);
+    refreshTimeoutRef.current = setTimeout(() => {
+      load({ silent: true });
+    }, 400);
+  }, [load]);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const channel = supabase
+      .channel(`community_profile_stats_${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "community_profiles",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "community_posts",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "community_post_comments",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleRefresh
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "success_stories",
+          filter: `userId=eq.${userId}`,
+        },
+        scheduleRefresh
+      )
+      .subscribe();
+
+    return () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+        refreshTimeoutRef.current = null;
+      }
+      supabase.removeChannel(channel);
+    };
+  }, [scheduleRefresh, userId]);
+
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
@@ -156,7 +229,7 @@ export default function PublicCommunityProfilePage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-red-500">{error || "Profile not found"}</p>
-            <Button className="mt-4" onClick={load}>
+            <Button className="mt-4" onClick={() => load()}>
               Retry
             </Button>
           </CardContent>
