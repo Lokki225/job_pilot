@@ -149,9 +149,9 @@ export function useRealtimeNotifications(
           event: "INSERT",
           schema: "public",
           table: "notifications",
-          filter: `userId=eq.${userId}`,
         },
         (payload) => {
+          if (payload.new.userId !== userId) return;
           const newNotification: RealtimeNotification = {
             id: payload.new.id,
             type: payload.new.type,
@@ -170,9 +170,9 @@ export function useRealtimeNotifications(
           event: "UPDATE",
           schema: "public",
           table: "notifications",
-          filter: `userId=eq.${userId}`,
         },
         (payload) => {
+          if (payload.new.userId !== userId) return;
           // Update local state when notification is marked as read
           setNotifications((prev) =>
             prev.map((n) =>
@@ -197,10 +197,10 @@ export function useRealtimeNotifications(
           event: "DELETE",
           schema: "public",
           table: "notifications",
-          filter: `userId=eq.${userId}`,
         },
         (payload) => {
           const deletedId = payload.old?.id;
+          if (payload.old?.userId !== userId) return;
           if (!deletedId) return;
           setNotifications((prev) => prev.filter((n) => n.id !== deletedId));
           if (payload.old && payload.old.isRead === false) {

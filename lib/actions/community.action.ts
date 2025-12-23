@@ -442,10 +442,18 @@ export async function getPostById(postId: string): Promise<{
 
     if (error || !post) return { data: null, error: error?.message || "Post not found" };
 
-    await adminSupabase
-      .from("community_posts")
-      .update({ viewsCount: (post.viewsCount || 0) + 1 })
-      .eq("id", postId);
+    let recordedView = false;
+    if (user) {
+      const { data: viewResult, error: viewError } = await adminSupabase.rpc("record_post_view", {
+        p_post_id: postId,
+        p_user_id: user.id,
+      });
+      if (viewError) {
+        console.error("Error recording post view:", viewError);
+      } else if (typeof viewResult === "boolean") {
+        recordedView = viewResult;
+      }
+    }
 
     const { data: profile } = await adminSupabase
       .from("profiles")
@@ -534,7 +542,7 @@ export async function getPostById(postId: string): Promise<{
         attachments: Array.isArray(post.attachments) ? post.attachments : [],
         likesCount: post.likesCount,
         commentsCount: post.commentsCount,
-        viewsCount: post.viewsCount + 1,
+        viewsCount: (post.viewsCount || 0) + (recordedView ? 1 : 0),
         sharesCount: post.sharesCount,
         isPinned: post.isPinned,
         isFeatured: post.isFeatured,
@@ -783,6 +791,34 @@ export async function likePost(postId: string): Promise<{
 
     await adminSupabase.rpc("increment_post_likes", { post_id: postId });
 
+    const [{ data: postOwner }, { data: likerProfile }] = await Promise.all([
+      adminSupabase
+        .from("community_posts")
+        .select("userId, title")
+        .eq("id", postId)
+        .single(),
+      adminSupabase
+        .from("profiles")
+        .select("firstName,lastName")
+        .eq("userId", user.id)
+        .maybeSingle(),
+    ]);
+
+    if (postOwner && postOwner.userId !== user.id) {
+      const likerName =
+        likerProfile
+          ? [likerProfile.firstName, likerProfile.lastName].filter(Boolean).join(" ") || "Someone"
+          : "Someone";
+
+      await emitEvent({
+        event: AppEvent.COMMUNITY_POST_LIKED,
+        userId: postOwner.userId,
+        message: `${likerName} liked your community post"${postOwner.title ?? ""}"`,
+        link: `/dashboard/community/hub/post/${postId}`,
+        metadata: { postId, likedByUserId: user.id },
+      });
+    }
+
     return { data: { success: true }, error: null };
   } catch (err) {
     console.error("Error liking post:", err);
@@ -967,7 +1003,7 @@ export async function addPostComment(
 
     if (error) return { data: null, error: error.message };
 
-    await adminSupabase.rpc("increment_post_comments", { post_id: postId });
+    await adminSupabase.rpc("refresh_post_comments", { p_post_id: postId });
 
     return { data: { id: comment.id }, error: null };
   } catch (err) {
@@ -1000,6 +1036,8 @@ export async function deletePostComment(commentId: string): Promise<{
       .eq("id", commentId);
 
     if (error) return { data: null, error: error.message };
+
+    await adminSupabase.rpc("refresh_post_comments", { p_post_id: comment.postId });
 
     return { data: { success: true }, error: null };
   } catch (err) {

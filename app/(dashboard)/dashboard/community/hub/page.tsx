@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Heart,
@@ -55,6 +55,7 @@ import {
   type CommunityPersonSearchResult,
 } from "@/lib/actions/community.action";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { supabase } from "@/lib/supabase/client";
 
 const POST_TYPE_CONFIG: Record<CommunityPostType, { label: string; icon: React.ReactNode; color: string }> = {
   TIP: { label: "Tip", icon: <Lightbulb className="h-4 w-4" />, color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" },
@@ -92,6 +93,7 @@ export default function CommunityHubPage() {
   const [newPostContent, setNewPostContent] = useState("");
   const [newPostTags, setNewPostTags] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const realtimePostIdsRef = useRef<string[]>([]);
 
   useEffect(() => {
     loadInitialData();
@@ -198,11 +200,53 @@ export default function CommunityHubPage() {
         sort: sortBy,
         search: searchQuery.trim() || undefined,
       });
-      if (res.data) setPosts(res.data);
+      if (res.data) {
+        setPosts(res.data);
+        realtimePostIdsRef.current = res.data.map((post) => post.id);
+      }
     } catch (err) {
       console.error("Error loading posts:", err);
     }
   }
+
+  useEffect(() => {
+    const postIds = realtimePostIdsRef.current;
+    if (!postIds.length) return;
+
+    const filterValues = postIds.map((id) => `"${id}"`).join(",");
+    if (!filterValues) return;
+
+    const channel = supabase
+      .channel(`community_posts_feed_${Date.now()}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "community_posts",
+          filter: `id=in.(${filterValues})`,
+        },
+        (payload) => {
+          setPosts((prev) =>
+            prev.map((post) =>
+              post.id === payload.new.id
+                ? {
+                    ...post,
+                    likesCount: payload.new.likesCount,
+                    commentsCount: payload.new.commentsCount,
+                    viewsCount: payload.new.viewsCount,
+                  }
+                : post
+            )
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [posts]);
 
   async function handleCreatePost() {
     if (!newPostContent.trim()) return;

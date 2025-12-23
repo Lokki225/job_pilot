@@ -129,159 +129,159 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
-      {/* Mobile sidebar backdrop */}
-      <div
-        className={cn(
-          "fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden",
-          !sidebarOpen && "pointer-events-none opacity-0"
-        )}
-        onClick={() => setSidebarOpen(false)}
-      />
+    <NotificationToastProvider>
+      <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
+        {/* Mobile sidebar backdrop */}
+        <div
+          className={cn(
+            "fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden",
+            !sidebarOpen && "pointer-events-none opacity-0"
+          )}
+          onClick={() => setSidebarOpen(false)}
+        />
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex h-full flex-col bg-white shadow-lg transition-all duration-300 ease-in-out dark:bg-slate-800",
-          isCollapsed ? "w-16" : "w-64",
-          !sidebarOpen && "-translate-x-full lg:translate-x-0"
-        )}
-      >
-        <div className="flex h-full flex-col">
-          {/* Logo and Toggle */}
-          <div className="flex h-16 items-center justify-between border-b px-4 dark:border-slate-700">
-            {!isCollapsed && (
-              <Link href={isAdmin ? "/dashboard/admin" : "/dashboard"} className="flex items-center space-x-2">
-                <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                  JobPilot AI
-                </span>
-              </Link>
-            )}
-            <div className="flex items-center">
-              <button
-                type="button"
-                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-400 dark:hover:bg-slate-700"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-              >
-                {isCollapsed ? (
-                  <ChevronRight className="h-5 w-5" />
-                ) : (
-                  <ChevronLeft className="h-5 w-5" />
-                )}
-              </button>
-              <button
-                type="button"
-                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-400 dark:hover:bg-slate-700 lg:hidden"
-                onClick={() => setSidebarOpen(false)}
-              >
-                <X className="h-5 w-5" />
-              </button>
+        {/* Sidebar */}
+        <aside
+          className={cn(
+            "fixed inset-y-0 left-0 z-50 flex h-full flex-col bg-white shadow-lg transition-all duration-300 ease-in-out dark:bg-slate-800",
+            isCollapsed ? "w-16" : "w-64",
+            !sidebarOpen && "-translate-x-full lg:translate-x-0"
+          )}
+        >
+          <div className="flex h-full flex-col">
+            {/* Logo and Toggle */}
+            <div className="flex h-16 items-center justify-between border-b px-4 dark:border-slate-700">
+              {!isCollapsed && (
+                <Link href={isAdmin ? "/dashboard/admin" : "/dashboard"} className="flex items-center space-x-2">
+                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                    JobPilot AI
+                  </span>
+                </Link>
+              )}
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-400 dark:hover:bg-slate-700"
+                  onClick={() => setIsCollapsed(!isCollapsed)}
+                >
+                  {isCollapsed ? (
+                    <ChevronRight className="h-5 w-5" />
+                  ) : (
+                    <ChevronLeft className="h-5 w-5" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:text-gray-400 dark:hover:bg-slate-700 lg:hidden"
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 space-y-1 overflow-y-auto p-2">
-            {navigationItems
-              .filter((item: any) => !item.requiresAdmin)
-              .map(renderNavItem)}
+            {/* Navigation */}
+            <nav className="flex-1 space-y-1 overflow-y-auto p-2">
+              {navigationItems
+                .filter((item: any) => !item.requiresAdmin)
+                .map(renderNavItem)}
 
-            {isAdmin && navigationItems.some((item: any) => item.requiresAdmin) ? (
-              <div className={cn(isCollapsed ? "px-0" : "px-3")}
-                aria-hidden
+              {isAdmin && navigationItems.some((item: any) => item.requiresAdmin) ? (
+                <div className={cn(isCollapsed ? "px-0" : "px-3")}
+                  aria-hidden
+                >
+                  {isCollapsed ? (
+                    <div className="my-2 h-px bg-gray-200 dark:bg-slate-700" />
+                  ) : (
+                    <div className="my-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                      Admin Actions
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {isAdmin
+                ? navigationItems
+                  .filter((item: any) => item.requiresAdmin)
+                  .map(renderNavItem)
+                : null}
+            </nav>
+
+            {/* User Profile */}
+            <div className="border-t p-2 dark:border-slate-700">
+              <Link 
+                href="/dashboard/profile"
+                className={cn(
+                  "flex items-center rounded-md p-2 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors",
+                  isCollapsed ? "justify-center" : "px-2"
+                )}
               >
-                {isCollapsed ? (
-                  <div className="my-2 h-px bg-gray-200 dark:bg-slate-700" />
-                ) : (
-                  <div className="my-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
-                    Admin Actions
+                <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                  {session?.user?.user_metadata?.full_name ? (
+                    <span className="text-sm font-medium">
+                      {session.user.user_metadata.full_name.charAt(0).toUpperCase()}
+                    </span>
+                  ) : (
+                    <User className="h-4 w-4" />
+                  )}
+                </div>
+                {!isCollapsed && (
+                  <div className="ml-3 overflow-hidden">
+                    <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">
+                      {session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || 'User'}
+                    </p>
+                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+                      {t('nav.viewProfile')}
+                    </p>
                   </div>
                 )}
-              </div>
-            ) : null}
+              </Link>
+            </div>
+          </div>
+        </aside>
 
-            {isAdmin
-              ? navigationItems
-                .filter((item: any) => item.requiresAdmin)
-                .map(renderNavItem)
-              : null}
-          </nav>
-
-          {/* User Profile */}
-          <div className="border-t p-2 dark:border-slate-700">
-            <Link 
-              href="/dashboard/profile"
-              className={cn(
-                "flex items-center rounded-md p-2 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors",
-                isCollapsed ? "justify-center" : "px-2"
-              )}
+        {/* Main content */}
+        <div
+          className={cn(
+            "flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out",
+            isCollapsed ? "lg:ml-16" : "lg:ml-64"
+          )}
+        >
+          {/* Top navigation */}
+          <header className="flex h-16 shrink-0 items-center border-b bg-white px-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:px-6">
+            <button
+              type="button"
+              className="mr-4 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-slate-700 lg:hidden"
+              onClick={() => setSidebarOpen(true)}
             >
-              <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
-                {session?.user?.user_metadata?.full_name ? (
-                  <span className="text-sm font-medium">
-                    {session.user.user_metadata.full_name.charAt(0).toUpperCase()}
-                  </span>
-                ) : (
-                  <User className="h-4 w-4" />
-                )}
+              <Menu className="h-6 w-6" />
+            </button>
+            <div className="flex flex-1 justify-between">
+              <div className="flex items-center">
+                <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {getPageTitle(pathname)}
+                </h1>
               </div>
-              {!isCollapsed && (
-                <div className="ml-3 overflow-hidden">
-                  <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">
-                    {session?.user?.user_metadata?.full_name || session?.user?.email?.split('@')[0] || 'User'}
-                  </p>
-                  <p className="truncate text-xs text-gray-500 dark:text-gray-400">
-                    {t('nav.viewProfile')}
-                  </p>
-                </div>
-              )}
-            </Link>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main content */}
-      <div
-        className={cn(
-          "flex flex-1 flex-col overflow-hidden transition-all duration-300 ease-in-out",
-          isCollapsed ? "lg:ml-16" : "lg:ml-64"
-        )}
-      >
-        {/* Top navigation */}
-        <header className="flex h-16 shrink-0 items-center border-b bg-white px-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:px-6">
-          <button
-            type="button"
-            className="mr-4 rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-slate-700 lg:hidden"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-          <div className="flex flex-1 justify-between">
-            <div className="flex items-center">
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {getPageTitle(pathname)}
-              </h1>
+              <div className="flex items-center gap-3">
+                <NotificationBell />
+                <LanguageSelector variant="compact" />
+                <ThemeToggle />
+                {session ? (<Button onClick={() => {
+                  logout();
+                  router.push("/login");
+                }}>
+                  {t('common.logout')}
+                </Button>): null}
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <NotificationBell />
-              <LanguageSelector variant="compact" />
-              <ThemeToggle />
-              {session ? (<Button onClick={() => {
-                logout();
-                router.push("/login");
-              }}>
-                {t('common.logout')}
-              </Button>): null}
-            </div>
-          </div>
-        </header>
+          </header>
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-4 dark:bg-slate-900 sm:p-6 lg:p-8">
-          <NotificationToastProvider>
+          {/* Page content */}
+          <main className="flex-1 overflow-y-auto bg-gray-50 p-4 dark:bg-slate-900 sm:p-6 lg:p-8">
             {children}
-          </NotificationToastProvider>
-        </main>
+          </main>
+        </div>
       </div>
-    </div>
+    </NotificationToastProvider>
   )
 }
