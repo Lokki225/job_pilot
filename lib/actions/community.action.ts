@@ -3103,7 +3103,12 @@ export async function searchMentionableUsers(
   query: string,
   limit: number = 10
 ): Promise<{
-  data: Array<{ userId: string; name: string; avatarUrl: string | null }> | null;
+  data: Array<{
+    userId: string;
+    username: string;
+    displayName: string;
+    avatarUrl: string | null;
+  }> | null;
   error: string | null;
 }> {
   try {
@@ -3115,9 +3120,14 @@ export async function searchMentionableUsers(
 
     const { data: profiles, error } = await adminSupabase
       .from("profiles")
-      .select("userId, firstName, lastName, avatarUrl")
+      .select("userId, username, displayName, firstName, lastName, avatarUrl")
       .or(
-        `firstName.ilike.%${searchQuery}%,lastName.ilike.%${searchQuery}%`
+        [
+          `firstName.ilike.%${searchQuery}%`,
+          `lastName.ilike.%${searchQuery}%`,
+          `displayName.ilike.%${searchQuery}%`,
+          `username.ilike.%${searchQuery}%`,
+        ].join(",")
       )
       .limit(limit);
 
@@ -3125,7 +3135,8 @@ export async function searchMentionableUsers(
 
     const results = (profiles || []).map((p: any) => ({
       userId: p.userId,
-      name: [p.firstName, p.lastName].filter(Boolean).join(" ") || "Anonymous",
+      username: p.username || [p.firstName, p.lastName].filter(Boolean).join("_").replace(/\s+/g, ".").toLowerCase(),
+      displayName: p.displayName || [p.firstName, p.lastName].filter(Boolean).join(" ") || "Anonymous",
       avatarUrl: p.avatarUrl || null,
     }));
 

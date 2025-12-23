@@ -6,7 +6,8 @@
 export interface MentionMatch {
   id: string;
   userId: string;
-  name: string;
+  username: string;
+  displayName: string;
   avatarUrl: string | null;
   start: number;
   end: number;
@@ -14,10 +15,10 @@ export interface MentionMatch {
 
 /**
  * Parse mentions from text content
- * Matches @username or @firstName lastName patterns
+ * Matches @username (single-token, no spaces)
  */
 export function parseMentions(content: string): MentionMatch[] {
-  const mentionRegex = /@([a-zA-Z0-9_\s-]+)/g;
+  const mentionRegex = /@([\w.]+)/g;
   const mentions: MentionMatch[] = [];
   let match;
 
@@ -25,7 +26,8 @@ export function parseMentions(content: string): MentionMatch[] {
     mentions.push({
       id: match[0],
       userId: "",
-      name: match[1],
+      username: match[1],
+      displayName: "",
       avatarUrl: null,
       start: match.index,
       end: match.index + match[0].length,
@@ -36,30 +38,31 @@ export function parseMentions(content: string): MentionMatch[] {
 }
 
 /**
- * Extract unique mention names from content
+ * Extract unique mention usernames from content
  */
-export function extractMentionNames(content: string): string[] {
+export function extractMentionUsernames(content: string): string[] {
   const mentions = parseMentions(content);
-  return [...new Set(mentions.map((m) => m.name))];
+  return [...new Set(mentions.map((m) => m.username))];
 }
 
 /**
- * Replace mentions with formatted HTML/JSX
+ * Replace mentions with enriched data
  * Used for rendering in UI
  */
 export function renderMentions(
   content: string,
-  mentionMap: Map<string, { userId: string; name: string; avatarUrl: string | null }>
+  mentionMap: Map<string, { userId: string; username: string; displayName: string; avatarUrl: string | null }>
 ): { text: string; mentions: MentionMatch[] } {
   const mentions = parseMentions(content);
   const enrichedMentions: MentionMatch[] = [];
 
   mentions.forEach((mention) => {
-    const found = mentionMap.get(mention.name.toLowerCase());
+    const found = mentionMap.get(mention.username.toLowerCase());
     if (found) {
       enrichedMentions.push({
         ...mention,
         userId: found.userId,
+        displayName: found.displayName,
         avatarUrl: found.avatarUrl,
       });
     }
@@ -96,10 +99,10 @@ export function sanitizeMentions(content: string, maxMentions: number = 10): str
  * Check if a mention is valid (user exists and is mentionable)
  */
 export function isValidMention(
-  mentionName: string,
-  mentionMap: Map<string, { userId: string; name: string; avatarUrl: string | null }>
+  username: string,
+  mentionMap: Map<string, { userId: string; username: string; displayName: string; avatarUrl: string | null }>
 ): boolean {
-  return mentionMap.has(mentionName.toLowerCase());
+  return mentionMap.has(username.toLowerCase());
 }
 
 /**
@@ -107,13 +110,13 @@ export function isValidMention(
  */
 export function extractMentionedUserIds(
   content: string,
-  mentionMap: Map<string, { userId: string; name: string; avatarUrl: string | null }>
+  mentionMap: Map<string, { userId: string; username: string; displayName: string; avatarUrl: string | null }>
 ): string[] {
   const mentions = parseMentions(content);
   const userIds: string[] = [];
 
   mentions.forEach((mention) => {
-    const found = mentionMap.get(mention.name.toLowerCase());
+    const found = mentionMap.get(mention.username.toLowerCase());
     if (found) {
       userIds.push(found.userId);
     }
@@ -124,16 +127,16 @@ export function extractMentionedUserIds(
 
 /**
  * Format mention for storage/transmission
- * Ensures consistent format across the system
+ * Uses username token (single-word, no spaces)
  */
-export function formatMention(name: string): string {
-  return `@${name.trim()}`;
+export function formatMention(username: string): string {
+  return `@${username.trim()}`;
 }
 
 /**
  * Create a mention string for a user
+ * Uses username, not display name
  */
-export function createMention(firstName: string, lastName?: string): string {
-  const fullName = [firstName, lastName].filter(Boolean).join(" ");
-  return formatMention(fullName);
+export function createMention(username: string): string {
+  return formatMention(username);
 }

@@ -59,14 +59,29 @@ export default function ChatRoomPage() {
   const [replyTo, setReplyTo] = useState<ChatMessageData | null>(null);
   const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
-  const [mentionSuggestions, setMentionSuggestions] = useState<Array<{ userId: string; name: string; avatarUrl: string | null }>>([]);
+  const [mentionSuggestions, setMentionSuggestions] = useState<
+    Array<{ userId: string; username: string; displayName: string; avatarUrl: string | null }>
+  >([]);
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [isMentionLoading, setIsMentionLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const loadMessagesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const supabaseClientRef = useRef<ReturnType<typeof createBrowserClient> | null>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  const getSupabaseClient = useCallback(() => {
+    if (!supabaseClientRef.current) {
+      supabaseClientRef.current = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+    }
+    return supabaseClientRef.current;
   }, []);
 
   useEffect(() => {
@@ -74,12 +89,58 @@ export default function ChatRoomPage() {
   }, [slug]);
 
   useEffect(() => {
+    if (mentionQuery === null) {
+      setMentionSuggestions([]);
+      setIsMentionLoading(false);
+      return;
+    }
+
+    const trimmed = mentionQuery.trim();
+    if (!trimmed) {
+      setMentionSuggestions([]);
+      setIsMentionLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setIsMentionLoading(true);
+
+    const fetchSuggestions = async () => {
+      try {
+        const response = await fetch(`/api/mentions/search?q=${encodeURIComponent(trimmed)}`, {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch mention suggestions");
+        }
+
+        const payload = await response.json();
+        if (!controller.signal.aborted) {
+          setMentionSuggestions(Array.isArray(payload.data) ? payload.data : []);
+        }
+      } catch (err) {
+        if (controller.signal.aborted) return;
+        console.error("Error fetching mention suggestions:", err);
+        setMentionSuggestions([]);
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsMentionLoading(false);
+        }
+      }
+    };
+
+    fetchSuggestions();
+
+    return () => {
+      controller.abort();
+    };
+  }, [mentionQuery]);
+
+  useEffect(() => {
     if (!room) return;
 
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const supabase = getSupabaseClient();
 
     const scheduleLoadMessages = () => {
       if (loadMessagesTimeoutRef.current) {
@@ -100,7 +161,7 @@ export default function ChatRoomPage() {
           table: "chat_messages",
           filter: `roomId=eq.${room.id}`,
         },
-        (payload) => {
+        (_payload: unknown) => {
           // Immediately reload messages when new message arrives
           loadMessages();
         }
@@ -113,7 +174,7 @@ export default function ChatRoomPage() {
           table: "chat_messages",
           filter: `roomId=eq.${room.id}`,
         },
-        (payload) => {
+        (_payload: unknown) => {
           // Immediately reload messages when message is updated
           loadMessages();
         }
@@ -125,7 +186,7 @@ export default function ChatRoomPage() {
           schema: "public",
           table: "chat_message_reactions",
         },
-        (payload) => {
+        (_payload: unknown) => {
           // Debounce reaction updates since they can be frequent
           scheduleLoadMessages();
         }
@@ -426,6 +487,8 @@ export default function ChatRoomPage() {
                 disabled={!room.isMember || isSending}
                 placeholder={room.isMember ? "Type a message... (use @ to mention)" : "Join to send messages"}
                 suggestions={mentionSuggestions}
+                isLoadingSuggestions={isMentionLoading}
+                onMentionQueryChange={setMentionQuery}
                 onMentionSelect={(suggestion) => {
                   // Mention is already inserted by MentionInput
                 }}
@@ -542,6 +605,11 @@ function MessageBubble({
               <p className="whitespace-pre-wrap break-all leading-relaxed">
                 <MentionText
                   content={message.content}
+                  mentionClassName={
+                    message.isMine
+                      ? "inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white/20 text-white font-semibold hover:bg-white/30 transition-colors cursor-pointer"
+                      : undefined
+                  }
                   onMentionClick={(userId, name) => {
                     if (userId) {
                       window.location.href = `/dashboard/community/hub/profile/${userId}`;

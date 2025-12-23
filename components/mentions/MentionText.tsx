@@ -7,12 +7,13 @@ interface MentionTextProps {
   content: string;
   className?: string;
   mentionClassName?: string;
-  onMentionClick?: (userId: string, name: string) => void;
+  onMentionClick?: (userId: string, username: string) => void;
 }
 
 /**
  * Component to render text with highlighted mentions
- * Parses @mentions and renders them as clickable links with enhanced styling
+ * Parses @username tokens and renders them as clickable links
+ * Uses username for storage, displayName for UI display
  */
 export function MentionText({
   content,
@@ -41,19 +42,20 @@ export function MentionText({
 
     // Add mention as clickable element with enhanced styling
     const mentionText = content.substring(mention.start, mention.end);
-    const defaultMentionClass = mentionClassName || 
+    const defaultMentionClass =
+      mentionClassName ||
       "inline-flex items-center gap-1 px-2 py-1 rounded-md bg-primary/15 text-primary font-semibold hover:bg-primary/25 transition-colors cursor-pointer";
-    
+
     parts.push(
       <span
         key={`mention-${mention.start}`}
         className={defaultMentionClass}
-        onClick={() => onMentionClick?.(mention.userId, mention.name)}
+        onClick={() => onMentionClick?.(mention.userId, mention.username)}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
-            onMentionClick?.(mention.userId, mention.name);
+            onMentionClick?.(mention.userId, mention.username);
           }
         }}
       >

@@ -3,12 +3,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { extractMentionNames } from "@/lib/utils/mentions";
 import { Check } from "lucide-react";
 
 interface MentionSuggestion {
   userId: string;
-  name: string;
+  username: string;
+  displayName: string;
   avatarUrl: string | null;
 }
 
@@ -19,7 +19,9 @@ interface MentionInputProps {
   disabled?: boolean;
   placeholder?: string;
   suggestions?: MentionSuggestion[];
+  isLoadingSuggestions?: boolean;
   onMentionSelect?: (suggestion: MentionSuggestion) => void;
+  onMentionQueryChange?: (query: string | null) => void;
 }
 
 /**
@@ -33,7 +35,9 @@ export function MentionInput({
   disabled = false,
   placeholder = "Type a message... (use @ to mention)",
   suggestions = [],
+  isLoadingSuggestions = false,
   onMentionSelect,
+  onMentionQueryChange,
 }: MentionInputProps) {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<MentionSuggestion[]>([]);
@@ -71,22 +75,26 @@ export function MentionInput({
       setMentionStartPos(mention.startIndex);
       if (mention.query.length > 0) {
         setMentionQuery(mention.query);
-        const filtered = suggestions.filter((s) =>
-          s.name.toLowerCase().includes(mention.query.toLowerCase())
-        );
+        onMentionQueryChange?.(mention.query);
+        const filtered = suggestions.filter((s) => {
+          const target = `${s.displayName} ${s.username}`.toLowerCase();
+          return target.includes(mention.query.toLowerCase());
+        });
         setFilteredSuggestions(filtered);
         setShowSuggestions(true);
         setSelectedIndex(0);
       } else {
         // Show all suggestions when user just types @
         setMentionQuery("");
+        onMentionQueryChange?.("");
         setFilteredSuggestions(suggestions);
-        setShowSuggestions(suggestions.length > 0);
+        setShowSuggestions(true);
         setSelectedIndex(0);
       }
     } else {
       setShowSuggestions(false);
       setMentionQuery("");
+      onMentionQueryChange?.(null);
       setFilteredSuggestions([]);
     }
   };
@@ -99,16 +107,18 @@ export function MentionInput({
     if (mention) {
       const before = value.substring(0, mention.startIndex);
       const after = value.substring(cursorPos);
-      const newValue = `${before}@${suggestion.name} ${after}`;
+      const newValue = `${before}@${suggestion.username}${after.startsWith(" ") ? "" : " "}${after}`;
       onChange(newValue);
       onMentionSelect?.(suggestion);
       setShowSuggestions(false);
       setMentionQuery("");
+      onMentionQueryChange?.(null);
+      setFilteredSuggestions([]);
 
       // Focus input and move cursor after mention
       setTimeout(() => {
         if (inputRef.current) {
-          const newCursorPos = before.length + suggestion.name.length + 2;
+          const newCursorPos = before.length + suggestion.username.length + 1;
           inputRef.current.focus();
           inputRef.current.setSelectionRange(newCursorPos, newCursorPos);
         }
@@ -176,7 +186,7 @@ export function MentionInput({
         className="pr-10"
       />
 
-      {showSuggestions && filteredSuggestions.length > 0 && (
+      {showSuggestions && (
         <div
           ref={suggestionsRef}
           className="absolute bottom-full left-0 right-0 mb-2 max-h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-xl z-50"
@@ -187,30 +197,41 @@ export function MentionInput({
             </div>
           )}
           <div className="py-2">
-            {filteredSuggestions.map((suggestion, index) => (
-              <button
-                key={suggestion.userId}
-                onClick={() => handleSelectSuggestion(suggestion)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all ${
-                  index === selectedIndex
-                    ? "bg-primary/10 border-l-2 border-primary"
-                    : "hover:bg-muted/50"
-                }`}
-              >
-                <Avatar className="h-9 w-9 shrink-0 ring-2 ring-border">
-                  <AvatarImage src={suggestion.avatarUrl || undefined} />
-                  <AvatarFallback className="text-xs font-semibold">
-                    {suggestion.name[0]?.toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{suggestion.name}</p>
-                </div>
-                {index === selectedIndex && (
-                  <Check className="h-4 w-4 text-primary shrink-0" />
-                )}
-              </button>
-            ))}
+            {isLoadingSuggestions ? (
+              <div className="px-4 py-3 text-sm text-muted-foreground">Searching users…</div>
+            ) : filteredSuggestions.length > 0 ? (
+              filteredSuggestions.map((suggestion, index) => (
+                <button
+                  key={suggestion.userId}
+                  onClick={() => handleSelectSuggestion(suggestion)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-all ${
+                    index === selectedIndex
+                      ? "bg-primary/10 border-l-2 border-primary"
+                      : "hover:bg-muted/50"
+                  }`}
+                >
+                  <Avatar className="h-9 w-9 shrink-0 ring-2 ring-border">
+                    <AvatarImage src={suggestion.avatarUrl || undefined} />
+                    <AvatarFallback className="text-xs font-semibold">
+                      {suggestion.displayName[0]?.toUpperCase() || suggestion.username[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{suggestion.displayName}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      @{suggestion.username}
+                    </p>
+                  </div>
+                  {index === selectedIndex && (
+                    <Check className="h-4 w-4 text-primary shrink-0" />
+                  )}
+                </button>
+              ))
+            ) : (
+              <div className="px-4 py-3 text-sm text-muted-foreground">
+                {mentionQuery ? "No users found. Keep typing…" : "Type after @ to search users"}
+              </div>
+            )}
           </div>
         </div>
       )}

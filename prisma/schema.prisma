@@ -226,6 +226,8 @@ model Profile {
   // Core personal info
   firstName       String?
   lastName        String?
+  username        String?     @unique  // Single-token username for mentions (e.g., oriane.m)
+  displayName     String?     // Full display name for UI (e.g., Oriane Martinez)
   phone           String?
   location        String?
   bio             String?
