@@ -274,8 +274,8 @@ export default function CoverLettersPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl">
-                  <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-xl">
+                  <FileText className="w-6 h-6 text-primary dark:text-primary/90" />
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -290,7 +290,7 @@ export default function CoverLettersPage() {
             
             <Button 
               onClick={() => router.push('/dashboard/jobs')}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Generate New Letter
@@ -371,7 +371,7 @@ export default function CoverLettersPage() {
                   <button
                     onClick={() => setViewMode('grid')}
                     className={`p-2 ${viewMode === 'grid' 
-                      ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
+                      ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary/90' 
                       : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
                     }`}
                   >
@@ -380,7 +380,7 @@ export default function CoverLettersPage() {
                   <button
                     onClick={() => setViewMode('list')}
                     className={`p-2 ${viewMode === 'list' 
-                      ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' 
+                      ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary/90' 
                       : 'bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
                     }`}
                   >

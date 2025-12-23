@@ -166,6 +166,15 @@ export interface PublicCommunityProfileData {
   kitMastery: PublicInterviewKitMasterySummary[];
   posts: CommunityPostSummary[];
   stories: any[];
+  contact: {
+    email: string | null;
+    phone: string | null;
+    location: string | null;
+    website: string | null;
+    linkedinUrl: string | null;
+    githubUrl: string | null;
+  };
+  resumeUrl: string | null;
 }
 
 function buildInFilter(values: string[]): string {
@@ -1858,11 +1867,17 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
 
     const { data: baseProfile } = await adminSupabase
       .from("profiles")
-      .select("userId, firstName, lastName, avatarUrl, headline")
+      .select("userId, firstName, lastName, avatarUrl, headline, phone, location, website, linkedinUrl, githubUrl, resumeUrl")
       .eq("userId", targetUserId)
       .maybeSingle();
 
     if (!baseProfile) return { data: null, error: "Profile not found" };
+
+    const { data: userRecord } = await adminSupabase
+      .from("users")
+      .select("id, email")
+      .eq("id", targetUserId)
+      .maybeSingle();
 
     let { data: communityProfile } = await adminSupabase
       .from("community_profiles")
@@ -2060,6 +2075,15 @@ export async function getPublicCommunityProfile(userId: string): Promise<{
         kitMastery,
         posts,
         stories,
+        contact: {
+          email: userRecord?.email || null,
+          phone: baseProfile.phone || null,
+          location: baseProfile.location || null,
+          website: baseProfile.website || null,
+          linkedinUrl: baseProfile.linkedinUrl || null,
+          githubUrl: baseProfile.githubUrl || null,
+        },
+        resumeUrl: baseProfile.resumeUrl || null,
       },
       error: null,
     };

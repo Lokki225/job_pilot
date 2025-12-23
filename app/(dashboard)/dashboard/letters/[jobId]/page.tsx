@@ -115,7 +115,7 @@ Best regards,
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl">
+              <div className="p-3 bg-primary rounded-xl">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -125,7 +125,7 @@ Best regards,
             </div>
             <button
               onClick={() => setStep(1)}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
             >
               <Wand2 className="w-4 h-4" />
               New Letter
@@ -144,7 +144,7 @@ Best regards,
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step >= 1 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step >= 1 ? 'bg-primary text-primary-foreground' : 'bg-gray-200 text-gray-400'}`}>
                     1
                   </div>
                   <div>
@@ -158,7 +158,7 @@ Best regards,
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step >= 2 ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-full ${step >= 2 ? 'bg-primary text-primary-foreground' : 'bg-gray-200 text-gray-400'}`}>
                     2
                   </div>
                   <div>
@@ -178,7 +178,7 @@ Best regards,
                   {/* Job Title */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Briefcase className="w-4 h-4 text-indigo-600" />
+                      <Briefcase className="w-4 h-4 text-primary" />
                       Job Title *
                     </label>
                     <input
@@ -193,7 +193,7 @@ Best regards,
                   {/* Company */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <Building className="w-4 h-4 text-indigo-600" />
+                      <Building className="w-4 h-4 text-primary" />
                       Company Name *
                     </label>
                     <input
@@ -208,7 +208,7 @@ Best regards,
                   {/* Location */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <MapPin className="w-4 h-4 text-indigo-600" />
+                      <MapPin className="w-4 h-4 text-primary" />
                       Location
                     </label>
                     <input
@@ -223,7 +223,7 @@ Best regards,
                   {/* Job Description */}
                   <div>
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                      <FileText className="w-4 h-4 text-indigo-600" />
+                      <FileText className="w-4 h-4 text-primary" />
                       Job Description (Optional)
                     </label>
                     <textarea
@@ -288,7 +288,7 @@ Best regards,
                   <button
                     onClick={handleGenerate}
                     disabled={!formData.jobTitle || !formData.company || isGenerating}
-                    className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl"
+                    className="w-full py-4 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 text-lg shadow-lg hover:shadow-xl"
                   >
                     {isGenerating ? (
                       <>
@@ -332,7 +332,7 @@ Best regards,
                     </button>
                     <button
                       onClick={handleDownload}
-                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
+                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
                       Download
@@ -381,7 +381,7 @@ Best regards,
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Tips Card */}
-            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+            <div className="bg-primary rounded-xl shadow-lg p-6 text-primary-foreground">
               <div className="flex items-center gap-2 mb-4">
                 <Zap className="w-5 h-5" />
                 <h3 className="font-bold text-lg">Pro Tips</h3>
@@ -435,7 +435,7 @@ Best regards,
               <h3 className="font-bold text-gray-800 mb-4">Recent Letters</h3>
               <div className="space-y-3">
                 {savedLetters.slice(0, 3).map((letter) => (
-                  <div key={letter.id} className="p-3 border border-gray-200 rounded-lg hover:border-indigo-300 transition-colors cursor-pointer">
+                  <div key={letter.id} className="p-3 border border-gray-200 rounded-lg hover:border-primary/40 transition-colors cursor-pointer">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex-1">
                         <p className="font-semibold text-sm text-gray-800">{letter.jobTitle}</p>
@@ -453,7 +453,7 @@ Best regards,
                   </div>
                 ))}
               </div>
-              <button className="w-full mt-4 py-2 text-sm text-indigo-600 font-medium hover:bg-indigo-50 rounded-lg transition-colors">
+              <button className="w-full mt-4 py-2 text-sm text-primary font-medium hover:bg-indigo-50 rounded-lg transition-colors">
                 View All Letters →
               </button>
             </div>

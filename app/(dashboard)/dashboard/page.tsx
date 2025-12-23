@@ -115,7 +115,7 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <Loader2 className="h-10 w-10 animate-spin text-blue-500 mx-auto mb-4" />
+          <Loader2 className="h-10 w-10 animate-spin text-primary mx-auto mb-4" />
           <p className="text-gray-500 dark:text-gray-400">Loading your dashboard...</p>
         </div>
       </div>
@@ -165,17 +165,17 @@ export default function DashboardPage() {
 
       {/* Top Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-blue-200 dark:border-blue-800">
+        <Card className="bg-linear-to-br from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 border-primary/20 dark:border-primary/40">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">Applications</p>
-                <p className="text-3xl font-bold text-blue-700 dark:text-blue-300">{analytics.totalApplications}</p>
-                <p className="text-xs text-blue-500 dark:text-blue-400 mt-1">
+                <p className="text-sm text-primary dark:text-primary/90 font-medium">Applications</p>
+                <p className="text-3xl font-bold text-primary dark:text-primary/90">{analytics.totalApplications}</p>
+                <p className="text-xs text-primary/80 dark:text-primary/70 mt-1">
                   +{analytics.applicationsThisWeek} this week
                 </p>
               </div>
-              <div className="p-3 bg-blue-500 rounded-xl">
+              <div className="p-3 bg-primary rounded-xl">
                 <Briefcase className="h-6 w-6 text-white" />
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-blue-500" />
+                <BarChart3 className="h-5 w-5 text-primary" />
                 Weekly Activity
               </CardTitle>
               <CardDescription>Your activity over the last 7 days</CardDescription>
@@ -329,7 +329,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-blue-500" />
+                <Briefcase className="h-5 w-5 text-primary" />
                 Application Pipeline
               </CardTitle>
               <CardDescription>Status breakdown of your applications</CardDescription>
@@ -586,8 +586,8 @@ export default function DashboardPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
+                <Clock className="h-5 w-5 text-primary dark:text-primary/90" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">

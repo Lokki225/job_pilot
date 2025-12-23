@@ -46,15 +46,15 @@ import {
 } from "@/lib/actions/community.action";
 
 const POST_TYPE_CONFIG: Record<CommunityPostType, { label: string; icon: React.ReactNode; color: string }> = {
-  TIP: { label: "Tip", icon: <Lightbulb className="h-4 w-4" />, color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" },
-  QUESTION: { label: "Question", icon: <HelpCircle className="h-4 w-4" />, color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" },
-  DISCUSSION: { label: "Discussion", icon: <MessageSquare className="h-4 w-4" />, color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" },
-  RESOURCE: { label: "Resource", icon: <FileText className="h-4 w-4" />, color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" },
-  ANNOUNCEMENT: { label: "Announcement", icon: <Megaphone className="h-4 w-4" />, color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" },
+  TIP: { label: "Tip", icon: <Lightbulb className="h-4 w-4" />, color: "bg-yellow-500/10 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400" },
+  QUESTION: { label: "Question", icon: <HelpCircle className="h-4 w-4" />, color: "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400" },
+  DISCUSSION: { label: "Discussion", icon: <MessageSquare className="h-4 w-4" />, color: "bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400" },
+  RESOURCE: { label: "Resource", icon: <FileText className="h-4 w-4" />, color: "bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400" },
+  ANNOUNCEMENT: { label: "Announcement", icon: <Megaphone className="h-4 w-4" />, color: "bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400" },
   TRAINING_RESULT_SHARE: {
     label: "Training Result",
     icon: <Trophy className="h-4 w-4" />,
-    color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    color: "bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400",
   },
 };
 

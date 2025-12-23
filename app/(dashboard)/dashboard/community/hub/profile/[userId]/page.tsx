@@ -12,6 +12,13 @@ import {
   UserPlus,
   UserCheck,
   Trophy,
+  Mail,
+  Phone,
+  MapPin,
+  Globe,
+  Linkedin,
+  Github,
+  FileText,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,12 +32,14 @@ import {
   type PublicCommunityProfileData,
 } from "@/lib/actions/community.action";
 import { RequestInterviewDialog } from "@/components/interviews/RequestInterviewDialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function PublicCommunityProfilePage() {
   const [data, setData] = useState<PublicCommunityProfileData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isTogglingFollow, setIsTogglingFollow] = useState(false);
+  const [isResumePreviewOpen, setIsResumePreviewOpen] = useState(false);
 
   const params = useParams();
   const userId = useMemo(() => {
@@ -218,6 +227,21 @@ export default function PublicCommunityProfilePage() {
                     </Button>
                   </div>
                 )}
+                {data.isMe && (
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <Link href="/dashboard/profile">
+                      <Button variant="outline" size="sm">
+                        Edit Profile
+                      </Button>
+                    </Link>
+                    {data.resumeUrl && (
+                      <Button size="sm" onClick={() => setIsResumePreviewOpen(true)}>
+                        <FileText className="mr-2 h-4 w-4" />
+                        Preview Resume
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -258,6 +282,62 @@ export default function PublicCommunityProfilePage() {
           </div>
         </CardContent>
       </Card>
+
+      {Object.values(data.contact).some((value) => value) && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Contact Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
+            {data.contact.email && (
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4" />
+                <a href={`mailto:${data.contact.email}`} className="hover:text-primary">
+                  {data.contact.email}
+                </a>
+              </div>
+            )}
+            {data.contact.phone && (
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4" />
+                <a href={`tel:${data.contact.phone}`} className="hover:text-primary">
+                  {data.contact.phone}
+                </a>
+              </div>
+            )}
+            {data.contact.location && (
+              <div className="flex items-center gap-3">
+                <MapPin className="h-4 w-4" />
+                <span>{data.contact.location}</span>
+              </div>
+            )}
+            {data.contact.website && (
+              <div className="flex items-center gap-3">
+                <Globe className="h-4 w-4" />
+                <a href={data.contact.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                  {data.contact.website}
+                </a>
+              </div>
+            )}
+            {data.contact.linkedinUrl && (
+              <div className="flex items-center gap-3">
+                <Linkedin className="h-4 w-4" />
+                <a href={data.contact.linkedinUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                  {data.contact.linkedinUrl}
+                </a>
+              </div>
+            )}
+            {data.contact.githubUrl && (
+              <div className="flex items-center gap-3">
+                <Github className="h-4 w-4" />
+                <a href={data.contact.githubUrl} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                  {data.contact.githubUrl}
+                </a>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <Tabs defaultValue="overview">
         <TabsList>
@@ -429,6 +509,31 @@ export default function PublicCommunityProfilePage() {
           )}
         </TabsContent>
       </Tabs>
+
+      {data.resumeUrl && (
+        <Dialog open={isResumePreviewOpen} onOpenChange={setIsResumePreviewOpen}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle>{data.name}'s Resume</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="rounded-lg border">
+                <iframe src={data.resumeUrl} className="h-[70vh] w-full rounded-lg" title="Resume preview" />
+              </div>
+              <div className="flex justify-between">
+                <Button variant="outline" onClick={() => setIsResumePreviewOpen(false)}>
+                  Close
+                </Button>
+                <Button asChild>
+                  <a href={data.resumeUrl} target="_blank" rel="noopener noreferrer">
+                    Download Resume
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

@@ -639,7 +639,7 @@ export default function JobsPage() {
             <div className="mt-4">
               {recommendationsLoading ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+                  <Loader2 className="w-6 h-6 text-primary animate-spin" />
                   <span className="ml-2 text-slate-600 dark:text-slate-400">Loading recommendations...</span>
                 </div>
               ) : topPicks.length > 0 ? (
@@ -653,7 +653,7 @@ export default function JobsPage() {
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <Badge variant="secondary" className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400">
+                            <Badge variant="secondary" className="text-xs bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary/90">
                               #{index + 1} Match
                             </Badge>
                             {job.remote && (

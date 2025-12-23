@@ -163,7 +163,7 @@ export function LetterEditor({
                           onClick={() => setShowImproveInput(true)}
                           className="w-full dark:border-slate-600 dark:text-gray-300 dark:hover:bg-slate-700"
                         >
-                          <Sparkles className="w-4 h-4 mr-2 text-indigo-500" />
+                          <Sparkles className="w-4 h-4 mr-2 text-primary" />
                           Improve with AI
                         </Button>
                       ) : (
@@ -192,7 +192,7 @@ export function LetterEditor({
                             <Button
                               onClick={handleImprove}
                               disabled={!feedback.trim() || isImproving}
-                              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                              className="bg-primary hover:bg-primary/90 text-primary-foreground"
                             >
                               {isImproving ? (
                                 <>
@@ -225,7 +225,7 @@ export function LetterEditor({
                   <Button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
                     {isSaving ? (
                       <>

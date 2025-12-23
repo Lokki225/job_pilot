@@ -58,15 +58,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { supabase } from "@/lib/supabase/client";
 
 const POST_TYPE_CONFIG: Record<CommunityPostType, { label: string; icon: React.ReactNode; color: string }> = {
-  TIP: { label: "Tip", icon: <Lightbulb className="h-4 w-4" />, color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" },
-  QUESTION: { label: "Question", icon: <HelpCircle className="h-4 w-4" />, color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" },
-  DISCUSSION: { label: "Discussion", icon: <MessageSquare className="h-4 w-4" />, color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" },
-  RESOURCE: { label: "Resource", icon: <FileText className="h-4 w-4" />, color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" },
-  ANNOUNCEMENT: { label: "Announcement", icon: <Megaphone className="h-4 w-4" />, color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200" },
+  TIP: { label: "Tip", icon: <Lightbulb className="h-4 w-4" />, color: "bg-yellow-500/10 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400" },
+  QUESTION: { label: "Question", icon: <HelpCircle className="h-4 w-4" />, color: "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400" },
+  DISCUSSION: { label: "Discussion", icon: <MessageSquare className="h-4 w-4" />, color: "bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400" },
+  RESOURCE: { label: "Resource", icon: <FileText className="h-4 w-4" />, color: "bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400" },
+  ANNOUNCEMENT: { label: "Announcement", icon: <Megaphone className="h-4 w-4" />, color: "bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400" },
   TRAINING_RESULT_SHARE: {
     label: "Training Result",
     icon: <Trophy className="h-4 w-4" />,
-    color: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    color: "bg-orange-500/10 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400",
   },
 };
 
@@ -787,7 +787,12 @@ function PostCard({
           </Avatar>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-medium">{post.authorName}</span>
+              <Link
+                href={`/dashboard/community/hub/profile/${post.userId}`}
+                className="font-medium transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+              >
+                {post.authorName}
+              </Link>
               <Badge className={`${typeConfig.color} gap-1`}>
                 {typeConfig.icon}
                 {typeConfig.label}
@@ -823,7 +828,7 @@ function PostCard({
               </div>
             )}
 
-            <div className="mt-3 flex items-center gap-4">
+            <div className="mt-3 flex flex-wrap items-center gap-2 sm:gap-4">
               <Button
                 variant="ghost"
                 size="sm"
@@ -859,9 +864,12 @@ function PostCard({
                   <Bookmark className="h-4 w-4" />
                 )}
               </Button>
+              <Link href={`/dashboard/community/hub/post/${post.id}`} className="ml-auto">
+                <Button size="sm">View full post</Button>
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="ml-auto" aria-label="Post actions">
+                  <Button variant="ghost" size="sm" aria-label="Post actions">
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>

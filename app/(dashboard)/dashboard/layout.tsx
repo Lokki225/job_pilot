@@ -107,7 +107,7 @@ export default function DashboardLayout({
         className={cn(
           "group flex items-center rounded-md p-2 text-sm font-medium",
           isActive
-            ? "bg-blue-50 text-blue-600 dark:bg-slate-700 dark:text-blue-400"
+            ? "bg-primary/5 text-primary/70 dark:bg-primary/15 dark:text-primary/60"
             : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-slate-700 dark:hover:text-white",
           isCollapsed ? "justify-center" : "px-3"
         )}
@@ -117,7 +117,7 @@ export default function DashboardLayout({
           className={cn(
             "h-5 w-5 shrink-0",
             isActive
-              ? "text-blue-600 dark:text-blue-400"
+              ? "text-primary/70 dark:text-primary/60"
               : "text-gray-400 group-hover:text-gray-500 dark:text-gray-400"
           )}
         />
@@ -153,7 +153,7 @@ export default function DashboardLayout({
             <div className="flex h-16 items-center justify-between border-b px-4 dark:border-slate-700">
               {!isCollapsed && (
                 <Link href={isAdmin ? "/dashboard/admin" : "/dashboard"} className="flex items-center space-x-2">
-                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                  <span className="text-xl font-bold text-primary/80 dark:text-primary/70">
                     JobPilot AI
                   </span>
                 </Link>
@@ -216,7 +216,7 @@ export default function DashboardLayout({
                   isCollapsed ? "justify-center" : "px-2"
                 )}
               >
-                <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary dark:bg-primary/20 dark:text-primary/90">
                   {session?.user?.user_metadata?.full_name ? (
                     <span className="text-sm font-medium">
                       {session.user.user_metadata.full_name.charAt(0).toUpperCase()}

@@ -596,7 +596,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
-        <div className="h-8 w-8 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin" />
+        <div className="h-8 w-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
       </div>
     );
   }
@@ -732,7 +732,7 @@ export default function ProfilePage() {
                 <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Certifications</h3>
                 <div className="space-y-4">
                   {certifications.map((cert: any) => (
-                    <div key={cert.id} className="border-l-2 border-indigo-600 dark:border-indigo-400 pl-3">
+                    <div key={cert.id} className="border-l-2 border-primary dark:border-primary/90 pl-3">
                       <p className="font-semibold text-gray-800 dark:text-white text-sm">{cert.name}</p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">{cert.issuer}</p>
                       {cert.issueDate && (
@@ -745,7 +745,7 @@ export default function ProfilePage() {
             )}
 
             {/* Profile Strength */}
-            <div className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-md p-6 text-white">
+            <div className="bg-primary rounded-xl shadow-md p-6 text-primary-foreground">
               <h3 className="text-lg font-bold mb-2">Profile Strength</h3>
               <div className="mb-4">
                 <div className="flex justify-between text-sm mb-2">
@@ -759,7 +759,7 @@ export default function ProfilePage() {
                   />
                 </div>
               </div>
-              <p className="text-sm text-indigo-100">
+              <p className="text-sm text-primary-foreground/80">
                 Great job! Complete your profile to unlock all features.
               </p>
             </div>

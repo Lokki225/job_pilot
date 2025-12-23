@@ -11,8 +11,8 @@ export function EmptyLettersState({ onCreateNew }: EmptyLettersStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-16 px-4">
       <div className="relative mb-6">
-        <div className="w-24 h-24 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
-          <FileText className="w-12 h-12 text-indigo-600 dark:text-indigo-400" />
+        <div className="w-24 h-24 bg-primary/10 dark:bg-primary/20 rounded-full flex items-center justify-center">
+          <FileText className="w-12 h-12 text-primary dark:text-primary/90" />
         </div>
         <div className="absolute -top-1 -right-1 w-8 h-8 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
           <Sparkles className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
@@ -30,7 +30,7 @@ export function EmptyLettersState({ onCreateNew }: EmptyLettersStateProps) {
       {onCreateNew && (
         <Button 
           onClick={onCreateNew}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
         >
           <Plus className="w-4 h-4 mr-2" />
           Create Your First Letter

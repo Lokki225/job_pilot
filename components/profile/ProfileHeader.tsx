@@ -144,7 +144,7 @@ export const ProfileHeader = ({
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                 {profile.firstName} {profile.lastName}
               </h1>
-              <p className="text-lg text-indigo-600 dark:text-indigo-400 mt-1">{profile.headline}</p>
+              <p className="text-lg text-primary dark:text-primary/90 mt-1">{profile.headline}</p>
               <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-600 dark:text-gray-400">
                 {profile.location && (
                   <span className="flex items-center gap-1">
@@ -153,13 +153,13 @@ export const ProfileHeader = ({
                   </span>
                 )}
                 {profile.email && (
-                  <a href={`mailto:${profile.email}`} className="flex items-center gap-1 hover:text-indigo-600">
+                  <a href={`mailto:${profile.email}`} className="flex items-center gap-1 hover:text-primary">
                     <Mail className="w-4 h-4" />
                     {profile.email}
                   </a>
                 )}
                 {profile.phone && (
-                  <a href={`tel:${profile.phone}`} className="flex items-center gap-1 hover:text-indigo-600">
+                  <a href={`tel:${profile.phone}`} className="flex items-center gap-1 hover:text-primary">
                     <Phone className="w-4 h-4" />
                     {profile.phone}
                   </a>
@@ -171,7 +171,7 @@ export const ProfileHeader = ({
                     href={profile.website.startsWith('http') ? profile.website : `https://${profile.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-500 hover:text-indigo-600"
+                    className="text-gray-500 hover:text-primary"
                   >
                     <Globe className="w-5 h-5" />
                   </a>
@@ -208,7 +208,7 @@ export const ProfileHeader = ({
               <button
                 onClick={() => onSave(profile)}
                 disabled={isSaving}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-2 disabled:opacity-60"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 flex items-center gap-2 disabled:opacity-60"
               >
                 <Save className="w-4 h-4" />
                 {isSaving ? 'Saving...' : 'Save'}
@@ -232,7 +232,7 @@ export const ProfileHeader = ({
               </button>
               <button
                 onClick={onPreview}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 flex items-center gap-2"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 flex items-center gap-2"
               >
                 <Eye className="w-4 h-4" />
                 Preview Resume

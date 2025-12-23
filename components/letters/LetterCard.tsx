@@ -89,12 +89,12 @@ export function LetterCard({
   };
 
   return (
-    <div className="group bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 hover:shadow-lg hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-200">
+    <div className="group bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 p-5 hover:shadow-lg hover:border-primary/40 dark:hover:border-primary/60 transition-all duration-200">
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg">
-            <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
+            <FileText className="w-5 h-5 text-primary dark:text-primary/90" />
           </div>
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-1">

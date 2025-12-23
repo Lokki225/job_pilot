@@ -246,7 +246,7 @@ export function TemplatesSection() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -422,7 +422,7 @@ export function TemplatesSection() {
               <Badge variant="secondary">{selectedTemplate?.tone}</Badge>
               {selectedTemplate?.category && <Badge variant="outline">{selectedTemplate.category}</Badge>}
               {selectedTemplate?.isSystem && (
-                <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400">
+                <Badge className="bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary/90">
                   System
                 </Badge>
               )}
@@ -488,7 +488,7 @@ function TemplateCard({
             </Badge>
           )}
           {template.isSystem && (
-            <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 text-xs">
+            <Badge className="bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary/90 text-xs">
               System
             </Badge>
           )}
