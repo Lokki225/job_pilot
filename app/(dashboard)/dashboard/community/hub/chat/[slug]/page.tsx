@@ -66,6 +66,7 @@ export default function ChatRoomPage() {
   const [isMentionLoading, setIsMentionLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const inputRef = useRef<HTMLInputElement>(null);
   const loadMessagesTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const supabaseClientRef = useRef<ReturnType<typeof createBrowserClient> | null>(null);
@@ -82,6 +83,17 @@ export default function ChatRoomPage() {
       );
     }
     return supabaseClientRef.current;
+  }, []);
+
+  const scrollToMessage = useCallback((messageId: string) => {
+    const target = messageRefs.current.get(messageId);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      target.classList.add("ring-2", "ring-primary");
+      setTimeout(() => {
+        target.classList.remove("ring-2", "ring-primary");
+      }, 1200);
+    }
   }, []);
 
   useEffect(() => {
@@ -449,6 +461,18 @@ export default function ChatRoomPage() {
                         setReplyTo(message);
                         inputRef.current?.focus();
                       }}
+                      onReplyPreviewClick={() => {
+                        if (message.replyTo?.id) {
+                          scrollToMessage(message.replyTo.id);
+                        }
+                      }}
+                      registerRef={(el) => {
+                        if (el) {
+                          messageRefs.current.set(message.id, el);
+                        } else {
+                          messageRefs.current.delete(message.id);
+                        }
+                      }}
                       onReaction={(emoji, hasReacted) =>
                         handleReaction(message.id, emoji, hasReacted)
                       }
@@ -524,6 +548,8 @@ function MessageBubble({
   onDelete,
   onReply,
   onReaction,
+  onReplyPreviewClick,
+  registerRef,
 }: {
   message: ChatMessageData;
   showAvatar: boolean;
@@ -537,11 +563,16 @@ function MessageBubble({
   onDelete: () => void;
   onReply: () => void;
   onReaction: (emoji: string, hasReacted: boolean) => void;
+  onReplyPreviewClick?: () => void;
+  registerRef?: (el: HTMLDivElement | null) => void;
 }) {
   const [emojiOpen, setEmojiOpen] = useState(false);
 
   return (
-    <div className={`group flex min-w-0 gap-3 ${message.isMine ? "flex-row-reverse" : ""}`}>
+    <div
+      ref={registerRef}
+      className={`group flex min-w-0 gap-3 ${message.isMine ? "flex-row-reverse" : ""}`}
+    >
       {showAvatar ? (
         <Avatar className="h-8 w-8 shrink-0">
           <AvatarImage src={message.authorAvatar || undefined} />
@@ -567,10 +598,14 @@ function MessageBubble({
         )}
 
         {message.replyTo && (
-          <div className={`mb-1 rounded border-l-2 border-primary bg-muted/50 px-2 py-1 text-xs ${message.isMine ? "ml-auto" : ""}`}>
+          <button
+            type="button"
+            onClick={onReplyPreviewClick}
+            className={`mb-1 w-full rounded border-l-2 border-primary bg-muted/50 px-2 py-1 text-left text-xs transition hover:bg-muted ${message.isMine ? "ml-auto" : ""}`}
+          >
             <span className="font-medium">{message.replyTo.authorName}</span>
             <p className="truncate text-muted-foreground">{message.replyTo.content}</p>
-          </div>
+          </button>
         )}
 
         <div
