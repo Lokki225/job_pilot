@@ -59,6 +59,8 @@ export default function ChatRoomPage() {
   const [replyTo, setReplyTo] = useState<ChatMessageData | null>(null);
   const [editingMessage, setEditingMessage] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeMessageActions, setActiveMessageActions] = useState<string | null>(null);
   const [mentionSuggestions, setMentionSuggestions] = useState<
     Array<{ userId: string; username: string; displayName: string; avatarUrl: string | null }>
   >([]);
@@ -73,6 +75,11 @@ export default function ChatRoomPage() {
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  const updateIsMobile = useCallback(() => {
+    if (typeof window === "undefined") return;
+    setIsMobile(window.innerWidth < 768);
   }, []);
 
   const getSupabaseClient = useCallback(() => {
@@ -97,8 +104,22 @@ export default function ChatRoomPage() {
   }, []);
 
   useEffect(() => {
+    updateIsMobile();
+    window.addEventListener("resize", updateIsMobile);
+    return () => {
+      window.removeEventListener("resize", updateIsMobile);
+    };
+  }, [updateIsMobile]);
+
+  useEffect(() => {
     loadRoom();
   }, [slug]);
+
+  useEffect(() => {
+    if (!isMobile && activeMessageActions) {
+      setActiveMessageActions(null);
+    }
+  }, [isMobile, activeMessageActions]);
 
   useEffect(() => {
     if (mentionQuery === null) {
@@ -278,6 +299,18 @@ export default function ChatRoomPage() {
     }
   }
 
+  const handleToggleMessageActions = useCallback(
+    (messageId: string) => {
+      if (!isMobile) return;
+      setActiveMessageActions((prev) => (prev === messageId ? null : messageId));
+    },
+    [isMobile]
+  );
+
+  const handleCloseMessageActions = useCallback(() => {
+    setActiveMessageActions(null);
+  }, []);
+
   async function handleSendMessage() {
     if (!newMessage.trim() || !room) return;
 
@@ -389,33 +422,41 @@ export default function ChatRoomPage() {
     <div className="flex h-[calc(100vh-8rem)] w-full flex-col overflow-x-hidden p-4 md:p-6">
       <Card className="flex w-full flex-1 flex-col overflow-hidden">
         <CardHeader className="shrink-0 border-b">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => router.push("/dashboard/community/hub")}>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                onClick={() => router.push("/dashboard/community/hub")}
+              >
                 <ArrowLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Back</span>
               </Button>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-xl">
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="gap-1">
+                  <Users className="h-3 w-3" />
+                  {room.memberCount}
+                </Badge>
+                {room.isMember ? (
+                  <Button variant="outline" size="sm" onClick={handleLeaveRoom}>
+                    Leave
+                  </Button>
+                ) : (
+                  <Button size="sm" onClick={handleJoinRoom}>
+                    Join
+                  </Button>
+                )}
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl">
                 {room.icon || "💬"}
               </div>
               <div>
-                <CardTitle className="text-lg">{room.name}</CardTitle>
+                <CardTitle className="text-xl">{room.name}</CardTitle>
                 <p className="text-sm text-muted-foreground">{room.description}</p>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="gap-1">
-                <Users className="h-3 w-3" />
-                {room.memberCount}
-              </Badge>
-              {room.isMember ? (
-                <Button variant="outline" size="sm" onClick={handleLeaveRoom}>
-                  Leave
-                </Button>
-              ) : (
-                <Button size="sm" onClick={handleJoinRoom}>
-                  Join
-                </Button>
-              )}
             </div>
           </div>
         </CardHeader>
@@ -447,7 +488,11 @@ export default function ChatRoomPage() {
                       isEditing={editingMessage === message.id}
                       editContent={editContent}
                       setEditContent={setEditContent}
+                      isMobile={isMobile}
+                      isActionBarActive={activeMessageActions === message.id}
+                      onToggleActionBar={() => handleToggleMessageActions(message.id)}
                       onEdit={() => {
+                        handleCloseMessageActions();
                         setEditingMessage(message.id);
                         setEditContent(message.content);
                       }}
@@ -456,8 +501,12 @@ export default function ChatRoomPage() {
                         setEditContent("");
                       }}
                       onSaveEdit={() => handleEditMessage(message.id)}
-                      onDelete={() => handleDeleteMessage(message.id)}
+                      onDelete={() => {
+                        handleCloseMessageActions();
+                        handleDeleteMessage(message.id);
+                      }}
                       onReply={() => {
+                        handleCloseMessageActions();
                         setReplyTo(message);
                         inputRef.current?.focus();
                       }}
@@ -550,6 +599,9 @@ function MessageBubble({
   onReaction,
   onReplyPreviewClick,
   registerRef,
+  isMobile,
+  isActionBarActive,
+  onToggleActionBar,
 }: {
   message: ChatMessageData;
   showAvatar: boolean;
@@ -565,8 +617,21 @@ function MessageBubble({
   onReaction: (emoji: string, hasReacted: boolean) => void;
   onReplyPreviewClick?: () => void;
   registerRef?: (el: HTMLDivElement | null) => void;
+  isMobile: boolean;
+  isActionBarActive: boolean;
+  onToggleActionBar: () => void;
 }) {
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const actionBarVisibleClass = isMobile
+    ? isActionBarActive
+      ? "opacity-100 pointer-events-auto"
+      : "opacity-0 pointer-events-none"
+    : emojiOpen
+      ? "opacity-100 pointer-events-auto"
+      : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto";
+  const actionBarPositionClass = isMobile
+    ? `${message.isMine ? "right-0" : "left-0"} top-full mt-2`
+    : `${message.isMine ? "right-0" : "left-0"} -top-10`;
 
   return (
     <div
@@ -610,10 +675,12 @@ function MessageBubble({
 
         <div
           className={`relative w-fit max-w-full rounded-lg px-3 py-2 ${
-            message.isMine
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted"
+            message.isMine ? "bg-primary text-primary-foreground" : "bg-muted"
           } ${message.isDeleted ? "italic text-muted-foreground" : ""}`}
+          onClick={() => {
+            if (!isMobile || isEditing || message.isDeleted) return;
+            onToggleActionBar();
+          }}
         >
           {isEditing ? (
             <div className="space-y-2">
@@ -660,11 +727,9 @@ function MessageBubble({
 
           {!isEditing && !message.isDeleted && (
             <div
-              className={`absolute -top-10 left-0 z-50 flex items-center gap-1 rounded-lg border bg-card text-card-foreground p-1 shadow-md transition-opacity ${
-                emojiOpen
-                  ? "opacity-100 pointer-events-auto"
-                  : "opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto"
-              }`}
+              data-action-bar
+              onClick={(e) => e.stopPropagation()}
+              className={`absolute ${actionBarPositionClass} z-50 flex items-center gap-1 rounded-lg border bg-card text-card-foreground p-1 shadow-md transition-opacity ${actionBarVisibleClass}`}
             >
               <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
                 <PopoverTrigger asChild>

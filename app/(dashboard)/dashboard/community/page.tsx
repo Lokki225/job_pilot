@@ -131,7 +131,7 @@ export default function CommunityPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
             <Trophy className="h-8 w-8 text-yellow-500" />
@@ -141,26 +141,26 @@ export default function CommunityPage() {
             Real stories from job seekers who landed their dream roles
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" asChild>
+        <div className="flex w-full flex-wrap gap-2 sm:flex-nowrap sm:justify-end">
+          <Button variant="outline" className="w-full justify-center sm:w-auto" asChild>
             <Link href="/dashboard/community/hub">
               <Users className="h-4 w-4 mr-2" />
               Community Hub
             </Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="w-full justify-center sm:w-auto" asChild>
             <Link href="/dashboard/community/leaderboard">
               <BarChart3 className="h-4 w-4 mr-2" />
               Leaderboard
             </Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="w-full justify-center sm:w-auto" asChild>
             <Link href="/dashboard/community/saved">
               <Bookmark className="h-4 w-4 mr-2" />
               Saved
             </Link>
           </Button>
-          <Button asChild>
+          <Button className="w-full justify-center sm:w-auto" asChild>
             <Link href="/dashboard/community/submit">
               <PenLine className="h-4 w-4 mr-2" />
               Share Your Story
@@ -170,22 +170,21 @@ export default function CommunityPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-6">
-        <div className="flex items-center gap-2">
+      <div className="mb-6 rounded-2xl border bg-background/60 p-4 shadow-sm">
+        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
           <Filter className="h-4 w-4 text-gray-500" />
-          <span className="text-sm text-gray-600 dark:text-gray-400">Filter by:</span>
+          <span className="text-sm font-medium">Filter stories</span>
         </div>
-
-        <div className="flex flex-col md:flex-row gap-3 md:items-center flex-1">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search stories (title, company, role...)"
-            className="md:max-w-sm"
+            className="sm:col-span-2 lg:col-span-2"
           />
 
           <Select value={selectedIndustry} onValueChange={setSelectedIndustry}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="All Industries" />
             </SelectTrigger>
             <SelectContent>
@@ -199,7 +198,7 @@ export default function CommunityPage() {
           </Select>
 
           <Select value={selectedTag} onValueChange={setSelectedTag}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="All Tags" />
             </SelectTrigger>
             <SelectContent>
@@ -213,7 +212,7 @@ export default function CommunityPage() {
           </Select>
 
           <Select value={sort} onValueChange={(v) => setSort(v as any)}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
             <SelectContent>

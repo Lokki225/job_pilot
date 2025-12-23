@@ -12,6 +12,7 @@ import {
   MessageSquare,
   Heart,
   Crown,
+  Info,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,8 @@ import {
   getCommunityLeaderboard,
   type LeaderboardEntry,
 } from "@/lib/actions/community.action";
+import { syncCurrentUserReputation } from "@/lib/services/gamification.service";
+import { Loader2 as Spinner } from "lucide-react";
 
 function getRankIcon(rank: number) {
   if (rank === 1) return <Crown className="h-5 w-5 text-yellow-500" />;
@@ -41,6 +44,8 @@ export default function CommunityLeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadLeaderboard();
@@ -60,6 +65,28 @@ export default function CommunityLeaderboardPage() {
       setError("Failed to load leaderboard");
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleSync() {
+    try {
+      setIsSyncing(true);
+      setSyncMessage(null);
+      const response = await fetch("/api/leaderboard/sync", {
+        method: "POST",
+      });
+      const payload = await response.json();
+      if (!response.ok || payload.error) {
+        throw new Error(payload.error || "Sync failed");
+      }
+      setSyncMessage(`Synced ${payload.data?.processed ?? 0} profiles. Your RP will update shortly.`);
+      await loadLeaderboard();
+      await syncCurrentUserReputation();
+    } catch (err) {
+      console.error("Error syncing leaderboard reputation:", err);
+      setSyncMessage("Unable to sync reputation right now. Please try again later.");
+    } finally {
+      setIsSyncing(false);
     }
   }
 
@@ -83,12 +110,21 @@ export default function CommunityLeaderboardPage() {
             Back to Hub
           </Button>
         </Link>
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-yellow-500" />
-            Community Leaderboard
-          </h1>
-          <p className="text-muted-foreground">Top contributors in the Job Pilot community</p>
+        <div className="flex-1">
+          <div className="flex flex-wrap items-center gap-4 justify-between">
+            <div>
+              <h1 className="text-2xl font-bold flex items-center gap-2">
+                <Trophy className="h-6 w-6 text-yellow-500" />
+                Community Leaderboard
+              </h1>
+              <p className="text-muted-foreground">Top contributors in the Job Pilot community</p>
+            </div>
+            <Button onClick={handleSync} disabled={isSyncing} variant="secondary" className="flex items-center gap-2">
+              {isSyncing && <Spinner className="h-4 w-4 animate-spin" />}
+              {isSyncing ? "Syncing..." : "Sync XP → RP"}
+            </Button>
+          </div>
+          {syncMessage && <p className="mt-2 text-sm text-muted-foreground">{syncMessage}</p>}
         </div>
       </div>
 
@@ -208,6 +244,29 @@ export default function CommunityLeaderboardPage() {
               </CardContent>
             </Card>
           )}
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Info className="h-4 w-4 text-blue-500" />
+                XP ↔ RP balance
+              </CardTitle>
+              <CardDescription>How Leaderboard reputation is calculated</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2 text-sm text-muted-foreground">
+              <p>
+                Reputation Points (RP) mirror your total XP across JobPilot – roughly 1 RP for every 20 XP earned, so
+                every study session, training drill, or job milestone powers your community standing automatically.
+              </p>
+              <p>
+                Hit XP milestones to get bonus RP (+100 at 1.5k XP, +250 at 4k XP, +500 at 6k XP) and jump tiers faster
+                without grinding separate actions.
+              </p>
+              <p className="text-xs text-muted-foreground/80">
+                RP unlocks perks like mentor eligibility, badge showcases, and leaderboard visibility inside the hub.
+              </p>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>

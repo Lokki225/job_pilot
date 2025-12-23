@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Crown, Loader2, Medal, Trophy, TrendingUp, Users } from "lucide-react";
+import { ArrowLeft, Crown, Info, Loader2, Medal, Trophy, TrendingUp, Users } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getLeaderboard, getUserXP } from "@/lib/services/gamification.service";
+import { Switch } from "@/components/ui/switch";
+import {
+  getLeaderboard,
+  getLeaderboardPrivacyPreference,
+  getUserXP,
+  updateLeaderboardPrivacyPreference,
+} from "@/lib/services/gamification.service";
 
 interface LeaderboardEntry {
   rank: number;
@@ -31,6 +37,8 @@ export default function LeaderboardPage() {
   const [monthlyLeaderboard, setMonthlyLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [allTimeLeaderboard, setAllTimeLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [userXP, setUserXP] = useState<UserXPData | null>(null);
+  const [showOnLeaderboard, setShowOnLeaderboard] = useState<boolean | null>(null);
+  const [isUpdatingPrivacy, setIsUpdatingPrivacy] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("weekly");
 
@@ -41,21 +49,43 @@ export default function LeaderboardPage() {
   async function loadData() {
     setIsLoading(true);
     try {
-      const [weeklyResult, monthlyResult, allTimeResult, userResult] = await Promise.all([
+      const [weeklyResult, monthlyResult, allTimeResult, userResult, privacyResult] = await Promise.all([
         getLeaderboard("weekly", 10),
         getLeaderboard("monthly", 10),
         getLeaderboard("all", 10),
         getUserXP(),
+        getLeaderboardPrivacyPreference(),
       ]);
 
       if (weeklyResult.data) setWeeklyLeaderboard(weeklyResult.data);
       if (monthlyResult.data) setMonthlyLeaderboard(monthlyResult.data);
       if (allTimeResult.data) setAllTimeLeaderboard(allTimeResult.data);
       if (userResult.data) setUserXP(userResult.data);
+      if (privacyResult.data?.showOnLeaderboard !== undefined) {
+        setShowOnLeaderboard(privacyResult.data.showOnLeaderboard);
+      }
     } catch (err) {
       console.error("Error loading leaderboard:", err);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handlePrivacyToggle(value: boolean) {
+    if (showOnLeaderboard === null) return;
+    setIsUpdatingPrivacy(true);
+    setShowOnLeaderboard(value);
+    try {
+      const result = await updateLeaderboardPrivacyPreference(value);
+      if (result.error) {
+        throw new Error(result.error);
+      }
+      await loadData();
+    } catch (err) {
+      console.error("Error updating leaderboard privacy:", err);
+      setShowOnLeaderboard((prev) => (prev === null ? prev : !value));
+    } finally {
+      setIsUpdatingPrivacy(false);
     }
   }
 
@@ -142,6 +172,21 @@ export default function LeaderboardPage() {
             See how you rank against other job seekers
           </p>
         </div>
+        <Card className="w-full max-w-md border-dashed border-gray-200 dark:border-gray-700">
+          <CardContent className="flex items-center justify-between gap-3 p-4">
+            <div>
+              <p className="text-sm font-medium text-gray-900 dark:text-white">Show my name on leaderboard</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Toggle off to appear as Anonymous to other members.
+              </p>
+            </div>
+            <Switch
+              checked={(showOnLeaderboard ?? true) && !isUpdatingPrivacy}
+              disabled={showOnLeaderboard === null || isUpdatingPrivacy}
+              onCheckedChange={(checked) => handlePrivacyToggle(checked)}
+            />
+          </CardContent>
+        </Card>
       </div>
 
       {isLoading ? (
@@ -151,21 +196,32 @@ export default function LeaderboardPage() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Leaderboard */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
             <Card>
-              <CardHeader>
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="weekly">This Week</TabsTrigger>
-                    <TabsTrigger value="monthly">This Month</TabsTrigger>
-                    <TabsTrigger value="all">All Time</TabsTrigger>
-                  </TabsList>
-                </Tabs>
+              <CardHeader className="pb-0">
+                <div className="flex flex-col gap-6">
+                  <Tabs value={activeTab} onValueChange={setActiveTab}>
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="weekly">This Week</TabsTrigger>
+                      <TabsTrigger value="monthly">This Month</TabsTrigger>
+                      <TabsTrigger value="all">All Time</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                  {!userXP && (
+                    <CardDescription>
+                      Track how your points grow each week. Earn XP across the platform to climb these rankings.
+                    </CardDescription>
+                  )}
+                </div>
               </CardHeader>
-              <CardContent>
-                {activeTab === "weekly" && renderLeaderboard(weeklyLeaderboard)}
-                {activeTab === "monthly" && renderLeaderboard(monthlyLeaderboard)}
-                {activeTab === "all" && renderLeaderboard(allTimeLeaderboard)}
+              <CardContent className="space-y-6">
+                <div>
+                  {activeTab === "weekly" && renderLeaderboard(weeklyLeaderboard)}
+                  {activeTab === "monthly" && renderLeaderboard(monthlyLeaderboard)}
+                  {activeTab === "all" && renderLeaderboard(allTimeLeaderboard)}
+                </div>
+
+                <HowToEarnXPHorizontal />
               </CardContent>
             </Card>
           </div>
@@ -198,45 +254,136 @@ export default function LeaderboardPage() {
                     </div>
                   </div>
                   <div className="pt-2 border-t border-purple-200 dark:border-purple-800">
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-                      {userXP.levelTitle}
-                    </p>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">{userXP.levelTitle}</p>
                   </div>
                 </CardContent>
               </Card>
             )}
-
-            {/* Tips */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">How to Earn XP</CardTitle>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Info className="h-4 w-4 text-blue-500" />
+                  XP ↔ RP balance
+                </CardTitle>
+                <CardDescription>How Leaderboard reputation works</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Complete a lesson</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">+25 XP</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Pass a quiz</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">+50 XP</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Training session</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">+30 XP</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Score 90+ in training</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">+100 XP</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600 dark:text-gray-400">Share success story</span>
-                  <span className="font-medium text-purple-600 dark:text-purple-400">+200 XP</span>
-                </div>
+              <CardContent className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <p>
+                  Reputation Points (RP) mirror your total XP – roughly 1 RP for every 20 XP earned. Keep practicing to
+                  raise both.
+                </p>
+                <p>
+                  XP milestones grant RP boosts (+100 at 1.5k XP, +250 at 4k XP, +500 at 6k XP), so consistent streaks
+                  push you up the community tiers even faster.
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  RP powers community perks like eligibility for special badges and moderator applications.
+                </p>
               </CardContent>
             </Card>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+const XP_CATEGORIES = [
+  {
+    title: "Jobs",
+    items: [
+      { label: "First application", value: "+50 XP" },
+      { label: "First interview", value: "+100 XP" },
+      { label: "Job offer received", value: "+500 XP" },
+    ],
+  },
+  {
+    title: "Cover Letters",
+    items: [
+      { label: "Generate a cover letter", value: "+40 XP" },
+      { label: "Improve a cover letter", value: "+30 XP" },
+    ],
+  },
+  {
+    title: "Study Room",
+    items: [
+      { label: "Complete a lesson", value: "+25 XP" },
+      { label: "Pass a quiz", value: "+50 XP" },
+      { label: "Score 100% on a quiz", value: "+75 XP" },
+      { label: "Finish a chapter", value: "+100 XP" },
+      { label: "Complete the full Study Plan", value: "+500 XP" },
+    ],
+  },
+  {
+    title: "Training Room",
+    items: [
+      { label: "Training session", value: "+30 XP" },
+      { label: "Score 90+ in training", value: "+100 XP" },
+      { label: "Fix a weak area", value: "+75 XP" },
+      { label: "Daily practice streak", value: "+20 XP" },
+    ],
+  },
+  {
+    title: "Community",
+    items: [
+      { label: "Share a success story", value: "+200 XP" },
+      { label: "Finish a peer practice", value: "+50 XP" },
+    ],
+  },
+  {
+    title: "Streaks & Extras",
+    items: [
+      { label: "7-day streak", value: "+100 XP" },
+      { label: "30-day streak", value: "+500 XP" },
+      { label: "Unlock achievements", value: "+Variable" },
+    ],
+  },
+] satisfies { title: string; items: { label: string; value: string }[] }[];
+
+function HowToEarnXPHorizontal() {
+  return (
+    <div className="rounded-2xl border border-purple-200/60 dark:border-purple-800/60 bg-white/80 dark:bg-purple-950/20 p-4 space-y-4 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <Trophy className="h-4 w-4 text-purple-500" />
+            How to Earn XP
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Complete actions across every workspace to keep leveling up.
+          </p>
+        </div>
+        <span className="text-xs font-semibold text-purple-600 dark:text-purple-300">Stay consistent, boost rewards</span>
+      </div>
+      <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap">
+        {XP_CATEGORIES.map((category) => (
+          <XPRewardsCategory key={category.title} title={category.title} items={category.items} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function XPRewardsCategory({
+  title,
+  items,
+}: {
+  title: string;
+  items: { label: string; value: string }[];
+}) {
+  return (
+    <div className="flex-1 min-w-[180px] space-y-2">
+      <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{title}</p>
+      <div className="space-y-1.5">
+        {items.map((item) => (
+          <div key={`${title}-${item.label}`} className="flex items-center justify-between gap-3">
+            <span className="text-gray-600 dark:text-gray-400">{item.label}</span>
+            <span className="font-medium text-purple-600 dark:text-purple-400">
+              {item.value}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

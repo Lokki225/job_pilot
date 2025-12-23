@@ -460,19 +460,25 @@ export default function CommunityHubPage() {
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Community Hub</h1>
           <p className="text-muted-foreground">Connect, share, and learn with fellow job seekers</p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/dashboard/community">
-            <Button variant="outline">Success Stories</Button>
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap sm:gap-1.5">
+          <Link href="/dashboard/community" className="flex-1 min-w-[150px] sm:flex-none sm:min-w-0">
+            <Button variant="outline" className="w-full justify-center sm:w-auto">
+              Success Stories
+            </Button>
           </Link>
-          <Link href="/dashboard/community/kits">
-            <Button variant="outline">Kits</Button>
+          <Link href="/dashboard/community/kits" className="flex-1 min-w-[150px] sm:flex-none sm:min-w-0">
+            <Button variant="outline" className="w-full justify-center sm:w-auto">
+              Kits
+            </Button>
           </Link>
-          <Link href="/dashboard/community/kits/marketplace">
-            <Button variant="outline">Marketplace</Button>
+          <Link href="/dashboard/community/kits/marketplace" className="flex-1 min-w-[150px] sm:flex-none sm:min-w-0">
+            <Button variant="outline" className="w-full justify-center sm:w-auto">
+              Marketplace
+            </Button>
           </Link>
           <Dialog open={isCreatePostOpen} onOpenChange={setIsCreatePostOpen}>
             <DialogTrigger asChild>
-              <Button>
+              <Button className="w-full justify-center sm:w-auto">
                 <PenLine className="mr-2 h-4 w-4" />
                 Create Post
               </Button>
@@ -565,9 +571,9 @@ export default function CommunityHubPage() {
       )}
 
       <div className="grid gap-6 lg:grid-cols-4">
-        <div className="lg:col-span-3">
+        <div className="order-2 lg:order-1 lg:col-span-3" id="community-hub-feed">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="mb-4">
+            <TabsList className="mb-4 flex flex-wrap gap-2">
               <TabsTrigger value="feed" className="gap-2">
                 <MessageSquare className="h-4 w-4" />
                 Feed
@@ -757,7 +763,7 @@ export default function CommunityHubPage() {
           </Tabs>
         </div>
 
-        <div className="space-y-4">
+        <div className="order-1 space-y-4 lg:order-2" id="community-hub-overview">
           {profile && (
             <Card>
               <CardHeader className="pb-3">

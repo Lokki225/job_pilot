@@ -111,6 +111,60 @@ function getLevelProgress(totalXp: number): {
 // AWARD XP
 // ===========================================================
 
+const COMMUNITY_LEVEL_THRESHOLDS = [0, 100, 300, 600, 1000, 1500, 2500, 4000, 6000, 10000];
+
+function calculateCommunityLevel(points: number): number {
+  for (let i = COMMUNITY_LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (points >= COMMUNITY_LEVEL_THRESHOLDS[i]) return i + 1;
+  }
+  return 1;
+}
+
+function deriveReputationFromXP(totalXp: number): number {
+  const base = Math.max(0, Math.floor(totalXp / 20));
+  let milestoneBonus = 0;
+  if (totalXp >= 6000) milestoneBonus = 500;
+  else if (totalXp >= 4000) milestoneBonus = 250;
+  else if (totalXp >= 1500) milestoneBonus = 100;
+  return base + milestoneBonus;
+}
+
+export async function syncReputationFromXP(userId: string, totalXp: number) {
+  try {
+    const derivedReputation = deriveReputationFromXP(totalXp);
+    if (derivedReputation <= 0) return;
+
+    const { data: profile } = await adminSupabase
+      .from("community_profiles")
+      .select("id, reputationPoints, level")
+      .eq("userId", userId)
+      .maybeSingle();
+
+    const existingPoints = profile?.reputationPoints ?? 0;
+    if (derivedReputation <= existingPoints) return;
+
+    const targetLevel = calculateCommunityLevel(derivedReputation);
+    if (profile) {
+      await adminSupabase
+        .from("community_profiles")
+        .update({
+          reputationPoints: derivedReputation,
+          level: Math.max(profile.level ?? 1, targetLevel),
+          updatedAt: new Date().toISOString(),
+        })
+        .eq("id", profile.id);
+    } else {
+      await adminSupabase.from("community_profiles").insert({
+        userId,
+        reputationPoints: derivedReputation,
+        level: targetLevel,
+      });
+    }
+  } catch (err) {
+    console.error("Error syncing reputation from XP:", err);
+  }
+}
+
 export async function awardXP(
   userId: string,
   source: XPSource | string,
@@ -181,6 +235,8 @@ export async function awardXP(
       console.error("Error logging XP transaction:", txError);
     }
 
+    await syncReputationFromXP(userId, newTotal);
+
     // If leveled up, could create a notification here
     // (skipping for now, can add later)
 
@@ -230,6 +286,7 @@ export async function getUserXP(): Promise<{
       .single();
 
     const totalXp = userXP?.totalXp || 0;
+    await syncReputationFromXP(user.id, totalXp);
     const progress = getLevelProgress(totalXp);
     const levelInfo = getLevelInfo(progress.currentLevel);
 
@@ -248,6 +305,44 @@ export async function getUserXP(): Promise<{
   } catch (err) {
     console.error("Error getting user XP:", err);
     return { data: null, error: "Failed to load XP" };
+  }
+}
+
+export async function syncCurrentUserReputation(): Promise<{
+  data: { reputationPoints: number } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: userXP } = await adminSupabase
+      .from("user_xp")
+      .select("totalXp")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    const totalXp = userXP?.totalXp || 0;
+    await syncReputationFromXP(user.id, totalXp);
+
+    const { data: profile } = await adminSupabase
+      .from("community_profiles")
+      .select("reputationPoints")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    return {
+      data: {
+        reputationPoints: profile?.reputationPoints ?? deriveReputationFromXP(totalXp),
+      },
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error syncing reputation:", err);
+    return { data: null, error: "Failed to sync reputation" };
   }
 }
 
@@ -316,17 +411,37 @@ export async function getLeaderboard(
 
     const { data, error } = await adminSupabase
       .from("user_xp")
-      .select(`${xpField}, currentLevel, userId, user:users(profile:profiles(firstName, lastName))`)
+      .select(
+        `${xpField}, currentLevel, userId, user:users(email, profile:profiles(firstName, lastName, displayName))`
+      )
       .order(xpField, { ascending: false })
       .limit(limit);
 
     if (error) return { data: null, error: error.message };
 
+    const userIds = (data || []).map((entry: any) => entry.userId).filter(Boolean);
+    const privacyMap = new Map<string, boolean>();
+    if (userIds.length > 0) {
+      const { data: privacyRows } = await adminSupabase
+        .from("community_profile_settings")
+        .select("userId, showOnLeaderboard")
+        .in("userId", userIds);
+      (privacyRows || []).forEach((row: any) => {
+        if (row?.userId) {
+          privacyMap.set(row.userId, row.showOnLeaderboard ?? true);
+        }
+      });
+    }
+
     const leaderboard = (data || []).map((entry: any, index: number) => {
-      const profile = entry.user?.profile;
-      const displayName = profile?.firstName
-        ? `${profile.firstName} ${profile.lastName || ""}`.trim()
-        : "Anonymous";
+      const profileRaw = entry.user?.profile;
+      const profile = Array.isArray(profileRaw) ? profileRaw[0] : profileRaw;
+      const trimmedDisplayName = (profile?.displayName || "").trim();
+      const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(" ").trim();
+      const emailHandle = (entry.user?.email || "").split("@")[0] || "";
+      const prefersPublicName = privacyMap.has(entry.userId) ? privacyMap.get(entry.userId)! : true;
+      const computedName = trimmedDisplayName || fullName || emailHandle || "Anonymous";
+      const displayName = prefersPublicName ? computedName : "Anonymous";
 
       return {
         rank: index + 1,
@@ -341,6 +456,77 @@ export async function getLeaderboard(
     return { data: leaderboard, error: null };
   } catch (err) {
     console.error("Error getting leaderboard:", err);
-    return { data: null, error: "Failed to load leaderboard" };
+    return { data: null, error: "Failed to get leaderboard" };
+  }
+}
+
+export async function getLeaderboardPrivacyPreference(): Promise<{
+  data: { showOnLeaderboard: boolean } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data, error } = await adminSupabase
+      .from("community_profile_settings")
+      .select("showOnLeaderboard")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    if (error && error.code !== "PGRST116") {
+      return { data: null, error: error.message };
+    }
+
+    return {
+      data: {
+        showOnLeaderboard: data?.showOnLeaderboard ?? true,
+      },
+      error: null,
+    };
+  } catch (err) {
+    console.error("Error getting leaderboard privacy preference:", err);
+    return { data: null, error: "Failed to load preference" };
+  }
+}
+
+export async function updateLeaderboardPrivacyPreference(showOnLeaderboard: boolean): Promise<{
+  data: { success: true } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: existing } = await adminSupabase
+      .from("community_profile_settings")
+      .select("userId")
+      .eq("userId", user.id)
+      .maybeSingle();
+
+    if (existing) {
+      const { error } = await adminSupabase
+        .from("community_profile_settings")
+        .update({ showOnLeaderboard, updatedAt: new Date().toISOString() })
+        .eq("userId", user.id);
+      if (error) return { data: null, error: error.message };
+    } else {
+      const { error } = await adminSupabase.from("community_profile_settings").insert({
+        userId: user.id,
+        showOnLeaderboard,
+      });
+      if (error) return { data: null, error: error.message };
+    }
+
+    return { data: { success: true }, error: null };
+  } catch (err) {
+    console.error("Error updating leaderboard privacy preference:", err);
+    return { data: null, error: "Failed to update preference" };
   }
 }
