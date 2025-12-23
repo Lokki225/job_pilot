@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import { AppEvent, EVENT_META, shouldShowToast } from "@/lib/types/app-events";
 import { getNotifications, getUnreadCount } from "@/lib/actions/notifications.action";
@@ -50,10 +50,14 @@ export function useRealtimeNotifications(
   const [userId, setUserId] = useState<string | null>(options.userId || null);
   const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
 
-  // Initialize Supabase client
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  // Initialize Supabase client once
+  const supabase = useMemo(
+    () =>
+      createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      ),
+    []
   );
 
   useEffect(() => {
