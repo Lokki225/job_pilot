@@ -1674,7 +1674,10 @@ model CommunityPostComment {
   
   content     String        @db.Text
   likesCount  Int           @default(0)
-  
+  isHelpful   Boolean       @default(false)
+  helpfulMarkedBy String?   @db.Uuid
+  helpfulMarkedAt DateTime? @db.Timestamptz(6)
+
   isEdited    Boolean       @default(false)
   isDeleted   Boolean       @default(false)
   

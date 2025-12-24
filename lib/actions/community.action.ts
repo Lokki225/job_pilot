@@ -50,6 +50,9 @@ export interface PostComment {
   parentId: string | null;
   content: string;
   likesCount: number;
+  isHelpful: boolean;
+  helpfulMarkedBy: string | null;
+  helpfulMarkedAt: string | null;
   isEdited: boolean;
   createdAt: string;
   authorName: string;
@@ -179,6 +182,45 @@ export interface PublicCommunityProfileData {
 
 function buildInFilter(values: string[]): string {
   return `(${values.map((v) => `"${v}"`).join(",")})`;
+}
+
+async function ensureCommunityProfileExists(userId: string): Promise<void> {
+  try {
+    const { data: existing } = await adminSupabase
+      .from("community_profiles")
+      .select("id")
+      .eq("userId", userId)
+      .maybeSingle();
+
+    if (existing) return;
+
+    const { error: insertError } = await adminSupabase.from("community_profiles").insert({ userId });
+    if (insertError && insertError.code !== "23505") {
+      console.error("Error creating community profile:", insertError);
+    }
+  } catch (err) {
+    console.error("Error ensuring community profile exists:", err);
+  }
+}
+
+async function maybeAwardFirstPostBonus(userId: string): Promise<void> {
+  try {
+    const { count, error } = await adminSupabase
+      .from("community_posts")
+      .select("id", { count: "exact", head: true })
+      .eq("userId", userId);
+
+    if (error) {
+      console.error("Error checking first post bonus:", error);
+      return;
+    }
+
+    if (typeof count === "number" && count === 1) {
+      await awardReputationPoints(userId, "FIRST_POST_BONUS");
+    }
+  } catch (err) {
+    console.error("Error awarding first post bonus:", err);
+  }
 }
 
 // ===========================================================
@@ -567,6 +609,9 @@ export async function getPostById(postId: string): Promise<{
             parentId: c.parentId,
             content: c.content,
             likesCount: c.likesCount,
+            isHelpful: !!c.isHelpful,
+            helpfulMarkedBy: c.helpfulMarkedBy || null,
+            helpfulMarkedAt: c.helpfulMarkedAt || null,
             isEdited: c.isEdited,
             createdAt: c.createdAt,
             authorName: cp ? `${cp.firstName || ""} ${cp.lastName || ""}`.trim() || "Anonymous" : "Anonymous",
@@ -620,6 +665,8 @@ export async function createPost(input: CreatePostInput): Promise<{
 
     if (!input.content?.trim()) return { data: null, error: "Content is required" };
 
+    await ensureCommunityProfileExists(user.id);
+
     const { data: post, error } = await adminSupabase
       .from("community_posts")
       .insert({
@@ -637,6 +684,8 @@ export async function createPost(input: CreatePostInput): Promise<{
     if (error) return { data: null, error: error.message };
 
     await adminSupabase.rpc("increment_profile_posts", { user_id: user.id });
+    await awardReputationPoints(user.id, "CREATE_POST");
+    await maybeAwardFirstPostBonus(user.id);
 
     return { data: { id: post.id }, error: null };
   } catch (err) {
@@ -656,6 +705,8 @@ export async function shareTrainingResultAsCommunityPost(input: {
     if (!user) return { data: null, error: "Unauthorized" };
 
     if (!input.sessionId) return { data: null, error: "Session id is required" };
+
+    await ensureCommunityProfileExists(user.id);
 
     const { data: session, error: sessionError } = await adminSupabase
       .from("training_sessions")
@@ -739,7 +790,8 @@ export async function shareTrainingResultAsCommunityPost(input: {
     if (postError || !post) return { data: null, error: postError?.message || "Failed to share training result" };
 
     await adminSupabase.rpc("increment_profile_posts", { user_id: user.id });
-    await awardReputationPoints(user.id, "CREATE_POST", 1);
+    await awardReputationPoints(user.id, "CREATE_POST");
+    await maybeAwardFirstPostBonus(user.id);
 
     return { data: { id: post.id }, error: null };
   } catch (err) {
@@ -864,6 +916,8 @@ export async function likePost(postId: string): Promise<{
         link: `/dashboard/community/hub/post/${postId}`,
         metadata: { postId, likedByUserId: user.id },
       });
+
+      await awardReputationPoints(postOwner.userId, "RECEIVE_LIKE");
     }
 
     return { data: { success: true }, error: null };
@@ -1037,6 +1091,14 @@ export async function addPostComment(
 
     if (!content?.trim()) return { data: null, error: "Content is required" };
 
+    const { data: postOwner } = await adminSupabase
+      .from("community_posts")
+      .select("userId")
+      .eq("id", postId)
+      .maybeSingle();
+
+    if (!postOwner?.userId) return { data: null, error: "Post not found" };
+
     const { data: comment, error } = await adminSupabase
       .from("community_post_comments")
       .insert({
@@ -1051,6 +1113,10 @@ export async function addPostComment(
     if (error) return { data: null, error: error.message };
 
     await adminSupabase.rpc("refresh_post_comments", { p_post_id: postId });
+    await awardReputationPoints(user.id, "COMMENT_POST");
+    if (postOwner.userId !== user.id) {
+      await awardReputationPoints(postOwner.userId, "RECEIVE_COMMENT");
+    }
 
     return { data: { id: comment.id }, error: null };
   } catch (err) {
@@ -1112,6 +1178,16 @@ export async function likePostComment(commentId: string): Promise<{
     }
 
     await adminSupabase.rpc("increment_comment_likes", { comment_id: commentId });
+
+    const { data: commentOwner } = await adminSupabase
+      .from("community_post_comments")
+      .select("userId")
+      .eq("id", commentId)
+      .maybeSingle();
+
+    if (commentOwner?.userId && commentOwner.userId !== user.id) {
+      await awardReputationPoints(commentOwner.userId, "RECEIVE_LIKE");
+    }
 
     return { data: { success: true }, error: null };
   } catch (err) {
@@ -2314,6 +2390,7 @@ export async function getCommunityLeaderboard(options?: {
 
 const REPUTATION_POINTS = {
   CREATE_POST: 5,
+  COMMENT_POST: 2,
   RECEIVE_LIKE: 2,
   RECEIVE_COMMENT: 1,
   HELPFUL_ANSWER: 10,

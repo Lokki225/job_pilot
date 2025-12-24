@@ -47,6 +47,51 @@ export default function CommunityLeaderboardPage() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
+  const earningActions = [
+    {
+      title: "Create a Post",
+      points: "+5 points",
+      icon: MessageSquare,
+      color: "bg-blue-100 text-blue-600 dark:bg-blue-900/30",
+    },
+    {
+      title: "Leave a Comment",
+      points: "+2 points",
+      icon: MessageSquare,
+      color: "bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30",
+    },
+    {
+      title: "Receive a Like",
+      points: "+2 points",
+      icon: Heart,
+      color: "bg-red-100 text-red-600 dark:bg-red-900/30",
+    },
+    {
+      title: "Receive Comment",
+      points: "+1 point",
+      icon: MessageSquare,
+      color: "bg-purple-100 text-purple-600 dark:bg-purple-900/30",
+    },
+    {
+      title: "Helpful Answer",
+      points: "+10 points",
+      icon: Award,
+      color: "bg-green-100 text-green-600 dark:bg-green-900/30",
+    },
+    {
+      title: "Share Success Story",
+      points: "+25 points",
+      icon: Trophy,
+      color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30",
+    },
+    {
+      title: "First Post Bonus",
+      points: "+10 points",
+      icon: Award,
+      color: "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30",
+    },
+  ] as const;
+
   useEffect(() => {
     loadLeaderboard();
   }, []);
@@ -278,60 +323,19 @@ export default function CommunityLeaderboardPage() {
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/30">
-                    <MessageSquare className="h-5 w-5" />
+                {earningActions.map((action) => (
+                  <div key={action.title} className="flex items-center gap-3 rounded-lg border p-3">
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-full ${action.color}`}
+                    >
+                      <action.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{action.title}</p>
+                      <p className="text-sm text-muted-foreground">{action.points}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium">Create a Post</p>
-                    <p className="text-sm text-muted-foreground">+5 points</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-900/30">
-                    <Heart className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Receive a Like</p>
-                    <p className="text-sm text-muted-foreground">+2 points</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30">
-                    <Award className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Helpful Answer</p>
-                    <p className="text-sm text-muted-foreground">+10 points</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30">
-                    <Trophy className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Share Success Story</p>
-                    <p className="text-sm text-muted-foreground">+25 points</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30">
-                    <MessageSquare className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Receive Comment</p>
-                    <p className="text-sm text-muted-foreground">+1 point</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-lg border p-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-100 text-cyan-600 dark:bg-cyan-900/30">
-                    <Award className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="font-medium">First Post Bonus</p>
-                    <p className="text-sm text-muted-foreground">+10 points</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>

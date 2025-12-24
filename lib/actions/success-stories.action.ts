@@ -5,6 +5,7 @@ import { awardXP } from "@/lib/services/gamification.service";
 import { triggerAchievementCheck } from "@/lib/services/achievements.service";
 import { emitEvent } from "@/lib/services/event-dispatcher";
 import { AppEvent } from "@/lib/types/app-events";
+import { awardReputationPoints } from "@/lib/actions/community.action";
 
 // ===========================================================
 // TYPES
@@ -704,6 +705,7 @@ export async function submitSuccessStory(input: SubmitStoryInput): Promise<{
 
     await awardXP(user.id, "success_story_submitted", data.id);
     await triggerAchievementCheck(user.id, ["stories_submitted"]);
+    await awardReputationPoints(user.id, "SHARE_SUCCESS_STORY");
 
     return { data: { id: data.id }, error: null };
   } catch (err) {
@@ -857,6 +859,8 @@ export async function likeStory(storyId: string): Promise<{
           likedByUserId: user.id,
         },
       });
+
+      await awardReputationPoints(storyData.userId, "RECEIVE_LIKE");
     }
 
     return { data: { likeCount: newCount }, error: null };
@@ -1158,7 +1162,11 @@ export async function addStoryComment(storyId: string, content: string, parentId
           parentId: parentId || null,
         },
       });
+
+      await awardReputationPoints(storyData.userId, "RECEIVE_COMMENT");
     }
+
+    await awardReputationPoints(user.id, "COMMENT_POST");
 
     return { data: { id: data.id }, error: null };
   } catch (err) {
@@ -1224,7 +1232,7 @@ export async function likeStoryComment(commentId: string): Promise<{
 
     const { data: comment } = await adminSupabase
       .from("success_story_comments")
-      .select("likeCount")
+      .select("likeCount, userId")
       .eq("id", commentId)
       .single();
 
@@ -1234,6 +1242,10 @@ export async function likeStoryComment(commentId: string): Promise<{
       .from("success_story_comments")
       .update({ likeCount: newCount })
       .eq("id", commentId);
+
+    if (comment?.userId && comment.userId !== user.id) {
+      await awardReputationPoints(comment.userId, "RECEIVE_LIKE");
+    }
 
     return { data: { likeCount: newCount }, error: null };
   } catch (err) {
