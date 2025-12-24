@@ -22,6 +22,7 @@ import {
   CornerDownRight,
   Flag,
   MoreHorizontal,
+  Check,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,8 @@ import {
   likePostComment,
   unlikePostComment,
   reportPost,
+  markCommentHelpful,
+  unmarkCommentHelpful,
   type CommunityPostDetail,
   type CommunityPostType,
   type PostComment,
@@ -72,6 +75,7 @@ export default function PostDetailPage() {
   const [replyDraft, setReplyDraft] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [collapsedComments, setCollapsedComments] = useState<Set<string>>(new Set());
+  const [helpfulActionIds, setHelpfulActionIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadPost();
@@ -211,6 +215,68 @@ export default function PostDetailPage() {
       }
       return next;
     });
+  }
+
+  const updateCommentTree = (
+    comments: PostComment[],
+    targetId: string,
+    updater: (comment: PostComment) => PostComment
+  ): PostComment[] => {
+    return comments.map((comment) => {
+      if (comment.id === targetId) {
+        return updater(comment);
+      }
+      if (comment.replies.length > 0) {
+        const nextReplies = updateCommentTree(comment.replies, targetId, updater);
+        if (nextReplies !== comment.replies) {
+          return { ...comment, replies: nextReplies };
+        }
+      }
+      return comment;
+    });
+  };
+
+  async function handleToggleCommentHelpful(commentId: string, isHelpful: boolean) {
+    if (!post || !post.isMyPost) return;
+
+    const previousComments = post.comments;
+    const nextValue = !isHelpful;
+
+    setHelpfulActionIds((prev) => {
+      const next = new Set(prev);
+      next.add(commentId);
+      return next;
+    });
+
+    setPost((prev) =>
+      prev
+        ? {
+            ...prev,
+            comments: updateCommentTree(prev.comments, commentId, (comment) => ({
+              ...comment,
+              isHelpful: nextValue,
+            })),
+          }
+        : prev
+    );
+
+    try {
+      const res = nextValue ? await markCommentHelpful(commentId) : await unmarkCommentHelpful(commentId);
+      if (res.error) {
+        setPost((prev) => (prev ? { ...prev, comments: previousComments } : prev));
+        setError(res.error);
+      }
+    } catch (err) {
+      console.error("Error toggling helpful:", err);
+      setPost((prev) => (prev ? { ...prev, comments: previousComments } : prev));
+      setError("Failed to update helpful status");
+    } finally {
+      setHelpfulActionIds((prev) => {
+        const next = new Set(prev);
+        next.delete(commentId);
+        return next;
+      });
+    }
   }
 
   const totalCommentsCount = useMemo(() => {
@@ -392,6 +458,10 @@ export default function PostDetailPage() {
                   onReply={handleAddComment}
                   onToggleLike={handleToggleCommentLike}
                   onToggleCollapse={toggleCollapseComment}
+                  onToggleHelpful={handleToggleCommentHelpful}
+                  isPostOwner={post.isMyPost}
+                  isProcessingHelpful={helpfulActionIds.has(comment.id)}
+                  helpfulActionLookup={helpfulActionIds}
                 />
               ))}
             </div>
@@ -415,6 +485,10 @@ function CommentItem({
   onReply,
   onToggleLike,
   onToggleCollapse,
+  onToggleHelpful,
+  isPostOwner,
+  isProcessingHelpful,
+  helpfulActionLookup,
 }: {
   comment: PostComment;
   depth: number;
@@ -428,6 +502,10 @@ function CommentItem({
   onReply: (parentId?: string | null) => void;
   onToggleLike: (commentId: string, hasLiked: boolean) => void;
   onToggleCollapse: (commentId: string) => void;
+  onToggleHelpful: (commentId: string, isHelpful: boolean) => void;
+  isPostOwner: boolean;
+  isProcessingHelpful: boolean;
+  helpfulActionLookup: Set<string>;
 }) {
   const isReplyingHere = replyToId === comment.id;
   const isCollapsed = collapsedComments.has(comment.id);
@@ -453,7 +531,7 @@ function CommentItem({
               </div>
               <p className="mt-1 text-sm whitespace-pre-wrap">{comment.content}</p>
 
-              <div className="mt-2 flex items-center gap-2">
+              <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -465,6 +543,24 @@ function CommentItem({
                   <Heart className={`mr-1 h-3 w-3 ${comment.hasLiked ? "fill-current" : ""}`} />
                   {comment.likesCount}
                 </Button>
+                {comment.isHelpful && (
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <Check className="h-3 w-3" />
+                    Helpful
+                  </Badge>
+                )}
+                {isPostOwner && !comment.isMine && (
+                  <Button
+                    variant={comment.isHelpful ? "secondary" : "ghost"}
+                    size="sm"
+                    className="h-7 px-2 font-medium"
+                    disabled={isProcessingHelpful}
+                    onClick={() => onToggleHelpful(comment.id, comment.isHelpful)}
+                  >
+                    <Check className="mr-1 h-3 w-3" />
+                    {comment.isHelpful ? "Helpful" : "Mark helpful"}
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -564,6 +660,10 @@ function CommentItem({
               onReply={onReply}
               onToggleLike={onToggleLike}
               onToggleCollapse={onToggleCollapse}
+              onToggleHelpful={onToggleHelpful}
+              isPostOwner={isPostOwner}
+              isProcessingHelpful={helpfulActionLookup.has(reply.id)}
+              helpfulActionLookup={helpfulActionLookup}
             />
           ))}
         </div>

@@ -41,6 +41,7 @@ export interface CommunityPostDetail extends CommunityPostSummary {
   isHighlighted: boolean;
   sharesCount: number;
   comments: PostComment[];
+  isMyPost: boolean;
 }
 
 export interface PostComment {
@@ -50,6 +51,9 @@ export interface PostComment {
   parentId: string | null;
   content: string;
   likesCount: number;
+  isHelpful: boolean;
+  helpfulMarkedBy: string | null;
+  helpfulMarkedAt: string | null;
   isEdited: boolean;
   createdAt: string;
   authorName: string;
@@ -179,6 +183,30 @@ export interface PublicCommunityProfileData {
 
 function buildInFilter(values: string[]): string {
   return `(${values.map((v) => `"${v}"`).join(",")})`;
+}
+
+async function ensureCommunityProfileExists(targetUserId: string): Promise<void> {
+  const { data, error } = await adminSupabase
+    .from("community_profiles")
+    .select("id")
+    .eq("userId", targetUserId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to ensure community profile exists: ${error.message}`);
+  }
+
+  if (data) return;
+
+  const { error: createError } = await adminSupabase
+    .from("community_profiles")
+    .upsert({ userId: targetUserId }, { onConflict: "userId" })
+    .select("id")
+    .single();
+
+  if (createError) {
+    throw new Error(`Failed to create missing community profile: ${createError.message}`);
+  }
 }
 
 // ===========================================================
@@ -479,7 +507,10 @@ export async function getPostById(postId: string): Promise<{
 }> {
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const viewerId = user?.id || null;
 
     const { data: post, error } = await adminSupabase
       .from("community_posts")
@@ -567,6 +598,9 @@ export async function getPostById(postId: string): Promise<{
             parentId: c.parentId,
             content: c.content,
             likesCount: c.likesCount,
+            isHelpful: !!c.isHelpful,
+            helpfulMarkedBy: c.helpfulMarkedBy || null,
+            helpfulMarkedAt: c.helpfulMarkedAt || null,
             isEdited: c.isEdited,
             createdAt: c.createdAt,
             authorName: cp ? `${cp.firstName || ""} ${cp.lastName || ""}`.trim() || "Anonymous" : "Anonymous",
@@ -600,6 +634,7 @@ export async function getPostById(postId: string): Promise<{
         hasLiked,
         hasBookmarked,
         comments: buildCommentTree(null),
+        isMyPost: viewerId ? viewerId === post.userId : false,
       },
       error: null,
     };
@@ -1142,12 +1177,116 @@ export async function unlikePostComment(commentId: string): Promise<{
     return { data: { success: true }, error: null };
   } catch (err) {
     console.error("Error unliking comment:", err);
-    return { data: null, error: "Failed to unlike comment" };
+    return { data: { success: true }, error: null };
+  }
+}
+
+export async function markCommentHelpful(commentId: string): Promise<{
+  data: { success: true } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: comment } = await adminSupabase
+      .from("community_post_comments")
+      .select("id, postId, userId, isHelpful, helpfulMarkedBy, isDeleted")
+      .eq("id", commentId)
+      .maybeSingle();
+
+    if (!comment || comment.isDeleted) return { data: null, error: "Comment not found" };
+    if (comment.userId === user.id) return { data: null, error: "You cannot mark your own comment as helpful" };
+    if (comment.isHelpful) return { data: { success: true }, error: null };
+
+    const { data: post } = await adminSupabase
+      .from("community_posts")
+      .select("userId")
+      .eq("id", comment.postId)
+      .maybeSingle();
+
+    if (!post) return { data: null, error: "Post not found" };
+    if (post.userId !== user.id) return { data: null, error: "Forbidden" };
+
+    const now = new Date().toISOString();
+    const { error: updateError } = await adminSupabase
+      .from("community_post_comments")
+      .update({
+        isHelpful: true,
+        helpfulMarkedBy: user.id,
+        helpfulMarkedAt: now,
+      })
+      .eq("id", commentId);
+
+    if (updateError) return { data: null, error: updateError.message };
+
+    await ensureCommunityProfileExists(comment.userId);
+    await adminSupabase.rpc("increment_profile_helpful_votes", { user_id: comment.userId });
+    await awardReputationPoints(comment.userId, "HELPFUL_ANSWER");
+
+    return { data: { success: true }, error: null };
+  } catch (err) {
+    console.error("Error marking comment helpful:", err);
+    return { data: null, error: "Failed to mark comment helpful" };
+  }
+}
+
+export async function unmarkCommentHelpful(commentId: string): Promise<{
+  data: { success: true } | null;
+  error: string | null;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { data: null, error: "Unauthorized" };
+
+    const { data: comment } = await adminSupabase
+      .from("community_post_comments")
+      .select("id, postId, userId, isHelpful, helpfulMarkedBy, isDeleted")
+      .eq("id", commentId)
+      .maybeSingle();
+
+    if (!comment || comment.isDeleted) return { data: null, error: "Comment not found" };
+    if (!comment.isHelpful) return { data: { success: true }, error: null };
+
+    const { data: post } = await adminSupabase
+      .from("community_posts")
+      .select("userId")
+      .eq("id", comment.postId)
+      .maybeSingle();
+
+    if (!post) return { data: null, error: "Post not found" };
+    if (post.userId !== user.id) return { data: null, error: "Forbidden" };
+    if (comment.helpfulMarkedBy && comment.helpfulMarkedBy !== user.id) {
+      return { data: null, error: "Only the marker can unmark this comment" };
+    }
+
+    const { error: updateError } = await adminSupabase
+      .from("community_post_comments")
+      .update({
+        isHelpful: false,
+        helpfulMarkedBy: null,
+        helpfulMarkedAt: null,
+      })
+      .eq("id", commentId);
+
+    if (updateError) return { data: null, error: updateError.message };
+
+    await ensureCommunityProfileExists(comment.userId);
+    await adminSupabase.rpc("decrement_profile_helpful_votes", { user_id: comment.userId });
+    await awardReputationPoints(comment.userId, "HELPFUL_ANSWER", -1);
+
+    return { data: { success: true }, error: null };
+  } catch (err) {
+    console.error("Error unmarking comment helpful:", err);
+    return { data: null, error: "Failed to unmark comment helpful" };
   }
 }
 
 // ===========================================================
 // CHAT ROOMS
+// ... (rest of the code remains the same)
 // ===========================================================
 
 export async function getChatRooms(): Promise<{
